@@ -19,7 +19,7 @@ class CreateProjectsTable extends Migration
 
             $table->unsignedInteger('customer_id')->nullable();
             $table->foreign('customer_id')
-                ->references('id')->on('customers')
+                ->references('id')->on('users')
                 ->onDelete('cascade');
 
             $table->enum('billing_type', ['fixed_rate', 'project_hours', 'task_hours'])->default('fixed_rate');

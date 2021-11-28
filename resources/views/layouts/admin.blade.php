@@ -24,7 +24,8 @@
         APP.TIMEZONE = '{{config('app.timezone')}}';
         APP.NOTIFICATION_REFRESH_TIMEOUT = '{{config('constants.notification_refresh_timeout')}}';
         APP.UPLOAD_FILE_MAX_SIZE = '{{config('constants.upload_file_max_size')}}';
-        APP.RTL = @if(in_array(config('app.locale'), config('constants.langs_rtl'))) true @else false @endif;
+        // @if(in_array(config('app.locale'), config('constants.langs_rtl'))) true @else false @endif;
+        APP.RTL =false;
         APP.FIRST_DAY_OF_WEEK = '{{$first_day_of_week}}';
         @auth
             @php
@@ -106,25 +107,30 @@
                 </v-list> -->
         <!--    </v-navigation-drawer>-->
 
+
             <v-toolbar style="background-color:#06706d;" app dark flat fixed dense height="100"
                 :clipped-left="true">
                 <!-- this Line to hide 3 lines in navbar
                 <v-toolbar-side-icon @click="drawerToggle"></v-toolbar-side-icon> 
                 <v-toolbar-title class="hidden-sm-and-down">{{config('app.name')}}</v-toolbar-title>
                 -->
-                <v-layout>
-                
+        
+           
+                <img src="{{asset('img/logo.png')}}"  alt="logo" width="100" style="border-radius:20px;" />
                 </v-layout>
-                <v-layout align-center row fill-height/>
-                    <!-- Plus buttons in navbar
-
-                        <quick-add-button></quick-add-button>
-
-                        <calendar></calendar>
-
-                        <notification></notification>
-                    -->
-                    
+                <v-layout >
+                    <div style="font-size:16px;">
+ 
+                        &nbsp;&nbsp;&nbsp;
+                        <router-link to="/" style="color:white;">
+                            {{trans('data.home')}}
+                        </router-link>    
+                        &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+                        <router-link to="/to-do-list" style="color:white;">
+                            {{trans('data.to_do_list')}}
+                        </router-link>                                      
+                    </div>
+                </v-layout>
 
                     <v-menu
                         attach
@@ -157,24 +163,14 @@
                                 </v-list-tile-title>
                             </v-list-tile>
                         </v-list>
-                    </v-menu>
-                </v-layout>
 
-                <v-layout >
-                    <div style="font-size:16px;">
-                        <router-link to="/to-do-list" style="color:white;">
-                            {{trans('data.to_do_list')}}
-                        </router-link>   
-                        &nbsp;&nbsp;&nbsp;
-                        <router-link to="/" style="color:white;">
-                            {{trans('data.home')}}
-                        </router-link>                                         
-                    </div>
-                </v-layout>
 
-                <v-layout justify-end>
-                <img src="{{asset('img/logo.png')}}"  alt="logo" width="100" style="border-radius:20px;" />
+           
+                                            </v-menu>
                 </v-layout>
+   
+
+       
             </v-toolbar>
 
             <v-content>

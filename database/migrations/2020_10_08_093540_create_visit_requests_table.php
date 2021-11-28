@@ -18,7 +18,7 @@ class CreateVisitRequestsTable extends Migration
             $table->string('title');
 
             $table->unsignedInteger('customer_id');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->unsignedInteger('project_id');
         //    $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');

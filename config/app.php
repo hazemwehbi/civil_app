@@ -79,7 +79,7 @@ return [
     | to any of the locales which will be supported by the application.
     |
     */
-
+  ///ar
     'locale' => env('APP_LOCALE', 'en'),
 
     /*
