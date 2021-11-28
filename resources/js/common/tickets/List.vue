@@ -396,7 +396,6 @@ export default {
                                 message: response.data.msg,
                                 color: response.data.success,
                             });
-
                             if (response.data.success === true) {
                              //   self.getTicketFromApi();
                                 // self.getStatistics();
