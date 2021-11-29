@@ -120,7 +120,7 @@ class ProjectController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $customers = Customer::getCustomersForDropDown();
+        $customers =User::getUsersForDropDown() ;//Customer::getCustomersForDropDown();
         $users = User::getUsersForDropDown();
         $billingTypes = Project::getBillingTypes();
         $status = Project::getStatusForProject();
@@ -189,16 +189,16 @@ class ProjectController extends Controller
                 $user->assignRole($roles['member']);
             }
             //Assign lead role
-            $project_lead = User::find($project_data['lead_id']);
-            $project_lead->assignRole($roles['lead']);
+          //  $project_lead = User::find($project_data['lead_id']);
+         //   $project_lead->assignRole($roles['lead']);
 
             //Assign roles to customer contacts
             if (!empty($project_data['customer_id'])) {
-                $contacts = Customer::find($project_data['customer_id'])
+                $contacts = User::find($project_data['customer_id'])
                                 ->contacts;
-                foreach ($contacts as $contact) {
-                    $contact->assignRole($roles['customer']);
-                }
+             ///   foreach ($contacts as $contact) {
+              ///      $contact->assignRole($roles['customer']);
+              //  }
             }
 
             DB::commit();

@@ -58,7 +58,7 @@
                                 <v-layout wrap>
                                     <v-flex xs12 md4 v-if="$hasRole('employee') ||$can('superadmin')">
                                         <v-autocomplete
-                                            item-text="company"
+                                            item-text="name"
                                             item-value="id"
                                             :items="customers"
                                             v-model="project.customer_id"
@@ -80,7 +80,7 @@
                                             required
                                         ></v-select>
                                     </v-flex>-->
-                                   <!-- <v-flex xs12 md4 v-if="$hasRole('employee') ||$can('superadmin')">
+                                   <v-flex xs12 md4 v-if="$hasRole('employee') ||$can('superadmin')">
                                         <v-autocomplete
                                             item-text="name"
                                             item-value="id"
@@ -100,7 +100,7 @@
                                             </Popover>
                                         </v-autocomplete>
                                     </v-flex>
--->
+
                                     <v-flex xs12 md4>
                                         <div class="v-input v-text-field theme--light">
                                             <div class="v-input__control">
