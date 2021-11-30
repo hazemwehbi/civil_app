@@ -510,4 +510,5 @@ return [
     'ticket_overview' => 'Ticket Overview',
     'invoice_paid_versus_expense' => 'Invoice Paid Vs Expenses',
     'invoice_paid' => 'Invoice Paid',
+    'id' => 'Id',
 ];

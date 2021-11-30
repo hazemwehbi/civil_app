@@ -203,10 +203,10 @@ class User extends Authenticatable implements HasMedia
 
     public static function getRolesForEmployee()
     {
-        $roles = Role::where('type', 'employee')
-                    ->get()
-                    ->toArray();
-                    
+        // $roles = Role::where('type', 'employee')
+        //             ->get()
+        //             ->toArray();
+            $roles=Role::all();        
         return $roles;
     }
 
@@ -304,5 +304,13 @@ class User extends Authenticatable implements HasMedia
         $value = System::where('key', 'time_format')->value('value');
 
         return $value;
+    }
+
+
+    //add my code
+
+    public function visitRequests()
+    {
+        return $this->hasMany('App\VisitRequest','customer_id');
     }
 }

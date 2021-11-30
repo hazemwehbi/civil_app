@@ -36,18 +36,23 @@
                                 <v-list>
 
                                     <v-list-tile
-                                        @click="$router.push({name: 'create_visit_request_list'})"                               >
+                                        @click="$router.push({name: 'create_visit_request_list',
+                                         params: { project_id: props.item.id ,customer_id: props.item.customer_id }})"                               >
                                         <v-list-tile-title>
                                             {{ trans('data.create_a_visit_request') }}
                                         </v-list-tile-title>
                                     </v-list-tile>
 
-
+                                   <v-list-tile
+                                        @click="deleteProject(props.item.id)"                               >
+                                        <v-list-tile-title>
+                                            {{ trans('messages.delete') }}
+                                        </v-list-tile-title>
+                                    </v-list-tile>
                                     <v-list-tile
                                         @click="$router.push({name:'reports'})"
                                     >
                                         <v-list-tile-title>
-                                            
                                             {{ trans('data.create_a_report') }}
                                         </v-list-tile-title>
                                     </v-list-tile>
@@ -71,7 +76,6 @@
                                         "
                                     >
                                         <v-list-tile-title>
-                                        
                                             {{ trans('data.schedule') }}
                                         </v-list-tile-title>
                                     </v-list-tile>
@@ -84,7 +88,7 @@
                                             params: { project_id: props.item.id }                           
                                             })
                                         "
-                                    >
+                                         >
                                         <v-list-tile-title>
                                         
                                             {{ trans('data.attachments') }}
@@ -124,6 +128,7 @@
                                                             </v-btn> 
                                                         </div>  -->
                                                     </td>
+                                                     <td>{{ props.item.id }}</td>
                                                     <td>{{ props.item.name }}</td>
                                                     <td> {{ props.item.customer.company }}</td>
                                                     <td>
@@ -183,6 +188,12 @@ export default {
                     value: false,
                     align: 'left',
                     sortable: false,
+                },
+                {
+                    text: self.trans('messages.id'),
+                    value: 'id',
+                    align: 'left',
+                    sortable: true,
                 },
                 {
                     text: self.trans('messages.name'),

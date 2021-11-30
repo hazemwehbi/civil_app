@@ -342,4 +342,5 @@ return [
     "created_at" => "أنشئت في",
     "updated_at" => "تم التحديث في",
     "invoice_count" => "عدد الفواتير",
+    'id' => 'المعرف',
     ];

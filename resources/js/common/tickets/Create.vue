@@ -17,7 +17,7 @@
                                     required
                                 ></v-text-field>
                             </v-flex>
-                            <v-flex xs11 sm5 md4>
+                            <v-flex xs12 sm5 md5>
                                   <v-autocomplete
                                     item-text="name"
                                     item-value="id"
@@ -42,9 +42,13 @@
                                     <v-icon>add</v-icon>
                                 </v-btn>
                             </v-flex>
+              
                         </v-layout>
                         <v-layout row>
-                            <v-flex xs11 sm5 md4>
+
+               
+
+                                          <v-flex xs12 sm4 md4>
                                   <v-autocomplete
                                     item-text="name"
                                     item-value="id"
@@ -56,6 +60,29 @@
                                     :data-vv-as="trans('data.project_name')"
                                     :error-messages="errors.collect('project_name')"
                                     required
+                                ></v-autocomplete>
+                            </v-flex>
+                                    <v-flex xs12 sm6 md6 v-if="$hasRole('employee')">
+                                <v-autocomplete
+                                    item-text="name"
+                                    item-value="id"
+                                    :items="customers"
+                                    v-model="customer_id"
+                                    :label="trans('messages.customer')"
+                                    v-validate="'required'"
+                                    data-vv-name="customer"
+                                    :data-vv-as="trans('messages.customer')"
+                                    :error-messages="errors.collect('customer')"
+                                    required
+                                ></v-autocomplete>
+                            </v-flex>
+                                                <v-flex xs12 sm4 md4 v-if="$hasRole('employee')">
+                                <v-autocomplete
+                                    item-text="value"
+                                    item-value="key"
+                                    :items="priorities"
+                                    v-model="priority"
+                                    :label="trans('messages.priority')"
                                 ></v-autocomplete>
                             </v-flex>
                         <!--    <v-flex xs1 sm1 md1>
@@ -83,6 +110,7 @@
                                     required
                                 ></v-textarea>
                             </v-flex>
+                   
                         </v-layout>
                     <!--    <v-layout row>
                             <v-flex xs12 sm6 md6 v-if="$hasRole('employee')">
@@ -99,17 +127,10 @@
                                     required
                                 ></v-autocomplete>
                             </v-flex>
-                            <v-flex xs12 sm6 md6 v-if="$hasRole('employee')">
-                                <v-autocomplete
-                                    item-text="value"
-                                    item-value="key"
-                                    :items="priorities"
-                                    v-model="priority"
-                                    :label="trans('messages.priority')"
-                                ></v-autocomplete>
-                            </v-flex>
+              
                         </v-layout>-->
                         <v-layout row wrap>
+              
                         <!--    <v-flex xs12 sm6 md6 v-if="$hasRole('employee')">
                                 <v-autocomplete
                                     item-text="name"
@@ -119,27 +140,14 @@
                                     :label="trans('messages.assigned_to')"
                                 ></v-autocomplete>
                             </v-flex>-->
-                            <v-flex xs12 sm6 md6 v-if="$hasRole('employee')">
-                                <v-autocomplete
-                                    item-text="name"
-                                    item-value="id"
-                                    :items="customers"
-                                    v-model="customer_id"
-                                    :label="trans('messages.customer')"
-                                    v-validate="'required'"
-                                    data-vv-name="customer"
-                                    :data-vv-as="trans('messages.customer')"
-                                    :error-messages="errors.collect('customer')"
-                                    required
-                                ></v-autocomplete>
-                            </v-flex>
+       
                         </v-layout>
                     </v-container>
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn  style="color:#06706d;"  @click="reset = false">
+                    <v-btn  style="color:#06706d;"  @click="reset">
                         {{ trans('data.reset') }}
                     </v-btn>
                     <v-btn style="background-color:#06706d;color:white;" color="darken-1" @click="store(1)" :loading="loading" :disabled="loading">
@@ -170,7 +178,6 @@ export default {
             loading: false,
             title:'',
             request_type:'',
-            project_id:'',
             description:'',
             status:'new',
             priority:'',
@@ -186,6 +193,8 @@ export default {
     created() {
         const self = this;
         self.reset();
+        self.project_id = self.project_id = self.$route.params.project_id;
+        self.customer_id = self.customer_id = self.$route.params.customer_id;
         self.getRequestTypes();
         self.getCustomerProject();
         self.getCustomers();
@@ -221,6 +230,8 @@ export default {
             self.description="";
             self.status="";
             self.priority="";
+            self.customer_id="";
+           // self.request_types=[];
         },
         getRequestTypes(){
             const self = this;
@@ -260,6 +271,7 @@ export default {
                 priority:self.priority,
                 customer_id:self.customer_id
             }
+           console.log(data)
             self.$validator.validateAll().then(result => {
                 if (result == true) {
                     self.loading = true;

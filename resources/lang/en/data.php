@@ -94,7 +94,7 @@ return [
     'primary_contact_id'=>'Primary Contact Id',
     'review_project_data'=>'Review Project Data',
     'project_name'=>'project Name',
-    ''=>'',
+    'delete'=>'delete',
     ''=>'',
     ''=>'',
     ''=>'',

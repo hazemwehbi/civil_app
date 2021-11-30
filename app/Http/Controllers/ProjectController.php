@@ -653,9 +653,10 @@ class ProjectController extends Controller
 
     public function getProjectRequest()
     {
+
         $user=User::find(request()->user()->id);
         if($user->hasRole('superadmin')){
-            $requests=Customer::with(['visitRequests'=>function ($query) { 
+            $requests=User::with(['visitRequests'=>function ($query) { 
                 $query->where('sent', 1); }
                 ]);
                 // This code for get projects request
@@ -666,8 +667,8 @@ class ProjectController extends Controller
             return $this->respond($data);
         }else{
             $user=User::find(request()->user()->id);
-            $customerquery=Customer::query();
-            $c=Customer::find($user->customer_id);
+            $customerquery=User::query();
+            $c=User::find($user->customer_id);
             $customerquery->where('id',$user->customer_id);
             $customerquery->whereHas('visitRequests')->with('visitRequests');
           //  $customerquery->whereHas('projectrequest')->with('projectrequest');
@@ -731,7 +732,7 @@ class ProjectController extends Controller
         }else{
             $user_id=$request->customer_id;
         }
-        $customer_id=User::find($user_id)->customer_id;
+        $customer_id=$user_id;//User::find($user_id)->customer_id;
         
         if($request->priority==null){
             $priority=$request->priority;
@@ -779,11 +780,14 @@ class ProjectController extends Controller
 
     public function getAllCustomer()
     {
-        $customers=User::whereNotNull('customer_id')
-                ->select('id', 'name')
-                ->get()
-                ->toArray();
-
+        // $customers=User::whereNotNull('customer_id')
+        //         ->select('id', 'name')
+        //         ->get()
+        //         ->toArray();
+    $customers=User::select('id', 'name') ->get()->toArray();
+                
+              
+               
         return $customers;
     }
 
