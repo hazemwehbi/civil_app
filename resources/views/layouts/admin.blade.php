@@ -25,7 +25,8 @@
         APP.NOTIFICATION_REFRESH_TIMEOUT = '{{config('constants.notification_refresh_timeout')}}';
         APP.UPLOAD_FILE_MAX_SIZE = '{{config('constants.upload_file_max_size')}}';
         // @if(in_array(config('app.locale'), config('constants.langs_rtl'))) true @else false @endif;
-        APP.RTL =false;
+       // APP.RTL =true;
+        APP.RTL = @if(in_array(config('app.locale'), config('constants.langs_rtl'))) true @else false @endif;
         APP.FIRST_DAY_OF_WEEK = '{{$first_day_of_week}}';
         @auth
             @php

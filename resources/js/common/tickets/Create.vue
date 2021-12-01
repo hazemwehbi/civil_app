@@ -285,16 +285,18 @@ export default {
                             });
 
                             if (response.data.success === true) {
+                              //   self.dialog = false;
                                 self.$eventBus.$emit('updateTicketsTable');
+                                 self.goBack();
                             }
-
-                            self.reset();
+                           
                         })
                         .catch(function(error) {
                             console.log(error);
                         });
                 }
             });
+             self.reset();
         },
     },
 };

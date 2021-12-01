@@ -53,7 +53,7 @@ Vue.use(QuillEditor, {
 Vue.use(Vuetify, {
    // rtl: true,
     
-    rtl: APP.RTL,
+    rtl: APP.RTl,
     theme: {
         primary: '#1976D2',
         secondary: '#424242',

@@ -75,8 +75,8 @@
 </template>
 
 <script>
-import identityCheckChooseTheTypeOfBuilding from "./identity_check_choose_the_type_of_building.vue";
-import ProjectInfo from "./ProjectInfo.vue";
+import identityCheckChooseTheTypeOfBuilding from ".project_info/identity_check_choose_the_type_of_building.vue";
+import ProjectInfo from ".project_info/ProjectInfo.vue";
 
 export default {
     components:{
