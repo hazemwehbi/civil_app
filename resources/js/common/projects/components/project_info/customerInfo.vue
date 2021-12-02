@@ -90,10 +90,9 @@ export default {
             //     console.log(error);
             // });
         },
-
             nextStep() {
             this.$validator.validateAll().then(result => {
-                alert(result)
+              //  alert(result)
                 if (result == true) {
                   this.$emit('next',this.customer);
                 }

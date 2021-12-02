@@ -22,6 +22,16 @@ return [
         'ar' => ['full_name' => 'Arabic - العَرَبِيَّة', 'short_name' => 'Arabic'],
         // 'tr' => ['full_name' => 'Turkish - Türkçe', 'short_name' => 'Turkish'],
     ],
+    'user_types' => [
+        'ESTATE_OWNER' => "Estate Owner",
+        'ENGINEERING_OFFICE' => "Engineering Office",
+        'SUPPORT_SERVICES_OFFICE' => "Support Service Office",
+        
+        'CONTRACTING_COMPANY' => "Contracting  Company",
+        'GOVERNMENT_AGENCIES' => "Government Agencies",
+        'SITE_MANAGENMENT' => "Site Managnment",
+
+    ],
     'langs_rtl' => ['ar'],
     'non_utf8_languages' => ['ar', 'hi'],
     'expense_prefix' => 'expense#',

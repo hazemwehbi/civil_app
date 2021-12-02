@@ -63,7 +63,38 @@
                                     </span>
                                 @endif
                             </div>
+                            <div class="form-label-group">
 
+                            <select name="user_type" id="user_type"  required class="form-control" >
+                            <option value="" disabled selected>Select your Type</option>
+                                    @foreach(array_keys(config('constants.user_types'))  as $type)
+                                        <option value="{{$type}}" >{{config('constants.user_types')[$type]}} </option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('user_type'))
+                                    <span class="help-block text-danger">
+                                        <small class="help-text">
+                                            {{ $errors->first('user_type') }}
+                                        </small>
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="form-label-group">
+                            <select name="user_type1" id="user_type1"  required class="form-control" style="display: none;">
+                            <option value="" disabled selected>Select your Type</option>
+                                    @foreach(array_keys(config('constants.user_types'))  as $type)
+                                        <option value="{{$type}}" >{{config('constants.user_types')[$type]}} </option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('user_type'))
+                                    <span class="help-block text-danger">
+                                        <small class="help-text">
+                                            {{ $errors->first('user_type') }}
+                                        </small>
+                                    </span>
+                                @endif
+                            </div>
+                            
                             <div class="custom-control custom-checkbox mb-3">
                                 <input type="checkbox" class="custom-control-input" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                                 <label class="custom-control-label" for="remember">
@@ -139,6 +170,25 @@
 
 @section('javascript')
     <script type="text/javascript">
+
+        $("#user_type").change(function() {
+       var value = $("option:selected", this).val();
+           $("#user_type1").show(); 
+           var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    /* the route pointing to the post function */
+                    url: '/postajax',
+                    type: 'POST',
+                    /* send the csrf-token and the input to the controller */
+                    data: {_token: CSRF_TOKEN, message:value},
+                    /* remind that 'data' is the response of the AjaxController */
+                    success: function (data) { 
+                        alert(1)
+                       // $(".writeinfo").append(data.msg); 
+                    }
+                }); 
+         // $("#user_typ1 > option[value=" + value + "]").attr("selected", true);  
+           })
         $('button.copy').click(function(){
             $('input#inputEmail').val($(this).data('email'));
             $('input#inputPassword').val($(this).data('pwd'));

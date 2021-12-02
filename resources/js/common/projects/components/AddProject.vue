@@ -116,7 +116,7 @@ export default {
            
 
          goTo(step, can,data) {
-             alert(JSON.stringify(data))
+         //    alert(JSON.stringify(data))
     //   if (can) {
     //     this.e1 = step;
     //   }
@@ -152,7 +152,7 @@ export default {
     },
 
         store() {
-                   alert(JSON.stringify(this.customer))
+                //   alert(JSON.stringify(this.customer))
             // const self = this;
             // let data = {
             //     name: self.project.name,

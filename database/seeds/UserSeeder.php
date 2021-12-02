@@ -28,11 +28,11 @@ class UserSeeder extends Seeder
 
 
 
-        $type = [
-            ['id' => 1,'type'=>config('enum.user_types')['SITE_MANAGENMENT'] , 'user_id','1','created_at' => '2019-04-19 07:13:33','updated_at' => '2019-04-19 07:13:33'],
-          ];
+        // $type = [
+        //     ['id' => 1,'type'=>config('enum.user_types')['SITE_MANAGENMENT'] , 'user_id','1','created_at' => '2019-04-19 07:13:33','updated_at' => '2019-04-19 07:13:33'],
+        //   ];
   
-          DB::table('user_type')->insert($type);
+        //   DB::table('user_type')->insert($type);
 
 
     }

@@ -230,6 +230,35 @@ class User extends Authenticatable implements HasMedia
             ];
     }
 
+
+    public static function getUserTypes()
+    {
+        return [
+                ['value' => 'ESTATE_OWNER',
+                 'text' => __('Estate Owner'),
+                ],
+                ['value' => 'ENGINEERING_OFFICE',
+                 'text' => __('Engineering Office'),
+                ],
+                ['value' => 'SUPPORT_SERVICES_OFFICE',
+                 'text' => __('Support Service Office'),
+                ],
+
+
+
+                ['value' => 'CONTRACTING_COMPANY',
+                'text' => __('Contracting  Company'),
+               ],
+               ['value' => 'GOVERNMENT_AGENCIES',
+                'text' => __('Government Agencies'),
+               ],
+               ['value' => 'SITE_MANAGENMENT',
+                'text' => __('Site Managnment'),
+               ],
+            ];
+    }
+    
+    
     /**
      * retrieve all the permissions
      * of user.
