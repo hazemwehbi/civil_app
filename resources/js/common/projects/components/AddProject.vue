@@ -1,440 +1,198 @@
 <template>
     <div class="component-wrap">
         <v-container grid-list-md>
-            <v-layout row justify-center>
-                <!-- category Add -->
-                <CategoryAdd ref="categoryAdd"></CategoryAdd>
-                    <v-card>
-                        <v-card-title>
-                            <v-icon medium>assessment</v-icon>
-                            <span class="headline">
-                                {{ trans('messages.create_project') }}
-                            </span>
-                        </v-card-title>
-                        <v-divider></v-divider>
-                        <v-card-text>
-                            <v-container grid-list-md>
-                                <v-layout row wrap>
-                                    <v-flex xs12 md6>
-                                        <v-text-field
-                                            v-model="project.name"
-                                            :label="trans('messages.name')"
-                                            
-                                            data-vv-name="name"
-                                            :data-vv-as="trans('messages.name')"
-                                            :error-messages="errors.collect('name')"
-                                            required
-                                        >
-                                        </v-text-field>
-                                    </v-flex>
-                                 <!--   <v-flex xs12 md5  v-if="$hasRole('employee') ||$can('superadmin')">
-                                        <v-autocomplete
-                                            item-text="name"
-                                            item-value="id"
-                                            :items="categories"
-                                            v-model="category_id"
-                                            multiple
-                                            :label="trans('messages.category')"
-                                            
-                                            data-vv-name="category"
-                                            :data-vv-as="trans('messages.category')"
-                                            :error-messages="errors.collect('category')"
-                                            required
-                                        ></v-autocomplete>
-                                    </v-flex>
-                                    <v-flex md1 v-if="$hasRole('employee') ||$can('superadmin')">
-                                        <v-btn @click="createCategory" small :color="'#06706d'" fab dark>
-                                            <v-icon>add</v-icon>
-                                        </v-btn>
-                                    </v-flex>-->
-                                </v-layout>
-                                <v-layout row wrap>
-                                    <v-flex xs12 sm12 md12>
-                                        {{ trans('messages.description') }}
-                                        <br>
-                                        <quill-editor v-model="project.description"> </quill-editor>
-                                    </v-flex>
-                                </v-layout>
-                                <v-layout wrap>
-                                    <v-flex xs12 md4 v-if="$hasRole('employee') ||$can('superadmin')">
-                                        <v-autocomplete
-                                            item-text="name"
-                                            item-value="id"
-                                            :items="customers"
-                                            v-model="project.customer_id"
-                                            :label="trans('messages.customer')"
-                                        ></v-autocomplete>
-                                    </v-flex>
+        <v-stepper v-model="e1" alt-labels>
+            <v-stepper-header>
+            <v-stepper-step :complete="e1 > 1" step="1" color="teal">
+                {{ trans('data.customer_info') }}
+                
+            </v-stepper-step>
 
-                                  <!--  <v-flex xs12 md4 v-if="$hasRole('employee') ||$can('superadmin')">
-                                        <v-select
-                                            item-text="value"
-                                            item-value="key"
-                                            :items="status"
-                                            v-model="project.status"
-                                            :label="trans('messages.status')"
-                                            
-                                            data-vv-name="status"
-                                            :data-vv-as="trans('messages.status')"
-                                            :error-messages="errors.collect('status')"
-                                            required
-                                        ></v-select>
-                                    </v-flex>-->
-                                   <v-flex xs12 md4 v-if="$hasRole('employee') ||$can('superadmin')">
-                                        <v-autocomplete
-                                            item-text="name"
-                                            item-value="id"
-                                            :items="users"
-                                            v-model="project.lead_id"
-                                            :label="trans('messages.lead')"
-                                            
-                                            data-vv-name="lead"
-                                            :data-vv-as="trans('messages.lead')"
-                                            :error-messages="errors.collect('lead')"
-                                            required
-                                        >
-                                            <Popover
-                                                slot="append"
-                                                :helptext="trans('messages.project_lead_tooltip')"
-                                            >
-                                            </Popover>
-                                        </v-autocomplete>
-                                    </v-flex>
+            <v-divider></v-divider>
 
-                                    <v-flex xs12 md4>
-                                        <div class="v-input v-text-field theme--light">
-                                            <div class="v-input__control">
-                                                <div class="v-input__slot">
-                                                    <div class="v-text-field__slot">
-                                                        <label
-                                                            aria-hidden="true"
-                                                            class="v-label v-label--active theme--light flat_picker_label"
-                                                        >
-                                                            {{ trans('messages.start_date') }}
-                                                        </label>
-                                                        <flat-pickr
-                                                            v-model="start_date"
-                                                            
-                                                            name="start_date"
-                                                            required
-                                                            :config="flatPickerDate()"
-                                                            :data-vv-as="trans('messages.start_date')"
-                                                        ></flat-pickr>
-                                                    </div>
-                                                </div>
-                                                <div class="v-messages theme--light error--text">
-                                                    {{ errors.first('start_date') }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </v-flex>
+            <v-stepper-step step="2" :complete="e1 > 2" color="teal">
+       
+               {{ trans('data.location_info') }}
+            </v-stepper-step>
 
-                                    <v-flex xs12 md4>
-                                        <div class="v-input v-text-field theme--light">
-                                            <div class="v-input__control">
-                                                <div class="v-input__slot">
-                                                    <div class="v-text-field__slot">
-                                                        <label
-                                                            aria-hidden="true"
-                                                            class="v-label v-label--active theme--light flat_picker_label"
-                                                        >
-                                                            {{ trans('messages.end_date') }}
-                                                        </label>
-                                                        <flat-pickr
-                                                            v-model="end_date"
-                                                            
-                                                            name="end_date"
-                                                            required
-                                                            :config="flatPickerDate()"
-                                                            :data-vv-as="trans('messages.end_date')"
-                                                        ></flat-pickr>
-                                                    </div>
-                                                </div>
-                                                <div class="v-messages theme--light error--text">
-                                                    {{ errors.first('end_date') }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </v-flex>
-                                    <v-flex xs12 md4 v-if="$can('superadmin')">
-                                        <v-autocomplete
-                                            item-text="name"
-                                            item-value="id"
-                                            :items="users"
-                                            v-model="project.user_id"
-                                            :label="trans('messages.members')"
-                                            chips
-                                            multiple
-                                            
-                                            data-vv-name="members"
-                                            :data-vv-as="trans('messages.members')"
-                                            :error-messages="errors.collect('members')"
-                                            required
-                                        >
-                                            <Popover
-                                                slot="append"
-                                                :helptext="trans('messages.project_member_tooltip')"
-                                            >
-                                            </Popover>
-                                        </v-autocomplete>
-                                    </v-flex>
+            <v-divider></v-divider>
 
-                                    <v-flex xs12 md4>
-                                        <v-text-field
-                                            v-model="authorization_request_number"
-                                            :label="trans('data.authorization_request_number')"
-                                            
-                                            data-vv-name="Authorization Request Number"
-                                            :data-vv-as="trans('data.authorization_request_number')"
-                                            :error-messages="errors.collect('authorization_request_number')"
-                                            required
-                                        >
-                                        </v-text-field>
-                                    </v-flex>
+            <v-stepper-step step="3" :complete="e1 > 3" color="teal">
+            
+                 {{ trans('data.project_info') }}
+            </v-stepper-step>
+            
+            </v-stepper-header>
 
-                                    <v-flex xs12 md4>
-                                        <v-text-field
-                                            v-model="license_number"
-                                            :label="trans('data.license_number')"
-                                            
-                                            data-vv-name="Authorization Request Number"
-                                            :data-vv-as="trans('data.license_number')"
-                                            :error-messages="errors.collect('license_number')"
-                                            required
-                                        >
-                                        </v-text-field>
-                                    </v-flex>
-
-                                   
-
-
-                                    <v-flex xs12 md4>
-                                        <v-text-field
-                                            v-model="type_of_request"
-                                            :label="trans('data.type_of_request')"
-                                            
-                                            data-vv-name="Authorization Request Number"
-                                            :data-vv-as="trans('data.type_of_request')"
-                                            :error-messages="errors.collect('type_of_request')"
-                                            required
-                                        >
-                                        </v-text-field>
-                                    </v-flex>
-
-                                    <v-flex xs12 md4>
-                                        <v-text-field
-                                            v-model="plot_number"
-                                            :label="trans('data.plot_number')"
-                                            
-                                            data-vv-name="Authorization Request Number"
-                                            :data-vv-as="trans('data.plot_number')"
-                                            :error-messages="errors.collect('plot_number')"
-                                            required
-                                        >
-                                        </v-text-field>
-                                    </v-flex>
-
-                                    <v-flex xs12 md4>
-                                        <v-text-field
-                                            v-model="cadastral_decision_number"
-                                            :label="trans('data.cadastral_decision_number')"
-                                            
-                                            data-vv-name="Authorization Request Number"
-                                            :data-vv-as="trans('data.cadastral_decision_number')"
-                                            :error-messages="errors.collect('cadastral_decision_number')"
-                                            required
-                                        >
-                                        </v-text-field>
-                                    </v-flex>
-
-                                </v-layout>
-                            </v-container>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="darken-1" @click="reset" style="color:#06706d;" >
-                                {{ trans('data.reset') }}
+        <v-stepper-items>
+            <v-stepper-content step="1">
+                <CustomerInfo  @next="getCustomerData($event)" ref="customerInfo"  @click="getCustomerInfo"/>
+                 <v-layout row >
+                              <v-btn color="teal" small outline @click="$router.go(-1)" >
+                                {{ trans('messages.back') }}
+                            </v-btn> 
+                    <div style="display: flex;" align="right">
+                            <v-btn style="background-color:#06706d;color:white;" small @click="getCustomerInfo">
+                                    {{ trans('messages.next') }}
                             </v-btn>
-                            <v-btn v-if="$can('superadmin')" style="background-color:#06706d;color:white;" @click="store" :loading="loading" :disabled="loading">
-                                {{ trans('messages.save') }}
-                            </v-btn>
-                            <v-btn v-else style="background-color:#06706d;color:white;" @click="sendRequest(1)" :loading="loading" :disabled="loading">
-                                {{ trans('data.submit') }}
-                            </v-btn>
-                            <div align="right">
-                                <v-btn style="color:#06706d;" @click="$router.go(-1)">
-                                    {{ trans('messages.back') }}
-                                </v-btn>
-                            </div>
-                            <v-btn v-if="!$can('superadmin')" style="background-color:#06706d;color:white;" color="darken-1" @click="sendRequest(0)" :loading="loading" :disabled="loading">
-                                {{ trans('messages.draft') }}
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-            </v-layout>
-        </v-container>
-    </div>
+               
+                        </div> 
+                </v-layout> 
+            </v-stepper-content>
+
+      <v-stepper-content step="2">
+          <LocationInfo  @next="getLocationData($event)"  ref="locationInfo" />
+        <v-layout row pt-3>
+                <v-btn color="teal" small outline @click="e1 = 1" >
+                    {{ trans('messages.back') }}
+                </v-btn> 
+            <div style="display: flex;" align="right">
+                <v-btn style="background-color:#06706d;color:white;" small @click="e1 = 3">
+                    {{ trans('messages.next') }}
+                </v-btn>
+        
+            </div> 
+        </v-layout> 
+    </v-stepper-content>
+
+      <v-stepper-content step="3">
+        <ProjectInfo  @next="getProjectData($event)"  ref="projectInfo"/>
+        <v-layout row pt-3>
+                  <v-btn color="teal" small outline @click="e1 = 2" >
+                    {{ trans('messages.back') }}
+                </v-btn> 
+            <div style="display: flex;" align="right">
+                <v-btn style="background-color:#06706d;color:white;" small @click="getProjectInfo">
+                    {{ trans('messages.save') }}
+                </v-btn>
+      
+            </div> 
+        </v-layout> 
+      </v-stepper-content>
+
+
+    </v-stepper-items>
+  </v-stepper>
+
+        
+        </v-container>          
+        </div>
 </template>
+
 <script>
-import CategoryAdd from '../category/Add';
-import Popover from '../../../admin/popover/Popover';
+import CustomerInfo from "./project_info/customerInfo.vue";
+import LocationInfo from "./project_info/locationInfo.vue";
+import ProjectInfo from "./project_info/ProjectInfo.vue";
+
 export default {
-    components: {
-        CategoryAdd,
-        Popover,
+    components:{
+        CustomerInfo,
+        LocationInfo,
+        ProjectInfo,
+        
     },
-    data() {
-        return {
-            customers: [],
-            billing_types: [],
-            status: [],
-            users: [],
-            project: [],
-            authorization_request_number:'',
-            license_number:'',
-            type_of_request:'',
-            plot_number:'',
-            cadastral_decision_number:'',
-            start_date: null,
-            end_date: null,
-            categories: [],
-            loading: false,
-            category_id: [],
-        };
+    data(){
+        const self = this;
+        return{
+            e1: 1,
+            project_id:'',
+            customer:new Object,
+            location   :new Object,
+            project:new Object,
+        }        
     },
     mounted() {
-        const self = this;
-        self.$eventBus.$on('updateCategoryList', data => {
-            self.categories.push(data);
-            self.category_id.push(data.id);
-        });
+       
     },
-    beforeDestroy() {
-        const self = this;
-        self.$eventBus.$off('updateCategoryList');
-    },
+
+
     created(){
-          this.create();
+        const self = this;
+       // self.customer_id=self.$route.params.project.customer_id;
+       // self.project_id=self.$route.params.project.project_id;
     },
     methods: {
-        reset(){
-            const self = this;
-            self.customers= [];
-            self.billing_types= [];
-            self.status= [];
-            self.users= [];
-            self.project= [];
-            self.start_date= null;
-            self.end_date= null;
-            self.categories= [];
-            self.loading= false;
-            self.category_id= [];
-            self.authorization_request_number='';
-            self.license_number='';
-            self.type_of_request='';
-            self.plot_number='';
-            self.cadastral_decision_number='';
-            this.create();
-        },
-        create() {
-            const self = this;
-            self.$validator.reset();
-            self.project = [];
-            self.category_id = [];
-            (self.start_date = null),
-                (self.end_date = null),
-                axios
-                    .get('/projects/create')
-                    .then(function(response) {
-                        self.customers = response.data.customers;
-                        self.billing_types = response.data.billingTypes;
-                        self.status = response.data.status;
-                        self.users = response.data.users;
-                        self.categories = response.data.categories;
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    });                   
-        },
-        store() {
-            const self = this;
-            let data = {
-                name: self.project.name,
-                category_id: self.category_id,
-                customer_id: self.project.customer_id,
-                billing_type: self.project.billing_type,
-                total_rate: self.project.total_rate,
-                price_per_hours: self.project.price_per_hours,
-                estimated_hours: self.project.estimated_hours,
-                estimated_cost: self.project.estimated_cost,
-                status: self.project.status,
-                lead_id: self.project.lead_id,
-                description: self.project.description,
-                user_id: self.project.user_id,
-                start_date: self.start_date,
-                end_date: self.end_date,
-            };
-            self.$validator.validateAll().then(result => {
-                if (result == true) {
-                    self.loading = true;
-                    axios
-                        .post('/projects', data)
-                        .then(function(response) {
-                            self.loading = false;
-                            self.$store.commit('showSnackbar', {
-                                message: response.data.msg,
-                                color: response.data.success,
-                            });
-                            if (response.data.success === true) {
-                                self.$eventBus.$emit('updateProjectTable');
-                            }
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                        });
-                }
-            });
-        },
-        createCategory() {
-            const self = this;
-            var data = { type: 'projects' };
-            self.$refs.categoryAdd.create(data);
-        },
-        sendRequest(val){            
-            const self = this;
-            let data = {
-                sent:val,
-                name: self.project.name,
-                description: self.project.description,
-               // user_id: self.project.user_id,
-                start_date: self.start_date,
-                end_date: self.end_date,
-                authorization_request_number:self.authorization_request_number,
-                license_number:self.license_number,
-                type_of_request:self.type_of_request,
-                plot_number:self.plot_number,
-                cadastral_decision_number:self.cadastral_decision_number
-            };
-            self.$validator.validateAll().then(result => {
-                if (result == true) {
-                    self.loading = true;
-                    axios
-                        .post('/send_request', data)
-                        .then(function(response) {
-                            self.loading = false;
-                            
-                            if (response.data.success === true) {
-                               // self.$eventBus.$emit('updateProjectTable');
 
-                            }
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                        });
-                }
-            });
-            this.reset();
+           
+
+         goTo(step, can,data) {
+             alert(JSON.stringify(data))
+    //   if (can) {
+    //     this.e1 = step;
+    //   }
+    },
+    getCustomerData(data){
+        this.customer=data;
+          this.e1=2;
+
+    },
+    getLocationData(data){
+         this.location=data;
+         this.e1=3;
+    },
+     getProjectData(data){
+       this.project=data;
+       this.store();
+    },
+    getCustomerInfo(){
+         this.$refs.customerInfo.nextStep();
+       
+    },
+    getLocationInfo(){
+         this.$refs.locationInfo.nextStep();
+         
+    },
+   getProjectInfo(){
+         this.$refs.projectInfo.nextStep();
+    },
+    click(){
+      //  this.$refs.customerInfo.nextStep();
+      //  this.$refs.locationInfo.nextStep();
+      //  this.$refs.projectInfo.nextStep();
+    },
+
+        store() {
+                   alert(JSON.stringify(this.customer))
+            // const self = this;
+            // let data = {
+            //     name: self.project.name,
+            //     category_id: self.category_id,
+            //     customer_id: self.project.customer_id,
+            //     billing_type: self.project.billing_type,
+            //     total_rate: self.project.total_rate,
+            //     price_per_hours: self.project.price_per_hours,
+            //     estimated_hours: self.project.estimated_hours,
+            //     estimated_cost: self.project.estimated_cost,
+            //     status: self.project.status,
+            //     lead_id: self.project.lead_id,
+            //     description: self.project.description,
+            //     user_id: self.project.user_id,
+            //     start_date: self.start_date,
+            //     end_date: self.end_date,
+            // };
+            // self.$validator.validateAll().then(result => {
+            //     if (result == true) {
+            //         self.loading = true;
+            //         axios
+            //             .post('/projects', data)
+            //             .then(function(response) {
+            //                 self.loading = false;
+            //                 self.$store.commit('showSnackbar', {
+            //                     message: response.data.msg,
+            //                     color: response.data.success,
+            //                 });
+            //                 if (response.data.success === true) {
+            //                     self.$eventBus.$emit('updateProjectTable');
+            //                 }
+            //             })
+            //             .catch(function(error) {
+            //                 console.log(error);
+            //             });
+            //     }
+            // });
         },
     },
 };
 </script>
+ 
+

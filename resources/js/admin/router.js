@@ -139,7 +139,7 @@ const router = new Router({
                 },
                 {
                     path: '/add-project',
-                    name: 'add-project',
+                    name: 'add-project',//AddProject
                     component: require('../common/projects/components/AddProject'),
                 },
                 {

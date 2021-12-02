@@ -48,6 +48,8 @@ class CreateUsersTable extends Migration
             $table->timestamp('last_login')->nullable();
             $table->timestamp('active')->nullable();
             $table->string('activation_key', 255)->nullable();
+            $table->text('id_card_number')->nullable();
+            
             $table->rememberToken();
             $table->timestamps();
         });
