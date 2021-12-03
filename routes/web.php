@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,9 +12,13 @@
 |
 */
 
-Route::get('/', 'Front\\HomeController@index')->name('front.home');
+Route::get('/', function () {
+    return redirect(route('login'));
+});
 
 Auth::routes(['register' => false]);
+
+Route::post('ajaxRequest', [UserController::class, 'getUserData'])->name('ajaxRequest.post');
 
 if (config('constants.enable_client_signup')) {
     Route::get('/client/register', 'Client\ClientRegisterController@index')

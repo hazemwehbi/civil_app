@@ -323,4 +323,14 @@ class UserController extends AdminController
         
         return $this->respond($statistics);
     }
+
+
+    public function getUserData(Request $request){
+        $users = User::getUserByRoleTypw($request->get('name'));
+        $data = [
+            'users' =>$users,
+            'type' =>config('constants.user_types')[$request->get('name')]
+        ];
+        return $this->respond($data);
+    }
 }

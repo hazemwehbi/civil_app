@@ -14,7 +14,7 @@ class AddRoleTypeToRolesTable extends Migration
     public function up()
     {
         Schema::table('roles', function (Blueprint $table) {
-            $table->enum('type', ['employee', 'contact', 'project'])
+            $table->enum('type',array_keys(config('constants.user_types')))
                 ->after('guard_name')
                 ->nullable();
         });

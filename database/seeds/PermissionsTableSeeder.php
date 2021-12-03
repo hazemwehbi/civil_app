@@ -68,19 +68,32 @@ class PermissionsTableSeeder extends Seeder
                     ['name' => 'tickets.delete'],
                 ];
 
+
+
         foreach ($permissions as $permission) {
             Permission::create($permission);
         }
 
-        //Superadmin role.
-        Role::create(['name' => 'superadmin']);
+        //add static roles for create acount
+        foreach(array_keys(config('constants.user_types'))  as $type){
+            $StaticRole = Role::create([
+                'name' => config('constants.user_types')[$type],
+                'type' =>$type,
+            ]);
+          //  $StaticRole =  Role::create(['name' =>  config('constants.user_types')[$type] , 'type'=> config('constants.user_types')[$type]]);
+            $StaticRole->syncPermissions(['employee.create', 'employee.view', 'employee.edit','employee.delete']);
+        }
 
-        //Employee role.
-        $employeeRole = Role::create(['name' => 'employee', 'type' => 'employee']);
-        $employeeRole->syncPermissions(['profile.edit', 'leaves.create', 'leaves.edit', 'knowledge_base.view']);
+     
+        //Superadmin role.
+        $superadmin = Role::create(['name' => 'superadmin']);
+        $superadmin->syncPermissions($permissions);
+        //Employ ee role.
+    //    $employeeRole = Role::create(['name' => 'employee', 'type' => 'employee']);
+       // $employeeRole->syncPermissions(['profile.edit', 'leaves.create', 'leaves.edit', 'knowledge_base.view']);
 
         //Customer role.
-        $customerRole = Role::create(['name' => 'contact', 'type' => 'contact']);
-        $customerRole->syncPermissions(['profile.edit', 'tickets.create', 'tickets.view']);
+      //  $customerRole = Role::create(['name' => 'contact', 'type' => 'contact']);
+       // $customerRole->syncPermissions(['profile.edit', 'tickets.create', 'tickets.view']);
     }
 }

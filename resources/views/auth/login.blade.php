@@ -23,9 +23,7 @@
                 $email = '';
             @endphp
 
-            <div class="text-center mt-5">
-                <img src="{{asset('img/logo.png')}}"  alt="logo" width="100" />
-            </div>
+     
 
             <div class="col-sm-9 col-md-7 col-lg-5 mx-auto shadow-lg  mb-5 bg-white rounded mt-3" >
                 <div class="card card-signin">
@@ -80,11 +78,7 @@
                                 @endif
                             </div>
                             <div class="form-label-group">
-                            <select name="user_type1" id="user_type1"  required class="form-control" style="display: none;">
-                            <option value="" disabled selected>Select your Type</option>
-                                    @foreach(array_keys(config('constants.user_types'))  as $type)
-                                        <option value="{{$type}}" >{{config('constants.user_types')[$type]}} </option>
-                                    @endforeach
+                            <select name="type_name" id="type_name"  required class="form-control" style="display: none;">
                                 </select>
                                 @if ($errors->has('user_type'))
                                     <span class="help-block text-danger">
@@ -170,24 +164,29 @@
 
 @section('javascript')
     <script type="text/javascript">
-
-        $("#user_type").change(function() {
+        $("#user_type").change(function(e) {
+            e.preventDefault();
        var value = $("option:selected", this).val();
-           $("#user_type1").show(); 
+       $('#type_name').children().remove();
+           $("#type_name").show(); 
            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
-                    /* the route pointing to the post function */
-                    url: '/postajax',
-                    type: 'POST',
-                    /* send the csrf-token and the input to the controller */
-                    data: {_token: CSRF_TOKEN, message:value},
-                    /* remind that 'data' is the response of the AjaxController */
-                    success: function (data) { 
-                        alert(1)
-                       // $(".writeinfo").append(data.msg); 
+                    headers: {
+                    'X-CSRF-TOKEN': CSRF_TOKEN
+                    },
+                type:'POST',
+                url:"{{ route('ajaxRequest.post') }}",
+                data:{name: value},
+                success:function(result){
+                    var options = "";
+                   var options1 = `<option value="" disabled selected>choose ${result.type}</option>`;
+                    $("#type_name").append(options1);
+                    for (var i = 0; i < result.users.length; i++) {
+                       options += `<option value=${result.users[i].id}>${result.users[i].name}</option>`;//<--string 
                     }
-                }); 
-         // $("#user_typ1 > option[value=" + value + "]").attr("selected", true);  
+                    $("#type_name").append(options);
+                }
+                });
            })
         $('button.copy').click(function(){
             $('input#inputEmail').val($(this).data('email'));

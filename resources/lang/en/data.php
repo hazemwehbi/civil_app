@@ -25,7 +25,7 @@ return [
     'requests_under_procedure'=>'Requests under procedure',
     'previous_requests'=>'Previous requests',
     'supervision_requests'=>'Supervision_requests',
-    'Log_in_to_the_engineering_offices_system'=>'Log in to the engineering offices system',
+    'Log_in_to_the_engineering_offices_system'=>'Log In To The Engineering Offices System',
     'authorization_request_number'=>'Authorization request number',
     'license_number'=>'License number',
     'beneficiary_id_number'=>'Beneficiary ID number',
@@ -113,8 +113,8 @@ return [
     'lat'=>'Lat',
 
     'buiding_type'=>'Buiding Type',
-    'role_number'=>'Role Number',
-    'unit_number'=>'Unit Number',
+    'role_number'=>'Roles Number',
+    'unit_number'=>'Units Number',
     'build_rate'=>'Build Rate',
 
 

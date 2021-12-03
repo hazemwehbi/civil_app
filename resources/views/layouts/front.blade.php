@@ -21,6 +21,16 @@
     @endif
     
     <style type="text/css">
+          html, body {
+            background-color: #fff;
+            color: #636b6f;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 100;
+            height: 100vh;
+            margin: 0;
+            background: #ffffff url("{{asset('img/welcome.jpg')}}") no-repeat right top;
+            background-size: cover;
+        }
         .hide{
             display: none !important;
         }
@@ -126,6 +136,18 @@
           padding-bottom: calc(var(--input-padding-y) / 3);
           font-size: 12px;
           color: #777;
+        }
+        html, body {
+          height: 100%;
+  margin: 0;
+
+  background-image:url("{{asset('img/welcome.jpg')}}");
+/* Center and scale the image nicely */
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+            
+         
         }
         /*.help-text {
             margin-left: 36px;

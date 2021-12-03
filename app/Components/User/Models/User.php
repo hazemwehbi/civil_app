@@ -281,6 +281,16 @@ class User extends Authenticatable implements HasMedia
         return $permissions;
     }
 
+
+    public static function getUserByRoleTypw($type)
+    {
+        $users= Role::where('type', $type)->first()->users() ->select('id', 'name')
+        ->orderBy('name')
+        ->get()
+        ->toArray();
+         return $users;
+    }
+
     /**
      * retrieve all the roles
      * of user.

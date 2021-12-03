@@ -43,10 +43,11 @@ class CreateProjectsTable extends Migration
 
 
             $table->enum('buiding_type', ['not_started', 'in_progress', 'on_hold', 'cancelled', 'completed'])->nullable();;
-            $table->unsignedInteger('role_number')->nullable();;
-            $table->unsignedInteger('unit_number')->nullable();;
+            $table->unsignedInteger('role_number')->nullable();
+            $table->unsignedInteger('unit_number')->nullable();
+            $table->unsignedInteger('using')->nullable();
             $table->decimal('build_rate', 8, 2)->default(0);
-         
+           
 
             $table->timestamps();
         });
