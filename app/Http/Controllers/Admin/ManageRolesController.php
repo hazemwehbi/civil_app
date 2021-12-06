@@ -113,8 +113,11 @@ class ManageRolesController extends Controller
      */
     public function edit($id)
     {
-        $role = Role::where('type', 'employee')
-                ->find($id);
+        // $role = Role::where('type', 'employee')
+        //         ->find($id);
+
+          $role = Role::find($id);
+                
 
         $role_permissions = [];
         foreach ($role->permissions as $role_perm) {

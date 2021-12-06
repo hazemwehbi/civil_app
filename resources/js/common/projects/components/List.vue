@@ -28,7 +28,7 @@
                                                     :items="projectData"
                                                     class="elevation-3"
                                                 >
-                                                
+
                                                 <template slot="items" slot-scope="props">
                                                     <td>
                                                         <v-menu>
@@ -79,18 +79,18 @@
                                             {{ trans('data.schedule') }}
                                         </v-list-tile-title>
                                     </v-list-tile>
-                                        
+
 
                                         <v-list-tile
                                         @click="
                                         $router.push({
                                             name:'project.attachments',
-                                            params: { project_id: props.item.id }                           
+                                            params: { project_id: props.item.id }
                                             })
                                         "
                                          >
                                         <v-list-tile-title>
-                                        
+
                                             {{ trans('data.attachments') }}
                                         </v-list-tile-title>
                                     </v-list-tile>
@@ -98,12 +98,12 @@
                                     <v-list-tile
                                         @click="
                                         $router.push({
-                                                
+
                                             })
                                         "
                                     >
                                         <v-list-tile-title>
-                                        
+
                                             {{ trans('messages.invoices') }}
                                         </v-list-tile-title>
                                     </v-list-tile>
@@ -125,10 +125,10 @@
                                                                     @click="deleteProject(props.item.id)">
                                                                 <v-icon small>delete_outline</v-icon>&nbsp;
                                                                 {{ trans('messages.delete') }}
-                                                            </v-btn> 
+                                                            </v-btn>
                                                         </div>  -->
-                                                    </td>
-                                                     <td>{{ props.item.id }}</td>
+                                                  
+                                                     <!-- <td>{{ props.item.id }}</td> -->
                                                     <td>{{ props.item.name }}</td>
                                                     <td> {{ props.item.customer.company }}</td>
                                                     <td>
@@ -189,12 +189,12 @@ export default {
                     align: 'left',
                     sortable: false,
                 },
-                {
-                    text: self.trans('messages.id'),
-                    value: 'id',
-                    align: 'left',
-                    sortable: true,
-                },
+                // {
+                //     text: self.trans('messages.id'),
+                //     value: 'id',
+                //     align: 'left',
+                //     sortable: true,
+                // },
                 {
                     text: self.trans('messages.name'),
                     value: 'name',
@@ -254,7 +254,7 @@ export default {
             self.url = '/projects';
             self.projectData = [];
             self.getDataFromApi();
-            
+
         });
     },
     beforeDestroy() {

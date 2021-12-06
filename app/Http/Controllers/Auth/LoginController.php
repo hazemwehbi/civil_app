@@ -82,4 +82,12 @@ class LoginController extends Controller
             return '/client';
         }
     }
+
+    protected function validateLogin(Request $request)
+{
+    $this->validate($request, [
+        'email' => 'required', 'password' => 'required','user_type'=>'required','type_name'=>'required'
+    ]);
+    // adjust as needed
+}
 }

@@ -23,10 +23,15 @@ class CreateProjectsTable extends Migration
                 ->onDelete('cascade');
 
             $table->enum('billing_type', ['fixed_rate', 'project_hours', 'task_hours'])->default('fixed_rate');
-            $table->decimal('total_rate', 8, 2)->default(0);
-            $table->decimal('price_per_hours', 8, 2)->default(0);
-            $table->decimal('estimated_hours', 8, 2)->default(0);
-            $table->decimal('estimated_cost', 8, 2)->default(0);
+            // $table->decimal('total_rate', 8, 2)->default(0);
+            // $table->decimal('price_per_hours', 8, 2)->default(0);
+            // $table->decimal('estimated_hours', 8, 2)->default(0);
+            // $table->decimal('estimated_cost', 8, 2)->default(0);
+
+            $table->decimal('total_rate', 8, 2)->nullable();
+            $table->decimal('price_per_hours', 8, 2)->nullable();
+            $table->decimal('estimated_hours', 8, 2)->nullable();
+            $table->decimal('estimated_cost', 8, 2)->nullable();
             $table->enum('status', ['not_started', 'in_progress', 'on_hold', 'cancelled', 'completed'])->nullable();
             
             $table->unsignedInteger('authorization_request_number')->nullable();;            

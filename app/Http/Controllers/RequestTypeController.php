@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Util\CommonUtil;
 use Illuminate\Http\Request;
 use App\RequestType;
 
@@ -43,4 +43,32 @@ class RequestTypeController extends Controller
         }
 
     }
+
+    public function getPriority(Request $request)
+    {
+        $priority = [
+            [
+                'key' => 'low',
+                'value' => __('messages.low')
+            ],
+            [
+                'key' => 'medium',
+                'value' => __('messages.medium')
+            ],
+            [
+                'key' => 'high',
+                'value' => __('messages.high')
+            ],
+            [
+                'key' => 'urgent',
+                'value' => __('messages.urgent')
+            ]
+        ];
+        return  $priority;
+
+    }
+
+
+
+   
 }

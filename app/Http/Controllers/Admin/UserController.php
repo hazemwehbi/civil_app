@@ -84,7 +84,7 @@ class UserController extends AdminController
         try {
             DB::beginTransaction();
 
-            $input = $request->only('name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id');
+            $input = $request->only('name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number');
 
             /** @var User $user */
             $user = $this->userRepository->create($input);
@@ -207,7 +207,9 @@ class UserController extends AdminController
                 'bank_name',
                 'bank_identifier_code',
                 'branch_location',
-                'tax_payer_id'
+                'tax_payer_id',
+                'id_card_number',
+
             );
 
             // if password field is present but has empty value or null value
@@ -326,11 +328,14 @@ class UserController extends AdminController
 
 
     public function getUserData(Request $request){
-        $users = User::getUserByRoleTypw($request->get('name'));
+        $users = User::getUserByRoleType($request->get('name'));
         $data = [
             'users' =>$users,
             'type' =>config('constants.user_types')[$request->get('name')]
         ];
         return $this->respond($data);
     }
+
+
+    
 }

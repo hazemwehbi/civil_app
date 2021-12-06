@@ -357,4 +357,101 @@ class CommonUtil
         
         return $priority;
     }
+
+
+    public function getBuildingTypeList($append_all = false)
+    {
+        $priority = [
+                        [
+                            'key' => 'test',
+                            'value' => __('messages.low')
+                        ],
+                        [
+                            'key' => 'test1',
+                            'value' => __('messages.medium')
+                        ],
+                    ];
+
+        if ($append_all) {
+            $priority = array_merge([['key' => '', 'value' => __('messages.all')]], $priority);
+        }
+        
+        return $priority;
+    }
+
+    
+    public function getUsingBuilding($append_all = false)
+    {
+        $usingTypes = [
+                        [
+                            'key' => 'ecomerce',
+                            'value' => __('data.ecomerce')
+                        ],
+                        [
+                            'key' => 'support',
+                            'value' =>'support'// __('messages.medium')
+                        ],
+                    ];
+
+       // if ($append_all) {
+         //   $priority = array_merge([['key' => '', 'value' => __('messages.all')]], $priority);
+       // }
+        
+        return $usingTypes;
+    }
+
+    public function getRolesNumber($append_all = false)
+    {
+        $roles_number = [
+                        [
+                            'key' => '1',
+                            'value' =>1// __('data.ecomerce')
+                        ],
+                        [
+                            'key' => '2',
+                            'value' =>'2',// __('data.ecomerce')
+                        ],
+                        [
+                            'key' => '3',
+                            'value' =>'3'// __('data.ecomerce')
+                        ],
+                        [
+                            'key' => '4',
+                            'value' =>'4'// __('data.ecomerce')
+                        ],
+                        [
+                            'key' => '4',
+                            'value' =>'4'//'// __('data.ecomerce')
+                        ],
+                    ];
+
+       // if ($append_all) {
+         //   $priority = array_merge([['key' => '', 'value' => __('messages.all')]], $priority);
+       // }
+        
+        return $roles_number;
+    }
+
+
+
+    public function getBuildingTypes($append_all = false)
+    {
+        $building_types = [
+                        [
+                            'key' => 'test',
+                            'value' =>'test'// __('data.ecomerce')
+                        ],
+                        [
+                            'key' => 'test1',
+                            'value' =>'test1',// __('data.ecomerce')
+                        ],
+                      
+                    ];
+
+       // if ($append_all) {
+         //   $priority = array_merge([['key' => '', 'value' => __('messages.all')]], $priority);
+       // }
+        
+        return $building_types;
+    }
 }

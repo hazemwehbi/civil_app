@@ -198,6 +198,8 @@ export default {
         self.getRequestTypes();
         self.getCustomerProject();
         self.getCustomers();
+        self.getpriority();
+        
     },
     beforeDestroy() {
         const self = this;
@@ -239,6 +241,18 @@ export default {
                 .get('/request-type')
                 .then(function(response) {
                     self.request_types = response.data;
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        },
+
+          getpriority(){
+            const self = this;
+            axios
+                .get('/get-priority')
+                .then(function(response) {
+                    self.priorities = response.data;
                 })
                 .catch(function(error) {
                     console.log(error);

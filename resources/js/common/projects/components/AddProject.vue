@@ -80,15 +80,17 @@
 </template>
 
 <script>
+import VueTelInputVuetify from "vue-tel-input-vuetify";
 import CustomerInfo from "./project_info/customerInfo.vue";
 import LocationInfo from "./project_info/locationInfo.vue";
 import ProjectInfo from "./project_info/ProjectInfo.vue";
-
+import Popover from '../../../admin/popover/Popover';
 export default {
     components:{
         CustomerInfo,
         LocationInfo,
         ProjectInfo,
+        Popover,
         
     },
     data(){
@@ -96,9 +98,10 @@ export default {
         return{
             e1: 1,
             project_id:'',
-            customer:new Object,
+            customers:[],
             location   :new Object,
             project:new Object,
+            users_id:[]
         }        
     },
     mounted() {
@@ -122,7 +125,7 @@ export default {
     //   }
     },
     getCustomerData(data){
-        this.customer=data;
+        this.customers=data;
           this.e1=2;
 
     },
@@ -132,6 +135,8 @@ export default {
     },
      getProjectData(data){
        this.project=data;
+       this.users_id=data.users_id;
+       delete this.project.users_id
        this.store();
     },
     getCustomerInfo(){
@@ -150,8 +155,62 @@ export default {
       //  this.$refs.locationInfo.nextStep();
       //  this.$refs.projectInfo.nextStep();
     },
+        store(val) {
+            const self = this;
+            let data={
+                project:self.project,
+                location:self.location,
+                customers:self.customers,
+                users_id:self.users_id
+            }
+            self.loading = true;
+            axios.post('/add-new-project', data)
+            .then(function(response) {
+                self.loading = false;
+                self.$store.commit('showSnackbar', {
+                    message: response.data.msg,
+                    color: response.data.success,
+                });
+                   // this.$router.push({ path: '/project', })
 
-        store() {
+                if (response.data.success === true) {
+                    //   self.dialog = false;
+                    self.$eventBus.$emit('updateTicketsTable');
+                     //   self.goBack();
+                }
+                
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+        //    console.log(data)
+        //     self.$validator.validateAll().then(result => {
+        //         if (result == true) {
+        //             self.loading = true;
+        //             axios
+        //                 .post('/visit-request', data)
+        //                 .then(function(response) {
+        //                     self.loading = false;
+        //                     self.$store.commit('showSnackbar', {
+        //                         message: response.data.msg,
+        //                         color: response.data.success,
+        //                     });
+
+        //                     if (response.data.success === true) {
+        //                       //   self.dialog = false;
+        //                         self.$eventBus.$emit('updateTicketsTable');
+        //                          self.goBack();
+        //                     }
+                           
+        //                 })
+        //                 .catch(function(error) {
+        //                     console.log(error);
+        //                 });
+        //         }
+        //     });
+          //   self.reset();
+        },
+       // store() {
                 //   alert(JSON.stringify(this.customer))
             // const self = this;
             // let data = {
@@ -190,7 +249,7 @@ export default {
             //             });
             //     }
             // });
-        },
+        //},
     },
 };
 </script>

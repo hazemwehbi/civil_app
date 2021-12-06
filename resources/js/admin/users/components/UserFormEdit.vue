@@ -224,7 +224,7 @@
                             >
                             </v-textarea>
                         </v-flex>
-                        <v-flex xs12 sm4>
+                        <v-flex xs12 sm3>
                             <v-autocomplete
                                 item-text="name"
                                 item-value="id"
@@ -238,19 +238,26 @@
                                 required
                             ></v-autocomplete>
                         </v-flex>
-                        <v-flex xs12 sm4>
+                        <v-flex xs12 sm3>
                             <v-switch
                                 :label="trans('messages.pre_Active_acount')"
                                 v-model="active"
                             ></v-switch>
                         </v-flex>
-                        <v-flex xs12 sm4>
+                        <v-flex xs12 sm3>
                             <v-checkbox
                                 :label="trans('messages.send_email')"
                                 value="true"
                                 v-model="send_email"
                             >
                             </v-checkbox>
+                        </v-flex>
+                             <v-flex xs12 sm3>
+                                <v-text-field
+                            v-model="id_card_number"
+                                type="number"
+                            :label="trans('data.id_card_number')"
+                        ></v-text-field>
                         </v-flex>
                     </v-layout>
                 </v-container>
@@ -289,6 +296,7 @@ export default {
             password: '',
             active: '',
             roles: [],
+             id_card_number:'',
             send_email: false,
         };
     },
@@ -326,6 +334,7 @@ export default {
                 bank_identifier_code: self.form_fields.bank_identifier_code,
                 branch_location: self.form_fields.branch_location,
                 tax_payer_id: self.form_fields.tax_payer_id,
+                 id_card_number: self.id_card_number,
             };
 
             self.$validator.validateAll().then(result => {
@@ -365,7 +374,6 @@ export default {
         },
         loadUser(cb) {
             const self = this;
-
             axios.get('/admin/users/' + self.propUserId + '/edit').then(function(response) {
                 let User = response.data.user;
                 self.form_fields = User;
@@ -373,6 +381,7 @@ export default {
                 self.birth_date = User.birth_date;
                 self.name = User.name;
                 self.email = User.email;
+                self.id_card_number=User.id_card_number;
                 self.active = User.active !== null;
                 self.roles = response.data.roles;
                 self.form_fields.role_id = response.data.role_id;

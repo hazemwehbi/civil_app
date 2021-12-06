@@ -386,7 +386,9 @@ export default {
                             });
                             if (response.data.success === true) {
                                 self.$eventBus.$emit('updateProjectTable');
+                               //  self.goBack()
                             }
+                            ;
                         })
                         .catch(function(error) {
                             console.log(error);

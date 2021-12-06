@@ -282,12 +282,18 @@ class User extends Authenticatable implements HasMedia
     }
 
 
-    public static function getUserByRoleTypw($type)
+    public static function getUserByRoleType($type)
     {
-        $users= Role::where('type', $type)->first()->users() ->select('id', 'name')
-        ->orderBy('name')
-        ->get()
-        ->toArray();
+        //check if role not null
+        $role=Role::where('type', $type)->first();
+        $users=[];
+        if($role != null){
+            $users= $role->users() ->select('id', 'name')
+            ->orderBy('name')
+            ->get()
+            ->toArray();
+        }
+  
          return $users;
     }
 
@@ -351,5 +357,10 @@ class User extends Authenticatable implements HasMedia
     public function visitRequests()
     {
         return $this->hasMany('App\VisitRequest','customer_id');
+    }
+
+    public function GetAgencies()
+    {
+        return $this->hasMany('App\Agency','user_id');
     }
 }

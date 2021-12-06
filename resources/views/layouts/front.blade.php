@@ -19,7 +19,8 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('front/css/util.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('front/css/main.css') }}">
     @endif
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" rel="stylesheet"/>
+
     <style type="text/css">
           html, body {
             background-color: #fff;
@@ -36,7 +37,7 @@
         }
         :root {
           --input-padding-x: 1.5rem;
-          --input-padding-y: .75rem;
+          --input-padding-y: .82rem;
         }
 
         body {
@@ -100,7 +101,6 @@
           margin-bottom: 0;
           /* Override default `<label>` margin */
           line-height: 1.5;
-          color: #495057;
           border: 1px solid transparent;
           border-radius: .25rem;
           transition: all .1s ease-in-out;

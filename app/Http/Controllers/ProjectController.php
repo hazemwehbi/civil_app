@@ -21,7 +21,8 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use App\ProjectRequest;
 use App\VisitRequest;
-
+use App\Agency;
+use App\Location;
 class ProjectController extends Controller
 {
     /**
@@ -784,7 +785,7 @@ class ProjectController extends Controller
         //         ->select('id', 'name')
         //         ->get()
         //         ->toArray();
-    $customers=User::select('id', 'name') ->get()->toArray();
+    $customers=User::select('id', 'name','email','mobile','id_card_number') ->get()->toArray();
                 
               
                
@@ -859,4 +860,131 @@ class ProjectController extends Controller
         
         return $project;
     }
+
+
+    public function getProjectData(Request $request)
+    {
+        $project=Project::find($request->project_id);
+        $data=[
+            'using_types'=>$this->CommonUtil->getUsingBuilding(),
+             'roles_number'=>$this->CommonUtil->getRolesNumber(),
+             'building_types'=>$this->CommonUtil->getBuildingTypes(),
+        ];
+        return $data;
+    }
+
+    public function addAgency(Request $request){
+        try {
+            $agencies=Agency::create([
+                'trade_name'=>$request->trade_name,
+                'record_number'=>$request->record_number,
+                'delegate_record'=>$request->delegate_record,
+                'agency_number'=>$request->agency_number,
+                'agent_name'=>$request->agent_name,
+                'agent_card_number'=>$request->agent_card_number,
+                'email'=>$request->email,
+                'mobile'=>$request->mobile,
+            ]);
+                
+                // $agencies=Agency::select('id', 'trade_name','record_number','delegate_record','agency_number','agent_name','agent_card_number','email','mobile')
+                //         ->get()
+                //         ->toArray();
+
+                return $agencies;
+            }
+            catch (Exception $e) {
+                $output = $this->respondWentWrong($e);
+                return $output;
+              
+            }
+
+       // return $this->respond($data);
+    }
+
+
+   public function  addNewProject(Request $request){
+    if (!request()->user()->can('project.create')) {
+        abort(403, 'Unauthorized action.');
+    }
+
+  
+
+        
+
+
+    $project = $request['project'];
+    $location = $request['location'];
+    ;
+    $customers = $request['customers'];
+
+  
+//    echo(json_encode($customers[0]['id']));
+//     die();
+
+    try {
+        //TODO: optimise the process.
+        DB::beginTransaction();
+
+        $project_data = $project;
+        $project_data['status']='not_started';
+        $project_data['customer_id']=$customers[0]['id'];
+        
+    //$customer->id ?? Auth::id();
+        $project_data['created_by'] = $request->user()->id;
+        $project = Project::create($project_data);
+
+        //Add members
+        $project_members = $request['users_id'];
+        array_push($project_members, $project_data['lead_id']);
+        $project->members()->sync($project_members);
+
+        //Add category
+       // $category = $project['category_id'];
+       // $project->categories()->sync($category);
+
+        $roles = $this->CommonUtil->createRoleAndPermissionsForProject($project->id);
+
+        //Assign project member role
+        $users = User::find($project_members);
+        foreach ($users as $user) {
+            $user->assignRole($roles['member']);
+        }
+        //Assign lead role
+        //  $project_lead = User::find($project_data['lead_id']);
+        //   $project_lead->assignRole($roles['lead']);
+
+        //Assign roles to customer contacts
+        if (!empty($project_data['customer_id'])) {
+            $contacts = User::find($project_data['customer_id'])
+                            ->contacts;
+        ///   foreach ($contacts as $contact) {
+        ///      $contact->assignRole($roles['customer']);
+        //  }
+        }
+
+            DB::commit();
+
+            $this->_saveProjectCreatedNotifications($project_members, $project->id);
+
+            $output = $this->respondSuccess(__('messages.saved_successfully'));
+
+
+
+        $location['project_id'] = $project['id'];
+        Location::create($location);
+
+        $output = $this->respondSuccess(__('messages.saved_successfully'));
+        DB::commit();
+    } catch (\Exception $e) {
+        DB::rollBack();
+        $output = $this->respondWentWrong($e);
+      
+    }
+    return $output;
+   }
+
+
+
+
+
 }

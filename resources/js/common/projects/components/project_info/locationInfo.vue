@@ -1,5 +1,7 @@
 <template>
+   
     <v-container grid-list-md>
+         <Mapp ref="mapadded"></Mapp>
             <v-layout row >
                 <v-flex xs12 sm12>
                     <v-card class="elevation-3">
@@ -30,12 +32,14 @@
                                                <v-flex  md3>
                                                 <v-text-field
                                                 v-model="location.plan_id"
+                                                 type="number" 
                                                 :label="trans('data.plan_id')"
                                             ></v-text-field>
                                                 </v-flex>
                                                <v-flex  md3>
                                                 <v-text-field
                                                 v-model="location.piece_number"
+                                                 type="number" 
                                                 :label="trans('data.piece_number')"
                                             ></v-text-field>
                                     
@@ -47,6 +51,7 @@
                                             <v-flex  md3>
                                                 <v-text-field
                                                 v-model="location.size_number"
+                                                 type="number" 
                                                 :label="trans('data.size_number')"
                                             >
                                             </v-text-field>
@@ -54,6 +59,7 @@
                                                 <v-flex  md3>
                                                 <v-text-field
                                                 v-model="location.instrument_number"
+                                                 type="number" 
                                                 :label="trans('data.instrument_number')"
                                             ></v-text-field>
                                             </v-flex>
@@ -64,6 +70,7 @@
                                                 <div class="v-input__slot">
                                                     <div class="v-text-field__slot">
                                                         <label
+                                                            style="font-size: 22px;"
                                                             aria-hidden="true"
                                                             class="v-label v-label--active theme--light flat_picker_label"
                                                         >
@@ -71,7 +78,6 @@
                                                         </label>
                                                         <flat-pickr
                                                             v-model="location.instrument_date"
-                                                            
                                                             name="instrument_date"
                                                             required
                                                             :config="flatPickerDate()"
@@ -141,6 +147,17 @@
                                             ></v-text-field>
                                     
                                             </v-flex> 
+                                                   <!-- <v-flex xs1 sm1 md1>
+                                <v-btn
+                                    @click="createcordinate"
+                                    small
+                                    fab
+                                    dark
+                                    style="background-color:#06706d;color:white;"
+                                >
+                                    <v-icon>add</v-icon>
+                                </v-btn> -->
+                            </v-flex>
                                           
                                         </v-layout>
                                 </v-container>
@@ -151,7 +168,11 @@
             </v-container> 
 </template>
 <script>
+import Mapp from './map.vue'
 export default {
+        components: {
+        Mapp,
+    },
     props:['customerId'],
     data(){
         return{
@@ -200,6 +221,11 @@ export default {
             nextStep() {
             this.$emit('next',this.location);
         },
+
+        createcordinate(){
+                const self = this;
+            this.$refs.mapadded.create();
+        }
     }
 }
 </script>

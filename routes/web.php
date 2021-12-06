@@ -41,6 +41,7 @@ Route::prefix('admin')
         Route::get('user-statistics', 'UserController@getStatistics');
         Route::get('users-all', 'UserController@getAllEmployee');
         Route::get('users/{id}/name', 'UserController@getEmployee');
+        
         Route::resource('users', 'UserController');
 
         Route::get('customers/{id}/customer-name', 'CustomerController@getCustomer');
@@ -92,6 +93,8 @@ Route::middleware(['auth'])
         Route::resource('media', 'MediaController');
 
         Route::post('visit-request', 'ProjectController@addVisitRequest');
+        Route::post('add-new-project', 'ProjectController@addNewProject');
+        
         Route::get('all-customers', 'ProjectController@getAllCustomer');
         Route::get('projects-statistics', 'ProjectController@getStatistics');
         Route::get('projects-customer', 'ProjectController@getCustomerProject');
@@ -121,10 +124,15 @@ Route::middleware(['auth'])
 
         Route::post('customer-info', 'Admin\CustomerController@getCutomerInfo');
         Route::post('project-info', 'ProjectController@getProjectInfo');
+        Route::post('getProject-Data', 'ProjectController@getProjectData');
+        Route::post('add-agency', 'ProjectController@addAgency');
+        
         Route::post('accept-project', 'ProjectController@acceptProject');
         Route::get('sent-requests', 'ProjectController@getProjectRequest');
         Route::delete('delete-requests/{id}', 'ProjectController@deleteProject');
+        Route::get('get-priority','RequestTypeController@getPriority');
         Route::resource('request-type','RequestTypeController');
+       
         Route::get('get-Customer-name/{id}','Admin\CustomerController@getCustomerName');
         Route::get('visit-request-type/{id}','ProjectController@getVisitRequestType');
         

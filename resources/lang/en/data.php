@@ -111,16 +111,30 @@ return [
     'southern_border'=>'Southern Border',
     'lon'=>'Lon',
     'lat'=>'Lat',
-
+    'using'=>'Using',
+    
     'buiding_type'=>'Buiding Type',
     'role_number'=>'Roles Number',
     'unit_number'=>'Units Number',
     'build_rate'=>'Build Rate',
 
-
+    'name2'=>'second owner',
+  
     'location_info'=>'Location Info',
     'project_info'=>'Project Info',
     'customer_info'=>'Customer Info ',
     
+    
+    'add_agency'=>'Add Agency',
+    'trade_name'=>'Trade Name',
+    'record_number'=>'Record Number',
+    'delegate_record'=>'Delegate Record ',
+
+    'agency_number'=>'Agency Number',
+    'agent_name'=>'Agent Name',
+    'agent_card_number'=>'Agent Card Number',
+    'billing_type'=>'Billing Type',
+  
 ];
+
 

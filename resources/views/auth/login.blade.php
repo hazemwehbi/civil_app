@@ -15,7 +15,7 @@
         </div>
     @endif
     <div class="row">
-        <form class="form-signin" method="POST" action="{{ route('login') }}">
+        <form class="form-signin" id="form" method="POST" action="{{ route('login') }}">
             {{ csrf_field() }}
 
             @php
@@ -35,10 +35,11 @@
                         </div>
                         <div style="padding:20px;">
                             <div class="form-label-group">
-                                <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email Address" value="{{$email}}" required autofocus>
-                                <label for="inputEmail">
+                            <label for="inputEmail">
                                     Email Address
                                 </label>
+                                <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email Address" value="{{$email}}" required  autofocus><br>
+                           
                                 @if ($errors->has('email'))
                                     <span class="help-block text-danger">
                                         <small class="help-text">
@@ -49,10 +50,11 @@
                             </div>
 
                             <div class="form-label-group">
-                                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" value ="{{$pwd}}" required>
-                                <label for="inputPassword">
+                            <label for="inputPassword">
                                     Password
                                 </label>
+                                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" value ="{{$pwd}}"  required ><br>
+                      
                                 @if ($errors->has('password'))
                                     <span class="help-block text-danger">
                                         <small class="help-text">
@@ -62,9 +64,8 @@
                                 @endif
                             </div>
                             <div class="form-label-group">
-
-                            <select name="user_type" id="user_type"  required class="form-control" >
-                            <option value="" disabled selected>Select your Type</option>
+                            <select name="user_type" id="user_type"   class="form-control" autofocus required >
+                            <option value="" disabled selected>Select your Type</option req>
                                     @foreach(array_keys(config('constants.user_types'))  as $type)
                                         <option value="{{$type}}" >{{config('constants.user_types')[$type]}} </option>
                                     @endforeach
@@ -77,8 +78,10 @@
                                     </span>
                                 @endif
                             </div>
-                            <div class="form-label-group">
-                            <select name="type_name" id="type_name"  required class="form-control" style="display: none;">
+
+
+                            <div class="form-label-group" style="margin-top: 20;">
+                            <select name="type_name" id="type_name"   class="form-control" style="display: none;" required>
                                 </select>
                                 @if ($errors->has('user_type'))
                                     <span class="help-block text-danger">
@@ -163,7 +166,70 @@
 @endsection
 
 @section('javascript')
+<style>
+
+
+  .error{
+    color: red;
+  }
+  label,
+  input,
+  button {
+    border: 0;
+    margin-bottom: 3px;
+    display: block;
+    width: 100%;
+  }
+ .common_box_body {
+    padding: 15px;
+    border: 12px solid #28BAA2;
+    border-color: #28BAA2;
+    border-radius: 15px;
+    margin-top: 10px;
+    background: #d4edda;
+}
+</style>
+@section('javascript')
+<!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script> -->
     <script type="text/javascript">
+
+$(document).ready(function(){
+
+//   $("#form").validate({
+//     // Specify validation rules
+//     rules: {
+//       user_type: "required",
+//       type_name: "required",
+//       email: {
+//         required: true,
+//         email: true
+//       },      
+//       password: {
+//         required: true,
+//        // minlength: 5,
+//       }
+//     },
+//     messages: {
+//         user_type: {
+//       required: "Please Select your type",
+//      },      
+//      type_name: {
+//       required: "Please select name of  type",
+//      },     
+//      password: {
+//       required: "Please enter password",
+//      }, 
+//      email: {
+//       required: "Please enter email address",
+//       email: "Please enter a valid email address.",
+//      },
+//     },
+  
+//   });
+ });
+   
         $("#user_type").change(function(e) {
             e.preventDefault();
        var value = $("option:selected", this).val();
