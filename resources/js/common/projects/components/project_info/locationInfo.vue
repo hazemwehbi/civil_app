@@ -1,7 +1,7 @@
 <template>
    
     <v-container grid-list-md>
-         <Mapp ref="mapadded"></Mapp>
+         <!-- <Mapp ref="mapadded"></Mapp> -->
             <v-layout row >
                 <v-flex xs12 sm12>
                     <v-card class="elevation-3">
@@ -157,57 +157,50 @@
                                 >
                                     <v-icon>add</v-icon>
                                 </v-btn> -->
-                            </v-flex>
-                                          
                                         </v-layout>
                                 </v-container>
                             </v-card-text>
                         </v-card>
-                    </v-flex>
+                         </v-flex>
                 </v-layout>     
             </v-container> 
 </template>
 <script>
-import Mapp from './map.vue'
+import Mapp from './map.vue';
 export default {
-        components: {
+    components: {
         Mapp,
     },
-    props:['customerId'],
-    data(){
-        return{
-            location:{
-                province_municipality:'',
-                municipality:'',
-                plan_id :'',
-                piece_number:'',
+    props: ['customerId'],
+    data() {
+        return {
+            location: {
+                province_municipality: '',
+                municipality: '',
+                plan_id: '',
+                piece_number: '',
 
-                size_number:'',
-                instrument_number:'',
-                instrument_date :'',
-                northern_border:'',
+                size_number: '',
+                instrument_number: '',
+                instrument_date: '',
+                northern_border: '',
 
+                eastern_border: '',
+                western_border: '',
+                southern_border: '',
+                status: '',
 
-
-                eastern_border:'',
-                western_border:'',
-                southern_border :'',
-                status:'',
-
-
-                lon:'',
-                lat:'',
-
-             
+                lon: '',
+                lat: '',
             },
-        }; 
+        };
     },
-    created(){
+    created() {
         const self = this;
         self.getCustomerData();
     },
-    methods:{
-        getCustomerData(){
+    methods: {
+        getCustomerData() {
             // const self = this;
             // axios.post('/customer-info' ,{customer_id:self.customerId}).then(function(response) {
             //     self.customer=response.data;
@@ -218,14 +211,14 @@ export default {
             // });
         },
 
-            nextStep() {
-            this.$emit('next',this.location);
+        nextStep() {
+            this.$emit('next', this.location);
         },
 
-        createcordinate(){
-                const self = this;
+        createcordinate() {
+            const self = this;
             this.$refs.mapadded.create();
-        }
-    }
-}
+        },
+    },
+};
 </script>

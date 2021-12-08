@@ -145,6 +145,7 @@
                     </v-container>
                 </v-card-text>
                 <v-divider></v-divider>
+                <v-layout justify-center>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn  style="color:#06706d;"  @click="reset">
@@ -160,6 +161,7 @@
                         {{ trans('messages.draft') }}
                     </v-btn>
                 </v-card-actions>
+                </v-layout>
             </v-card>
     </v-container>
 </template>

@@ -262,12 +262,14 @@
                     </v-layout>
                 </v-container>
             </v-card-text>
+              <v-layout justify-center>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn @click="save()" color="primary" dark>
                     {{ trans('messages.update') }}
                 </v-btn>
             </v-card-actions>
+             </v-layout>
         </v-card>
     </div>
 </template>

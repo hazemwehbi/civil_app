@@ -27,7 +27,7 @@
         <v-stepper-items>
             <v-stepper-content step="1">
                 <CustomerInfo  @next="getCustomerData($event)" ref="customerInfo"  @click="getCustomerInfo"/>
-                 <v-layout row >
+                 <v-layout row  justify-center>
                               <v-btn color="teal" small outline @click="$router.go(-1)" >
                                 {{ trans('messages.back') }}
                             </v-btn> 
@@ -42,7 +42,7 @@
 
       <v-stepper-content step="2">
           <LocationInfo  @next="getLocationData($event)"  ref="locationInfo" />
-        <v-layout row pt-3>
+        <v-layout row pt-3 justify-center>
                 <v-btn color="teal" small outline @click="e1 = 1" >
                     {{ trans('messages.back') }}
                 </v-btn> 
@@ -57,7 +57,7 @@
 
       <v-stepper-content step="3">
         <ProjectInfo  @next="getProjectData($event)"  ref="projectInfo"/>
-        <v-layout row pt-3>
+        <v-layout row pt-3 justify-center>
                   <v-btn color="teal" small outline @click="e1 = 2" >
                     {{ trans('messages.back') }}
                 </v-btn> 
