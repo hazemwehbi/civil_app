@@ -103,13 +103,11 @@ class TicketController extends Controller
         if (!request()->user()->can('tickets.create')) {
             abort(403, 'Unauthorized action.');
         }
-
         $priority = $this->CommonUtil->getPriorityList();
         $statuses = Ticket::StatusForDropDown();
         $ticket_types = Category::forDropdown('tickets');
         $customers = Customer::getCustomersForDropDown();
         $employees = User::getUsersForDropDown();
-
         $data = [
                     'priority' => $priority,
                     'statuses' => $statuses,
@@ -118,6 +116,8 @@ class TicketController extends Controller
                     'employees' => $employees
                 ];
 
+                
+                
         return $this->respond($data);
     }
 

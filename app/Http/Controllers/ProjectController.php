@@ -750,7 +750,7 @@ class ProjectController extends Controller
                 'title'=>$request->title,
                 'customer_id'=>$customer_id,
                 'project_id'=>$request->project_id,
-                'request_type_id'=>$request->request_type,
+                'request_type'=>$request->request_type,
                 'description'=>$request->description,
                 'status'=>'new',
                 'priority'=>$priority,
@@ -762,7 +762,7 @@ class ProjectController extends Controller
                 'title'=>$request->title,
                 'customer_id'=>$customer_id,
                 'project_id'=>$request->project_id,
-                'request_type_id'=>$request->request_type,
+                'request_type'=>$request->request_type,
                 'description'=>$request->description,
                 'status'=>'accepted',
                 'priority'=>$priority,
@@ -812,7 +812,7 @@ class ProjectController extends Controller
             $visitRequest->title=$request->title;
             $visitRequest->customer_id=$request->customer_id;
             $visitRequest->project_id=$request->project_id;
-            $visitRequest->request_type_id=$request->request_type;
+            $visitRequest->request_type=$request->request_type;
             $visitRequest->description=$request->description;
             if(isset($request->priority)){
                 $visitRequest->priority=$request->priority;
@@ -903,30 +903,23 @@ class ProjectController extends Controller
 
 
    public function  addNewProject(Request $request){
+       echo (request()->user());
+       die();
     if (!request()->user()->can('project.create')) {
         abort(403, 'Unauthorized action.');
     }
-
-  
-
-        
-
 
     $project = $request['project'];
     $location = $request['location'];
     ;
     $customers = $request['customers'];
 
-  
-//    echo(json_encode($customers[0]['id']));
-//     die();
-
     try {
         //TODO: optimise the process.
         DB::beginTransaction();
 
         $project_data = $project;
-        $project_data['status']='not_started';
+        //$project_data['status']='not_started';
         $project_data['customer_id']=$customers[0]['id'];
         
     //$customer->id ?? Auth::id();
@@ -984,7 +977,33 @@ class ProjectController extends Controller
    }
 
 
+   public function getLocationStatus(Request $request)
+   {
+       $location_status = [
+           [
+               'key' => 'not_started',
+               'value' => __('messages.not_started')
+           ],
+           [
+               'key' => 'in_progress',
+               'value' => __('messages.in_progress')
+           ],
+           [
+               'key' => 'on_hold',
+               'value' => __('messages.on_hold')
+           ],
+           [
+               'key' => 'cancelled',
+               'value' => __('messages.cancelled')
+           ],
+           [
+               'key' => 'completed',
+               'value' => __('messages.completed')
+           ],
+       ];
+       return  $location_status;
 
+   }
 
 
 }

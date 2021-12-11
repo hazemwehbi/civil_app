@@ -37,7 +37,7 @@
 
                                     <v-list-tile
                                         @click="$router.push({name: 'create_visit_request_list',
-                                         params: { project_id: props.item.id ,customer_id: props.item.customer_id }})"                               >
+                                         params: { project_id: props.item.id ,customer_id: props.item.customer_id, request_type:'visit_request' }})"                               >
                                         <v-list-tile-title>
                                             {{ trans('data.create_a_visit_request') }}
                                         </v-list-tile-title>

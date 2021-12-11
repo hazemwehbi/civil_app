@@ -20,20 +20,20 @@ class CreateLocationTable extends Migration
                 ->references('id')->on('projects')
                 ->onDelete('cascade');
 
-            $table->string('province_municipality');
-            $table->string('municipality');
-            $table->unsignedInteger('plan_id');
-            $table->unsignedInteger('piece_number');
-            $table->unsignedInteger('size_number');
-            $table->unsignedInteger('instrument_number');
-            $table->dateTime('instrument_date');
-            $table->string('northern_border');
-            $table->string('eastern_border');
-            $table->string('western_border');
-            $table->string('southern_border');
-            $table->enum('status', ['not_started', 'in_progress', 'on_hold', 'cancelled', 'completed']);
-            $table->boolean('lon');
-            $table->boolean('lat');
+            $table->string('province_municipality')->nullable();;
+            $table->string('municipality')->nullable();;
+            $table->unsignedInteger('plan_id')->nullable();;
+            $table->unsignedInteger('piece_number')->nullable();;
+            $table->unsignedInteger('size_number')->nullable();;
+            $table->unsignedInteger('instrument_number')->nullable();;
+            $table->dateTime('instrument_date')->nullable();;
+            $table->string('northern_border')->nullable();;
+            $table->string('eastern_border')->nullable();;
+            $table->string('western_border')->nullable();;
+            $table->string('southern_border')->nullable();;
+            $table->enum('status', ['not_started', 'in_progress', 'on_hold', 'cancelled', 'completed'])->nullable();
+            $table->boolean('lon')->nullable();;
+            $table->boolean('lat')->nullable();;
 
             $table->timestamps();
         });

@@ -327,9 +327,9 @@ export default {
         roleName(role) {
             var name = [];
 
-            if (role.type == 'employee' || role.type == null) {
+           // if (role.type == 'employee' || role.type == null) {
                 name.push(role.name[0].toUpperCase() + role.name.slice(1));
-            }
+           // }
 
             return name.join();
         },

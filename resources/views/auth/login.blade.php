@@ -81,7 +81,7 @@
 
 
                             <div class="form-label-group" style="margin-top: 20;">
-                            <select name="type_name" id="type_name"   class="form-control" style="display: none;" required>
+                            <select name="type_name" id="type_name"   class="form-control" style="display: none;" >
                                 </select>
                                 @if ($errors->has('user_type'))
                                     <span class="help-block text-danger">
@@ -230,11 +230,17 @@ $(document).ready(function(){
 //   });
  });
    
-        $("#user_type").change(function(e) {
-            e.preventDefault();
+  $("#user_type").change(function(e) {
+      e.preventDefault();
        var value = $("option:selected", this).val();
        $('#type_name').children().remove();
-           $("#type_name").show(); 
+       $("#type_name").prop('required',false);
+       $("#type_name").hide(); 
+       if(value == 'ENGINEERING_OFFICE' || value == 'SUPPORT_SERVICES_OFFICE' || value == 'GOVERNMENT_AGENCIES')
+       {
+       
+       $("#type_name").show(); 
+       $("#type_name").prop('required',true);
            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
                     headers: {
@@ -253,11 +259,26 @@ $(document).ready(function(){
                     $("#type_name").append(options);
                 }
                 });
-           })
-        $('button.copy').click(function(){
+         
+
+       }
+    });
+
+
+
+       $('button.copy').click(function(){
             $('input#inputEmail').val($(this).data('email'));
             $('input#inputPassword').val($(this).data('pwd'));
             $('button#submit').trigger('click');
         });
+
+
+
+
+
+
+
+
+
     </script>
 @endsection

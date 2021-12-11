@@ -10,14 +10,14 @@ class RequestTypeController extends Controller
 
     public function index(Request $request)
     {
+
         $types=RequestType::select('id', 'name')
                         ->get()
                         ->toArray();
-
                 return $types;
     }
 
-
+    
     public function store(Request $request)
     {
         try {
@@ -69,6 +69,32 @@ class RequestTypeController extends Controller
     }
 
 
+    public function getRequestsTypes(Request $request)
+    {
+        $priority = [
+            [
+                'key' => 'visit_request',
+                'value' => __('data.visit_request')
+            ],
+            [
+                'key' => 'design_request',
+                'value' => __('data.design_request')
+            ],
+            [
+                'key' => 'support_service_request',
+                'value' => __('data.support_service_request')
+            ],
+            [
+                'key' => 'contractor_request',
+                'value' => __('data.contractor_request')
+            ],
+            [
+                'key' => 'supervision_request',
+                'value' => __('data.supervision_request')
+            ],
+        ];
+        return  $priority;
 
+    }
    
 }

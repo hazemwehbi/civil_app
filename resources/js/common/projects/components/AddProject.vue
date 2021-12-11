@@ -47,7 +47,7 @@
                     {{ trans('messages.back') }}
                 </v-btn> 
             <div style="display: flex;" align="right">
-                <v-btn style="background-color:#06706d;color:white;" small @click="e1 = 3">
+                <v-btn style="background-color:#06706d;color:white;" small @click="getLocationInfo">
                     {{ trans('messages.next') }}
                 </v-btn>
         
@@ -62,7 +62,7 @@
                     {{ trans('messages.back') }}
                 </v-btn> 
             <div style="display: flex;" align="right">
-                <v-btn style="background-color:#06706d;color:white;" small @click="getProjectInfo">
+                <v-btn style="background-color:#06706d;color:white;"  :loading="loading" :disabled="loading" small @click="getProjectInfo">
                     {{ trans('messages.save') }}
                 </v-btn>
       
@@ -101,7 +101,8 @@ export default {
             customers:[],
             location   :new Object,
             project:new Object,
-            users_id:[]
+            users_id:[],
+            loading: false,
         }        
     },
     mounted() {
@@ -130,6 +131,7 @@ export default {
 
     },
     getLocationData(data){
+        alert(JSON.stringify(data))
          this.location=data;
          this.e1=3;
     },
@@ -144,6 +146,7 @@ export default {
        
     },
     getLocationInfo(){
+         alert(JSON.stringify(1))
          this.$refs.locationInfo.nextStep();
          
     },
@@ -163,7 +166,7 @@ export default {
                 customers:self.customers,
                 users_id:self.users_id
             }
-            self.loading = true;
+            this.loading = true;
             axios.post('/add-new-project', data)
             .then(function(response) {
                 self.loading = false;
@@ -172,8 +175,9 @@ export default {
                     color: response.data.success,
                 });
                    // this.$router.push({ path: '/project', })
-
+                
                 if (response.data.success === true) {
+                      this.loading=false;
                     //   self.dialog = false;
                     self.$eventBus.$emit('updateTicketsTable');
                      //   self.goBack();

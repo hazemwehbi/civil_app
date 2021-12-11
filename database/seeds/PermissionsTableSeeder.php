@@ -42,7 +42,10 @@ class PermissionsTableSeeder extends Seeder
                     ['name' => 'customerNote.edit'],
                     ['name' => 'customerNote.delete'],
 
+                    ['name' => 'project.list'],
                     ['name' => 'project.create'],
+                    ['name' => 'project.edit'],
+                    ['name' => 'project.delete'],
 
                     ['name' => 'file.create'],
                     ['name' => 'setting'],

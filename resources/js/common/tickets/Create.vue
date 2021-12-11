@@ -17,10 +17,10 @@
                                     required
                                 ></v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm5 md5>
+                            <v-flex xs12 sm6 md6>
                                   <v-autocomplete
-                                    item-text="name"
-                                    item-value="id"
+                                    item-text="value"
+                                    item-value="key"
                                     :items="request_types"
                                     v-model="request_type"
                                     :label="trans('data.request_type')"
@@ -31,7 +31,7 @@
                                     required
                                 ></v-autocomplete>
                             </v-flex>
-                            <v-flex xs1 sm1 md1>
+                            <!-- <v-flex xs1 sm1 md1>
                                 <v-btn
                                     @click="createRequestType"
                                     small
@@ -41,7 +41,7 @@
                                 >
                                     <v-icon>add</v-icon>
                                 </v-btn>
-                            </v-flex>
+                            </v-flex> -->
               
                         </v-layout>
                         <v-layout row>
@@ -62,7 +62,8 @@
                                     required
                                 ></v-autocomplete>
                             </v-flex>
-                                    <v-flex xs12 sm6 md6 v-if="$hasRole('employee')">
+                            <!-- v-if="$hasRole('employee')" -->
+                                    <v-flex xs12 sm6 md6 >
                                 <v-autocomplete
                                     item-text="name"
                                     item-value="id"
@@ -76,7 +77,8 @@
                                     required
                                 ></v-autocomplete>
                             </v-flex>
-                                                <v-flex xs12 sm4 md4 v-if="$hasRole('employee')">
+                            <!-- v-if="$hasRole('employee')" -->
+                                                <v-flex xs12 sm4 md4 >
                                 <v-autocomplete
                                     item-text="value"
                                     item-value="key"
@@ -197,6 +199,7 @@ export default {
         self.reset();
         self.project_id = self.project_id = self.$route.params.project_id;
         self.customer_id = self.customer_id = self.$route.params.customer_id;
+        self.request_type=self.$route.params.request_type;
         self.getRequestTypes();
         self.getCustomerProject();
         self.getCustomers();
@@ -240,7 +243,7 @@ export default {
         getRequestTypes(){
             const self = this;
             axios
-                .get('/request-type')
+                .get('/get-request-types')
                 .then(function(response) {
                     self.request_types = response.data;
                 })

@@ -163,12 +163,14 @@
                         </v-layout>
                     </v-container>
                 </v-card-text>
+                 <v-layout justify-center>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="success" @click="store" :loading="loading" :disabled="loading">
                         {{ trans('messages.update') }}
                     </v-btn>
                 </v-card-actions>
+                 </v-layout >
             </v-card>
         </v-flex>
     </v-layout>

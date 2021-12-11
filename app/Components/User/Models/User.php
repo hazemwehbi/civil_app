@@ -10,7 +10,8 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
-
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Auth;
 /**
  * Class User.
  *
@@ -363,4 +364,15 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany('App\Agency','user_id');
     }
+
+
+    public function getAllPermissionsAttribute() {
+        $permissions = [];
+          foreach (Permission::all() as $permission) {
+            if (Auth::user()->can($permission->name)) {
+              $permissions[] = $permission->name;
+            }
+          }
+          return $permissions;
+      }
 }

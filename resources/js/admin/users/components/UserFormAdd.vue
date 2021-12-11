@@ -279,7 +279,9 @@
                 <v-btn @click="save()" color="primary" dark>
                     {{ trans('messages.save') }}
                 </v-btn>
-
+                    <v-btn style="color:#06706d;" @click="$router.go(-1)">
+                        {{ trans('messages.back') }}
+                    </v-btn>
             </v-card-actions>
               </v-layout>
         </v-card>

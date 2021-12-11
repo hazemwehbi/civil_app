@@ -1,92 +1,145 @@
 <template>
     <v-container grid-list-md>
-        <AddAgency ref="agencyadded"></AddAgency>
-            <v-layout row >
-                <v-flex xs12 sm12>
-                    <v-card class="elevation-3">
-                        <v-card-title primary-title xs8 sm8>
-                            <div>
-                                <div class="headline">
-                                    {{ trans('data.customer_info') }}
-                                </div>
+        <AddAgency ref="agencyadded" @fillAgencyData="getAgenctData($event)"></AddAgency>
+        <v-layout row>
+            <v-flex xs12 sm12>
+                <v-card class="elevation-3">
+                    <v-card-title primary-title xs8 sm8>
+                        <div>
+                            <div class="headline">
+                                {{ trans('data.customer_info') }}
                             </div>
-                        </v-card-title>
-                        <v-divider></v-divider>
-                        <v-card-text>
-                    <v-container grid-list-md>
-                             <v-form ref="form">
-
-                                        <v-layout row wrap v-for="(input,k) in inputs" :key="k">
-                                            <v-flex xs12  md4 >
-                                    <v-autocomplete
-                                    item-text="name"
-                                    item-value="id"
-                                    :items="customers"
-                                     v-model="input.id"
-                                     :label="trans('messages.name')"
-                                    v-validate="'required'"
-                                    data-vv-name="name"
-                                    :data-vv-as="trans('messages.name')"
-                                     @change="(event) => updatevalues(event,k)"
-                                    :error-messages="errors.collect('name')"
-                                    required
-                                ></v-autocomplete>
-                                            
-                                              </v-flex> 
-                                                <v-flex  xs12  md4>
-                                                <v-text-field
-                                                v-model="input.id_card_number"
-                                                 type="number"
-                                                :label="trans('data.id_card_number')"
+                        </div>
+                    </v-card-title>
+                    <v-divider></v-divider>
+                    <v-card-text>
+                        <v-container grid-list-md>
+                            <v-form ref="form">
+                                <v-layout row wrap v-for="(input, k) in inputs" :key="k">
+                                    <v-flex xs12 md4>
+                                        <v-autocomplete
+                                            item-text="name"
+                                            item-value="id"
+                                            :items="customers"
+                                            v-model="input.id"
+                                            :label="trans('messages.name')"
+                                            v-validate="'required'"
+                                            data-vv-name="name"
+                                            :data-vv-as="trans('messages.name')"
+                                            @change="(event) => updatevalues(event, k)"
+                                            :error-messages="errors.collect('name')"
+                                            required
+                                        ></v-autocomplete>
+                                    </v-flex>
+                                    <v-flex xs12 md4>
+                                        <v-text-field
+                                            v-model="input.id_card_number"
+                                            type="number"
+                                            :label="trans('data.id_card_number')"
+                                        ></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs12 md4>
+                                        <v-text-field
+                                            :label="trans('messages.email')"
+                                            v-model="input.email"
+                                            v-validate="'required|email'"
+                                            data-vv-name="email"
+                                            :data-vv-as="trans('messages.email')"
+                                            :error-messages="errors.collect('email')"
+                                            required
+                                        ></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs12 md4>
+                                        <v-text-field
+                                            v-model="input.mobile"
+                                            type="number"
+                                            :label="trans('messages.mobile')"
+                                        ></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs12 md4>
+                                        <v-btn
+                                            @click="add(k)"
+                                            small
+                                            v-show="k == inputs.length - 1"
+                                            fab
+                                            style="background-color: #06706d; color: white"
+                                        >
+                                            <v-icon dark> add </v-icon>
+                                        </v-btn>
+                                        <v-btn
+                                            @click="remove(k)"
+                                            v-show="k || (!k && inputs.length > 1)"
+                                            small
+                                            fab
+                                            color="red"
+                                            dark
+                                        >
+                                            <i class="fas fa-minus-circle"></i>
+                                        </v-btn>
+                                    </v-flex>
+                                </v-layout>
+                                </v-form>
+                                <div v-show="isAgency">
+                                    <v-layout row wrap class="add-agency">
+                                        <v-flex md3>
+                                            <v-text-field
+                                                v-model="agency.trade_name"
+                                                data-vv-name="name"
+                                                :label="trans('data.trade_name')"
+                                            >
+                                            </v-text-field>
+                                        </v-flex>
+                                        <v-flex md3>
+                                            <v-text-field
+                                                v-model="agency.record_number"
+                                                :label="trans('data.record_number')"
                                             ></v-text-field>
-                                            </v-flex>
-                                               <v-flex xs12  md4>
-                                                   <v-text-field
-                                                    :label="trans('messages.email')"
-                                                    v-model="input.email"
-                                                    v-validate="'required|email'"
-                                                    data-vv-name="email"
-                                                    :data-vv-as="trans('messages.email')"
-                                                    :error-messages="errors.collect('email')"
-                                                    required
-                                                ></v-text-field>
-                                                </v-flex>
-                                               <v-flex xs12  md4>
-                                                <v-text-field
-                                                 v-model="input.mobile"
-                                                  type="number"
+                                        </v-flex>
+                                        <v-flex md3>
+                                            <v-text-field
+                                                :label="trans('messages.email')"
+                                                v-model="agency.email"
+                                                v-validate="'email'"
+                                                data-vv-name="email"
+                                            ></v-text-field>
+                                        </v-flex>
+                                        <v-flex md3>
+                                            <v-text-field
+                                                v-model="agency.mobile"
+                                                type="number"
                                                 :label="trans('messages.mobile')"
                                             ></v-text-field>
-                                            </v-flex> 
-                                            <v-flex  xs12  md4>
-                                               
-                                <v-btn
-                                    @click="add(k)"
-                                    small
-                                    v-show="k == inputs.length-1"
-                                    fab
-                                    style="background-color:#06706d;color:white;"
-                                >
-                                     <v-icon dark>
-                                        add
-                                    </v-icon>
-                                </v-btn>
-                                 <v-btn
-                                    @click="remove(k)"
-                                    v-show="k || ( !k && inputs.length > 1)"
-                                    small
-                                    fab
-                                     color="red"
-                                    dark
-                                >
-                                 <i class="fas fa-minus-circle"></i>
-                                   
-                                </v-btn>
-                            </v-flex>
-
-                                       
-                                        </v-layout>
-                                        <!-- <v-layout row wrap>
+                                        </v-flex>
+                                    </v-layout>
+                                    <v-layout row wrap>
+                                        <v-flex md3>
+                                            <v-text-field
+                                                v-model="agency.delegate_record"
+                                                :label="trans('data.delegate_record')"
+                                            ></v-text-field>
+                                        </v-flex>
+                                        <v-flex md3>
+                                            <v-text-field
+                                                v-model="agency.agency_number"
+                                                :label="trans('data.agency_number')"
+                                            ></v-text-field>
+                                        </v-flex>
+                                        <v-flex md3>
+                                            <v-text-field
+                                                v-model="agency.agent_name"
+                                                :label="trans('data.agent_name')"
+                                            >
+                                            </v-text-field>
+                                        </v-flex>
+                                        <v-flex md3>
+                                            <v-text-field
+                                                v-model="agency.agent_card_number"
+                                                :label="trans('data.agent_card_number')"
+                                            ></v-text-field>
+                                        </v-flex>
+                                    </v-layout>
+                                </div>
+                                <!-- <v-layout row wrap>
                                             <v-flex  md3 >
                                                                    <v-autocomplete
                                     item-text="name"
@@ -128,86 +181,101 @@
                                             ></v-text-field>
                                             </v-flex> 
                                         </v-layout> -->
-                                             <v-layout row wrap>
-                                            <v-flex  md3 >
+                                <v-layout row wrap>
+                                    <v-flex md3>
                                         <v-btn
-                                                @click="createAgency"
-                                                large
-                                                dark
-                                                style="background-color:#06706d;color:white;"
-                                          >
-                                          Add Agency
-                                    <!-- //<v-icon>add</v-icon> -->
-                                </v-btn>
-                                          </v-flex> 
-                                        </v-layout>
-                        
-                                           </v-form>
-                                </v-container>
-                            </v-card-text>
-                        </v-card>
-                    </v-flex>
-                </v-layout>     
-            </v-container> 
+                                            @click="createAgency"
+                                            large
+                                            dark
+                                            style="background-color: #06706d; color: white"
+                                        >
+                                            Add Agency
+                                            <!-- //<v-icon>add</v-icon> -->
+                                        </v-btn>
+                                    </v-flex>
+                                </v-layout>
+                            
+                        </v-container>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 <script>
-import AddAgency from './AddAgency.vue'
+import AddAgency from './AddAgency.vue';
 export default {
-        components: {
+    components: {
         AddAgency,
     },
-    props:['customerId'],
-    data(){
-        return{
-     inputs: [{
-        id: '',
-        id_card_number: '',
-        email: '',
-        mobile: ''
-      }],
-            customers:[],
-        }; 
+    props: ['customerId'],
+    data() {
+        return {
+            inputs: [
+                {
+                    id: '',
+                    id_card_number: '',
+                    email: '',
+                    mobile: '',
+                },
+            ],
+            customers: [],
+            isAgency: false,
+            agency: {
+                trade_name: null,
+                record_number: null,
+                delegate_record: null,
+                agency_number: null,
+                agent_name: null,
+                agent_card_number: null,
+                email: null,
+                mobile: null,
+            },
+        };
     },
-    created(){
+    created() {
         const self = this;
         self.getCustomers();
-     ///   self.getCustomerData();
+        ///   self.getCustomerData();
         //   return this.$v.$touch();
-
     },
-    methods:{
-        add () {
-      this.inputs.push({
-        id: '',
-        id_card_number: '',
-        email: '',
-        mobile: ''
-      })
-      console.log(this.inputs)
-    },
-
-    remove (index) {
-      this.inputs.splice(index, 1)
-    },
-        updatevalues(value,key){
-          const self = this;
-          let x =self.customers.find(o => o.id === value);
-          self.inputs[key].mobile=x.mobile;
-          self.inputs[key].id_card_number=x.id_card_number;
-          self.inputs[key].email=x.email;
+    methods: {
+        getAgenctData(data) {
+            this.agency = data;
+            this.isAgency = true;
         },
-        getCustomers(){
+        add() {
+            this.inputs.push({
+                id: '',
+                id_card_number: '',
+                email: '',
+                mobile: '',
+            });
+            console.log(this.inputs);
+        },
+
+        remove(index) {
+            this.inputs.splice(index, 1);
+        },
+        updatevalues(value, key) {
+            const self = this;
+            let x = self.customers.find((o) => o.id === value);
+            self.inputs[key].mobile = x.mobile;
+            self.inputs[key].id_card_number = x.id_card_number;
+            self.inputs[key].email = x.email;
+        },
+        getCustomers() {
             const self = this;
             axios
                 .get('/all-customers')
-                .then(function(response) {
+                .then(function (response) {
                     self.customers = response.data;
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log(error);
                 });
         },
-        getCustomerData(){
+        getCustomerData() {
             // const self = this;
             // axios.post('/customer-info' ,{customer_id:self.customerId}).then(function(response) {
             //     self.customer=response.data;
@@ -217,25 +285,21 @@ export default {
             //     console.log(error);
             // });
         },
-            nextStep() {
-            this.$validator.validateAll().then(result => {
-              //  alert(result)
+        nextStep() {
+            this.$validator.validateAll().then((result) => {
+                //  alert(result)
                 if (result == true) {
-                  this.$emit('next',this.inputs);
-                }
-                else{
-                 this.$refs.form.validate();
+                    this.$emit('next', this.inputs);
+                } else {
+                    this.$refs.form.validate();
                 }
             });
-            
-           },
-
+        },
 
         createAgency() {
             const self = this;
             this.$refs.agencyadded.create();
         },
-           
-    }
-}
+    },
+};
 </script>

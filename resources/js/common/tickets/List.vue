@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <v-spacer></v-spacer>
-                <v-btn style="background-color:#06706d;color:white;" v-if="$can('tickets.create')"  class="lighten-1" @click="$router.push({name: 'create_visit_request_list'})">
+                <v-btn style="background-color:#06706d;color:white;" v-if="$can('tickets.create')"  class="lighten-1" @click="$router.push({name: 'create_visit_request_list', params: {request_type:'visit_request' }})">
                     {{ trans('messages.add') }}
                     <v-icon right dark>add</v-icon>
                 </v-btn>
@@ -85,7 +85,7 @@
             </v-data-table>
         </v-card>
         <br>
-            <div align="right">
+            <div align="center">
                 <v-btn style="background-color:#06706d;color:white;" @click="$router.go(-1)">
                     {{ trans('messages.back') }}
                 </v-btn>

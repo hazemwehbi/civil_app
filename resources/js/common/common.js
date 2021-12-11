@@ -116,4 +116,14 @@ import formatters from './Formatters';
 import functions from './Functions';
 
 Vue.use(formatters);
+
 Vue.mixin(functions);
+
+
+import * as VueGoogleMaps from 'vue2-google-maps'
+Vue.use(VueGoogleMaps, {
+    load: {
+        key: 'AIzaSyDbCbVzCES9MfgpiISriDDveQwshIPwH7I',
+        libraries: 'places',
+    }
+});

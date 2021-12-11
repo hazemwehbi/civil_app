@@ -29,9 +29,10 @@ class ManageRolesController extends Controller
             $sort_by = 'id';
         }
 
-        $roles = Role::where('type', 'employee')
-                    ->select('name', 'created_at', 'id');
-
+        // $roles = Role::where('type', 'employee')
+        //             ->select('name', 'created_at', 'id');
+        $roles = Role::select('name', 'created_at', 'id');
+                    
         if (!empty($request->get('name'))) {
             $term = $request->get('name');
             $roles->where('name', 'like', "%$term%");

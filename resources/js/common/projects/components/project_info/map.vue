@@ -1,93 +1,98 @@
-
 <template>
-    <v-layout row justify-center>
-        <v-dialog v-model="dialog" width="1000">
-<div>
     <div>
-      <h2>Search and add a pin</h2>
-      <label>
-        <gmap-autocomplete
-          @place_changed="setPlace">
-        </gmap-autocomplete>
-        <button @click="addMarker">Add</button>
-      </label>
-      <br/>
+        <v-dialog v-model="dialog" width="1000">
+            <div>
+                <GmapMap
+                    :center="center"
+                    :zoom="8"
+                    style="width: 100%; height: 400px"
+                    ref="mapRef"
+                    @click="handleMapClick"
+                >
+                    <GmapMarker
+                        :position="marker.position"
+                        :clickable="true"
+                        :draggable="true"
+                        @drag="handleMarkerDrag"
+                        @click="panToMarker"
+                    />
+                </GmapMap>
 
-    </div>
-    <br>
-    <gmap-map
-      :center="center"
-      :zoom="12"
-      style="width:100%;  height: 400px;" 
-    >
-      <gmap-marker
-        :key="index"
-        v-for="(m, index) in markers"
-        :position="m.position"
-        @click="center=m.position"
-      ></gmap-marker>
-    </gmap-map>
-  </div>
+                <!-- <button @click="geolocate">Detect Location</button>
+
+            <p>Selected Position: {{ marker.position }}</p> -->
+                <!-- <v-divider></v-divider> -->
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color=" darken-1" style="color: #06706d" @click="dialog = false">
+                        {{ trans('messages.close') }}
+                    </v-btn>
+                    <!-- <v-btn
+                    style="background-color: #06706d; color: white"
+                    @click="store"
+                    :loading="loading"
+                    :disabled="loading"
+                >
+                    {{ trans('messages.save') }}
+                </v-btn> -->
+                </v-card-actions>
+            </div>
         </v-dialog>
-    </v-layout>
+    </div>
 </template>
-<style scoped>
-#map {
-  height: 100%;
-}
 
-/* Optional: Makes the sample page fill the window. */
-</style>
 <script>
 export default {
-  name: "GoogleMap",
-  data() {
-    return {
-      dialog :false,
-      loading:false,
-      // default to montreal to keep it simple
-      // change this to whatever makes sense
-      center: { lat: 45.508, lng: -73.587 },
-      markers: [],
-      places: [],
-      currentPlace: null
-    };
-  },
+    name: 'GoogleMap',
+    data() {
+        return {
+            marker: { position: { lat: 10, lng: 10 } },
+            center: { lat: 10, lng: 10 },
 
-  mounted() {
-    this.geolocate();
-  },
+            mapOptions: {
+                disableDefaultUI: true,
+            },
+            dialog: false,
+            loading: false,
+        };
+    },
 
-  methods: {
-    create() {
-        const self = this;
-        //self.name = null;
-      //  (self.type = data.type), self.$validator.reset();
-        self.dialog = true;
+    mounted() {
+        this.geolocate();
     },
-    setPlace(place) {
-      this.currentPlace = place;
+    methods: {
+        //detects location from browser
+        geolocate: function () {
+            navigator.geolocation.getCurrentPosition((position) => {
+                this.center = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                };
+            });
+        },
+
+        //sets the position of marker when dragged
+        handleMarkerDrag(e) {
+            this.marker.position = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+        },
+
+        //Moves the map view port to marker
+        panToMarker() {
+            this.$refs.mapRef.panTo(this.marker.position);
+            this.$refs.mapRef.setZoom(10);
+        },
+
+        //Moves the marker to click position on the map
+        handleMapClick(e) {
+            this.marker.position = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+            this.$emit('fillCordinate', { lat: e.latLng.lat(), lon: e.latLng.lng() });
+            console.log(e);
+        },
+
+        create() {
+            const self = this;
+            self.dialog = true;
+        },
     },
-    addMarker() {
-      if (this.currentPlace) {
-        const marker = {
-          lat: this.currentPlace.geometry.location.lat(),
-          lng: this.currentPlace.geometry.location.lng()
-        };
-        this.markers.push({ position: marker });
-        this.places.push(this.currentPlace);
-        this.center = marker;
-        this.currentPlace = null;
-      }
-    },
-    geolocate: function() {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.center = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-      });
-    }
-  }
 };
 </script>

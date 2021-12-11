@@ -102,6 +102,9 @@ Route::middleware(['auth'])
         Route::get('projects/projects-list', 'ProjectController@getProjectsList');
         Route::get('projects/{id}/members', 'ProjectController@getMembers');
         Route::get('projects/update-status', 'ProjectController@updateStatus');
+
+
+
         Route::get('projects/mark-favorite', 'ProjectController@markAsFavorite');
         Route::resource('projects', 'ProjectController');
         Route::resource('project-notes', 'ProjectDocumentsAndNotesController');
@@ -122,6 +125,9 @@ Route::middleware(['auth'])
         Route::post('edit-visit-request', 'ProjectController@editVisitRequest');   
         Route::post('edit-project-request', 'ProjectController@editProjectRequest');
 
+        Route::get('get-location-status', 'ProjectController@getLocationStatus');
+
+
         Route::post('customer-info', 'Admin\CustomerController@getCutomerInfo');
         Route::post('project-info', 'ProjectController@getProjectInfo');
         Route::post('getProject-Data', 'ProjectController@getProjectData');
@@ -132,7 +138,8 @@ Route::middleware(['auth'])
         Route::delete('delete-requests/{id}', 'ProjectController@deleteProject');
         Route::get('get-priority','RequestTypeController@getPriority');
         Route::resource('request-type','RequestTypeController');
-       
+        Route::get('get-request-types','RequestTypeController@getRequestsTypes');
+        
         Route::get('get-Customer-name/{id}','Admin\CustomerController@getCustomerName');
         Route::get('visit-request-type/{id}','ProjectController@getVisitRequestType');
         

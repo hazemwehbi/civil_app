@@ -120,6 +120,8 @@ return [
 
     'name2'=>'second owner',
   
+    'location_status'=>'Location Status ',
+
     'location_info'=>'Location Info',
     'project_info'=>'Project Info',
     'customer_info'=>'Customer Info ',
@@ -134,7 +136,25 @@ return [
     'agent_name'=>'Agent Name',
     'agent_card_number'=>'Agent Card Number',
     'billing_type'=>'Billing Type',
-  
+
+    'visit_request'=>'Visit Request',
+    'design_request'=>'Design Request',
+    'support_service_request'=>'Support Service Request',
+    'contractor_request'=>'Contractor Request',
+    'supervision_request'=>'Supervision Request',
+
+    'visit_requests'=>'Visit Requests',
+    'design_requests'=>'Design Requests',
+    'support_service_requests'=>'Support Service Requests',
+    'contractor_requests'=>'Contractor Requests',
+    'supervision_requests'=>'Supervision Requests',
+
+
+    'archive'=>'Archive',
+    'accounting'=>'Accounting',
+    'add_customer'=>'Add Customer',
+    'reports'=>'Reports'
+
 ];
 
 

@@ -30,6 +30,8 @@
         APP.RTL = @if(in_array(config('app.locale'), config('constants.langs_rtl'))) true @else false @endif;
         APP.FIRST_DAY_OF_WEEK = '{{$first_day_of_week}}';
         @auth
+             window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
+
             @php
                 $user = Auth::user();
             @endphp
@@ -39,6 +41,7 @@
             APP.DATE_FORMAT = {!! json_encode($user->appDateFormat()) !!};
             APP.TIME_FORMAT = {!! json_encode($user->appTimeFormat()) !!};
         @else
+             window.Permissions = [];
             @php
                 $user = null;
             @endphp
