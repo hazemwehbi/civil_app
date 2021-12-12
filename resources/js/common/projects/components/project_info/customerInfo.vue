@@ -282,6 +282,7 @@ export default {
             self.inputs[key].mobile = x.mobile;
             self.inputs[key].id_card_number = x.id_card_number;
             self.inputs[key].email = x.email;
+             self.getAgenciesData(value);
            
         },
         resetvalues(value, key=0) {
@@ -291,7 +292,7 @@ export default {
             self.inputs[key].mobile = x.mobile;
             self.inputs[key].id_card_number = x.id_card_number;
             self.inputs[key].email = x.email;
-            self.getAgenciesData(value);
+           
         },
         updateAgentvalues(value) {
             const self = this;
@@ -310,7 +311,7 @@ export default {
                 .get('/all-customers')
                 .then(function (response) {
                     self.customers = response.data;
-                        self.resetvalues(1);
+                      //  self.resetvalues(1);
                 })
                 .catch(function (error) {
                     console.log(error);
