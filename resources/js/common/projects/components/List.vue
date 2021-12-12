@@ -34,8 +34,9 @@
                                                         <v-menu>
                                 <v-btn icon slot="activator"> <v-icon>more_vert</v-icon> </v-btn>
                                 <v-list>
-
+ 
                                     <v-list-tile
+                                       v-if="$can('tickets.create')" 
                                         @click="$router.push({name: 'create_visit_request_list',
                                          params: { project_id: props.item.id ,customer_id: props.item.customer_id, request_type:'visit_request' }})"                               >
                                         <v-list-tile-title>
@@ -44,7 +45,8 @@
                                     </v-list-tile>
 
                                    <v-list-tile
-                                        @click="deleteProject(props.item.id)"                               >
+                                        @click="deleteProject(props.item.id)" 
+                                        v-if="$can('project.delete')"                              >
                                         <v-list-tile-title>
                                             {{ trans('messages.delete') }}
                                         </v-list-tile-title>
@@ -130,7 +132,7 @@
                                                   
                                                      <!-- <td>{{ props.item.id }}</td> -->
                                                     <td>{{ props.item.name }}</td>
-                                                    <td> {{ props.item.customer.company }}</td>
+                                                    <!-- <td> {{ props.item.customer.company }}</td> -->
                                                     <td>
                                                         <v-chip class="ma-2" color="red" text-color="white">{{trans('messages.' + props.item.status)}}
                                                         </v-chip>
@@ -201,12 +203,12 @@ export default {
                     align: 'left',
                     sortable: true,
                 },
-                {
-                    text: self.trans('messages.company'),
-                    value: 'company',
-                    align: 'left',
-                    sortable: true,
-                },
+                // {
+                //     text: self.trans('messages.company'),
+                //     value: 'company',
+                //     align: 'left',
+                //     sortable: true,
+                // },
                 {
                     text: self.trans('messages.status'),
                     value: 'status',

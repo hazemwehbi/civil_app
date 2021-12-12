@@ -8,7 +8,8 @@
                 <v-card-text>
                     <v-container grid-list-lg>
                         <v-layout wrap>
-                            <v-flex xs12 sm12 md3>
+                             <!-- v-if="$hasRole('employee') ||$can('superadmin')" -->
+                            <v-flex xs12 sm12 md3  v-if="$can('project.create')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover  v-slot:default="{ hover }" open-delay="100" close-delay="100">
                                         <v-card  @click="$router.push({name:'add-project'})"
@@ -27,7 +28,7 @@
                             </v-flex>
 
                             <v-flex xs12 sm12 md3>
-                                <v-flex xs12 sm12 md12>
+                                <v-flex xs12 sm12 md12 v-if="$can('project.list')">
                                     <v-hover  v-slot:default="{ hover }" open-delay="100" close-delay="100">
                                         <v-card  @click="$router.push({name:'projects.list'})"
                                                          :elevation="hover ? 16 : 2">
@@ -44,7 +45,7 @@
                                 </v-flex>
                             </v-flex>
                                 
-                            <v-flex xs12 sm12 md3>
+                            <v-flex xs12 sm12 md3 v-if="$can('project.list')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover  v-slot:default="{ hover }" open-delay="100" close-delay="100">
                                         <v-card  @click="$router.push({name:'finished-projects'})"
@@ -62,7 +63,7 @@
                                 </v-flex>
                             </v-flex>
                                 
-                            <v-flex xs12 sm12 md3>
+                            <!-- <v-flex xs12 sm12 md3 v-if="$can('project.list')"> 
                                 <v-flex xs12 sm12 md12>
                                     <v-hover  v-slot:default="{ hover }" open-delay="100" close-delay="100">
                                         <v-card  @click="$router.push({name:'schedule'})"
@@ -78,7 +79,7 @@
                                         </v-card>
                                     </v-hover>
                                 </v-flex>
-                            </v-flex>
+                            </v-flex> -->
                                    
                             </v-layout>
                         </v-container>

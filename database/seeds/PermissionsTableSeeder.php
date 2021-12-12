@@ -69,6 +69,11 @@ class PermissionsTableSeeder extends Seeder
                     ['name' => 'tickets.view'],
                     ['name' => 'tickets.edit'],
                     ['name' => 'tickets.delete'],
+
+                    ['name' => 'role.create'],
+                    ['name' => 'role.view'],
+                    ['name' => 'role.edit'],
+                    ['name' => 'role.delete'],
                 ];
 
 

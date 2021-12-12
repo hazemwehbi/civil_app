@@ -36,6 +36,7 @@
                                             v-model="input.id_card_number"
                                             type="number"
                                             :label="trans('data.id_card_number')"
+                                            readonly
                                         ></v-text-field>
                                     </v-flex>
                                     <v-flex xs12 md4>
@@ -46,6 +47,7 @@
                                             data-vv-name="email"
                                             :data-vv-as="trans('messages.email')"
                                             :error-messages="errors.collect('email')"
+                                            readonly
                                             required
                                         ></v-text-field>
                                     </v-flex>
@@ -54,6 +56,7 @@
                                             v-model="input.mobile"
                                             type="number"
                                             :label="trans('messages.mobile')"
+                                            readonly
                                         ></v-text-field>
                                     </v-flex>
                                     <v-flex xs12 md4>
@@ -78,68 +81,76 @@
                                         </v-btn>
                                     </v-flex>
                                 </v-layout>
-                                </v-form>
-                                <div v-show="isAgency">
-                                    <v-layout row wrap class="add-agency">
-                                        <v-flex md3>
-                                            <v-text-field
-                                                v-model="agency.trade_name"
-                                                data-vv-name="name"
-                                                :label="trans('data.trade_name')"
-                                            >
-                                            </v-text-field>
-                                        </v-flex>
-                                        <v-flex md3>
-                                            <v-text-field
-                                                v-model="agency.record_number"
-                                                :label="trans('data.record_number')"
-                                            ></v-text-field>
-                                        </v-flex>
-                                        <v-flex md3>
-                                            <v-text-field
-                                                :label="trans('messages.email')"
-                                                v-model="agency.email"
-                                                v-validate="'email'"
-                                                data-vv-name="email"
-                                            ></v-text-field>
-                                        </v-flex>
-                                        <v-flex md3>
-                                            <v-text-field
-                                                v-model="agency.mobile"
-                                                type="number"
-                                                :label="trans('messages.mobile')"
-                                            ></v-text-field>
-                                        </v-flex>
-                                    </v-layout>
-                                    <v-layout row wrap>
-                                        <v-flex md3>
-                                            <v-text-field
-                                                v-model="agency.delegate_record"
-                                                :label="trans('data.delegate_record')"
-                                            ></v-text-field>
-                                        </v-flex>
-                                        <v-flex md3>
-                                            <v-text-field
-                                                v-model="agency.agency_number"
-                                                :label="trans('data.agency_number')"
-                                            ></v-text-field>
-                                        </v-flex>
-                                        <v-flex md3>
-                                            <v-text-field
-                                                v-model="agency.agent_name"
-                                                :label="trans('data.agent_name')"
-                                            >
-                                            </v-text-field>
-                                        </v-flex>
-                                        <v-flex md3>
-                                            <v-text-field
-                                                v-model="agency.agent_card_number"
-                                                :label="trans('data.agent_card_number')"
-                                            ></v-text-field>
-                                        </v-flex>
-                                    </v-layout>
-                                </div>
-                                <!-- <v-layout row wrap>
+                            </v-form>
+                            <div v-show="true">
+                                <v-layout row wrap class="add-agency">
+                                    <v-flex md3>
+                                        <v-autocomplete
+                                            item-text="trade_name"
+                                            item-value="id"
+                                            :items="agencies"
+                                            v-model="agency.id"
+                                            @change="(event) => updateAgentvalues(event)"
+                                            :label="trans('data.trade_name')"
+                                        ></v-autocomplete>
+                                    </v-flex>
+                                    <v-flex md3>
+                                        <v-text-field
+                                            v-model="agency.record_number"
+                                            :label="trans('data.record_number')"
+                                            readonly
+                                        ></v-text-field>
+                                    </v-flex>
+                                    <v-flex md3>
+                                        <v-text-field
+                                            :label="trans('messages.email')"
+                                            v-model="agency.email"
+                                            v-validate="'email'"
+                                            data-vv-name="email"
+                                            readonly
+                                        ></v-text-field>
+                                    </v-flex>
+                                    <v-flex md3>
+                                        <v-text-field
+                                            v-model="agency.mobile"
+                                            type="number"
+                                            :label="trans('messages.mobile')"
+                                        ></v-text-field>
+                                    </v-flex>
+                                </v-layout>
+                                <v-layout row wrap>
+                                    <v-flex md3>
+                                        <v-text-field
+                                            v-model="agency.delegate_record"
+                                            :label="trans('data.delegate_record')"
+                                            readonly
+                                        ></v-text-field>
+                                    </v-flex>
+                                    <v-flex md3>
+                                        <v-text-field
+                                            v-model="agency.agency_number"
+                                            :label="trans('data.agency_number')"
+                                            readonly
+                                        ></v-text-field>
+                                    </v-flex>
+                                    <v-flex md3>
+                                        <v-text-field
+                                            v-model="agency.agent_name"
+                                            :label="trans('data.agent_name')"
+                                            readonly
+                                        >
+                                        </v-text-field>
+                                    </v-flex>
+                                    <v-flex md3>
+                                        <v-text-field
+                                            v-model="agency.agent_card_number"
+                                            :label="trans('data.agent_card_number')"
+                                            readonly
+                                        ></v-text-field>
+                                    </v-flex>
+                                </v-layout>
+                            </div>
+                            <!-- <v-layout row wrap>
                                             <v-flex  md3 >
                                                                    <v-autocomplete
                                     item-text="name"
@@ -181,20 +192,19 @@
                                             ></v-text-field>
                                             </v-flex> 
                                         </v-layout> -->
-                                <v-layout row wrap>
-                                    <v-flex md3>
-                                        <v-btn
-                                            @click="createAgency"
-                                            large
-                                            dark
-                                            style="background-color: #06706d; color: white"
-                                        >
-                                            Add Agency
-                                            <!-- //<v-icon>add</v-icon> -->
-                                        </v-btn>
-                                    </v-flex>
-                                </v-layout>
-                            
+                            <v-layout row wrap>
+                                <v-flex md3>
+                                    <v-btn
+                                        @click="createAgency"
+                                        large
+                                        dark
+                                        style="background-color: #06706d; color: white"
+                                    >
+                                        Add Agency
+                                        <!-- //<v-icon>add</v-icon> -->
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
                         </v-container>
                     </v-card-text>
                 </v-card>
@@ -220,6 +230,7 @@ export default {
                 },
             ],
             customers: [],
+            agencies: [],
             isAgency: false,
             agency: {
                 trade_name: null,
@@ -236,13 +247,20 @@ export default {
     created() {
         const self = this;
         self.getCustomers();
+     
+        //   self.getAgenciesData();
         ///   self.getCustomerData();
         //   return this.$v.$touch();
     },
+    mounted(){
+         const self = this;
+       
+    },
     methods: {
         getAgenctData(data) {
-            this.agency = data;
-            this.isAgency = true;
+            this.agencies.push(data);
+            
+            //this.isAgency = true;
         },
         add() {
             this.inputs.push({
@@ -259,10 +277,32 @@ export default {
         },
         updatevalues(value, key) {
             const self = this;
+            self.current_customer = value;
             let x = self.customers.find((o) => o.id === value);
             self.inputs[key].mobile = x.mobile;
             self.inputs[key].id_card_number = x.id_card_number;
             self.inputs[key].email = x.email;
+           
+        },
+        resetvalues(value, key=0) {
+            const self = this;
+            let x = self.customers.find((o) => o.id === value);
+            self.inputs[key].id = x.id;
+            self.inputs[key].mobile = x.mobile;
+            self.inputs[key].id_card_number = x.id_card_number;
+            self.inputs[key].email = x.email;
+            self.getAgenciesData(value);
+        },
+        updateAgentvalues(value) {
+            const self = this;
+            let x = self.agencies.find((o) => o.id === value);
+            self.agency.record_number = x.record_number;
+            self.agency.agency_number = x.agency_number;
+            self.agency.delegate_record = x.delegate_record;
+            self.agency.agent_name = x.agent_name;
+            self.agency.agent_card_number = x.agent_card_number;
+            self.agency.email = x.email;
+            self.agency.mobile = x.mobile;
         },
         getCustomers() {
             const self = this;
@@ -270,20 +310,23 @@ export default {
                 .get('/all-customers')
                 .then(function (response) {
                     self.customers = response.data;
+                        self.resetvalues(1);
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
         },
-        getCustomerData() {
-            // const self = this;
-            // axios.post('/customer-info' ,{customer_id:self.customerId}).then(function(response) {
-            //     self.customer=response.data;
-            //     console.log(self.customer);
-            // })
-            // .catch(function(error) {
-            //     console.log(error);
-            // });
+
+        getAgenciesData(value) {
+            const self = this;
+            axios
+                .get('/get-agencies/' + value)
+                .then(function (response) {
+                    self.agencies = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
         nextStep() {
             this.$validator.validateAll().then((result) => {

@@ -47,10 +47,10 @@ class CreateProjectsTable extends Migration
             $table->boolean('favorite')->default(0);
 
 
-            $table->enum('buiding_type', ['not_started', 'in_progress', 'on_hold', 'cancelled', 'completed'])->nullable();;
+            $table->enum('buiding_type', ['institutional', 'business', 'storage', 'assembly', 'residential'])->nullable();;
             $table->unsignedInteger('role_number')->nullable();
             $table->unsignedInteger('unit_number')->nullable();
-            $table->unsignedInteger('using')->nullable();
+            $table->enum('using', ['support ', 'personal'])->nullable();
             $table->decimal('build_rate', 8, 2)->default(0);
            
 

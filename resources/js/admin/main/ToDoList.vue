@@ -10,7 +10,7 @@
                 <v-card-text>
                     <v-container grid-list-lg>
                         <v-layout wrap>
-                            <v-flex xs12 sm12 md4>
+                            <v-flex xs12 sm12 md4 v-if="$can('tickets.view')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"
@@ -41,7 +41,7 @@
 
                             <!--add after edititng -->
                             <!-- @click="$router.push({name: 'visit_request_list'})" -->
-                            <v-flex xs12 sm12 md4>
+                            <v-flex xs12 sm12 md4 v-if="$can('tickets.view')" >
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"
@@ -67,7 +67,7 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md4>
+                            <v-flex xs12 sm12 md4 v-if="$can('tickets.view')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"
@@ -92,6 +92,9 @@
                                     </v-hover>
                                 </v-flex>
                             </v-flex>
+
+
+
 
                             <v-flex xs12 sm12 md4>
                                 <v-flex xs12 sm12 md12>
@@ -165,7 +168,7 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md4>
+                            <v-flex xs12 sm12 md4  v-if="$can('customer.create')" >
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"
@@ -193,7 +196,7 @@
                             </v-flex>
 
                             <!--add after edititng -->
-                            <v-flex xs12 sm12 md4>
+                            <v-flex xs12 sm12 md4 v-if="$can('tickets.view')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"
@@ -330,7 +333,7 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md4>
+                            <v-flex xs12 sm12 md4 v-if="$hasRole('superadmin')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"
@@ -356,7 +359,7 @@
                                     </v-hover>
                                 </v-flex>
                             </v-flex>
-                            <v-flex xs12 sm12 md4>
+                            <v-flex xs12 sm12 md4 v-if="$hasRole('superadmin')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"

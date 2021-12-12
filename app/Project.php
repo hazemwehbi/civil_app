@@ -228,4 +228,43 @@ class Project extends Model
     {
         return $this->hasMany('App\VisitRequest');
     }
+
+
+    public static function getBuildingTypes()
+    {
+        $building_types = [
+                            ['key' => 'institutional',
+                             'value' => __('data.institutional'),
+                            ],
+                            ['key' => 'business',
+                             'value' => __('data.business'),
+                            ],
+                            ['key' => 'storage',
+                             'value' => __('data.storage'),
+                            ],
+                            ['key' => 'assembly',
+                            'value' => __('data.assembly'),
+                           ],
+                           ['key' => 'residential',
+                            'value' => __('data.residential'),
+                           ],
+                        ];
+
+        return $building_types;
+    }
+
+
+    public static function getBuildingUsing()
+    {
+        $building_using = [
+                            ['key' => 'support',
+                             'value' => __('data.support'),
+                            ],
+                            ['key' => 'personal',
+                             'value' => __('data.personal'),
+                            ],
+                        ];
+
+        return $building_using;
+    }
 }

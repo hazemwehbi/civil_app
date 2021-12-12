@@ -90,6 +90,7 @@ return [
     'create_project' => 'Create Project',
     'view_project' => 'View Project',
     'edit_project' => 'Edit Project',
+    'delete_project'=>'Delete Project',
     'new_task' => 'New task',
     'create_task' => 'Create task',
     'tasks_list' => 'Tasks Lists',

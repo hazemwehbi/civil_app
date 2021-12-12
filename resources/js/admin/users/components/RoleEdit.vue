@@ -33,6 +33,98 @@
                             </span>
                         </v-flex>
                     </v-layout>
+
+
+
+
+                    <v-divider class="mt-1"></v-divider>
+
+                    <v-layout row wrap class="mt-3">
+                        <v-flex xs12 sm3 md3>
+                            <h4>{{ trans('data.Roles') }}</h4>
+                        </v-flex>
+                        <v-flex xs12 sm5 md5>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.create_role')"
+                                value="role.create"
+                            >
+                            </v-checkbox>
+                             <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.edit_role')"
+                                value="role.edit"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.view_role')"
+                                value="role.view"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.delete_role')"
+                                value="role.delete"
+                            >
+                            </v-checkbox>
+                           
+                        </v-flex>
+                        <v-flex xs12 sm4 md4>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.add_employee_note')"
+                                value="employeeNote.create"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.view_employee_note')"
+                                value="employeeNote.view"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.edit_employee_note')"
+                                value="employeeNote.edit"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.delete_employee_note')"
+                                value="employeeNote.delete"
+                            >
+                            </v-checkbox>
+                        </v-flex>
+                    </v-layout>
+                   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    
                     <v-divider class="mt-1"></v-divider>
 
                     <v-layout row wrap class="mt-3">
@@ -298,10 +390,9 @@
                         </v-flex>
                     </v-layout>
                     <v-divider></v-divider>
-
                     <v-layout row wrap class="mt-2">
                         <v-flex xs12 sm3 md3>
-                            <h4>{{ trans('messages.other') }}</h4>
+                            <h4>{{ trans('messages.project') }}</h4>
                         </v-flex>
                         <v-flex xs12 sm3 md3>
                             <v-checkbox
@@ -310,6 +401,32 @@
                                 value="project.create"
                             >
                             </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.view_project')"
+                                value="project.list"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.edit_project')"
+                                value="project.edit"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.delete_project')"
+                                value="project.delete"
+                            >
+                            </v-checkbox>
+                        </v-flex>
+                    </v-layout>
+                       <v-divider></v-divider>
+                    <v-layout row wrap class="mt-2">
+                        <v-flex xs12 sm3 md3>
+                            <h4>{{ trans('messages.other') }}</h4>
+                        </v-flex>
+                        <v-flex xs12 sm3 md3>
                             <v-checkbox
                                 v-model="permissions"
                                 :label="trans('messages.system_setting')"
@@ -357,6 +474,7 @@ export default {
         const self = this;
         self.roleId = self.$route.params.id;
         self.getRole(self.roleId);
+       
     },
     methods: {
         getRole(role_id) {

@@ -315,7 +315,7 @@ export default {
                         });
                 }
             });
-             self.reset();
+             //self.reset();
         },
     },
 };

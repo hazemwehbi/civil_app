@@ -63,6 +63,7 @@ export default {
     methods: {
         //detects location from browser
         geolocate: function () {
+           
             navigator.geolocation.getCurrentPosition((position) => {
                 this.center = {
                     lat: position.coords.latitude,

@@ -153,8 +153,24 @@ return [
     'archive'=>'Archive',
     'accounting'=>'Accounting',
     'add_customer'=>'Add Customer',
-    'reports'=>'Reports'
+    'reports'=>'Reports',
 
+    'institutional'=>'Institutional',
+    'business'=>'Business',
+    'storage'=>'Storage',
+    'assembly'=>'Assembly',
+    'residential'=>'Residential',
+
+    'support'=>'Support',
+    'personal'=>'Personal',
+
+    //role managment
+    'create_role' => 'Create Role',
+    'edit_role' => 'Edit Role',
+    'delete_role' => 'Delete Role',
+    'view_role' => 'View Role',
+
+ 
 ];
 
 

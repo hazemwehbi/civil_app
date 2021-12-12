@@ -127,12 +127,18 @@ class ProjectController extends Controller
         $status = Project::getStatusForProject();
         $categories = Category::forDropdown('projects');
 
+        $buildingTypes = Project::getBuildingTypes();
+        $buildUsing = Project::getBuildingUsing();
+
         $project = [
                 'customers' => $customers,
                 'users' => $users,
                 'billingTypes' => $billingTypes,
                 'status' => $status,
                 'categories' => $categories,
+                'buildingTypes'=>$buildingTypes,
+                'buildUsing'=>$buildUsing,
+                'roles_number'=>$this->CommonUtil->getRolesNumber(),
             ];
 
         return $project;
@@ -453,6 +459,9 @@ class ProjectController extends Controller
             Project::destroy($id);
 
             ProjectMember::where('project_id', $id)
+                        ->delete();
+
+            Location::where('project_id', $id)
                         ->delete();
 
             $output = $this->respondSuccess(__('messages.deleted_successfully'));
@@ -884,11 +893,13 @@ class ProjectController extends Controller
                 'agent_card_number'=>$request->agent_card_number,
                 'email'=>$request->email,
                 'mobile'=>$request->mobile,
+                 'user_id'=>Auth::id()
             ]);
                 
-                // $agencies=Agency::select('id', 'trade_name','record_number','delegate_record','agency_number','agent_name','agent_card_number','email','mobile')
-                //         ->get()
-                //         ->toArray();
+            $agencies = Agency::
+            orderBy('trade_name')
+            ->get()
+            ->toArray();
 
                 return $agencies;
             }
@@ -900,20 +911,33 @@ class ProjectController extends Controller
 
        // return $this->respond($data);
     }
+    public function getAgencies($user_id=null){
+        $agencies=[];
+        if($user_id!=null){
+            $agencies = Agency::where('user_id',$user_id)->
+            orderBy('trade_name')
+            ->get()
+            ->toArray();
+        }
+         else{
+            $agencies = Agency::
+            orderBy('trade_name')
+            ->get()
+            ->toArray();
+         }
+
+       return $agencies;
+       // return $this->respond($data);
+    }
 
 
    public function  addNewProject(Request $request){
-       echo (request()->user());
-       die();
     if (!request()->user()->can('project.create')) {
         abort(403, 'Unauthorized action.');
     }
-
     $project = $request['project'];
     $location = $request['location'];
-    ;
     $customers = $request['customers'];
-
     try {
         //TODO: optimise the process.
         DB::beginTransaction();

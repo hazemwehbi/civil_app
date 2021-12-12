@@ -31,7 +31,7 @@ class UserController extends AdminController
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {     
         if (!request()->user()->can('employee.view')) {
             abort(403, 'Unauthorized action.');
         }

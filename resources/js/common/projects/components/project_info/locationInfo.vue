@@ -218,7 +218,6 @@ export default {
             self.location.lat = data.lat;
         },
         nextStep() {
-             alert(JSON.stringify(2))
             this.$emit('next', this.location);
         },
 

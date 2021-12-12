@@ -131,7 +131,6 @@ export default {
 
     },
     getLocationData(data){
-        alert(JSON.stringify(data))
          this.location=data;
          this.e1=3;
     },
@@ -146,7 +145,6 @@ export default {
        
     },
     getLocationInfo(){
-         alert(JSON.stringify(1))
          this.$refs.locationInfo.nextStep();
          
     },
@@ -174,14 +172,17 @@ export default {
                     message: response.data.msg,
                     color: response.data.success,
                 });
-                   // this.$router.push({ path: '/project', })
-                
-                if (response.data.success === true) {
-                      this.loading=false;
+                if (response.data.success) {
+                     this.$router.push({ path: '/project', })
+                     // self.loading=false;
                     //   self.dialog = false;
                     self.$eventBus.$emit('updateTicketsTable');
+                    
                      //   self.goBack();
                 }
+                  
+                
+          
                 
             })
             .catch(function(error) {
