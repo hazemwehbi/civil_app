@@ -336,6 +336,18 @@ class UserController extends AdminController
         return $this->respond($data);
     }
 
+    public function checkUserType(Request $request){
+        $x= $this->userRepository->getTypeOfUser($request->get('email'), $request->get('user_type'));
+        return $this->respond( $x);
+        // if($x==true){
+        //     return $this->respond(1);
+        // }
+        // else{
+        //     return $this->respond(0);
+        // }
+        
+    }
 
+    
     
 }

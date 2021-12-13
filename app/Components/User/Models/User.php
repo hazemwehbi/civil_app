@@ -298,6 +298,22 @@ class User extends Authenticatable implements HasMedia
          return $users;
     }
 
+
+
+    //check user type
+    public static function getTypeOfUser($email,$userType)
+    {
+        $user =User::where('email',$email)->first();
+        foreach ($user->roles as $role) {
+           if($role->type==$userType){
+                return 'true';
+           }
+  
+        }
+        return 'false';
+    }
+
+
     /**
      * retrieve all the roles
      * of user.

@@ -19,6 +19,7 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 
 Route::post('ajaxRequest', [UserController::class, 'getUserData'])->name('ajaxRequest.post');
+Route::post('checkUser', [UserController::class, 'checkUserType'])->name('checkUser.post');
 
 if (config('constants.enable_client_signup')) {
     Route::get('/client/register', 'Client\ClientRegisterController@index')

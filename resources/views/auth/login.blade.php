@@ -232,36 +232,52 @@ $(document).ready(function(){
    
   $("#user_type").change(function(e) {
       e.preventDefault();
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
        var value = $("option:selected", this).val();
-       $('#type_name').children().remove();
-       $("#type_name").prop('required',false);
-       $("#type_name").hide(); 
-       if(value == 'ENGINEERING_OFFICE' || value == 'SUPPORT_SERVICES_OFFICE' || value == 'GOVERNMENT_AGENCIES')
-       {
-       
-       $("#type_name").show(); 
-       $("#type_name").prop('required',true);
-           var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    headers: {
-                    'X-CSRF-TOKEN': CSRF_TOKEN
-                    },
-                type:'POST',
-                url:"{{ route('ajaxRequest.post') }}",
-                data:{name: value},
-                success:function(result){
-                    var options = "";
-                   var options1 = `<option value="" disabled selected>choose ${result.type}</option>`;
-                    $("#type_name").append(options1);
-                    for (var i = 0; i < result.users.length; i++) {
-                       options += `<option value=${result.users[i].id}>${result.users[i].name}</option>`;//<--string 
-                    }
-                    $("#type_name").append(options);
-                }
-                });
-         
+       var email = $("#inputEmail").val();
+       $.ajax({
+            headers: {
+            'X-CSRF-TOKEN': CSRF_TOKEN
+            },
+            type:'POST',
+            url:"{{ route('checkUser.post') }}",
+            data:{email: email,user_type:value},
+            success:function(result){
+                $('#type_name').children().remove();
+                $("#type_name").prop('required',false);
+                $("#type_name").hide(); 
+               if(result==true){ 
+                        if(value == 'ENGINEERING_OFFICE' || value == 'SUPPORT_SERVICES_OFFICE' || value == 'GOVERNMENT_AGENCIES')
+                        {
+                        
+                        $("#type_name").show(); 
+                        $("#type_name").prop('required',true);
+                            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                                    $.ajax({
+                                        headers: {
+                                        'X-CSRF-TOKEN': CSRF_TOKEN
+                                        },
+                                    type:'POST',
+                                    url:"{{ route('ajaxRequest.post') }}",
+                                    data:{name: value},
+                                    success:function(result){
+                                        var options = "";
+                                    var options1 = `<option value="" disabled selected>choose ${result.type}</option>`;
+                                        $("#type_name").append(options1);
+                                        for (var i = 0; i < result.users.length; i++) {
+                                        options += `<option value=${result.users[i].id}>${result.users[i].name}</option>`;//<--string 
+                                        }
+                                        $("#type_name").append(options);
+                                    }
+                                    });
+                            
 
-       }
+                        }
+
+               }
+             }
+        });
+    
     });
 
 
