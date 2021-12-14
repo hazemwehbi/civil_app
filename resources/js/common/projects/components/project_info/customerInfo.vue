@@ -1,6 +1,6 @@
 <template>
     <v-container grid-list-md>
-        <AddAgency ref="agencyadded" @fillAgencyData="getAgenctData($event)"></AddAgency>
+        <AddAgency ref="agencyadded" @fillAgencyData="getAgenctData($event)" ></AddAgency>
         <v-layout row>
             <v-flex xs12 sm12>
                 <v-card class="elevation-3">
@@ -233,6 +233,7 @@ export default {
             agencies: [],
             isAgency: false,
             agency: {
+                id:null,
                 trade_name: null,
                 record_number: null,
                 delegate_record: null,
@@ -282,6 +283,7 @@ export default {
             self.inputs[key].mobile = x.mobile;
             self.inputs[key].id_card_number = x.id_card_number;
             self.inputs[key].email = x.email;
+            self.resetAgentvalues();
              self.getAgenciesData(value);
            
         },
@@ -296,7 +298,8 @@ export default {
         },
         updateAgentvalues(value) {
             const self = this;
-            let x = self.agencies.find((o) => o.id === value);
+            var x = self.agencies.find((o) => o.id == value);
+                  
             self.agency.record_number = x.record_number;
             self.agency.agency_number = x.agency_number;
             self.agency.delegate_record = x.delegate_record;
@@ -304,6 +307,17 @@ export default {
             self.agency.agent_card_number = x.agent_card_number;
             self.agency.email = x.email;
             self.agency.mobile = x.mobile;
+        },
+        resetAgentvalues() {
+            const self = this;
+             self.agency.id = null;
+            self.agency.record_number = null;
+            self.agency.agency_number =null;
+            self.agency.delegate_record =null;
+            self.agency.agent_name =null;
+            self.agency.agent_card_number = null;
+            self.agency.email = null;
+            self.agency.mobile = null;
         },
         getCustomers() {
             const self = this;

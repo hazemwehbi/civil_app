@@ -54,11 +54,12 @@ class UserRepository extends BaseRepository
        public  function getTypeOfUser($email,$userType)
        { 
            $user =User::where('email',$email)->first();
-           foreach ($user->roles as $role) {
-              if($role->type==$userType){
-                   return true;
-              }
-     
+           if($user != null){
+            foreach ($user->roles as $role) {
+                if($role->type==$userType){
+                     return true;
+                }
+           }
            }
            return false;
       

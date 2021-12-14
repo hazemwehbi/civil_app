@@ -34,27 +34,18 @@
                             </h5>
                         </div>
                         <div style="padding:20px;">
-                            <div class="form-label-group">
-                            <label for="inputEmail">
-                                    Email Address
-                                </label>
-                                <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email Address" value="{{$email}}" required  autofocus><br>
-                           
+                        <div class="form-outline mb-1">
+                                <input type="email" id="inputEmail" name="email" class="form-control form-control-lg" placeholder="Email Address" value="{{$email}}" required  ><br>
                                 @if ($errors->has('email'))
-                                    <span class="help-block text-danger">
-                                        <small class="help-text">
+                                    <span class="help-block  text-danger">
+                                        <small class="help-text span-email" span-email>
                                             {{ $errors->first('email') }}
                                         </small>
                                     </span>
                                 @endif
                             </div>
-
-                            <div class="form-label-group">
-                            <label for="inputPassword">
-                                    Password
-                                </label>
-                                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" value ="{{$pwd}}"  required ><br>
-                      
+                            <div class="form-outline mb-1">
+                                <input type="password" name="password" id="inputPassword" class="form-control form-control-lg" placeholder="Password" value ="{{$pwd}}"  required ><br>
                                 @if ($errors->has('password'))
                                     <span class="help-block text-danger">
                                         <small class="help-text">
@@ -63,8 +54,8 @@
                                     </span>
                                 @endif
                             </div>
-                            <div class="form-label-group">
-                            <select name="user_type" id="user_type"   class="form-control" autofocus required >
+                            <div class="form-outline mb-1">
+                            <select name="user_type" id="user_type"  class="form-control form-control-lg" autofocus required >
                             <option value="" disabled selected>Select your Type</option req>
                                     @foreach(array_keys(config('constants.user_types'))  as $type)
                                         <option value="{{$type}}" >{{config('constants.user_types')[$type]}} </option>
@@ -77,11 +68,11 @@
                                         </small>
                                     </span>
                                 @endif
+          
                             </div>
 
-
-                            <div class="form-label-group" style="margin-top: 20;">
-                            <select name="type_name" id="type_name"   class="form-control" style="display: none;" >
+                            <div class="form-outline mb-1">
+                            <select name="type_name" id="type_name"   class="form-control form-control-lg" style="display: none;margin-top:4%;" >
                                 </select>
                                 @if ($errors->has('user_type'))
                                     <span class="help-block text-danger">
@@ -172,7 +163,7 @@
   .error{
     color: red;
   }
-  label,
+  /* label,
   input,
   button {
     border: 0;
@@ -187,7 +178,7 @@
     border-radius: 15px;
     margin-top: 10px;
     background: #d4edda;
-}
+} */
 </style>
 @section('javascript')
 <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> 
@@ -229,13 +220,15 @@ $(document).ready(function(){
   
 //   });
  });
-   
+ const isEmpty = str => !str.trim().length;
   $("#user_type").change(function(e) {
       e.preventDefault();
       var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
        var value = $("option:selected", this).val();
        var email = $("#inputEmail").val();
-       $.ajax({
+       $(".error-type").remove();
+       if(!isEmpty(email)){
+        $.ajax({
             headers: {
             'X-CSRF-TOKEN': CSRF_TOKEN
             },
@@ -270,17 +263,48 @@ $(document).ready(function(){
                                         $("#type_name").append(options);
                                     }
                                     });
-                            
-
                         }
-
+               }
+               else{
+               $('#inputEmail').after('<span class="help-block text-danger error-type"> <small class="help-text"> user not match with type </small> </span>')
+                                   
                }
              }
         });
+
+       }
     
     });
 
+    $('#form').submit(function() {
+        var isValid=false;
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
+       var value = $('#user_type').find(":selected").val();
+       var email = $("#inputEmail").val();
+        $.ajax({
+            headers: {
+            'X-CSRF-TOKEN': CSRF_TOKEN
+            },
+            async: false,
+            type:'POST',
+            url:"{{ route('checkUser.post') }}",
+            data:{email: email,user_type:value},
+            success:function(result){
+                isValid= result;
+            }
 
+               });
+               if(!isValid){
+                $(".error-type").remove();
+                $('#inputEmail').after('<span class="help-block text-danger error-type"> <small class="help-text"> user not match with type </small> </span>')
+               }
+               else{
+                $(".error-type").remove();
+               }
+               return isValid;
+              
+         
+});
 
        $('button.copy').click(function(){
             $('input#inputEmail').val($(this).data('email'));

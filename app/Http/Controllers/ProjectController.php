@@ -676,10 +676,10 @@ class ProjectController extends Controller
             $data=$requests->latest()->simplePaginate(10);
             return $this->respond($data);
         }else{
-            $user=User::find(request()->user()->id);
+          //  $user=User::find(request()->user()->id);
             $customerquery=User::query();
-            $c=User::find($user->customer_id);
-            $customerquery->where('id',$user->customer_id);
+           // $c=User::find($user->customer_id);
+            $customerquery->where('id',request()->user()->id);
             $customerquery->whereHas('visitRequests')->with('visitRequests');
           //  $customerquery->whereHas('projectrequest')->with('projectrequest');
             $data=$customerquery->latest()->simplePaginate(10);
@@ -716,7 +716,7 @@ class ProjectController extends Controller
 
         if (!$user->hasRole('superadmin')) { 
         $projects=Project::select('id', 'name')
-                        ->where('customer_id',$user->customer_id)
+                        ->where('customer_id',Auth::id())
                         ->get()
                         ->toArray();
   //      $projectRequest=ProjectRequest::select('id', 'name')

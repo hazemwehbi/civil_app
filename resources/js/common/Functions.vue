@@ -40,7 +40,7 @@ export default {
             var step = goBackByStep || -1;
             setTimeout(() => {
                 this.$router.go(step);
-            }, 3000);
+            }, 1000);
         },
         defaultDateRange() {
             const self = this;

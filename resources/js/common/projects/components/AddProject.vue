@@ -172,8 +172,8 @@ export default {
                     message: response.data.msg,
                     color: response.data.success,
                 });
+                self.$router.push({ path: '/project', })
                 if (response.data.success) {
-                     this.$router.push({ path: '/project', })
                      // self.loading=false;
                     //   self.dialog = false;
                     self.$eventBus.$emit('updateTicketsTable');
