@@ -333,7 +333,7 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md4 v-if="$hasRole('superadmin')">
+                            <v-flex xs12 sm12 md4 v-if="$can('role.view')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"
@@ -359,7 +359,7 @@
                                     </v-hover>
                                 </v-flex>
                             </v-flex>
-                            <v-flex xs12 sm12 md4 v-if="$hasRole('superadmin')">
+                            <v-flex xs12 sm12 md4 v-if="$can('role.view')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"

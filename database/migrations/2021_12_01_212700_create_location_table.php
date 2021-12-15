@@ -15,11 +15,6 @@ class CreateLocationTable extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('project_id');
-            $table->foreign('project_id')
-                ->references('id')->on('projects')
-                ->onDelete('cascade');
-
             $table->string('province_municipality')->nullable();;
             $table->string('municipality')->nullable();;
             $table->unsignedInteger('plan_id')->nullable();;

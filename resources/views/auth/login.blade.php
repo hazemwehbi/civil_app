@@ -227,7 +227,7 @@ $(document).ready(function(){
        var value = $("option:selected", this).val();
        var email = $("#inputEmail").val();
        $(".error-type").remove();
-       if(!isEmpty(email)){
+       if(true){
         $.ajax({
             headers: {
             'X-CSRF-TOKEN': CSRF_TOKEN
@@ -239,7 +239,7 @@ $(document).ready(function(){
                 $('#type_name').children().remove();
                 $("#type_name").prop('required',false);
                 $("#type_name").hide(); 
-               if(result==true){ 
+               if(true){ 
                         if(value == 'ENGINEERING_OFFICE' || value == 'SUPPORT_SERVICES_OFFICE' || value == 'GOVERNMENT_AGENCIES')
                         {
                         

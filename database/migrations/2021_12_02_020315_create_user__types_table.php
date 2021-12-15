@@ -19,7 +19,7 @@ class CreateUserTypesTable extends Migration
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
-            $table->enum('type', config('enum.user_types'))->nullable();
+            $table->enum('type', config('enums.user_types'))->nullable();
             $table->timestamps();
         });
     }

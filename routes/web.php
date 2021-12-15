@@ -137,7 +137,7 @@ Route::middleware(['auth'])
         
         Route::post('accept-project', 'ProjectController@acceptProject');
         Route::get('sent-requests', 'ProjectController@getProjectRequest');
-        Route::delete('delete-requests/{id}', 'ProjectController@deleteProject');
+        Route::delete('delete-requests/{id}', 'ProjectController@deleteRequest');
         Route::get('get-priority','RequestTypeController@getPriority');
         Route::resource('request-type','RequestTypeController');
         Route::get('get-request-types','RequestTypeController@getRequestsTypes');

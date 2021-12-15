@@ -454,4 +454,7 @@ class CommonUtil
         
         return $building_types;
     }
+
+
+
 }

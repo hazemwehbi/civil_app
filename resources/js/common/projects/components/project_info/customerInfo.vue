@@ -1,6 +1,6 @@
 <template>
     <v-container grid-list-md>
-        <AddAgency ref="agencyadded" @fillAgencyData="getAgenctData($event)" ></AddAgency>
+        <AddAgency ref="agencyadded" @fillAgencyData="getAgenctData($event)"></AddAgency>
         <v-layout row>
             <v-flex xs12 sm12>
                 <v-card class="elevation-3">
@@ -233,7 +233,6 @@ export default {
             agencies: [],
             isAgency: false,
             agency: {
-                id:null,
                 trade_name: null,
                 record_number: null,
                 delegate_record: null,
@@ -242,25 +241,25 @@ export default {
                 agent_card_number: null,
                 email: null,
                 mobile: null,
+                id: null,
             },
         };
     },
     created() {
         const self = this;
         self.getCustomers();
-     
+
         //   self.getAgenciesData();
         ///   self.getCustomerData();
         //   return this.$v.$touch();
     },
-    mounted(){
-         const self = this;
-       
+    mounted() {
+        const self = this;
     },
     methods: {
         getAgenctData(data) {
-            this.agencies.push(data);
-            
+              const self = this;
+            self.agencies.push(data);
             //this.isAgency = true;
         },
         add() {
@@ -284,22 +283,20 @@ export default {
             self.inputs[key].id_card_number = x.id_card_number;
             self.inputs[key].email = x.email;
             self.resetAgentvalues();
-             self.getAgenciesData(value);
-           
+            self.getAgenciesData(value);
         },
-        resetvalues(value, key=0) {
+        resetvalues(value, key = 0) {
             const self = this;
             let x = self.customers.find((o) => o.id === value);
             self.inputs[key].id = x.id;
             self.inputs[key].mobile = x.mobile;
             self.inputs[key].id_card_number = x.id_card_number;
             self.inputs[key].email = x.email;
-           
         },
         updateAgentvalues(value) {
             const self = this;
             var x = self.agencies.find((o) => o.id == value);
-                  
+
             self.agency.record_number = x.record_number;
             self.agency.agency_number = x.agency_number;
             self.agency.delegate_record = x.delegate_record;
@@ -310,11 +307,11 @@ export default {
         },
         resetAgentvalues() {
             const self = this;
-             self.agency.id = null;
+            self.agency.id = null;
             self.agency.record_number = null;
-            self.agency.agency_number =null;
-            self.agency.delegate_record =null;
-            self.agency.agent_name =null;
+            self.agency.agency_number = null;
+            self.agency.delegate_record = null;
+            self.agency.agent_name = null;
             self.agency.agent_card_number = null;
             self.agency.email = null;
             self.agency.mobile = null;
@@ -325,7 +322,7 @@ export default {
                 .get('/all-customers')
                 .then(function (response) {
                     self.customers = response.data;
-                      //  self.resetvalues(1);
+                    //  self.resetvalues(1);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -345,9 +342,12 @@ export default {
         },
         nextStep() {
             this.$validator.validateAll().then((result) => {
-                //  alert(result)
                 if (result == true) {
-                    this.$emit('next', this.inputs);
+                    var data = {
+                        customers: this.inputs,
+                        agency_id: this.agency.id,
+                    };
+                    this.$emit('next', data);
                 } else {
                     this.$refs.form.validate();
                 }

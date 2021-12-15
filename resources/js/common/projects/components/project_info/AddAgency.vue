@@ -129,7 +129,7 @@ export default {
         },
         store() {
             const self = this;
-            let data = {
+            var data = {
                 trade_name: self.trade_name,
                 record_number: self.record_number,
                 agency_number: self.agency_number,
@@ -145,6 +145,7 @@ export default {
                     axios
                         .post('/add-agency', data)
                         .then(function (response) {
+                           
                             self.loading = false;
                             self.dialog = false;
                             (self.trade_name = data.trade_name),
@@ -155,7 +156,7 @@ export default {
                                 (self.agent_card_number = data.agent_card_number),
                                 (self.email = data.email),
                                 (self.mobile = data.mobile),
-                                self.$eventBus.$emit('fillAgencyData', data);
+                                
                             /*   self.$store.commit('showSnackbar', {
                                 message: response.data.msg,
                                 color: response.data.success,
@@ -164,7 +165,7 @@ export default {
                             //  if (response.data.success === true) {
                             //      self.$eventBus.$emit('updateRequestTypeList', response.data);
                             //    }
-                            self.$emit('fillAgencyData', data);
+                            self.$emit('fillAgencyData', response.data);
                         })
                         .catch(function (error) {
                             console.log(error);

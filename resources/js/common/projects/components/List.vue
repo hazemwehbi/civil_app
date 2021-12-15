@@ -51,6 +51,13 @@
                                             {{ trans('messages.delete') }}
                                         </v-list-tile-title>
                                     </v-list-tile>
+                                     <v-list-tile
+                                        @click="edit(props.item)" 
+                                        v-if="$can('project.edit')"                              >
+                                        <v-list-tile-title>
+                                            {{ trans('messages.edit') }}
+                                        </v-list-tile-title>
+                                    </v-list-tile>
                                     <v-list-tile
                                         @click="$router.push({name:'reports'})"
                                     >
@@ -302,9 +309,13 @@ export default {
                     console.log(error);
                 });
         },
-        edit(id) {
+        edit(item) {
+            console.log(item)
+            alert(JSON.stringify(item))
             const self = this;
-            self.$refs.projectEdit.edit(id);
+         //   self.$router.push({name: 'add-project', params: { project_id: id }});
+                                        
+           // self.$refs.projectEdit.edit(id);
         },
         deleteProject(id) {
             const self = this;

@@ -101,6 +101,7 @@ export default {
             customers:[],
             location   :new Object,
             project:new Object,
+            agency_id:null,
             users_id:[],
             loading: false,
         }        
@@ -126,7 +127,8 @@ export default {
     //   }
     },
     getCustomerData(data){
-        this.customers=data;
+        this.customers=data.customers;
+        this.agency_id=data.agency_id;
           this.e1=2;
 
     },
@@ -162,7 +164,8 @@ export default {
                 project:self.project,
                 location:self.location,
                 customers:self.customers,
-                users_id:self.users_id
+                users_id:self.users_id,
+                agency_id:self.agency_id
             }
             this.loading = true;
             axios.post('/add-new-project', data)

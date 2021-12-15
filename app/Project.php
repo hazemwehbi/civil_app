@@ -49,6 +49,13 @@ class Project extends Model
         return $this->belongsTo('App\Components\User\Models\User');
     }
 
+        /**
+     * Get the location for the project.
+     */
+    public function location()
+    {
+        return $this->belongsTo('App\Location');
+    }
     /**
      * Get the project task for the project.
      */

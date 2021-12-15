@@ -185,9 +185,9 @@ class ManageRolesController extends Controller
     public function destroy($id)
     {
         try {
-            $role = Role::where('type', 'employee')
-                        ->find($id);
-                        
+            // $role = Role::where('type', 'employee')
+            //             ->find($id);
+            $role = Role::find($id);   
             $role->delete();
 
             $output = $this->respondSuccess(__('messages.deleted_successfully'));

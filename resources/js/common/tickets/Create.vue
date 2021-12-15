@@ -63,7 +63,7 @@
                                 ></v-autocomplete>
                             </v-flex>
                             <!-- v-if="$hasRole('employee')" -->
-                                    <v-flex xs12 sm6 md6 >
+                                    <v-flex xs12 sm4 md4 >
                                 <v-autocomplete
                                     item-text="name"
                                     item-value="id"
@@ -159,7 +159,7 @@
                     <v-btn style="color:#06706d;" @click="$router.go(-1)">
                         {{ trans('messages.back') }}
                     </v-btn>
-                    <v-btn v-if="!$can('superadmin')" style="background-color:#06706d;color:white;" color="darken-1" @click="store(0)" :loading="loading" :disabled="loading">
+                    <v-btn  style="background-color:#06706d;color:white;" color="darken-1" @click="store(0)" :loading="loading" :disabled="loading">
                         {{ trans('messages.draft') }}
                     </v-btn>
                 </v-card-actions>

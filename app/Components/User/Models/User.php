@@ -370,7 +370,6 @@ class User extends Authenticatable implements HasMedia
 
 
     //add my code
-
     public function visitRequests()
     {
         return $this->hasMany('App\VisitRequest','customer_id');
