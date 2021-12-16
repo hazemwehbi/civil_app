@@ -66,7 +66,7 @@
             </v-data-table>
         </v-card>
         <br>
-        <div align="right">
+        <div align="center">
             <v-btn style="background-color:#06706d;color:white;" @click="$router.go(-1)">
                 {{ trans('messages.back') }}
             </v-btn>

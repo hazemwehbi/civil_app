@@ -394,7 +394,7 @@ const router = new Router({
         {
             path: '/create-project',
             name:'create_project',
-            component: require('./main/components/superadmin/CreateProject'),
+            component: require('../common/tickets/CreateProjectRequest1'),
         },
         {
             path: '/test',

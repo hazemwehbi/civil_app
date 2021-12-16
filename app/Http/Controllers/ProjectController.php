@@ -452,7 +452,7 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        if (!request()->user()->can('project.'.$id.'.delete')) {
+        if (!request()->user()->can('project.delete')) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -462,8 +462,8 @@ class ProjectController extends Controller
             ProjectMember::where('project_id', $id)
                         ->delete();
 
-            Location::where('project_id', $id)
-                        ->delete();
+            // Location::where('project_id', $id)
+            //             ->delete();
 
             $output = $this->respondSuccess(__('messages.deleted_successfully'));
         } catch (\Exception $e) {
@@ -1102,8 +1102,6 @@ class ProjectController extends Controller
        // self.id=data.id;
         $project->update();
 
-
-        //Add members
         ProjectMember::where('project_id',$project_data['id'])->delete();
         $project_members = $request['users_id'];
         array_push($project_members);

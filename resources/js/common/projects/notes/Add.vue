@@ -40,6 +40,7 @@
                     </v-container>
                 </v-card-text>
                 <v-divider></v-divider>
+                 <v-layout justify-center>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="teal" small outline @click="dialog = false">
@@ -49,6 +50,7 @@
                         {{ trans('messages.save') }}
                     </v-btn>
                 </v-card-actions>
+                 </v-layout>
             </v-card>
             <!-- /v-card -->
         </v-dialog>

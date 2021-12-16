@@ -404,24 +404,24 @@ class CommonUtil
     {
         $roles_number = [
                         [
-                            'key' => '1',
+                            'key' => 1,
                             'value' =>1// __('data.ecomerce')
                         ],
                         [
-                            'key' => '2',
-                            'value' =>'2',// __('data.ecomerce')
+                            'key' => 2,
+                            'value' =>2,// __('data.ecomerce')
                         ],
                         [
-                            'key' => '3',
-                            'value' =>'3'// __('data.ecomerce')
+                            'key' => 3,
+                            'value' =>3// __('data.ecomerce')
                         ],
                         [
-                            'key' => '4',
-                            'value' =>'4'// __('data.ecomerce')
+                            'key' => 4,
+                            'value' =>4// __('data.ecomerce')
                         ],
                         [
-                            'key' => '4',
-                            'value' =>'4'//'// __('data.ecomerce')
+                            'key' => 5,
+                            'value' =>5//'// __('data.ecomerce')
                         ],
                     ];
 

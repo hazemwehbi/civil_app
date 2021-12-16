@@ -349,7 +349,7 @@ export default {
 
             project: {
                 buiding_type: '',
-                role_number: '',
+                role_number: 0,
                 unit_number: 0,
                 build_rate: '',
                 using: '',
@@ -468,7 +468,11 @@ export default {
                 // self.lead_id=data.buiding_type;
                 // self.status=data.buiding_type;
                 // self.id=data.buiding_type;
-            self.project.users_id=data.members
+                
+             
+ 
+            self.project.users_id=data.members.map(({ id }) => id);
+           
         },
     },
 };
