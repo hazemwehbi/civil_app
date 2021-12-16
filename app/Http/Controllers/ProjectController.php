@@ -49,7 +49,7 @@ class ProjectController extends Controller
     {
         $user = $request->user();
 
-        $projects = Project::with('customer', 'categories', 'members', 'members.media','location');
+        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency');
 
         if (!$user->hasRole('superadmin')) {
             //If employee then get projects assigned or lead.
@@ -953,9 +953,9 @@ class ProjectController extends Controller
     }
 // ":2,"project_id":0,"created_at":"2021-12-15 22:26:18","updated_at":"2021-12-15 22:26:18"},{"id":7,"trade_name":"a","record_number":0,"delegate_record":"wqe","agency_number":0,"agent_name":"wqe","agent_card_number":0,"email":"test@example.com","mobile":"0938435134","user_id":2,"project_id":0,"created_at":"2021-12-15 22:20:36","updated_at":"2021-12-15 22:20:36"},{"id":2,"trade_name":"er","record_number":4334,"delegate_record":null,"agency_number":0,"agent_name":"wer","agent_card_number":0,"email":"435@gmail.com","mobile":"43534","user_id":2,"project_id":0,"created_at":"2021-12-15 22:03:15","updated_at":"2021-12-15 22:03:15"},{"id":13,"trade_name":"erter","record_number":0,"delegate_record":"tre","agency_number":0,"agent_name":"rt","agent_card_number":0,"email":"test@example.com","mobile":"0938435134","user_id":2,"project_id":0,"created_at":"2021-12-15 22:30:17","updated_at":"2021-12-15 22:30:17"},{"id":16,"trade_name":"ewtw","record_number":0,"delegate_record":"twet","agency_number":0,"agent_name":"ewt","agent_card_number":0,"email":"test@example.com","mobile":"0938435134","user_id":2,"project_id":0,"created_at":"2021-12-15 22:32:34","updated_at":"2021-12-15 22:32:34"},{"id":8,"trade_name":"fdg","record_number":34534,"delegate_record":"ewr","agency_number":0,"agent_name":"ewr","agent_card_number":0,"email":"test@example.com","mobile":"45","user_id":2,"project_id":0,"created_at":"2021-12-15 22:21:26","updated_at":"2021-12-15 22:21:26"},{"id":11,"trade_name":"mehyaaa","record_number":0,"delegate_record":"rt","agency_number":null,"agent_name":"ret","agent_card_number":0,"email":"test@gmail.com","mobile":"0938435134","user_id":2,"project_id":0,"created_at":"2021-12-15 22:25:06","updated_at":"2021-12-15 22:25:06"},{"id":10,"trade_name":"ret","record_number":0,"delegate_record":"ret","agency_number":0,"agent_name":"ert","agent_card_number":0,"email":"test@example.com","mobile":"0938435134","user_id":2,"project_id":0,"created_at":"2021-12-15 22:23:43","updated_at":"2021-12-15 22:23:43"},{"id":14,"trade_name":"ret","record_number":0,"delegate_record":"ret","agency_number":0,"agent_name":"ret","agent_card_number":0,"email":"test@example.com","mobile":"0938435134","user_id":2,"project_id":0,"created_at":"2021-12-15 22:30:45","updated_at":"2021-12-15 22:30:45"},{"id":15,"trade_name":"rewr","record_number":0,"delegate_record":"rewr","agency_number":0,"agent_name":"ewrwe","agent_card_number":0,"email":"test@example.com","mobile":"0938435134","user_id":2,"project_id":0,"created_at":"2021-12-15 22:31:22","updated_at":"2021-12-15 22:31:22"},{"id":3,"trade_name":"sad","record_number":0,"delegate_record":null,"agency_number":4234,"agent_name":"ewr","agent_card_number":32423,"email":"test@example.com","mobile":"0938435134","user_id":2,"project_id":0,"created_at":"2021-12-15 22:06:33","updated_at":"2021-12-15 22:06:33"},{"id":9,"trade_name":"sdf","record_number":0,"delegate_record":"er","agency_number":0,"agent_name":"rewrwe","agent_card_number":0,"email":"test@example.com","mobile":"0938435134","user_id":2,"project_id":0,"created_at":"2021-12-15 22:22:06","updated_at":"2021-12-15 22:22:06"},{
 
-    public function getAgencies($user_id=null){
+    public function getAgencies($user_id=0){
         $agencies=[];
-        if($user_id!=null){
+        if($user_id!=0){
             $agencies = Agency::where('user_id',$user_id)
            ->select('id','trade_name','record_number','delegate_record','agency_number','agent_name','agent_card_number','email','mobile')->
             orderBy('trade_name')
@@ -963,6 +963,7 @@ class ProjectController extends Controller
             ->toArray();
         }
          else{
+        
             $agencies = Agency::
             orderBy('trade_name')
             ->get()
@@ -1051,6 +1052,105 @@ class ProjectController extends Controller
    }
 
 
+   public function  editNewProject(Request $request){
+    if (!request()->user()->can('project.edit')) {
+        abort(403, 'Unauthorized action.');
+    }
+
+
+
+    $project_data = $request['project'];
+    $location_data = $request['location'];
+    $customers_data = $request['customers'];
+    $agency_id= $request['agency_id'];
+    try {
+        //TODO: optimise the process.
+        DB::beginTransaction();
+
+
+        $location=Location::find($location_data['id']);
+       
+        $location->update($location_data);
+     
+        $project=Project::findOrFail($project_data['id']);
+
+        $project->status =$project_data['status'];
+        $project-> customer_id =$customers_data[0]['id'];
+        $project-> agency_id =$agency_id;
+        $project->name=$project_data['name'];
+
+        $project->buiding_type=$project_data['buiding_type'];
+        $project->role_number=$project_data['role_number'];
+        $project->unit_number=$project_data['unit_number'];
+        $project->build_rate=$project_data['build_rate'];
+        $project->using=$project_data['using'];
+        $project->name=$project_data['name'];
+        $project->billing_type=$project_data['billing_type'];
+        $project->total_rate=$project_data['total_rate'];
+        $project->authorization_request_number=$project_data['authorization_request_number'];
+        $project->license_number=$project_data['license_number'];
+        //  type_of_request:'',
+        $project->plot_number=$project_data['plot_number'];
+        $project->cadastral_decision_number= $project_data['cadastral_decision_number'] ;
+        $project->start_date=$project_data['start_date'] ;
+        $project->end_date=$project_data['end_date'] ;
+        // customer_id:null,
+      //  $project->users_id= $project_data['users_id'] ;
+        $project->description= $project_data['description'] ;
+        $project->lead_id=$project_data['lead_id'] ;
+        $project->status=$project_data['status'] ;
+       // self.id=data.id;
+        $project->update();
+
+
+        //Add members
+        ProjectMember::where('project_id',$project_data['id'])->delete();
+        $project_members = $request['users_id'];
+        array_push($project_members);
+        $project->members()->sync($project_members);
+        //Add members
+        // $project_members = $request['users_id'];
+        // array_push($project_members, $project_data['lead_id']);
+        // $project->members()->sync($project_members);
+
+        //Add category
+       // $category = $project['category_id'];
+       // $project->categories()->sync($category);
+
+     //   $roles = $this->CommonUtil->createRoleAndPermissionsForProject($project->id);
+
+        //Assign project member role
+        // $users = User::find($project_members);
+        // foreach ($users as $user) {
+        //     $user->assignRole($roles['member']);
+        // }
+        //Assign lead role
+        //  $project_lead = User::find($project_data['lead_id']);
+        //   $project_lead->assignRole($roles['lead']);
+
+        //Assign roles to customer contacts
+        // if (!empty($project_data['customer_id'])) {
+        //     $contacts = User::find($project_data['customer_id'])
+        //                     ->contacts;
+        // ///   foreach ($contacts as $contact) {
+        ///      $contact->assignRole($roles['customer']);
+        //  }
+       // }
+
+            DB::commit();
+
+         //   $this->_saveProjectCreatedNotifications($project_members, $project->id);
+
+
+        $output = $this->respondSuccess(__('messages.saved_successfully'));
+        DB::commit();
+    } catch (\Exception $e) {
+        DB::rollBack();
+        $output = $this->respondWentWrong($e);
+      
+    }
+    return $output;
+   }
    public function getLocationStatus(Request $request)
    {
        $location_status = [

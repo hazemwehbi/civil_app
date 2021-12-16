@@ -293,7 +293,7 @@
                                             required
                                         ></v-autocomplete>
                                     </v-flex>
-                                                      <v-flex md4>
+                                    <v-flex md4>
                                         <v-autocomplete
                                             item-text="value"
                                             item-value="key"
@@ -316,9 +316,7 @@
                                 </v-layout>
                             </v-container>
                             <v-container grid-list-md>
-                                <v-layout row wrap>
-                  
-                                </v-layout>
+                                <v-layout row wrap> </v-layout>
                             </v-container>
 
                             <v-container grid-list-md>
@@ -370,6 +368,7 @@ export default {
                 description: null,
                 lead_id: null,
                 status: null,
+                id:'',
                 //category_id: null,
 
                 // name:'',
@@ -444,6 +443,32 @@ export default {
                     this.$refs.form.validate();
                 }
             });
+        },
+        fillEditData(data) {
+            const self = this;
+           self.project = data;
+                // self.buiding_type=data.buiding_type;
+                // self.role_number=data.buiding_type;
+                // self.unit_number=data.buiding_type;
+                // self.build_rate=data.buiding_type;
+                // self.using=data.buiding_type;
+                // self.name=data.buiding_type;
+                // self.billing_type=data.buiding_type;
+                // self.total_rate=data.buiding_type;
+                // self.authorization_request_number=data.buiding_type;
+                // self.license_number=data.buiding_type;
+                // //  type_of_request:'',
+                // self.plot_number=data.buiding_type;
+                // self.cadastral_decision_number=data.buiding_type;
+                // self.start_date=data.buiding_type;
+                // self.end_date=data.buiding_type;
+                // // customer_id:null,
+                // self.users_id=data.buiding_type;
+                // self.description=data.buiding_type;
+                // self.lead_id=data.buiding_type;
+                // self.status=data.buiding_type;
+                // self.id=data.buiding_type;
+            self.project.users_id=data.members
         },
     },
 };

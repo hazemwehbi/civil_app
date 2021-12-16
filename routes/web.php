@@ -133,6 +133,7 @@ Route::middleware(['auth'])
         Route::post('project-info', 'ProjectController@getProjectInfo');
         Route::post('getProject-Data', 'ProjectController@getProjectData');
         Route::post('add-agency', 'ProjectController@addAgency');
+        Route::post('edit-new-project', 'ProjectController@editNewProject');
         Route::get('get-agencies/{user_id}', 'ProjectController@getAgencies');
         
         Route::post('accept-project', 'ProjectController@acceptProject');

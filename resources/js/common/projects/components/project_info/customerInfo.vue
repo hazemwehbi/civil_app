@@ -28,6 +28,7 @@
                                             :data-vv-as="trans('messages.name')"
                                             @change="(event) => updatevalues(event, k)"
                                             :error-messages="errors.collect('name')"
+                                            
                                             required
                                         ></v-autocomplete>
                                     </v-flex>
@@ -243,22 +244,24 @@ export default {
                 mobile: null,
                 id: null,
             },
+             isEdit:false,
         };
     },
     created() {
         const self = this;
         self.getCustomers();
-
+        //self.getAgenciesData(0)
         //   self.getAgenciesData();
         ///   self.getCustomerData();
         //   return this.$v.$touch();
     },
     mounted() {
         const self = this;
+       ;
     },
     methods: {
         getAgenctData(data) {
-              const self = this;
+            const self = this;
             self.agencies.push(data);
             //this.isAgency = true;
         },
@@ -354,6 +357,13 @@ export default {
             });
         },
 
+        fillEditData(data,agency) {
+             const self = this;
+               self.agencies.push(agency);
+            self.inputs[0]=data;
+            self.agency=agency;
+         
+        },
         createAgency() {
             const self = this;
             this.$refs.agencyadded.create();

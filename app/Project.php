@@ -56,6 +56,16 @@ class Project extends Model
     {
         return $this->belongsTo('App\Location');
     }
+
+
+    
+        /**
+     * Get the Agency for the project.
+     */
+    public function Agency()
+    {
+        return $this->belongsTo('App\Agency');
+    }
     /**
      * Get the project task for the project.
      */
@@ -235,7 +245,6 @@ class Project extends Model
     {
         return $this->hasMany('App\VisitRequest');
     }
-
 
     public static function getBuildingTypes()
     {

@@ -29,7 +29,8 @@
                     <td>
                         <div style="display:inline-flex;padding-left:30%;" align="center">
                         <!-- $hasRole('employee') && -->
-                            <v-btn  small fab dark color="teal"  v-if=" props.item.status!=='new'" @click="$router.push({name: 'create_project',params: { project: props.item }})">
+                        <!-- v-if="props.item.status!='accepted'" -->
+                            <v-btn  small fab dark color="teal"   @click="$router.push({name: 'create_project',params: { project: props.item }})">
                                 <v-icon color="white">add</v-icon>
                                 <!-- {{trans('messages.add')}}-->
                             </v-btn>

@@ -192,6 +192,7 @@ export default {
                 status: '',
                 lon: '',
                 lat: '',
+                id:'',
             },
             statuses: [],
         };
@@ -224,6 +225,11 @@ export default {
         createcordinate() {
             const self = this;
             this.$refs.mapadded.create();
+        },
+         fillEditData(data) {
+             const self = this;
+            self.location=data;
+         
         },
     },
 };

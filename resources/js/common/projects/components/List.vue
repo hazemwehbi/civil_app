@@ -311,9 +311,8 @@ export default {
         },
         edit(item) {
             console.log(item)
-            alert(JSON.stringify(item))
             const self = this;
-         //   self.$router.push({name: 'add-project', params: { project_id: id }});
+           self.$router.push({name: 'add-project', params: { project_info_edit: item,isEdit:true }});
                                         
            // self.$refs.projectEdit.edit(id);
         },

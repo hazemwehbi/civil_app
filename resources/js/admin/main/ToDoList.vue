@@ -522,9 +522,9 @@
     </div>
 </template>
 <style scoped>
-.not_working {
-    background-color: red;
-}
+/* .not_working {
+   // background-color: red;
+} */
 </style>
 <script>
 export default {
