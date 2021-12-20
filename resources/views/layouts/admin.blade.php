@@ -26,6 +26,7 @@
         APP.UPLOAD_FILE_MAX_SIZE = '{{config('constants.upload_file_max_size')}}';
         // @if(in_array(config('app.locale'), config('constants.langs_rtl'))) true @else false @endif;
        // APP.RTL =true;
+      
         APP.RTL = @if(in_array(config('app.locale'), config('constants.langs_rtl'))) true @else false @endif;
         APP.FIRST_DAY_OF_WEEK = '{{$first_day_of_week}}';
         @auth
@@ -47,6 +48,7 @@
             APP.USER_PERMISSIONS = [];
             APP.USER_ROLES = [];
         @endauth
+        alert('{{config('app.locale')}}')
     </script>
 </head>
 
@@ -138,6 +140,21 @@
                     </div>
                 </v-layout>
 
+
+
+
+                <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {{ Config::get('languages')[App::getLocale()] }}
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+    @foreach (Config::get('languages') as $lang => $language)
+        @if ($lang != App::getLocale())
+                <a class="dropdown-item" href="{{ route('lang.switch', $lang) }}"> {{$language}}</a>
+        @endif
+    @endforeach
+    </div>
+</li>
                     <v-menu
                         attach
                         offset-y

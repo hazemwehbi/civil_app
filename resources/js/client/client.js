@@ -87,6 +87,11 @@ const admin = new Vue({
                 window.location.href = afterLogoutRedirectUrl;
             });
         },
+        changeLanguage(languageUrl){
+            axios.post(languageUrl).then(r => {
+             
+            });
+        },
         dialogOk() {
             store.commit('dialogOk');
         },

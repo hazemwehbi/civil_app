@@ -209,4 +209,4 @@ Route::get('/js/lang.js', function () {
     echo 'window.i18n = '.json_encode($strings).';';
     exit();
 })->name('assets.lang');
-Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controllers\LanguageController@switchLang']);
+Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'LanguageController@switchLang']);
