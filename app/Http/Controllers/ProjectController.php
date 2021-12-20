@@ -457,11 +457,15 @@ class ProjectController extends Controller
         }
 
         try {
+            $request =  VisitRequest::where('project_id', $id)->first();
+            if($request != null){
+              return   $this->respondWithError('there is visit request related to project');
+            }
             Project::destroy($id);
-
             ProjectMember::where('project_id', $id)
                         ->delete();
-
+            VisitRequest::where('project_id', $id)
+            ->delete();
             // Location::where('project_id', $id)
             //             ->delete();
 
@@ -1004,7 +1008,7 @@ class ProjectController extends Controller
 
         //Add members
         $project_members = $request['users_id'];
-        array_push($project_members, $project_data['lead_id']);
+        array_push($project_members);
         $project->members()->sync($project_members);
 
         //Add category
@@ -1097,7 +1101,7 @@ class ProjectController extends Controller
         // customer_id:null,
       //  $project->users_id= $project_data['users_id'] ;
         $project->description= $project_data['description'] ;
-        $project->lead_id=$project_data['lead_id'] ;
+       // $project->lead_id=$project_data['lead_id'] ;
         $project->status=$project_data['status'] ;
        // self.id=data.id;
         $project->update();
@@ -1177,5 +1181,10 @@ class ProjectController extends Controller
 
    }
 
+
+   public function  getProject ($id){
+    $project=Project::find($id);
+    return $project;
+   }
 
 }

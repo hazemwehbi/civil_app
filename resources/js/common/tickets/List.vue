@@ -79,7 +79,7 @@
                     </td>
                     <td>
                         <div align="center">
-                            {{ props.item.project.name}}
+                             {{ getProject(props.item.project_id) }}
                         </div>
                     </td>
                     <td>
@@ -165,6 +165,7 @@ export default {
             tabs: 'tab-1',
             ticket_stats: [],
             type:'',
+            project_name:'',
         };
     },
     watch: {
@@ -247,6 +248,16 @@ export default {
                 const self = this;
                 return self.request_types.find((o)=>o.key==visit).value;
             
+        },
+        getProject(project_id){
+         const self = this;
+            axios.get('/get-project/'+project_id).then(function(response) { 
+                self.project_name= response.data.name;
+                console.log(self.project_name)
+            }).catch(function(error) {
+               // self.project_name= '-';
+            });
+            return self.project_name;
         },
         getVisitRequestType(id){
             const self = this;

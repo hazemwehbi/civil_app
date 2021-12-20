@@ -135,7 +135,8 @@ Route::middleware(['auth'])
         Route::post('add-agency', 'ProjectController@addAgency');
         Route::post('edit-new-project', 'ProjectController@editNewProject');
         Route::get('get-agencies/{user_id}', 'ProjectController@getAgencies');
-        
+        Route::get('get-project/{id}', 'ProjectController@getProject');
+
         Route::post('accept-project', 'ProjectController@acceptProject');
         Route::get('sent-requests', 'ProjectController@getProjectRequest');
         Route::delete('delete-requests/{id}', 'ProjectController@deleteRequest');
