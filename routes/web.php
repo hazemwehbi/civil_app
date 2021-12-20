@@ -189,19 +189,25 @@ Route::prefix('client')
         Route::get('dashboards', 'DashboardController@index');
     });
 
+   
+
 // Localization
 Route::get('/js/lang.js', function () {
     $strings = Cache::remember('lang.js', 2, function () {
         $lang = config('app.locale');
 
         $files = glob(resource_path('lang/'.$lang.'/*.php'));
+       
         $strings = [];
-
+   
         foreach ($files as $file) {
+        
             $name = basename($file, '.php');
+     
             $strings[$name] = require $file;
+       
         }
-
+     
         return $strings;
     });
 
@@ -210,3 +216,9 @@ Route::get('/js/lang.js', function () {
     exit();
 })->name('assets.lang');
 Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'LanguageController@switchLang']);
+// Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'LanguageController@switchLang']);
+// Route::get('welcome/{locale}', function ($locale) {
+//     App::setLocale($locale);
+
+//     //
+// });

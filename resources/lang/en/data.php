@@ -169,6 +169,7 @@ return [
     'edit_role' => 'Edit Role',
     'delete_role' => 'Delete Role',
     'view_role' => 'View Role',
+    'language'=>'Language',
 
  
 ];

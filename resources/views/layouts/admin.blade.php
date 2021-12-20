@@ -48,7 +48,6 @@
             APP.USER_PERMISSIONS = [];
             APP.USER_ROLES = [];
         @endauth
-        alert('{{config('app.locale')}}')
     </script>
 </head>
 
@@ -125,7 +124,6 @@
         
            
                 <img src="{{asset('img/logo.png')}}"  alt="logo" width="100" style="border-radius:20px;" />
-                </v-layout>
                 <v-layout >
                     <div style="font-size:16px;">
  
@@ -140,21 +138,40 @@
                     </div>
                 </v-layout>
 
+                <v-menu
+                     attach
+                        offset-y
+                        bottom
+                        center
+                        nudge-bottom="14"
+                        transition="slide-x-transition"
+                        >
+                        <v-btn flat slot="activator">
+                            <b style="font-size:14px;">
+                                <v-icon>language</v-icon>
+                                {{trans('data.language')}}
+                                
+                        </v-btn>
+                        <v-list>
+                            <v-list-tile style="background: darkgrey;" >
+                                <v-list-tile-title>
+                                <span class="flag-icon flag-icon-{{Config::get('languages')[App::getLocale()]['flag-icon']}}"></span> {{ Config::get('languages')[App::getLocale()]['display'] }}
+                                </v-list-tile-title>
+                            </v-list-tile>
+                            <v-list-tile >
+                                <v-list-tile-title>
+                                @foreach (Config::get('languages') as $lang => $language)
+                                @if ($lang != App::getLocale())
+                                        <a class="dropdown-item" href="{{ route('lang.switch', $lang) }}"><span class="flag-icon flag-icon-{{$language['flag-icon']}}"></span> {{$language['display']}}</a>
+                                    @endif
+                                @endforeach
+                                </v-list-tile-title>
+                            </v-list-tile>
+                        </v-list>
+                       
 
+                     </v-menu>
 
-
-                <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        {{ Config::get('languages')[App::getLocale()] }}
-    </a>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-    @foreach (Config::get('languages') as $lang => $language)
-        @if ($lang != App::getLocale())
-                <a class="dropdown-item" href="{{ route('lang.switch', $lang) }}"> {{$language}}</a>
-        @endif
-    @endforeach
-    </div>
-</li>
                     <v-menu
                         attach
                         offset-y
@@ -188,10 +205,13 @@
                         </v-list>
 
 
-           
-                                            </v-menu>
-                </v-layout>
+                     </v-menu>
+
+            
+          
    
+
+
 
        
             </v-toolbar>
@@ -206,7 +226,6 @@
                 <v-footer app
                     v-show="toggleFooter">
                     <span>
-                        
                     </span>
                 </v-footer>
             </div>

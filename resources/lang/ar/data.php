@@ -74,6 +74,7 @@ return [
     'review_project_data'=>'استعراض بيانات المشروع',
     'project_name'=>'اسم المشروع',
     'delete'=>'مسح',
+    'language'=>'اللغة',
     ''=>'',
     ''=>'',
     ''=>'',
@@ -110,7 +111,81 @@ return [
     ''=>'',
     ''=>'',
     ''=>'',
-    ''=>'',
+    'customer_data'=>'بيانات المالك',
+    'id_card_number'=>' رقم بطاقة الهوية',
+    'customer1'=>'العميل الأول',
+    'province_municipality'=>'الامانة',
+    'municipality'=>'البلدية',
+    'plan_id'=>'رقم المخطط',
+    'piece_number'=>'رقم القطعة',
+    'size_number'=>'مساحة القطعة',
+    'instrument_number'=>'رقم الصك',
+    'instrument_date'=>'تاريخ الصك',
+    'northern_border'=>'الحد الشمالي',
+    'eastern_border'=>'الحد الشرقي',
+    'western_border'=>'الحد الغربي',
+    'southern_border'=>'الحد الجنوبي',
+    'lon'=>'الاحداثيات',
+    'lat'=>'الاحداثيات',
+    'using'=>'الاستخدام',
+    
+    'buiding_type'=>'نوع المبنى e',
+    'role_number'=>'عدد الادوار',
+    'unit_number'=>'عدد الوحدات',
+    'build_rate'=>'نسبة البناء',
+
+    'name2'=>'المالك الثاني',
+  
+    'location_status'=>'حالة الموقع ',
+
+    'location_info'=>'بيانات الموقع',
+    'project_info'=>'بيانات المشروع',
+    'customer_info'=>'بيانات المالك ',
+    
+    
+    'add_agency'=>'إضافة وكالة',
+    'trade_name'=>'الاسم التجاري',
+    'record_number'=>'رقم السجل',
+    'delegate_record'=>'المفوض عن السجل',
+
+    'agency_number'=>'رقم الوكالة',
+    'agent_name'=>'اسم الوكيل',
+    'agent_card_number'=>'رقم بطاقة الوكيل',
+    'billing_type'=>'نوع الفاتورة',
+
+    'visit_request'=>'طلب زيارة',
+    'design_request'=>'طلب تصميم',
+    'support_service_request'=>'طلب خدمة مساندة',
+    'contractor_request'=>'طلب مقاول',
+    'supervision_request'=>'طلب اشراف',
+
+    'visit_requests'=>'طلبات الزيارة',
+    'design_requests'=>'طلبات التصميم',
+    'support_service_requests'=>'طلبات خدمة المساندة',
+    'contractor_requests'=>'طلبات المقاول',
+    'supervision_requests'=>'طلبات الاشراف',
+
+
+    'archive'=>'الارشيف',
+    'accounting'=>'المحاسبة',
+    'add_customer'=>'إضافة زبون',
+    'reports'=>'التقارير',
+
+    'institutional'=>'مؤسساتي',
+    'business'=>'اعمال',
+    'storage'=>'تخزين',
+    'assembly'=>'تجميع',
+    'residential'=>'سكني',
+
+    'support'=>'دعم',
+    'personal'=>'شخصي',
+
+    //role managment
+    'create_role' => 'انشاء دور',
+    'edit_role' => 'تعديل دور',
+    'delete_role' => 'مسح دور',
+    'view_role' => 'عرض دور ',
+   
 
 
 

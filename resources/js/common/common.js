@@ -49,11 +49,10 @@ Vue.use(QuillEditor, {
         ],
     },
 });
-
+var x=APP.RTL;
 Vue.use(Vuetify, {
    // rtl: true,
-    
-    rtl: APP.RTl,
+    rtl: x,
     theme: {
         primary: '#1976D2',
         secondary: '#424242',
