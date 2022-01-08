@@ -41,7 +41,7 @@
                             </v-btn>
                             <!-- v-if="$can('superadmin')" -->
                             <div >
-                                <v-btn color="primary"   small fab v-if=" $hasRole('superadmin') && (props.item.status=='pending' || props.item.status=='new')" dark @click="acceptProject(props.item.status,props.item.id)">
+                                <v-btn color="primary"   small fab v-if=" ($hasRole('superadmin') || $hasRole('Engineering Office'))&& (props.item.status=='pending' || props.item.status=='new')" dark @click="acceptProject(props.item.status,props.item.id)">
                                     <v-icon color="white">check</v-icon>
                                     <!--{{trans('data.accept')}}-->
                                 </v-btn>
@@ -79,7 +79,7 @@
                     </td>
                     <td>
                         <div align="center">
-                             {{ getProject(props.item.project_id) }}
+                             {{ props.item.project.name }}
                         </div>
                     </td>
                     <td>
@@ -250,6 +250,7 @@ export default {
             
         },
         getProject(project_id){
+            alert(project_id)
          const self = this;
             axios.get('/get-project/'+project_id).then(function(response) { 
                 self.project_name= response.data.name;

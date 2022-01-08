@@ -170,7 +170,31 @@ return [
     'delete_role' => 'Delete Role',
     'view_role' => 'View Role',
     'language'=>'Language',
+    'is_primary'=>'Primary Role',
+    'enginnering_office_name'=>'Enginnering Office Name',
 
+
+
+    //report 
+    'project_name_and_address'=> 'Project Name And Address',
+    'owner_name'=>'Owner Name ',
+    'land_number'=>'Land Number ',
+    'plan_numer'=>'Plan Number ',
+    //'owner_name'=>'',
+     'kick_of_project'=>'Kick Of Project',
+    'project_location'=>'Project Location',
+    'project_customer'=>'Project Customer',
+    'report_type'=>'Report Type',
+    'create_time'=>'Create Time ',
+    'decription_report'=>'Description',
+    'name_report'=>'Name ',
+    'print'=>'print',
+    'agency_info'=>'Agency Info',
+    'edit'=>'Edit',
+    'delete'=>'Delete',
+    'view'=>'View',
+    'close'=>'Close',
+    'update'=>'Update'
  
 ];
 

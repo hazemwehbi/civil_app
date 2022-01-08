@@ -20,18 +20,22 @@
     "prettier": "1.16.4",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
-    "vue": "^2.6"
+    "vue": "^2.6.14"
   },
   "dependencies": {
     "accounting": "^0.4.1",
+    "bootstrap": "^5.1.3",
+    "bootstrap-vue": "^2.21.2",
     "chart.js": "^2.7.3",
     "date-fns": "^1.30.1",
     "dropzone": "^5.2.0",
     "flag-icon-css": "^4.1.7",
+    "mdbvue": "^6.7.3",
     "moment": "^2.21.0",
     "moment-timezone": "^0.5.23",
     "vee-validate": "^2.1.7",
     "vue-flatpickr-component": "^8.1.2",
+    "vue-html-to-paper": "^1.4.4",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.1",
     "vue-spinner": "^1.0.2",

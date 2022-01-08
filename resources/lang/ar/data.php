@@ -121,7 +121,7 @@ return [
     'lon'=>'الاحداثيات',
     'lat'=>'الاحداثيات',
     'using'=>'الاستخدام', 
-    'buiding_type'=>'نوع المبنى e',
+    'buiding_type'=>'نوع المبنى ',
     'role_number'=>'عدد الادوار',
     'unit_number'=>'عدد الوحدات',
     'build_rate'=>'نسبة البناء',
@@ -164,5 +164,33 @@ return [
     'edit_role' => 'تعديل دور',
     'delete_role' => 'مسح دور',
     'view_role' => 'عرض دور ',
+    'is_primary'=>'دور رئيسي',
+    'enginnering_office_name'=>'اسم المكتب الهندسي',
 
+
+
+    //report 
+      //report 
+      'project_name_and_address'=> 'اسم وعنوان المشروع',
+      'owner_name'=>' اسم المالك ',
+      'land_number'=>' رقم قطعة  الارض ',
+      'plan_numer'=>' رقم المخطط ',
+
+    'kick_of_project'=>' تقرير بداية المشروع',
+     'project_location'=>'موقع المشروع',
+     'project_customer'=>'زبون المشروع',
+     'report_type'=>'نوع التقرير',
+     'create_time'=>'تاريخ الانشاء ' ,
+     'decription_report'=>'الوصف ',
+     'name_report'=>'الاسم ',
+     'print'=>'طباعة',
+     'agency_info'=>'معلومات الوكيل',
+     'edit'=>'تعديل',
+     'delete'=>'مسح',
+     'view'=>'عرض',
+      //
+      'close'=>'اغلاق',
+      'update'=>'تعديل'
+
+    
 ];

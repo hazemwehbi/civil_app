@@ -57,9 +57,9 @@
                             <div class="form-outline mb-1">
                             <select name="user_type" id="user_type"  class="form-control form-control-lg" autofocus required >
                             <option value="" disabled selected>Select your Type</option req>
-                                    @foreach(array_keys(config('constants.user_types'))  as $type)
+                                    <!-- @foreach(array_keys(config('constants.user_types'))  as $type)
                                         <option value="{{$type}}" >{{config('constants.user_types')[$type]}} </option>
-                                    @endforeach
+                                    @endforeach -->
                                 </select>
                                 @if ($errors->has('user_type'))
                                     <span class="help-block text-danger">
@@ -187,6 +187,36 @@
     <script type="text/javascript">
 
 $(document).ready(function(){
+   // e.preventDefault();
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
+    $.ajax({
+            headers: {
+            'X-CSRF-TOKEN': CSRF_TOKEN
+            },
+            type:'POST',
+            url:"{{ route('getTypes.post') }}",
+         //   data:{},
+            success:function(result){
+                console.log(result.types.length)
+                var options = "";
+              //  var options1 = `<option value="" disabled selected>choose ${result.type}</option>`;
+                   // $("#type_name").append(options1);
+                    for (var i = 0; i < result.types.length; i++) {
+                    options += `<option value=${result.types[i].id}>${result.types[i].name}</option>`;//<--string 
+                    }
+                    $("#user_type").append(options);
+                }
+        });
+
+
+    var options = "";
+        var options1 = `<option value="" disabled selected>choose ${result.type}</option>`;
+            $("#type_name").append(options1);
+            for (var i = 0; i < result.users.length; i++) {
+            options += `<option value=${result.users[i].id}>${result.users[i].name}</option>`;//<--string 
+            }
+            $("#type_name").append(options);
+
 
 //   $("#form").validate({
 //     // Specify validation rules
@@ -240,9 +270,8 @@ $(document).ready(function(){
                 $("#type_name").prop('required',false);
                 $("#type_name").hide(); 
                if(true){ 
-                        if(value == 'ENGINEERING_OFFICE' || value == 'SUPPORT_SERVICES_OFFICE' || value == 'GOVERNMENT_AGENCIES')
+                        if(value == '2' || value == '3' || value == '5')
                         {
-                        
                         $("#type_name").show(); 
                         $("#type_name").prop('required',true);
                             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -311,7 +340,6 @@ $(document).ready(function(){
             $('input#inputPassword').val($(this).data('pwd'));
             $('button#submit').trigger('click');
         });
-
 
 
 

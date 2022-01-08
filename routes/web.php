@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ManageRolesController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,6 +22,9 @@ Auth::routes(['register' => false]);
 
 Route::post('ajaxRequest', [UserController::class, 'getUserData'])->name('ajaxRequest.post');
 Route::post('checkUser', [UserController::class, 'checkUserType'])->name('checkUser.post');
+Route::post('getTypes', [ManageRolesController::class, 'getTypes'])->name('getTypes.post');
+
+
 
 if (config('constants.enable_client_signup')) {
     Route::get('/client/register', 'Client\ClientRegisterController@index')
@@ -82,6 +87,9 @@ Route::prefix('admin')
 
         Route::resource('lead-notes', 'LeadNoteController');
         Route::resource('reminders', 'ReminderController');
+
+     
+        
     });
 
 //Common routes
@@ -95,7 +103,7 @@ Route::middleware(['auth'])
 
         Route::post('visit-request', 'ProjectController@addVisitRequest');
         Route::post('add-new-project', 'ProjectController@addNewProject');
-        
+        Route::get('get-offices', 'Admin\UserController@getOffices');
         Route::get('all-customers', 'ProjectController@getAllCustomer');
         Route::get('projects-statistics', 'ProjectController@getStatistics');
         Route::get('projects-customer', 'ProjectController@getCustomerProject');
@@ -143,6 +151,11 @@ Route::middleware(['auth'])
         Route::get('get-priority','RequestTypeController@getPriority');
         Route::resource('request-type','RequestTypeController');
         Route::get('get-request-types','RequestTypeController@getRequestsTypes');
+        
+        //reRoute::get('get-request-types','RequestTypeController@getRequestsTypes');port 
+        Route::get('get-report-types','ReportController@getReportTypes');
+        Route::resource('reports', 'ReportController');
+        
         
         Route::get('get-Customer-name/{id}','Admin\CustomerController@getCustomerName');
         Route::get('visit-request-type/{id}','ProjectController@getVisitRequestType');

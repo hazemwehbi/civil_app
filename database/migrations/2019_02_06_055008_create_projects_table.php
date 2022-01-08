@@ -22,12 +22,12 @@ class CreateProjectsTable extends Migration
                 ->references('id')->on('users')
                 ->onDelete('cascade');
 
-            $table->unsignedInteger('location_id');
+            $table->unsignedInteger('location_id')->nullable();;
             $table->foreign('location_id')
                 ->references('id')->on('locations')
                     ->onDelete('cascade');
 
-            $table->unsignedInteger('agency_id');
+            $table->unsignedInteger('agency_id')->nullable();;
             $table->foreign('agency_id')
                 ->references('id')->on('agencies')
                     ->onDelete('cascade');

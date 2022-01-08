@@ -528,5 +528,5 @@ return [
     'invoice_paid_versus_expense' => 'Invoice Paid Vs Expenses',
     'invoice_paid' => 'Invoice Paid',
     'id' => 'Id',
-
+    'printed_saved_successfully'=>'تمت الطباعة والحفظ بنجاح'
     ];

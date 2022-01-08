@@ -21,6 +21,14 @@
                             required
                         ></v-text-field>
                     </v-flex>
+                    
+                    <v-flex xs12 sm6 md6 style="padding-left: 5%;">
+                        <v-checkbox
+                            :label="trans('data.is_primary')"
+                            v-model="is_primary"
+                        >
+                        </v-checkbox>
+                    </v-flex>
                 </v-layout>
                 <v-container grid-list-md>
                     <v-layout row>
@@ -467,6 +475,7 @@ export default {
             role_name: '',
             loading: false,
             permissions: [],
+            is_primary:'',
             roleId: null,
         };
     },
@@ -482,7 +491,8 @@ export default {
             axios
                 .get('/admin/roles/' + role_id + '/edit')
                 .then(function(response) {
-                    self.role_name = response.data.role;
+                    self.role_name = response.data.role.name;
+                    self.is_primary=response.data.role.is_primary;
                     self.permissions = response.data.permissions;
                 })
                 .catch(function(error) {
@@ -494,6 +504,7 @@ export default {
             let data = {
                 name: self.role_name,
                 permissions: self.permissions,
+                is_primary:self.is_primary
             };
             self.$validator.validateAll().then(result => {
                 if (result == true) {

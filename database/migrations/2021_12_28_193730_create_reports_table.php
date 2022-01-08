@@ -16,12 +16,10 @@ class CreateReportsTable extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
-
-
-            $table->unsignedInteger('project_id');
+            $table->string('description')->nullable();
+            $table->unsignedInteger('project_id')->nullable();
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');;
-            
-            $table->enum('type', [ 'start_project' ,'project_location', 'project_customer'])->nullable();
+            $table->enum('type', [ 'kick_of_project'])->nullable();
             $table->timestamps();
         });
     }

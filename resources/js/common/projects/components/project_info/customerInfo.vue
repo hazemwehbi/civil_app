@@ -83,17 +83,22 @@
                                     </v-flex>
                                 </v-layout>
                             </v-form>
-                            <div v-show="true">
+                            <div v-show="isAgency" v-for="(agency, k) in agency_inputs" :key="k">
                                 <v-layout row wrap class="add-agency">
                                     <v-flex md3>
-                                        <v-autocomplete
+                                        <!-- <v-autocomplete
                                             item-text="trade_name"
                                             item-value="id"
                                             :items="agencies"
                                             v-model="agency.id"
                                             @change="(event) => updateAgentvalues(event)"
                                             :label="trans('data.trade_name')"
-                                        ></v-autocomplete>
+                                        ></v-autocomplete> -->
+                                         <v-text-field
+                                            v-model="agency.trade_name"
+                                            :label="trans('data.trade_name')"
+                                            readonly
+                                        ></v-text-field>
                                     </v-flex>
                                     <v-flex md3>
                                         <v-text-field
@@ -230,6 +235,19 @@ export default {
                     mobile: '',
                 },
             ],
+            agency_inputs: [
+                {
+                trade_name: null,
+                record_number: null,
+                delegate_record: null,
+                agency_number: null,
+                agent_name: null,
+                agent_card_number: null,
+                email: null,
+                mobile: null,
+                id: null,
+                },
+            ],
             customers: [],
             agencies: [],
             isAgency: false,
@@ -262,8 +280,16 @@ export default {
     methods: {
         getAgenctData(data) {
             const self = this;
-            self.agencies.push(data);
-            //this.isAgency = true;
+           if(self.agency_inputs.length==1 && !self.isAgency){
+             self.agency_inputs[0]=data
+               self.isAgency = true;
+           }
+           else{
+               self.agency_inputs.push(data);
+           }
+           
+         //   self.agency=data;
+            
         },
         add() {
             this.inputs.push({
@@ -348,7 +374,7 @@ export default {
                 if (result == true) {
                     var data = {
                         customers: this.inputs,
-                        agency_id: this.agency.id,
+                        agency_id: this.agency_inputs[0].id,
                     };
                     this.$emit('next', data);
                 } else {

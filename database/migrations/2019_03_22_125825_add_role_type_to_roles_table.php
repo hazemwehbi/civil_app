@@ -17,6 +17,7 @@ class AddRoleTypeToRolesTable extends Migration
             $table->enum('type',array_keys(config('constants.user_types')))
                 ->after('guard_name')
                 ->nullable();
+                $table->boolean('is_primary')->default(0);
         });
     }
 

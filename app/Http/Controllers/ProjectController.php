@@ -53,16 +53,16 @@ class ProjectController extends Controller
 
         if (!$user->hasRole('superadmin')) {
             //If employee then get projects assigned or lead.
-            if ($user->is_employee) {
-                $project_ids = $this->CommonUtil->getAssignedProjectForEmployee($user->id);
-                $projects->orWhere('projects.lead_id', $user->id)
-                    ->orWhereIn('projects.id', $project_ids);
-            }
+            // if ($user->is_employee) {
+            //     $project_ids = $this->CommonUtil->getAssignedProjectForEmployee($user->id);
+            //     $projects->orWhere('projects.lead_id', $user->id)
+            //         ->orWhereIn('projects.id', $project_ids);
+            // }
 
             //If customer, then get project for that customer.
-            if ($user->is_client) {
-                $projects->Where('customer_id', $user->customer_id);
-            }
+            //if ($user->is_client) {
+                $projects->Where('customer_id', $user->id);
+           // }
         }
 
         $projects = $projects->withCount(['tasks',
@@ -685,9 +685,17 @@ class ProjectController extends Controller
 
         // // $roles = Role::where('type', 'employee')
         // //             ->select('name', 'created_at', 'id');
-       
+       // with another group
+       $user=User::find(request()->user()->id);
+       if($user->hasRole('superadmin')){
         $requests =  VisitRequest::with('customer', 'project')->where('request_type','visit_request')->get()
         ->toArray();
+       }
+       else{
+        $requests =  VisitRequest::with('customer', 'project')->where([['request_type','visit_request'],['customer_id',$user->id]])->orWhere([['request_type','visit_request'],['office_id',$user->id]])->get()
+        ->toArray();
+       }
+
                     
         // // if (!empty($request->get('name'))) {
         // //     $term = $request->get('name');
@@ -792,12 +800,12 @@ class ProjectController extends Controller
 
         $user = $request->user();
 
-        if(!$user->hasRole('superadmin')){
+        // if(!$user->hasRole('superadmin')){
              $status=config('enums.visit_request_status.new');
-        }
-        else{
-            $status=config('enums.visit_request_status.accepted');
-        }
+        // }
+        // else{
+        //     $status=config('enums.visit_request_status.accepted');
+        // }
 
         $projects = Project::with('customer', 'categories', 'members', 'members.media');
 
@@ -811,6 +819,7 @@ class ProjectController extends Controller
             'status'=>$status,
             'priority'=>$priority,
             'sent'=>$request->sent,
+            'office_id'=>$request->office_id,
             'created_at'=>Carbon::now()
         ]);
 

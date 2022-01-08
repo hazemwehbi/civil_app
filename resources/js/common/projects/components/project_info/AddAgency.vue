@@ -127,6 +127,17 @@ export default {
             //  (self.type = data.type), self.$validator.reset();
             self.dialog = true;
         },
+        reset(){
+             const self = this;
+            self.trade_name= '',
+           self.record_number = null;
+            self.agency_number =null;
+            self.delegate_record = null;
+            self.agent_name ='';
+            self.agent_card_number = null;
+            self.email = '';
+            self.mobile = null;
+        },
         store() {
             const self = this;
             var data = {
@@ -165,6 +176,7 @@ export default {
                             //  if (response.data.success === true) {
                             //      self.$eventBus.$emit('updateRequestTypeList', response.data);
                             //    }
+                            self.reset();
                             self.$emit('fillAgencyData', response.data);
                         })
                         .catch(function (error) {

@@ -138,7 +138,7 @@
                                     <v-text-field
                                         v-model="location.lon"
                                         :label="trans('data.lon')"
-                                        readonly
+                                        
 
                                     ></v-text-field>
                                 </v-flex>
@@ -146,7 +146,7 @@
                                     <v-text-field
                                         v-model="location.lat"
                                         :label="trans('data.lat')"
-                                        readonly
+                                        
                                     ></v-text-field>
                                 </v-flex>
                                 <v-flex xs1 sm1 md1>

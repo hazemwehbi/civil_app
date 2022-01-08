@@ -331,11 +331,10 @@ class UserController extends AdminController
         $users = User::getUserByRoleType($request->get('name'));
         $data = [
             'users' =>$users,
-            'type' =>config('constants.user_types')[$request->get('name')]
+            'type' =>Role::where('id', $request->get('name'))->first()->name, //config('constants.user_types')[$request->get('name')]
         ];
         return $this->respond($data);
     }
-
     public function checkUserType(Request $request){
         $x= $this->userRepository->getTypeOfUser($request->get('email'), $request->get('user_type'));
         return $this->respond( $x);
@@ -348,6 +347,12 @@ class UserController extends AdminController
         
     }
 
+    
+    public function getOffices()
+    {
+        $users = User::getOfficeUsers();
+        return $users;
+    }
     
     
 }

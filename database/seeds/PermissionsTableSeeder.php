@@ -89,6 +89,7 @@ class PermissionsTableSeeder extends Seeder
                 $StaticRole = Role::create([
                     'name' => 'superadmin',
                     'type' =>$type,
+                    'is_primary'=>1,
                 ]);
                 $StaticRole->syncPermissions($permissions);
 
@@ -97,6 +98,7 @@ class PermissionsTableSeeder extends Seeder
                 $StaticRole = Role::create([
                     'name' => config('constants.user_types')[$type],
                     'type' =>$type,
+                     'is_primary'=>1,
                 ]);
                 $StaticRole->syncPermissions(['employee.create', 'employee.view', 'employee.edit','employee.delete']);
             }

@@ -59,7 +59,7 @@
                                         </v-list-tile-title>
                                     </v-list-tile>
                                     <v-list-tile
-                                        @click="$router.push({name:'reports'})"
+                                        @click="$router.push({name: 'add_report', params: {project:props.item }})"
                                     >
                                         <v-list-tile-title>
                                             {{ trans('data.create_a_report') }}
@@ -67,10 +67,6 @@
                                     </v-list-tile>
 
                                     <v-list-tile
-                                        @click="
-                                        $router.push({
-                                            })
-                                        "
                                     >
                                         <v-list-tile-title>
                                             {{ trans('data.reports_review') }}

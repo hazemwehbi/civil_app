@@ -283,10 +283,12 @@ class User extends Authenticatable implements HasMedia
     }
 
 
-    public static function getUserByRoleType($type)
+    public static function getUserByRoleType($id)
     {
+      
         //check if role not null
-        $role=Role::where('type', $type)->first();
+        $role=Role::where('id', $id)->first();
+       //$role=Role::where('type', $type)->first();
         $users=[];
         if($role != null){
             $users= $role->users() ->select('id', 'name')
@@ -301,11 +303,11 @@ class User extends Authenticatable implements HasMedia
 
 
     //check user type
-    public static function getTypeOfUser($email,$userType)
+    public static function getTypeOfUser($email,$id)
     {
         $user =User::where('email',$email)->first();
         foreach ($user->roles as $role) {
-           if($role->type==$userType){
+           if($role->id==$id){
                 return 'true';
            }
   
@@ -389,5 +391,34 @@ class User extends Authenticatable implements HasMedia
             }
           }
           return $permissions;
+      }
+
+
+
+      public static function getOfficeUsers($append_all = false)
+      {
+            //check if role not null
+        $role=Role::where('type', 'ENGINEERING_OFFICE')->first();
+        //$role=Role::where('type', $type)->first();
+         $users=[];
+         if($role != null){
+             $users= $role->users() ->select('id', 'name')
+             ->orderBy('name')
+             ->get()
+             ->toArray();
+         }
+   
+          return $users;
+        //   $users = User::where('office_id', null)
+        //                   ->select('id', 'name')
+        //                   ->orderBy('name')
+        //                   ->get()
+        //                   ->toArray();
+  
+        //   if ($append_all) {
+        //       $users = array_merge([['id' => 0, 'name' => __('messages.all')]], $users);
+        //   }
+          
+        //   return $users;
       }
 }
