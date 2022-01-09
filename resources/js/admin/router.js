@@ -111,6 +111,11 @@ const router = new Router({
             name: 'add_report',
             component: require('../common/projects/notes/Add'),
         },
+        {
+            path: '/edit_report',
+            name: 'edit_report',
+            component: require('../common/projects/notes/Edit'),
+        },
 
         {
             path: '/project',

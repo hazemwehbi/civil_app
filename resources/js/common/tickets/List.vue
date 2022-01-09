@@ -30,13 +30,13 @@
                         <div style="display:inline-flex;padding-left:30%;" align="center">
                         <!-- $hasRole('employee') && -->
                         <!-- v-if="props.item.status!='accepted'" -->
-                            <v-btn  small fab dark color="teal"   @click="$router.push({name: 'create_project',params: { project: props.item }})">
+                            <v-btn  small fab dark color="teal" v-if='($hasRole("superadmin") || $hasRole("Engineering Office"))&& ( props.item.status=="accepted") && props.item.office_id == currentUser'    @click="$router.push({name: 'create_project',params: { project: props.item }})">
                                 <v-icon color="white">add</v-icon>
                                 <!-- {{trans('messages.add')}}-->
                             </v-btn>
                              <!-- v-if="!$can('superadmin')" -->
                        
-                            <v-btn   v-if='props.item.status=="new"'  small fab dark color="success" @click="editRequest(props.item)">
+                            <v-btn    v-if='props.item.status!="accepted" && props.item.customer_id == currentUser'  small fab dark color="success" @click="editRequest(props.item)">
                                 <v-icon color="white">edit</v-icon>
                             </v-btn>
                             <!-- v-if="$can('superadmin')" -->
@@ -53,7 +53,7 @@
                                     <!--{{trans('data.accept')}}-->
                                 </v-btn>
                             </div>
-                            <v-btn color="error" small fab dark @click="removeProject(props.item.id)">
+                            <v-btn color="error" v-if='props.item.status!="accepted" ' small fab dark @click="removeProject(props.item.id)">
                                 <v-icon color="white">cancel</v-icon>
                                 <!-- {{trans('messages.cancel')}}-->
                             </v-btn> 
@@ -110,6 +110,7 @@ export default {
     data() {
         const self = this;
         return {
+            currentUser:'',
             projects:[],
             total_items: 0,
             loading: false,
@@ -166,6 +167,7 @@ export default {
             ticket_stats: [],
             type:'',
             project_name:'',
+           
         };
     },
     watch: {
@@ -178,6 +180,7 @@ export default {
     },
     mounted() {
         const self = this;
+        self.getCurrentUser();
         //self.getFilters();
         // self.getStatistics();
         self.$eventBus.$on('updateTicketsTable', data => {
@@ -200,6 +203,7 @@ export default {
         self.projects=[];
          self.getRequestTypes();
         this.getAllProjectRequest();
+        
     },
     methods: {
       getRequestTypes(){
@@ -236,6 +240,7 @@ export default {
         },
         editRequest(request){
            // alert( request.status)
+           
            // if( request.status ==  'new'){
                 this.$router.push({name: 'edit_visit_request_list',params:{visit_request:request}});
             // }
@@ -250,7 +255,6 @@ export default {
             
         },
         getProject(project_id){
-            alert(project_id)
          const self = this;
             axios.get('/get-project/'+project_id).then(function(response) { 
                 self.project_name= response.data.name;
@@ -447,6 +451,22 @@ export default {
                     console.log('CANCEL');
                 },
             });
+        },
+
+        getCurrentUser(){
+              const self = this;
+                   axios
+                .get('/get-current-user', {
+                   
+                })
+                .then(function(response) {
+                   
+                    self.currentUser=response.data.id;
+              
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
         },
    /*    getFilters() {
             const self = this;

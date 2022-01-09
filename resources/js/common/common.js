@@ -28,6 +28,7 @@ import QuillEditor from 'vue-quill-editor';
 // require styles
 import 'quill/dist/quill.snow.css';
 
+import './style.css'
 Vue.use(QuillEditor, {
     placeholder: 'Write here..',
     theme: 'snow',

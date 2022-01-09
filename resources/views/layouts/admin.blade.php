@@ -18,6 +18,9 @@
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" rel="stylesheet"/>
     <!-- app js values -->
+    
+    <link href="{{ asset('css/font-tajaw.css') }}" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Tajawal' rel='stylesheet'>
     <script type="application/javascript">
         var APP = {};
         APP.APP_URL = '{{config('app.url')}}';
@@ -284,6 +287,9 @@
 </body>
 <style type="text/css">
     /* quill editor toolbar */
+   #inspire {
+    font-family: 'Tajawal', sans-serif;
+   }
 .ql-toolbar {
   background-color: white;
 }

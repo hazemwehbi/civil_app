@@ -112,6 +112,7 @@ Route::middleware(['auth'])
         Route::get('projects/{id}/members', 'ProjectController@getMembers');
         Route::get('projects/update-status', 'ProjectController@updateStatus');
 
+        Route::get('get-project_info/{id}', 'ProjectController@getProjectInfo');
 
 
         Route::get('projects/mark-favorite', 'ProjectController@markAsFavorite');
@@ -187,6 +188,9 @@ Route::middleware(['auth'])
         Route::resource('tickets', 'TicketController');
         
         Route::resource('ticket-comments', 'TicketCommentController');
+
+        Route::get('get-current-user', 'Admin\UserController@getCurrentUser');
+        
     });
 
 // Employees & Superadmin

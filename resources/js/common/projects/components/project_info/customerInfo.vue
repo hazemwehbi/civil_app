@@ -84,6 +84,10 @@
                                 </v-layout>
                             </v-form>
                             <div v-show="isAgency" v-for="(agency, k) in agency_inputs" :key="k">
+                                                     
+                  
+                     <v-divider></v-divider>
+                     <v-container>
                                 <v-layout row wrap class="add-agency">
                                     <v-flex md3>
                                         <!-- <v-autocomplete
@@ -155,6 +159,8 @@
                                         ></v-text-field>
                                     </v-flex>
                                 </v-layout>
+
+                     </v-container>
                             </div>
                             <!-- <v-layout row wrap>
                                             <v-flex  md3 >

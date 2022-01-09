@@ -287,6 +287,10 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+
+    
     public function edit($id)
     {
         if (!request()->user()->can('project.'.$id.'.edit')) {
@@ -325,6 +329,12 @@ class ProjectController extends Controller
         return $output;
     }
 
+
+
+    public function  getProjectInfo($id){
+        $project = Project::with('customer', 'categories', 'members', 'members.media','location','agency')->find($id);
+        return $project;
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -922,12 +932,12 @@ class ProjectController extends Controller
         return $output;
     }
     
-    public function getProjectInfo(Request $request)
-    {
-        $project=Project::find($request->project_id);
+    // public function getProjectInfo(Request $request)
+    // {
+    //     $project=Project::find($request->project_id);
         
-        return $project;
-    }
+    //     return $project;
+    // }
 
 
     public function getProjectData(Request $request)

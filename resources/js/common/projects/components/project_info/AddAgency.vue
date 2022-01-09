@@ -8,6 +8,7 @@
                         {{ trans('data.add_agency') }}
                     </span>
                     <v-spacer></v-spacer>
+                    
                     <v-btn @click="dialog = false" icon> <v-icon>clear</v-icon> </v-btn>
                 </v-card-title>
                 <v-divider></v-divider>

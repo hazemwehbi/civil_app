@@ -8,7 +8,7 @@ use App\Notifications\EmployeeAdded;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
-
+use Illuminate\Support\Facades\Auth;
 class UserController extends AdminController
 {
     /**
@@ -353,6 +353,19 @@ class UserController extends AdminController
         $users = User::getOfficeUsers();
         return $users;
     }
+
+    public function getCurrentUser()
+    {
+        try {
+            $user=Auth::user();
+
+          $output=  $this->respond($user);
+        } catch (Exception $e) {
+            $output = $this->respondWentWrong($e);
+        }
+        return $output;
+    }
+    
     
     
 }

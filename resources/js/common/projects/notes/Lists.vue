@@ -41,8 +41,11 @@
                                         {{ trans('messages.view') }}
                                     </v-list-tile-title>
                                 </v-list-tile> -->
-
-                                <v-list-tile @click="edit(props.item.id)">
+                                          
+                                <v-list-tile @click="        $router.push({
+                                            name:'edit_report',
+                                            params: {report:props.item }
+                                            })">
                                     <v-list-tile-title>
                                         <v-icon small class="mr-2"> edit </v-icon>
                                         {{ trans('data.edit') }}
@@ -185,8 +188,9 @@ export default {
     },
     created() {
         const self = this;
+        self.getReportTypes();
          self.getProjectNotes();
-         self.getReportTypes();
+         
         // self.projectId = self.$route.params.project_id;
         // self.$eventBus.$on('updateProjectNotesTable', data => {
         //     self.getProjectNotes();
@@ -237,7 +241,13 @@ export default {
 
         getType(type){
                 const self = this;
-                return self.report_types.find((o)=>o.key==type).value;
+                if(type!= null){
+                       return self.report_types.find((o)=>o.key==type).value;
+                }
+                else{
+                        return null
+                }
+                
             
         },
         create() {
