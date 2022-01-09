@@ -863,9 +863,16 @@ class ProjectController extends Controller
         //         ->select('id', 'name')
         //         ->get()
         //         ->toArray();
-    $customers=User::select('id', 'name','email','mobile','id_card_number') ->get()->toArray();
-                
-              
+        $user=Auth::user();
+       if ($user->hasRole('Estate Owner'))
+        {
+            $customers=User::where('id',$user->id)->select('id', 'name','email','mobile','id_card_number') ->get()->toArray();
+
+        }
+        else{
+         $customers=User::where('id','>',1)->select('id', 'name','email','mobile','id_card_number')->get()->toArray();
+        }
+       
                
         return $customers;
     }

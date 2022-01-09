@@ -138,7 +138,7 @@
                                     <v-text-field
                                         v-model="location.lon"
                                         :label="trans('data.lon')"
-                                        
+                                        type="number"
 
                                     ></v-text-field>
                                 </v-flex>
@@ -146,7 +146,7 @@
                                     <v-text-field
                                         v-model="location.lat"
                                         :label="trans('data.lat')"
-                                        
+                                        type="number"
                                     ></v-text-field>
                                 </v-flex>
                                 <v-flex xs1 sm1 md1>
@@ -171,9 +171,7 @@
 <script>
 import Mapp from './map.vue';
 export default {
-    components: {
-        Mapp,
-    },
+
     props: ['customerId'],
     data() {
         return {
@@ -197,6 +195,7 @@ export default {
             statuses: [],
         };
     },
+ 
     created() {
         const self = this;
         self.getLocationStatus();

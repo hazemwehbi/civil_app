@@ -316,7 +316,7 @@
                                     header-tag="header1"
                                     title=""
                                 >
-                                    <b-card-text>{{ project.agency.trade_name }}</b-card-text>
+                                    <b-card-text>{{project.agency!= null ?  project.agency.trade_name : '' }}</b-card-text>
                                 </b-card>
                             </b-card-group>
                         </v-flex>
@@ -327,7 +327,7 @@
                                     header-tag="header1"
                                     title=""
                                 >
-                                    <b-card-text>{{ project.agency.record_number }}</b-card-text>
+                                    <b-card-text>{{project.agency!= null ?  project.agency.record_number : '' }}</b-card-text>
                                 </b-card>
                             </b-card-group>
                         </v-flex>
@@ -338,7 +338,7 @@
                                     header-tag="header1"
                                     title=""
                                 >
-                                    <b-card-text>{{ project.agency.email }}</b-card-text>
+                                    <b-card-text>{{ project.agency!= null ? project.agency.email : '' }}</b-card-text>
                                 </b-card>
                             </b-card-group>
                         </v-flex>
@@ -349,7 +349,7 @@
                                     header-tag="header1"
                                     title=""
                                 >
-                                    <b-card-text>{{ project.agency.mobile }}</b-card-text>
+                                    <b-card-text>{{project.agency!= null ? project.agency.mobile : '' }}</b-card-text>
                                 </b-card>
                             </b-card-group>
                         </v-flex>
