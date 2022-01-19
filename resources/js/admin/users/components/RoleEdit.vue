@@ -430,6 +430,46 @@
                         </v-flex>
                     </v-layout>
                        <v-divider></v-divider>
+
+
+                           <v-divider></v-divider>
+                    <v-layout row wrap class="mt-2">
+                        <v-flex xs12 sm3 md3>
+                            <h4>{{ trans('data.report') }}</h4>
+                        </v-flex>
+                        <v-flex xs12 sm3 md3>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.add_report')"
+                                value="report.create"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.view_report')"
+                                value="report.view"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.edit_report')"
+                                value="report.edit"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.delete_report')"
+                                value="report.delete"
+                            >
+                            </v-checkbox>
+                        </v-flex>
+                    </v-layout>
+                    <v-divider></v-divider>
+
+
+
+
+
                     <v-layout row wrap class="mt-2">
                         <v-flex xs12 sm3 md3>
                             <h4>{{ trans('messages.other') }}</h4>

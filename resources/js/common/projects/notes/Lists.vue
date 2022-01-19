@@ -42,22 +42,42 @@
                                     </v-list-tile-title>
                                 </v-list-tile> -->
                                           
-                                <v-list-tile @click="        $router.push({
+                                <v-list-tile @click="  
+                                      $router.push({
                                             name:'edit_report',
-                                            params: {report:props.item }
-                                            })">
+                                            params: {report:props.item ,isEdit:true}
+                                            })"
+                                             v-if="$can('report.edit')"
+                                            >
                                     <v-list-tile-title>
-                                        <v-icon small class="mr-2"> edit </v-icon>
+                                        <!-- <v-icon small class="mr-2"> edit </v-icon> -->
                                         {{ trans('data.edit') }}
                                     </v-list-tile-title>
                                 </v-list-tile>
-
-                                <v-list-tile @click="deleteNote(props.item)">
+                     
+                              <v-list-tile @click="  
+                                      $router.push({
+                                            name:'edit_report',
+                                            params: {report:props.item , isEdit:false}
+                                            })"
+                                             v-if="$can('report.view')"
+                                            >
                                     <v-list-tile-title>
-                                        <v-icon small class="mr-2"> delete_forever </v-icon>
+                                        {{ trans('data.view') }}
+                                    </v-list-tile-title>
+                                </v-list-tile>
+                                
+
+
+                                <v-list-tile 
+                                @click="deleteNote(props.item)"
+                                 v-if="$can('report.delete')"
+                                >
+                                    <v-list-tile-title>
                                         {{ trans('messages.delete') }}
                                     </v-list-tile-title>
                                 </v-list-tile>
+                                
                             </v-list>
                         </v-menu>
                     </td>

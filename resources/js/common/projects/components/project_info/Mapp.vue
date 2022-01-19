@@ -62,7 +62,7 @@ export default {
     },
     methods: {
         //detects location from browser
-        geolocate: function () {
+        geolocate(){
            
             navigator.geolocation.getCurrentPosition((position) => {
                 this.center = {

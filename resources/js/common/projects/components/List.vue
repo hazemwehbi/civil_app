@@ -1,6 +1,6 @@
 <template>
     <div>
-    <!-- create project -->
+        <!-- create project -->
         <ProjectFormAdd ref="projectAdd"></ProjectFormAdd>
         <!-- Edit project -->
         <ProjectFormEdit ref="projectEdit"></ProjectFormEdit>
@@ -18,103 +18,143 @@
                         <v-divider></v-divider>
                         <v-card-text>
                             <v-container grid-list-md>
-                                    <v-layout wrap>
-                                        <v-flex xs12 sm12 md12>
-                                            <v-data-table
-                                                    :headers="headers"
-                                                    :pagination.sync="pagination"
-                                                    :total-items="total_items"
-                                                    :loading="loading"
-                                                    :items="projectData"
-                                                    class="elevation-3"
-                                                >
+                                <v-layout wrap>
+                                    <v-flex xs12 sm12 md12>
+                                        <v-data-table
+                                            :headers="headers"
+                                            :pagination.sync="pagination"
+                                            :total-items="total_items"
+                                            :loading="loading"
+                                            :items="projectData"
+                                            class="elevation-3"
+                                        >
+                                            <template slot="items" slot-scope="props">
+                                                <td>
+                                                    <v-menu>
+                                                        <v-btn icon slot="activator">
+                                                            <v-icon>more_vert</v-icon>
+                                                        </v-btn>
+                                                        <v-list>
+                                                            <v-list-tile
+                                                                v-if="$can('tickets.create')"
+                                                                @click="
+                                                                    $router.push({
+                                                                        name: 'create_visit_request_list',
+                                                                        params: {
+                                                                            project_id:
+                                                                                props.item.id,
+                                                                            customer_id:
+                                                                                props.item
+                                                                                    .customer_id,
+                                                                            request_type:
+                                                                                'visit_request',
+                                                                        },
+                                                                    })
+                                                                "
+                                                            >
+                                                                <v-list-tile-title>
+                                                                    {{
+                                                                        trans(
+                                                                            'data.create_a_visit_request'
+                                                                        )
+                                                                    }}
+                                                                </v-list-tile-title>
+                                                            </v-list-tile>
 
-                                                <template slot="items" slot-scope="props">
-                                                    <td>
-                                                        <v-menu>
-                                <v-btn icon slot="activator"> <v-icon>more_vert</v-icon> </v-btn>
-                                <v-list>
- 
-                                    <v-list-tile
-                                       v-if="$can('tickets.create')" 
-                                        @click="$router.push({name: 'create_visit_request_list',
-                                         params: { project_id: props.item.id ,customer_id: props.item.customer_id, request_type:'visit_request' }})"                               >
-                                        <v-list-tile-title>
-                                            {{ trans('data.create_a_visit_request') }}
-                                        </v-list-tile-title>
-                                    </v-list-tile>
+                                                            <v-list-tile
+                                                                @click="
+                                                                    deleteProject(props.item.id)
+                                                                "
+                                                                v-if="$can('project.delete')"
+                                                            >
+                                                                <v-list-tile-title>
+                                                                    {{ trans('messages.delete') }}
+                                                                </v-list-tile-title>
+                                                            </v-list-tile>
+                                                            <v-list-tile
+                                                                @click="edit(props.item)"
+                                                                v-if="$can('project.edit')"
+                                                            >
+                                                                <v-list-tile-title>
+                                                                    {{ trans('messages.edit') }}
+                                                                </v-list-tile-title>
+                                                            </v-list-tile>
+                                                            <v-list-tile
+                                                                @click="view(props.item)"
+                                                                v-if="$can('project.list')"
+                                                            >
+                                                                <v-list-tile-title>
+                                                                    {{ trans('data.view') }}
+                                                                </v-list-tile-title>
+                                                            </v-list-tile>
 
-                                   <v-list-tile
-                                        @click="deleteProject(props.item.id)" 
-                                        v-if="$can('project.delete')"                              >
-                                        <v-list-tile-title>
-                                            {{ trans('messages.delete') }}
-                                        </v-list-tile-title>
-                                    </v-list-tile>
-                                     <v-list-tile
-                                        @click="edit(props.item)" 
-                                        v-if="$can('project.edit')"                              >
-                                        <v-list-tile-title>
-                                            {{ trans('messages.edit') }}
-                                        </v-list-tile-title>
-                                    </v-list-tile>
-                                    <v-list-tile
-                                        @click="$router.push({name: 'add_report', params: {project:props.item }})"
-                                    >
-                                        <v-list-tile-title>
-                                            {{ trans('data.create_a_report') }}
-                                        </v-list-tile-title>
-                                    </v-list-tile>
+                                                            <v-list-tile
+                                                                @click="
+                                                                    $router.push({
+                                                                        name: 'add_report',
+                                                                        params: {
+                                                                            project: props.item,
+                                                                        },
+                                                                    })
+                                                                "
+                                                            >
+                                                                <v-list-tile-title>
+                                                                    {{
+                                                                        trans(
+                                                                            'data.create_a_report'
+                                                                        )
+                                                                    }}
+                                                                </v-list-tile-title>
+                                                            </v-list-tile>
 
-                                    <v-list-tile
-                                    >
-                                        <v-list-tile-title>
-                                            {{ trans('data.reports_review') }}
-                                        </v-list-tile-title>
-                                    </v-list-tile>
+                                                            <v-list-tile>
+                                                                <v-list-tile-title>
+                                                                    {{
+                                                                        trans('data.reports_review')
+                                                                    }}
+                                                                </v-list-tile-title>
+                                                            </v-list-tile>
 
-                                    <v-list-tile
-                                        @click="
-                                        $router.push({name: 'project.schedule',
-                                                  params: { project_id: props.item.id }
-                                                  })
-                                        "
-                                    >
-                                        <v-list-tile-title>
-                                            {{ trans('data.schedule') }}
-                                        </v-list-tile-title>
-                                    </v-list-tile>
+                                                            <v-list-tile
+                                                                @click="
+                                                                    $router.push({
+                                                                        name: 'project.schedule',
+                                                                        params: {
+                                                                            project_id:
+                                                                                props.item.id,
+                                                                        },
+                                                                    })
+                                                                "
+                                                            >
+                                                                <v-list-tile-title>
+                                                                    {{ trans('data.schedule') }}
+                                                                </v-list-tile-title>
+                                                            </v-list-tile>
 
+                                                            <v-list-tile
+                                                                @click="
+                                                                    $router.push({
+                                                                        name: 'project.attachments',
+                                                                        params: {
+                                                                            project_id:
+                                                                                props.item.id,
+                                                                        },
+                                                                    })
+                                                                "
+                                                            >
+                                                                <v-list-tile-title>
+                                                                    {{ trans('data.attachments') }}
+                                                                </v-list-tile-title>
+                                                            </v-list-tile>
 
-                                        <v-list-tile
-                                        @click="
-                                        $router.push({
-                                            name:'project.attachments',
-                                            params: { project_id: props.item.id }
-                                            })
-                                        "
-                                         >
-                                        <v-list-tile-title>
-
-                                            {{ trans('data.attachments') }}
-                                        </v-list-tile-title>
-                                    </v-list-tile>
-
-                                    <v-list-tile
-                                        @click="
-                                        $router.push({
-
-                                            })
-                                        "
-                                    >
-                                        <v-list-tile-title>
-
-                                            {{ trans('messages.invoices') }}
-                                        </v-list-tile-title>
-                                    </v-list-tile>
-                                </v-list>
-                            </v-menu>
-                                                <!--      <div style="display: flex;">
+                                                            <v-list-tile @click="$router.push({})">
+                                                                <v-list-tile-title>
+                                                                    {{ trans('messages.invoices') }}
+                                                                </v-list-tile-title>
+                                                            </v-list-tile>
+                                                        </v-list>
+                                                    </v-menu>
+                                                    <!--      <div style="display: flex;">
                                                             <v-btn color="success" small v-if=" $can('project.' + props.item.id + '.status') ||
                                                                     $can('project.' + props.item.id + '.edit') ||
                                                                     $can('project.' + props.item.id + '.delete')
@@ -132,40 +172,59 @@
                                                                 {{ trans('messages.delete') }}
                                                             </v-btn>
                                                         </div>  -->
-                                                  
-                                                     <!-- <td>{{ props.item.id }}</td> -->
-                                                    <td>{{ props.item.name }}</td>
-                                                    <!-- <td> {{ props.item.customer.company }}</td> -->
-                                                    <td>
-                                                        <v-chip class="ma-2" color="red" text-color="white">{{trans('messages.' + props.item.status)}}
-                                                        </v-chip>
-                                                    </td>
-                                                    <td>
-                                                        <v-btn icon @click="markAsFavorite(props.item)">
-                                                            <v-icon :color="toggleFavorite(props.item)"> star </v-icon>
-                                                        </v-btn>
-                                                    </td>
-                                                    <td><avatar :members="props.item.members" class="mr-2"></avatar></td>
-                                                    <td>{{ projectProgress(
-                                                                    props.item.tasks_count,
-                                                                    props.item.completed_task
-                                                                )}}</td>
-                                                </template>
-                                            </v-data-table>
-                                        </v-flex>
-                                    </v-layout>
+
+                                                    <!-- <td>{{ props.item.id }}</td> -->
+                                                </td>
+
+                                                <td>{{ props.item.name }}</td>
+                                                <!-- <td> {{ props.item.customer.company }}</td> -->
+                                                <td>
+                                                    <v-chip
+                                                        class="ma-2"
+                                                        color="red"
+                                                        text-color="white"
+                                                        >{{
+                                                            trans('messages.' + props.item.status)
+                                                        }}
+                                                    </v-chip>
+                                                </td>
+                                                <td>
+                                                    <v-btn icon @click="markAsFavorite(props.item)">
+                                                        <v-icon :color="toggleFavorite(props.item)">
+                                                            star
+                                                        </v-icon>
+                                                    </v-btn>
+                                                </td>
+                                                <td>
+                                                    <avatar
+                                                        :members="props.item.members"
+                                                        class="mr-2"
+                                                    ></avatar>
+                                                </td>
+                                                <td>
+                                                    {{
+                                                        projectProgress(
+                                                            props.item.tasks_count,
+                                                            props.item.completed_task
+                                                        )
+                                                    }}
+                                                </td>
+                                            </template>
+                                        </v-data-table>
+                                    </v-flex>
+                                </v-layout>
                             </v-container>
                         </v-card-text>
                     </v-card>
                 </v-flex>
             </v-layout>
-            <br>
+            <br />
             <div align="center">
-                <v-btn style="background-color:#06706d;color:white;" @click="$router.go(-1)">
+                <v-btn style="background-color: #06706d; color: white" @click="$router.go(-1)">
                     {{ trans('messages.back') }}
                 </v-btn>
-           </div>
-        <br>
+            </div>
+            <br />
         </v-container>
     </div>
 </template>
@@ -235,7 +294,7 @@ export default {
                     value: 'project_progress',
                     align: 'left',
                     sortable: true,
-                }
+                },
             ],
             projectData: [],
             statuses: [],
@@ -255,11 +314,10 @@ export default {
         self.url = '/projects';
         self.getDataFromApi();
         self.getFilterData();
-        self.$eventBus.$on('updateProjectTable', data => {
+        self.$eventBus.$on('updateProjectTable', (data) => {
             self.url = '/projects';
             self.projectData = [];
             self.getDataFromApi();
-
         });
     },
     beforeDestroy() {
@@ -292,7 +350,7 @@ export default {
                 .get(self.url, {
                     params: params,
                 })
-                .then(function(response) {
+                .then(function (response) {
                     self.loading = false;
                     console.log(response);
                     self.projectData = _.concat(self.projectData, response.data.projects.data);
@@ -301,16 +359,29 @@ export default {
                     self.url = _.get(response, 'data.projects.next_page_url', null);
                     self.getStatistics();
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log(error);
                 });
         },
         edit(item) {
-            console.log(item)
+            console.log(item);
             const self = this;
-           self.$router.push({name: 'add-project', params: { project_info_edit: item,isEdit:true }});
-                                        
-           // self.$refs.projectEdit.edit(id);
+            self.$router.push({
+                name: 'add-project',
+                params: { project_info_edit: item, isEdit: true },
+            });
+
+            // self.$refs.projectEdit.edit(id);
+        },
+        view(item) {
+            console.log(item);
+            const self = this;
+            self.$router.push({
+                name: 'add-project',
+                params: { project_info_edit: item, isEdit: false },
+            });
+
+            // self.$refs.projectEdit.edit(id);
         },
         deleteProject(id) {
             const self = this;
@@ -323,7 +394,7 @@ export default {
                 okCb: () => {
                     axios
                         .delete('/projects/' + id)
-                        .then(function(response) {
+                        .then(function (response) {
                             self.$store.commit('showSnackbar', {
                                 message: response.data.msg,
                                 color: response.data.success,
@@ -335,7 +406,7 @@ export default {
                                 self.getDataFromApi();
                             }
                         })
-                        .catch(function(error) {
+                        .catch(function (error) {
                             console.log(error);
                         });
                 },
@@ -350,14 +421,14 @@ export default {
                 .get('/projects/mark-favorite', {
                     params: { id: project.id, favorite: project.is_favorited },
                 })
-                .then(function(response) {
+                .then(function (response) {
                     self.$store.commit('showSnackbar', {
                         message: response.data.msg,
                         color: response.data.success,
                     });
                     project.is_favorited = response.data.favorite;
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log(error);
                 });
         },
@@ -367,7 +438,7 @@ export default {
                 .get('/projects/update-status', {
                     params: { id: project.id, status: status },
                 })
-                .then(function(response) {
+                .then(function (response) {
                     self.$store.commit('showSnackbar', {
                         message: response.data.msg,
                         color: response.data.success,
@@ -378,7 +449,7 @@ export default {
                         self.getStatistics();
                     }
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log(error);
                 });
         },
@@ -394,13 +465,13 @@ export default {
             if (self.$can('superadmin')) {
                 axios
                     .get('/projects/create')
-                    .then(function(response) {
+                    .then(function (response) {
                         self.users = _.concat(self.users, response.data.users);
                         self.customers = _.concat(self.customers, response.data.customers);
                         self.status = _.concat(self.status, response.data.status);
                         self.categories = _.concat(self.categories, response.data.categories);
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         console.log(error);
                     });
             }
@@ -417,10 +488,10 @@ export default {
             if (self.$can('superadmin')) {
                 axios
                     .get('/projects-statistics')
-                    .then(function(response) {
+                    .then(function (response) {
                         self.statistics = response.data;
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         console.log(error);
                     });
             }

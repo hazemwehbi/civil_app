@@ -17,6 +17,7 @@
                                 <v-layout row wrap>
                                     <v-flex xs12 md6>
                                         <v-text-field
+                                           :readonly="isEdit"
                                             v-model="project.name"
                                             :label="trans('messages.name')"
                                             v-validate="'required'"
@@ -51,7 +52,7 @@
                                     <v-flex xs12 sm12 md12>
                                         {{ trans('messages.description') }}
                                         <br />
-                                        <quill-editor v-model="project.description"> </quill-editor>
+                                        <quill-editor :readonly="isEdit" v-model="project.description"> </quill-editor>
                                     </v-flex>
                                 </v-layout>
                                 <v-layout wrap>
@@ -76,6 +77,7 @@
                                             v-validate="'required'"
                                             :data-vv-as="trans('messages.status')"
                                             :error-messages="errors.collect('status')"
+                                            :readonly="isEdit"
                                             required
                                         ></v-select>
                                     </v-flex>
@@ -117,6 +119,7 @@
                                                         </label>
                                                         <flat-pickr
                                                             v-model="project.start_date"
+                                                            :readonly="isEdit"
                                                             name="start_date"
                                                             required
                                                             :config="flatPickerDate()"
@@ -137,6 +140,7 @@
                                             item-text="name"
                                             item-value="id"
                                             :items="users"
+                                            :readonly="isEdit"
                                             v-model="project.users_id"
                                             :label="trans('messages.members')"
                                             v-validate="'required'"
@@ -170,6 +174,7 @@
                                                         </label>
                                                         <flat-pickr
                                                             v-model="project.end_date"
+                                                            :readonly="isEdit"
                                                             name="end_date"
                                                             required
                                                             :config="flatPickerDate()"
@@ -187,6 +192,7 @@
                                     <v-flex xs12 md4>
                                         <v-text-field
                                             v-model="project.authorization_request_number"
+                                            :readonly="isEdit"
                                             :label="trans('data.authorization_request_number')"
                                             data-vv-name="Authorization Request Number"
                                             :data-vv-as="trans('data.authorization_request_number')"
@@ -201,6 +207,7 @@
                                     <v-flex xs12 md4>
                                         <v-text-field
                                             v-model="project.license_number"
+                                            :readonly="isEdit"
                                             :label="trans('data.license_number')"
                                             data-vv-name="Authorization Request Number"
                                             :data-vv-as="trans('data.license_number')"
@@ -213,6 +220,7 @@
                                     <v-flex xs12 md4>
                                         <v-text-field
                                             v-model="project.plot_number"
+                                            :readonly="isEdit"
                                             :label="trans('data.plot_number')"
                                             data-vv-name="Authorization Request Number"
                                             :data-vv-as="trans('data.plot_number')"
@@ -238,6 +246,7 @@
                                     <v-flex xs12 md4>
                                         <v-text-field
                                             v-model="project.cadastral_decision_number"
+                                            :readonly="isEdit"
                                             :label="trans('data.cadastral_decision_number')"
                                             data-vv-name="Authorization Request Number"
                                             :data-vv-as="trans('data.cadastral_decision_number')"
@@ -253,6 +262,7 @@
                                         <v-autocomplete
                                             item-text="value"
                                             item-value="key"
+                                            :readonly="isEdit"
                                             :items="buiding_types"
                                             v-model="project.buiding_type"
                                             :label="trans('data.buiding_type')"
@@ -264,6 +274,7 @@
                                         <v-text-field
                                             type="number"
                                             ref="input"
+                                            :readonly="isEdit"
                                             :label="trans('data.unit_number')"
                                             v-model.number="project.unit_number"
                                         ></v-text-field>
@@ -273,6 +284,7 @@
                                             v-model="project.build_rate"
                                             :label="trans('data.build_rate')"
                                             v-validate="'required'"
+                                            :readonly="isEdit"
                                             data-vv-name="build_rate"
                                             :data-vv-as="trans('data.build_rate')"
                                             :error-messages="errors.collect('build_rate')"
@@ -283,6 +295,7 @@
                                         <v-autocomplete
                                             item-text="value"
                                             item-value="key"
+                                            :readonly="isEdit"
                                             :items="billing_types"
                                             v-model="project.billing_type"
                                             :label="trans('data.billing_type')"
@@ -297,6 +310,7 @@
                                         <v-autocomplete
                                             item-text="value"
                                             item-value="key"
+                                            :readonly="isEdit"
                                             :items="roles_number"
                                             v-model="project.role_number"
                                             :label="trans('data.role_number')"
@@ -307,6 +321,7 @@
                                         <v-autocomplete
                                             item-text="value"
                                             item-value="key"
+                                            :readonly="isEdit"
                                             :items="using_types"
                                             v-model="project.using"
                                             :label="trans('data.using')"
@@ -346,7 +361,7 @@ export default {
 
             customers: [],
             //    project: [],
-
+             isEdit:false,
             project: {
                 buiding_type: '',
                 role_number: 0,
@@ -369,6 +384,7 @@ export default {
                 lead_id: null,
                 status: null,
                 id:'',
+                
                 //category_id: null,
 
                 // name:'',
@@ -444,9 +460,10 @@ export default {
                 }
             });
         },
-        fillEditData(data) {
+        fillEditData(data,isEdit) {
             const self = this;
            self.project = data;
+           self.isEdit=isEdit;
                 // self.buiding_type=data.buiding_type;
                 // self.role_number=data.buiding_type;
                 // self.unit_number=data.buiding_type;

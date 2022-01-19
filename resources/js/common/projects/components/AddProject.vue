@@ -73,6 +73,7 @@
                                     :loading="loading"
                                     :disabled="loading"
                                     small
+                                    v-show="!isEdit"
                                     @click="getProjectInfo"
                                 >
                                     {{ trans('messages.save') }}
@@ -114,14 +115,25 @@ export default {
         };
     },
     mounted() {
-        if (this.$route.params.isEdit) {
+        if (this.$route.params.isEdit==true) {
+            this.isEdit=false;
+            this.$refs.customerInfo.fillEditData(
+                this.$route.params.project_info_edit.customer,
+                this.$route.params.project_info_edit.agency,
+                 this.isEdit
+            );
+            this.$refs.locationInfo.fillEditData(this.$route.params.project_info_edit.location,this.isEdit);
+            this.$refs.projectInfo.fillEditData(this.$route.params.project_info_edit, this.isEdit);
+        }
+        else if(this.$route.params.isEdit==false){
             this.isEdit=true;
             this.$refs.customerInfo.fillEditData(
                 this.$route.params.project_info_edit.customer,
-                this.$route.params.project_info_edit.agency
+                this.$route.params.project_info_edit.agency,
+                 this.isEdit
             );
-            this.$refs.locationInfo.fillEditData(this.$route.params.project_info_edit.location);
-            this.$refs.projectInfo.fillEditData(this.$route.params.project_info_edit);
+            this.$refs.locationInfo.fillEditData(this.$route.params.project_info_edit.location,this.isEdit);
+            this.$refs.projectInfo.fillEditData(this.$route.params.project_info_edit,this.isEdit);
         }
     },
 
@@ -136,6 +148,7 @@ export default {
         // self.project_id=self.$route.params.project.project_id;
     },
     methods: {
+
         goTo(step, can, data) {
             //    alert(JSON.stringify(data))
             //   if (can) {

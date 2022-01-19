@@ -190,7 +190,13 @@ return [
      'view'=>'عرض',
       //
       'close'=>'اغلاق',
-      'update'=>'تعديل'
+      'update'=>'تعديل',
+
+      'report'=>'التقرير',
+      'add_report'=>'إضافة تقرير',
+      'view_report'=>'عرض تقرير',
+      'edit_report'=>'تعديل تقرير',
+      'delete_report'=>'مسح تقرير'
 
     
 ];

@@ -20,6 +20,7 @@
                                         <v-autocomplete
                                             item-text="name"
                                             item-value="id"
+                                            :readonly="isEdit"
                                             :items="customers"
                                             v-model="input.id"
                                             :label="trans('messages.name')"
@@ -62,18 +63,21 @@
                                     </v-flex>
                                     <v-flex xs12 md4>
                                         <v-btn
+                                         
                                             @click="add(k)"
                                             small
-                                            v-show="k == inputs.length - 1"
+                                            v-show="k == inputs.length - 1 && !isEdit"
                                             fab
                                             style="background-color: #06706d; color: white"
                                         >
                                             <v-icon dark> add </v-icon>
                                         </v-btn>
                                         <v-btn
+
                                             @click="remove(k)"
-                                            v-show="k || (!k && inputs.length > 1)"
+                                            v-show="k || (!k && inputs.length > 1) && !isEdit"
                                             small
+                                           
                                             fab
                                             color="red"
                                             dark
@@ -210,6 +214,7 @@
                                         @click="createAgency"
                                         large
                                         dark
+                                        v-show="!isEdit"
                                         style="background-color: #06706d; color: white"
                                     >
                                         Add Agency
@@ -233,6 +238,7 @@ export default {
     props: ['customerId'],
     data() {
         return {
+              isEdit:false,
             inputs: [
                 {
                     id: '',
@@ -268,7 +274,7 @@ export default {
                 mobile: null,
                 id: null,
             },
-             isEdit:false,
+           
         };
     },
     created() {
@@ -389,11 +395,18 @@ export default {
             });
         },
 
-        fillEditData(data,agency) {
+        fillEditData(data,agency,isEdit) {
              const self = this;
                self.agencies.push(agency);
             self.inputs[0]=data;
             self.agency=agency;
+            if(agency != null){
+               self.isAgency=true;
+               self.agency_inputs[0]=agency;
+            }
+            
+           
+            self.isEdit=isEdit;
          
         },
         createAgency() {

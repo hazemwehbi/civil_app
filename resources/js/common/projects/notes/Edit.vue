@@ -176,6 +176,7 @@
                         @click="update"
                         :loading="loading"
                         :disabled="loading"
+                        v-show="!isEdit"
                     >
                         {{ trans('data.update') }}
                     </v-btn>
@@ -199,6 +200,7 @@
                                         v-validate="'required'"
                                         data-vv-name="name"
                                         :data-vv-as="trans('messages.name')"
+                                         :readonly="isEdit"
                                         :error-messages="errors.collect('name')"
                                         required
                                     >
@@ -227,7 +229,7 @@
                                     header-tag="header1"
                                     title=""
                                 >
-                                    <quill-editor v-model="report.description"> </quill-editor>
+                                    <quill-editor   :readonly="isEdit" v-model="report.description"> </quill-editor>
                                 </b-card>
                             </b-card-group>
                         </v-flex>
@@ -238,7 +240,7 @@
                         <v-flex xs12 sm12 md12>
                             <v-autocomplete
                                 id="input_report_type"
-                                 :readonly="true"
+                                 :readonly="isEdit"
                                 item-text="value"
                                 item-value="key"
                                 :items="report_types"
@@ -821,6 +823,7 @@ export default {
             report_type: '',
             create_time:'',
             enable_report:true,
+            isEdit:false,
         };
     },
     created() {
@@ -828,7 +831,7 @@ export default {
         self.reset();
         self.getReportTypes();
         self.create_time=self.currentDateTime();
-                console.log(self.$route.params.project)
+             
       //  self.project = self.$route.params.project;
         self.report = self.$route.params.report;
         console.log(self.report);
@@ -840,6 +843,14 @@ export default {
         const self = this;
     },
     mounted: function() {
+        if (this.$route.params.isEdit==true) {
+            this.isEdit=false;
+            
+        }
+        else if(this.$route.params.isEdit==false){
+            this.isEdit=true;
+   
+        }
     },
     methods: {
 

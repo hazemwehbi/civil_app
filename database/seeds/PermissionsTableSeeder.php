@@ -47,6 +47,10 @@ class PermissionsTableSeeder extends Seeder
                     ['name' => 'project.edit'],
                     ['name' => 'project.delete'],
 
+            
+
+
+
                     ['name' => 'file.create'],
                     ['name' => 'setting'],
                     ['name' => 'profile.edit'],
@@ -69,6 +73,11 @@ class PermissionsTableSeeder extends Seeder
                     ['name' => 'tickets.view'],
                     ['name' => 'tickets.edit'],
                     ['name' => 'tickets.delete'],
+
+                    ['name' => 'report.view'],
+                    ['name' => 'report.create'],
+                    ['name' => 'report.edit'],
+                    ['name' => 'report.delete'],
 
                     ['name' => 'role.create'],
                     ['name' => 'role.view'],
