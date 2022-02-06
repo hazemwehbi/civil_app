@@ -50,12 +50,9 @@ class CreateCustomersTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('users', function (Blueprint $table) {
-            $table->unsignedInteger('customer_id')->after('created_by')->nullable();
-            $table->foreign('customer_id')
-                ->references('id')->on('customers')
-                ->onDelete('cascade');
-        });
+        // Schema::table('users', function (Blueprint $table) {
+
+        // });
 
         //assign status 1 to existing customer.
         $customers = Customer::where('status_id', '!=', null)

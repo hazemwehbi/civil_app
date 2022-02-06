@@ -50,6 +50,17 @@ class CreateUsersTable extends Migration
             $table->string('activation_key', 255)->nullable();
             $table->unsignedInteger('id_card_number')->nullable();
             
+
+            $table->unsignedInteger('parent_id')->nullable();
+            $table->foreign('parent_id')
+                ->references('id')->on('users')
+                    ->onDelete('cascade');
+
+            $table->unsignedInteger('customer_id')->nullable();
+            $table->foreign('customer_id')
+                ->references('id')->on('customers')
+                ->onDelete('cascade');
+
             $table->rememberToken();
             $table->timestamps();
         });

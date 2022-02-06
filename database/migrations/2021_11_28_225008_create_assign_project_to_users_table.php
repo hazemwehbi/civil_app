@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AssignProjectToUserss extends Migration
+class CreateAssignProjectToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,9 @@ class AssignProjectToUserss extends Migration
      */
     public function up()
     {
-        Schema::table('projects', function (Blueprint $table) {
+        Schema::create('assign_project_to_users', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('customer_id')->nullable();
             $table->foreign('customer_id')
             ->references('id')->on('users')
             ->onDelete('cascade');
@@ -28,8 +30,6 @@ class AssignProjectToUserss extends Migration
      */
     public function down()
     {
-        Schema::table('projects', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('assign_project_to_users');
     }
 }
