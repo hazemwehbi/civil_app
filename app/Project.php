@@ -46,9 +46,26 @@ class Project extends Model
      */
     public function customer()
     {
-        return $this->belongsTo('App\Customer');
+        return $this->belongsTo('App\Components\User\Models\User');
     }
 
+        /**
+     * Get the location for the project.
+     */
+    public function location()
+    {
+        return $this->belongsTo('App\Location');
+    }
+
+
+    
+        /**
+     * Get the Agency for the project.
+     */
+    public function Agency()
+    {
+        return $this->belongsTo('App\Agency');
+    }
     /**
      * Get the project task for the project.
      */
@@ -125,6 +142,20 @@ class Project extends Model
         return $billing_types;
     }
 
+    public static function getProjectTypes()
+    {
+        $projectTypes = [
+                            ['key' => 'normal',
+                             'value' => __('messages.normal'),
+                            ],
+                            ['key' => 'not_normal',
+                             'value' => __('messages.not_normal'),
+                            ],
+                        ];
+
+        return $projectTypes;
+    }
+    
     /**
      * Return the status for the project.
      */
@@ -227,5 +258,43 @@ class Project extends Model
     public function visitRequests()
     {
         return $this->hasMany('App\VisitRequest');
+    }
+
+    public static function getBuildingTypes()
+    {
+        $building_types = [
+                            ['key' => 'institutional',
+                             'value' => __('data.institutional'),
+                            ],
+                            ['key' => 'business',
+                             'value' => __('data.business'),
+                            ],
+                            ['key' => 'storage',
+                             'value' => __('data.storage'),
+                            ],
+                            ['key' => 'assembly',
+                            'value' => __('data.assembly'),
+                           ],
+                           ['key' => 'residential',
+                            'value' => __('data.residential'),
+                           ],
+                        ];
+
+        return $building_types;
+    }
+
+
+    public static function getBuildingUsing()
+    {
+        $building_using = [
+                            ['key' => 'support',
+                             'value' => __('data.support'),
+                            ],
+                            ['key' => 'personal',
+                             'value' => __('data.personal'),
+                            ],
+                        ];
+
+        return $building_using;
     }
 }

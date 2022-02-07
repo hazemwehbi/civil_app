@@ -115,7 +115,7 @@
                                                     </v-menu>
                                                 </td>
                                                 <td>{{ props.item.name }}</td>
-                                                <td> {{ props.item.customer.company }}</td>
+                                                <!-- <td> {{ props.item.customer.company }}</td> -->
                                                 <td>
                                                     <v-btn icon @click="markAsFavorite(props.item)">
                                                         <v-icon :color="toggleFavorite(props.item)"> star </v-icon>
@@ -132,7 +132,7 @@
             </v-flex>
         </v-layout>
         <br>
-            <div align="right">
+            <div align="center">
                 <v-btn style="background-color:#06706d;color:white;" @click="$router.go(-1)">
                     {{ trans('messages.back') }}
                 </v-btn>
@@ -167,12 +167,12 @@ export default {
                     align: 'left',
                     sortable: true,
                 },
-                {
-                    text: self.trans('messages.company'),
-                    value: 'company',
-                    align: 'left',
-                    sortable: true,
-                },
+                // {
+                //     text: self.trans('messages.company'),
+                //     value: 'company',
+                //     align: 'left',
+                //     sortable: true,
+                // },
                 {
                     text: self.trans('messages.favorited'),
                     value: 'favorited',

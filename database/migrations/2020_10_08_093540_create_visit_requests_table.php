@@ -18,19 +18,24 @@ class CreateVisitRequestsTable extends Migration
             $table->string('title');
 
             $table->unsignedInteger('customer_id');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->unsignedInteger('office_id');
+            $table->foreign('office_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->unsignedInteger('project_id');
-        //    $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
 
-            $table->unsignedInteger('request_type_id');
-            $table->foreign('request_type_id')->references('id')->on('request_types')->onDelete('cascade');
-
+            // $table->unsignedInteger('request_type_id');
+            // $table->foreign('request_type_id')->references('id')->on('request_types')->onDelete('cascade');
             $table->text('description');
 
             $table->enum('priority', ['low', 'medium', 'high', 'urgent'])->nullable();
 
+            $table->enum('request_type', [ 'visit_request' ,'design_request', 'support_service_request', 'contractor_request' ,'supervision_request'])->nullable();
+
             $table->string('status')->default('new');
+            
             $table->Boolean('sent')->default(0);
             
             $table->timestamps();
@@ -47,3 +52,6 @@ class CreateVisitRequestsTable extends Migration
         Schema::dropIfExists('visit_requests');
     }
 }
+
+
+

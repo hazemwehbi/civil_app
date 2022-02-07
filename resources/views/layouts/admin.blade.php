@@ -16,17 +16,25 @@
     <!-- Styles -->
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" rel="stylesheet"/>
     <!-- app js values -->
+    
+    <link href="{{ asset('css/font-tajaw.css') }}" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Tajawal' rel='stylesheet'>
     <script type="application/javascript">
         var APP = {};
         APP.APP_URL = '{{config('app.url')}}';
         APP.TIMEZONE = '{{config('app.timezone')}}';
         APP.NOTIFICATION_REFRESH_TIMEOUT = '{{config('constants.notification_refresh_timeout')}}';
         APP.UPLOAD_FILE_MAX_SIZE = '{{config('constants.upload_file_max_size')}}';
+        // @if(in_array(config('app.locale'), config('constants.langs_rtl'))) true @else false @endif;
+       // APP.RTL =true;
+      
         APP.RTL = @if(in_array(config('app.locale'), config('constants.langs_rtl'))) true @else false @endif;
         APP.FIRST_DAY_OF_WEEK = '{{$first_day_of_week}}';
         @auth
+             window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
+
             @php
                 $user = Auth::user();
             @endphp
@@ -36,6 +44,7 @@
             APP.DATE_FORMAT = {!! json_encode($user->appDateFormat()) !!};
             APP.TIME_FORMAT = {!! json_encode($user->appTimeFormat()) !!};
         @else
+             window.Permissions = [];
             @php
                 $user = null;
             @endphp
@@ -44,6 +53,8 @@
         @endauth
     </script>
 </head>
+
+
 <body>
 <div id="admin">
 
@@ -106,25 +117,63 @@
                 </v-list> -->
         <!--    </v-navigation-drawer>-->
 
+
             <v-toolbar style="background-color:#06706d;" app dark flat fixed dense height="100"
                 :clipped-left="true">
                 <!-- this Line to hide 3 lines in navbar
                 <v-toolbar-side-icon @click="drawerToggle"></v-toolbar-side-icon> 
                 <v-toolbar-title class="hidden-sm-and-down">{{config('app.name')}}</v-toolbar-title>
                 -->
-                <v-layout>
-                
+        
+           
+                <img src="{{asset('img/logo.png')}}"  alt="logo" width="100" style="border-radius:20px;" />
+                <v-layout >
+                    <div style="font-size:16px;">
+ 
+                        &nbsp;&nbsp;&nbsp;
+                        <router-link to="/" style="color:white;">
+                            {{trans('data.home')}}
+                        </router-link>    
+                        &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
+                        <router-link to="/to-do-list" style="color:white;">
+                            {{trans('data.to_do_list')}}
+                        </router-link>                                      
+                    </div>
                 </v-layout>
-                <v-layout align-center row fill-height/>
-                    <!-- Plus buttons in navbar
 
-                        <quick-add-button></quick-add-button>
+                <v-menu
+                     attach
+                        offset-y
+                        bottom
+                        center
+                        nudge-bottom="14"
+                        transition="slide-x-transition"
+                        >
+                        <v-btn flat slot="activator">
+                            <b style="font-size:14px;">
+                                <v-icon>language</v-icon>
+                                {{trans('data.language')}}
+                                
+                        </v-btn>
+                        <v-list>
+                            <v-list-tile style="background: darkgrey;" >
+                                <v-list-tile-title>
+                                <span class="flag-icon flag-icon-{{Config::get('languages')[App::getLocale()]['flag-icon']}}"></span> {{ Config::get('languages')[App::getLocale()]['display'] }}
+                                </v-list-tile-title>
+                            </v-list-tile>
+                            <v-list-tile >
+                                <v-list-tile-title>
+                                @foreach (Config::get('languages') as $lang => $language)
+                                @if ($lang != App::getLocale())
+                                        <a class="dropdown-item" href="{{ route('lang.switch', $lang) }}"><span class="flag-icon flag-icon-{{$language['flag-icon']}}"></span> {{$language['display']}}</a>
+                                    @endif
+                                @endforeach
+                                </v-list-tile-title>
+                            </v-list-tile>
+                        </v-list>
+                       
 
-                        <calendar></calendar>
-
-                        <notification></notification>
-                    -->
-                    
+                     </v-menu>
 
                     <v-menu
                         attach
@@ -157,24 +206,17 @@
                                 </v-list-tile-title>
                             </v-list-tile>
                         </v-list>
-                    </v-menu>
-                </v-layout>
 
-                <v-layout >
-                    <div style="font-size:16px;">
-                        <router-link to="/to-do-list" style="color:white;">
-                            {{trans('data.to_do_list')}}
-                        </router-link>   
-                        &nbsp;&nbsp;&nbsp;
-                        <router-link to="/" style="color:white;">
-                            {{trans('data.home')}}
-                        </router-link>                                         
-                    </div>
-                </v-layout>
 
-                <v-layout justify-end>
-                <img src="{{asset('img/logo.png')}}"  alt="logo" width="100" style="border-radius:20px;" />
-                </v-layout>
+                     </v-menu>
+
+            
+          
+   
+
+
+
+       
             </v-toolbar>
 
             <v-content>
@@ -187,7 +229,6 @@
                 <v-footer app
                     v-show="toggleFooter">
                     <span>
-                        
                     </span>
                 </v-footer>
             </div>
@@ -233,6 +274,7 @@
 </div>
 
     <!-- Scripts -->
+
     <script src="{{ env('APP_URL') . '/js/lang.js' }}"></script>
     <script src="{{ asset(mix('js/manifest.js')) }}"></script>
     <script src="{{ asset(mix('js/vendor.js')) }}"></script>
@@ -245,6 +287,9 @@
 </body>
 <style type="text/css">
     /* quill editor toolbar */
+   #inspire {
+    font-family: 'Tajawal', sans-serif;
+   }
 .ql-toolbar {
   background-color: white;
 }
@@ -254,5 +299,6 @@
     overflow-y: scroll;
     resize: vertical;
 }
+
 </style>
 </html>

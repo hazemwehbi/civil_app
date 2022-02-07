@@ -8,6 +8,7 @@ use App\Notifications\EmployeeAdded;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends AdminController
 {
@@ -30,15 +31,64 @@ class UserController extends AdminController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(Request $request)
+    {     
         if (!request()->user()->can('employee.view')) {
             abort(403, 'Unauthorized action.');
         }
 
-        $data = $this->userRepository->listUsers(request()->all());
+
+        $rowsPerPage = ($request->get('rowsPerPage') > 0) ? $request->get('rowsPerPage') : 0;
+        $sort_by = $request->get('sort_by');
+        $descending = $request->get('descending');
+
+        if ($descending == 'false') {
+            $orderby = 'asc';
+        } elseif ($descending == 'true') {
+            $orderby = 'desc';
+        } elseif ($descending == '') {
+            $orderby = 'desc';
+            $sort_by = 'id';
+        }
+
+        // $roles = Role::where('type', 'employee')
+        //             ->select('name', 'created_at', 'id');
+        $user=Auth::user();
+        if ($user->hasRole('superadmin')){
+             $users = User::with('roles');
+         }
+         else{
+            $users = User::with('roles')->where(function ($query) {
+                $query->where('parent_id',Auth::id());
+                $query->orWhere('id', Auth::id());
+            });
+         }
+
+
         
-        return $this->respond($data);
+
+        if (!empty($request->get('name'))) {
+            $term = $request->get('name');
+            $users->where('name', 'like', "%$term%");
+        }
+        if (!empty($request->get('email'))) {
+            $term = $request->get('email');
+            $users->where('email', 'like', "%$term%");
+        }
+
+        $users = $users->orderBy($sort_by, $orderby)
+                    ->paginate($rowsPerPage);
+
+  
+        return $this->respond($users);
+
+
+    //     $params=request()->all();
+    //     $params['parent_id']=Auth::id();
+       
+    //    $data = $this->userRepository->listUsers($params);
+   
+    //    return $this->respond($data);
     }
 
     /**
@@ -84,8 +134,8 @@ class UserController extends AdminController
         try {
             DB::beginTransaction();
 
-            $input = $request->only('name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id');
-
+            $input = $request->only('name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number');
+            $input['parent_id']=Auth::id(); 
             /** @var User $user */
             $user = $this->userRepository->create($input);
 
@@ -207,7 +257,9 @@ class UserController extends AdminController
                 'bank_name',
                 'bank_identifier_code',
                 'branch_location',
-                'tax_payer_id'
+                'tax_payer_id',
+                'id_card_number',
+
             );
 
             // if password field is present but has empty value or null value
@@ -323,4 +375,46 @@ class UserController extends AdminController
         
         return $this->respond($statistics);
     }
+
+
+    public function getUserData(Request $request){
+        $users = User::getUserByRoleType($request->get('name'));
+        $data = [
+            'users' =>$users,
+            'type' =>Role::where('id', $request->get('name'))->first()->name, //config('constants.user_types')[$request->get('name')]
+        ];
+        return $this->respond($data);
+    }
+    public function checkUserType(Request $request){
+        $x= $this->userRepository->getTypeOfUser($request->get('email'), $request->get('user_type'));
+        return $this->respond( $x);
+        
+    }
+
+    public function getType(Request $request){
+        $x= $this->userRepository->getType($request->get('email'), $request->get('password'));
+        return $this->respond( $x);
+        
+    }
+
+    public function getOffices()
+    {
+        $users = User::getOfficeUsers();
+        return $users;
+    }
+
+    public function getCurrentUser()
+    {
+        try {
+            $user=Auth::user();
+
+          $output=  $this->respond($user);
+        } catch (Exception $e) {
+            $output = $this->respondWentWrong($e);
+        }
+        return $output;
+    }
+    
+    
+    
 }

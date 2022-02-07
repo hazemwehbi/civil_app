@@ -3,7 +3,7 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-
+ 
 // vendor
 require('../bootstrap');
 window.Vue = require('vue');
@@ -28,6 +28,7 @@ import QuillEditor from 'vue-quill-editor';
 // require styles
 import 'quill/dist/quill.snow.css';
 
+import './style.css'
 Vue.use(QuillEditor, {
     placeholder: 'Write here..',
     theme: 'snow',
@@ -49,11 +50,10 @@ Vue.use(QuillEditor, {
         ],
     },
 });
-
+var x=APP.RTL;
 Vue.use(Vuetify, {
    // rtl: true,
-    
-    rtl: APP.RTL,
+    rtl: x,
     theme: {
         primary: '#1976D2',
         secondary: '#424242',
@@ -112,8 +112,36 @@ Vue.component('notification', require('../common/notification/Notification.vue')
 Vue.component('calendar', require('../common/calendar/Calendar.vue'));
 Vue.component('avatar', require('../common/projects/components/Avatar.vue'));
 Vue.component('quick-add-button', require('../admin/quick_add/Create.vue'));
+Vue.component('vue-panel', {
+    template: '#panel-template',
+    props: ['title', 'body', 'footer', 'style']
+  });
+  
 import formatters from './Formatters';
 import functions from './Functions';
 
 Vue.use(formatters);
+
 Vue.mixin(functions);
+
+
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+
+// Import Bootstrap an BootstrapVue CSS files (order is important)
+
+//import 'bootstrap-vue/dist/bootstrap-vue.css'
+// Make BootstrapVue available throughout your project
+Vue.use(BootstrapVue)
+// Optionally install the BootstrapVue icon components plugin
+Vue.use(IconsPlugin)
+//print  
+
+
+
+import * as VueGoogleMaps from 'vue2-google-maps'
+Vue.use(VueGoogleMaps, {
+    load: {
+        key: 'AIzaSyDbCbVzCES9MfgpiISriDDveQwshIPwH7I',
+        libraries: 'places',
+    }
+});

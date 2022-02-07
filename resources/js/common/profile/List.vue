@@ -1,4 +1,5 @@
 <template>
+<v-container>
     <v-layout wrap align-center justify-center row fill-height>
         <v-flex xs12 sm10 md10>
             <v-card elevation="3">
@@ -164,7 +165,17 @@
                 </v-card-actions>
             </v-card>
         </v-flex>
+     
     </v-layout>
+        <br>
+            <div align="center">
+                <v-btn style="background-color:#06706d;color:white;" @click="$router.go(-1)">
+                    {{ trans('messages.back') }}
+                </v-btn>
+           </div>
+        <br>
+    </v-container>
+        
 </template>
 <script>
 export default {

@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ManageRolesController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,9 +14,18 @@
 |
 */
 
-Route::get('/', 'Front\\HomeController@index')->name('front.home');
+Route::get('/', function () {
+    return redirect(route('login'));
+});
 
-Auth::routes(['register' => false]);
+Auth::routes(['register' => true]);
+
+Route::post('ajaxRequest', [UserController::class, 'getUserData'])->name('ajaxRequest.post');
+Route::post('checkUser', [UserController::class, 'checkUserType'])->name('checkUser.post');
+Route::post('getTypes', [ManageRolesController::class, 'getTypes'])->name('getTypes.post');
+Route::post('getType', [UserController::class, 'getType'])->name('getType.post');
+
+
 
 if (config('constants.enable_client_signup')) {
     Route::get('/client/register', 'Client\ClientRegisterController@index')
@@ -25,7 +37,7 @@ if (config('constants.enable_client_signup')) {
 // Employees & Superadmin
 Route::prefix('admin')
     ->namespace('Admin')
-    ->middleware(['auth', 'employee'])
+  //  ->middleware(['auth', 'employee'])
     ->name('admin')
     ->group(function () {
         // single page
@@ -36,6 +48,7 @@ Route::prefix('admin')
         Route::get('user-statistics', 'UserController@getStatistics');
         Route::get('users-all', 'UserController@getAllEmployee');
         Route::get('users/{id}/name', 'UserController@getEmployee');
+        
         Route::resource('users', 'UserController');
 
         Route::get('customers/{id}/customer-name', 'CustomerController@getCustomer');
@@ -75,6 +88,9 @@ Route::prefix('admin')
 
         Route::resource('lead-notes', 'LeadNoteController');
         Route::resource('reminders', 'ReminderController');
+
+     
+        
     });
 
 //Common routes
@@ -87,6 +103,8 @@ Route::middleware(['auth'])
         Route::resource('media', 'MediaController');
 
         Route::post('visit-request', 'ProjectController@addVisitRequest');
+        Route::post('add-new-project', 'ProjectController@addNewProject');
+        Route::get('get-offices', 'Admin\UserController@getOffices');
         Route::get('all-customers', 'ProjectController@getAllCustomer');
         Route::get('projects-statistics', 'ProjectController@getStatistics');
         Route::get('projects-customer', 'ProjectController@getCustomerProject');
@@ -94,6 +112,10 @@ Route::middleware(['auth'])
         Route::get('projects/projects-list', 'ProjectController@getProjectsList');
         Route::get('projects/{id}/members', 'ProjectController@getMembers');
         Route::get('projects/update-status', 'ProjectController@updateStatus');
+
+        Route::get('get-project_info/{id}', 'ProjectController@getProjectInfo');
+
+
         Route::get('projects/mark-favorite', 'ProjectController@markAsFavorite');
         Route::resource('projects', 'ProjectController');
         Route::resource('project-notes', 'ProjectDocumentsAndNotesController');
@@ -114,12 +136,29 @@ Route::middleware(['auth'])
         Route::post('edit-visit-request', 'ProjectController@editVisitRequest');   
         Route::post('edit-project-request', 'ProjectController@editProjectRequest');
 
+        Route::get('get-location-status', 'ProjectController@getLocationStatus');
+
+
         Route::post('customer-info', 'Admin\CustomerController@getCutomerInfo');
         Route::post('project-info', 'ProjectController@getProjectInfo');
+        Route::post('getProject-Data', 'ProjectController@getProjectData');
+        Route::post('add-agency', 'ProjectController@addAgency');
+        Route::post('edit-new-project', 'ProjectController@editNewProject');
+        Route::get('get-agencies/{user_id}', 'ProjectController@getAgencies');
+        Route::get('get-project/{id}', 'ProjectController@getProject');
+
         Route::post('accept-project', 'ProjectController@acceptProject');
         Route::get('sent-requests', 'ProjectController@getProjectRequest');
-        Route::delete('delete-requests/{id}', 'ProjectController@deleteProject');
+        Route::delete('delete-requests/{id}', 'ProjectController@deleteRequest');
+        Route::get('get-priority','RequestTypeController@getPriority');
         Route::resource('request-type','RequestTypeController');
+        Route::get('get-request-types','RequestTypeController@getRequestsTypes');
+        
+        //reRoute::get('get-request-types','RequestTypeController@getRequestsTypes');port 
+        Route::get('get-report-types','ReportController@getReportTypes');
+        Route::resource('reports', 'ReportController');
+        
+        
         Route::get('get-Customer-name/{id}','Admin\CustomerController@getCustomerName');
         Route::get('visit-request-type/{id}','ProjectController@getVisitRequestType');
         
@@ -150,12 +189,15 @@ Route::middleware(['auth'])
         Route::resource('tickets', 'TicketController');
         
         Route::resource('ticket-comments', 'TicketCommentController');
+
+        Route::get('get-current-user', 'Admin\UserController@getCurrentUser');
+        
     });
 
 // Employees & Superadmin
 Route::prefix('client')
     ->namespace('Client')
-    ->middleware(['auth', 'client'])
+    //->middleware(['auth', 'client'])
     ->name('client')
     ->group(function () {
         // single page
@@ -165,23 +207,36 @@ Route::prefix('client')
         Route::get('dashboards', 'DashboardController@index');
     });
 
+   
+
 // Localization
 Route::get('/js/lang.js', function () {
-    $strings = Cache::remember('lang.js', 2, function () {
+   // $strings = Cache::remember('lang.js', 2, function () {
         $lang = config('app.locale');
-
+   
         $files = glob(resource_path('lang/'.$lang.'/*.php'));
+       
         $strings = [];
-
         foreach ($files as $file) {
+        
             $name = basename($file, '.php');
+   
             $strings[$name] = require $file;
+         
+       
         }
-
-        return $strings;
-    });
+     
+     //   return $strings;
+    //});
 
     header('Content-Type: text/javascript');
     echo 'window.i18n = '.json_encode($strings).';';
     exit();
 })->name('assets.lang');
+Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'LanguageController@switchLang']);
+// Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'LanguageController@switchLang']);
+// Route::get('welcome/{locale}', function ($locale) {
+//     App::setLocale($locale);
+
+//     //
+// });

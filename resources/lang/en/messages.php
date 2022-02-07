@@ -90,6 +90,7 @@ return [
     'create_project' => 'Create Project',
     'view_project' => 'View Project',
     'edit_project' => 'Edit Project',
+    'delete_project'=>'Delete Project',
     'new_task' => 'New task',
     'create_task' => 'Create task',
     'tasks_list' => 'Tasks Lists',
@@ -510,4 +511,6 @@ return [
     'ticket_overview' => 'Ticket Overview',
     'invoice_paid_versus_expense' => 'Invoice Paid Vs Expenses',
     'invoice_paid' => 'Invoice Paid',
+    'id' => 'Id',
+    'printed_saved_successfully'=>'Printed and Saved Successfully'
 ];

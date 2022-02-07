@@ -1,6 +1,6 @@
 <template>
     <v-container grid-list-md>
-            <v-layout row pt-3>
+            <v-layout row >
                 <v-flex xs12 sm12>
                     <v-card class="elevation-3">
                         <v-card-title primary-title xs8 sm8>
@@ -99,7 +99,7 @@
                             </v-card-text>
                         </v-card>
                     </v-flex>
-                </v-layout>                  
+                </v-layout>     
             </v-container> 
 </template>
 <script>
@@ -133,15 +133,19 @@ export default {
     },
     methods:{
         getCustomerData(){
-            const self = this;
-            axios.post('/customer-info' ,{customer_id:self.customerId}).then(function(response) {
-                self.customer=response.data;
-                console.log(self.customer);
-            })
-            .catch(function(error) {
-                console.log(error);
-            });
-        }
+            // const self = this;
+            // axios.post('/customer-info' ,{customer_id:self.customerId}).then(function(response) {
+            //     self.customer=response.data;
+            //     console.log(self.customer);
+            // })
+            // .catch(function(error) {
+            //     console.log(error);
+            // });
+        },
+
+            nextStep() {
+            this.$emit('next',this.customer);
+    },
     }
 }
 </script>

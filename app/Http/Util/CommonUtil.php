@@ -357,4 +357,221 @@ class CommonUtil
         
         return $priority;
     }
+
+
+    public function getBuildingTypeList($append_all = false)
+    {
+        $priority = [
+                        [
+                            'key' => 'test',
+                            'value' => __('messages.low')
+                        ],
+                        [
+                            'key' => 'test1',
+                            'value' => __('messages.medium')
+                        ],
+                    ];
+
+        if ($append_all) {
+            $priority = array_merge([['key' => '', 'value' => __('messages.all')]], $priority);
+        }
+        
+        return $priority;
+    }
+
+    
+    public function getUsingBuilding($append_all = false)
+    {
+        $usingTypes = [
+                        [
+                            'key' => 'ecomerce',
+                            'value' => __('data.ecomerce')
+                        ],
+                        [
+                            'key' => 'support',
+                            'value' =>'support'// __('messages.medium')
+                        ],
+                    ];
+
+       // if ($append_all) {
+         //   $priority = array_merge([['key' => '', 'value' => __('messages.all')]], $priority);
+       // }
+        
+        return $usingTypes;
+    }
+
+    public function getRolesNumber($append_all = false)
+    {
+        $roles_number = [
+                        [
+                            'key' => 1,
+                            'value' =>1// __('data.ecomerce')
+                        ],
+                        [
+                            'key' => 2,
+                            'value' =>2,// __('data.ecomerce')
+                        ],
+                        [
+                            'key' => 3,
+                            'value' =>3// __('data.ecomerce')
+                        ],
+                        [
+                            'key' => 4,
+                            'value' =>4// __('data.ecomerce')
+                        ],
+                        [
+                            'key' => 5,
+                            'value' =>5//'// __('data.ecomerce')
+                        ],
+                    ];
+
+       // if ($append_all) {
+         //   $priority = array_merge([['key' => '', 'value' => __('messages.all')]], $priority);
+       // }
+        
+        return $roles_number;
+    }
+
+
+
+    public function getBuildingTypes($append_all = false)
+    {
+        $building_types = [
+                        [
+                            'key' => 'test',
+                            'value' =>'test'// __('data.ecomerce')
+                        ],
+                        [
+                            'key' => 'test1',
+                            'value' =>'test1',// __('data.ecomerce')
+                        ],
+                      
+                    ];
+
+       // if ($append_all) {
+         //   $priority = array_merge([['key' => '', 'value' => __('messages.all')]], $priority);
+       // }
+        
+        return $building_types;
+    }
+
+
+
+    public function getProvinceMunicipalities($append_all = false)
+    {
+        $provinceMunicipalities = [
+                        [
+                            'key' => 'province1',
+                            'value' => __('data.province1')
+                        ],
+                        [
+                            'key' => 'province2',
+                            'value' => __('data.province2')
+                        ],
+                        [
+                            'key' => 'province2',
+                            'value' => __('data.province3')
+                        ],
+                        
+                    ];
+
+        
+        return $provinceMunicipalities;
+    }
+
+    public function getMunicipalities($append_all = false)
+    {
+        $provinceMunicipalities = [
+                        [
+                            'key' => 'municipality1',
+                            'value' => __('data.municipality1')
+                        ],
+                        [
+                            'key' => 'municipality2',
+                            'value' => __('data.municipality2')
+                        ],
+                        [
+                            'key' => 'municipality3',
+                            'value' => __('data.municipality3')
+                        ],
+                        
+                    ];
+
+        
+        return $provinceMunicipalities;
+    }
+
+
+    public function getCategoriesLocation($append_all = false)
+    {
+        $categoriesLocation = [
+                        [
+                            'key' => 'category1',
+                            'value' => __('data.category1')
+                        ],
+                        [
+                            'key' => 'category2',
+                            'value' => __('data.category2')
+                        ],
+                        [
+                            'key' => 'category3',
+                            'value' => __('data.category3')
+                        ],
+                        
+                    ];
+
+        
+        return $categoriesLocation;
+    }
+
+
+    public function getNeighborhoods($append_all = false)
+    {
+        $provinceMunicipalities = [
+                        [
+                            'key' => 'municipality1',
+                            'value' => __('data.municipality1')
+                        ],
+                        [
+                            'key' => 'municipality2',
+                            'value' => __('data.municipality2')
+                        ],
+                        [
+                            'key' => 'municipality3',
+                            'value' => __('data.municipality3')
+                        ],
+                        
+                    ];
+
+        
+        return $provinceMunicipalities;
+    }
+
+
+
+    public function getDistrict($append_all = false)
+    {
+        $provinceMunicipalities = [
+                        [
+                            'key' => 'municipality1',
+                            'value' => __('data.municipality1')
+                        ],
+                        [
+                            'key' => 'municipality2',
+                            'value' => __('data.municipality2')
+                        ],
+                        [
+                            'key' => 'municipality3',
+                            'value' => __('data.municipality3')
+                        ],
+                        
+                    ];
+
+        
+        return $provinceMunicipalities;
+    }
+
+
+    
+
 }

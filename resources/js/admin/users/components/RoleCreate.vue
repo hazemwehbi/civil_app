@@ -21,18 +21,84 @@
                             required
                         ></v-text-field>
                     </v-flex>
+
+                    <v-flex xs12 sm6 md6 style="padding-left: 5%;">
+                        <v-checkbox
+                            :label="trans('data.is_primary')"
+                            v-model="is_primary"
+                        >
+                        </v-checkbox>
+                    </v-flex>
                 </v-layout>
                 <v-container grid-list-md>
                     <v-layout row>
                         <v-flex xs12 sm12 md12>
-                            <v-icon small>
-                                control_point_duplicate
-                            </v-icon>
+                            <v-icon small> control_point_duplicate </v-icon>
                             <span class="subheading">
                                 {{ trans('messages.permissions') }}
                             </span>
                         </v-flex>
                     </v-layout>
+                    <v-divider class="mt-1"></v-divider>
+
+                    <v-layout row wrap class="mt-3">
+                        <v-flex xs12 sm3 md3>
+                            <h4>{{ trans('data.Roles') }}</h4>
+                        </v-flex>
+                        <v-flex xs12 sm5 md5>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.create_role')"
+                                value="role.create"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.edit_role')"
+                                value="role.edit"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.view_role')"
+                                value="role.view"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.delete_role')"
+                                value="role.delete"
+                            >
+                            </v-checkbox>
+                        </v-flex>
+                        <v-flex xs12 sm4 md4>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.add_employee_note')"
+                                value="employeeNote.create"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.view_employee_note')"
+                                value="employeeNote.view"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.edit_employee_note')"
+                                value="employeeNote.edit"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.delete_employee_note')"
+                                value="employeeNote.delete"
+                            >
+                            </v-checkbox>
+                        </v-flex>
+                    </v-layout>
+
                     <v-divider class="mt-1"></v-divider>
                     <v-layout row wrap class="mt-3">
                         <v-flex xs12 sm3 md3>
@@ -297,10 +363,9 @@
                         </v-flex>
                     </v-layout>
                     <v-divider></v-divider>
-
                     <v-layout row wrap class="mt-2">
                         <v-flex xs12 sm3 md3>
-                            <h4>{{ trans('messages.other') }}</h4>
+                            <h4>{{ trans('messages.project') }}</h4>
                         </v-flex>
                         <v-flex xs12 sm3 md3>
                             <v-checkbox
@@ -309,6 +374,71 @@
                                 value="project.create"
                             >
                             </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.view_project')"
+                                value="project.list"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.edit_project')"
+                                value="project.edit"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('messages.delete_project')"
+                                value="project.delete"
+                            >
+                            </v-checkbox>
+                        </v-flex>
+                    </v-layout>
+                    <v-divider></v-divider>
+
+
+
+                          <v-divider></v-divider>
+                    <v-layout row wrap class="mt-2">
+                        <v-flex xs12 sm3 md3>
+                            <h4>{{ trans('data.report') }}</h4>
+                        </v-flex>
+                        <v-flex xs12 sm3 md3>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.add_report')"
+                                value="report.create"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.view_report')"
+                                value="report.view"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.edit_report')"
+                                value="report.edit"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.delete_report')"
+                                value="report.delete"
+                            >
+                            </v-checkbox>
+                        </v-flex>
+                    </v-layout>
+                    <v-divider></v-divider>
+
+
+
+                    <v-layout row wrap class="mt-2">
+                        <v-flex xs12 sm3 md3>
+                            <h4>{{ trans('messages.other') }}</h4>
+                        </v-flex>
+                        <v-flex xs12 sm3 md3>
                             <v-checkbox
                                 v-model="permissions"
                                 :label="trans('messages.system_setting')"
@@ -331,12 +461,14 @@
                     </v-layout>
                 </v-container>
             </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="success" @click="store" :loading="loading" :disabled="loading">
-                    {{ trans('messages.save') }}
-                </v-btn>
-            </v-card-actions>
+            <v-layout justify-center>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="success" @click="store" :loading="loading" :disabled="loading">
+                        {{ trans('messages.save') }}
+                    </v-btn>
+                </v-card-actions>
+            </v-layout>
         </v-card>
     </div>
 </template>
@@ -346,6 +478,7 @@ export default {
         return {
             role_name: '',
             loading: false,
+            is_primary:'',
             permissions: [],
         };
     },
@@ -354,16 +487,18 @@ export default {
             const self = this;
             let data = {
                 name: self.role_name,
+                is_primary : self.is_primary,
                 permissions: self.permissions,
             };
-            self.$validator.validateAll().then(result => {
+            self.$validator.validateAll().then((result) => {
                 if (result == true) {
                     self.loading = true;
                     axios
                         .post('/admin/roles', data)
-                        .then(function(response) {
+                        .then(function (response) {
                             self.loading = false;
                             self.role_name = '';
+                            self.is_primary='';
                             self.permissions = [];
                             self.$validator.reset();
                             self.$store.commit('showSnackbar', {
@@ -375,7 +510,7 @@ export default {
                                 self.goBack();
                             }
                         })
-                        .catch(function(error) {
+                        .catch(function (error) {
                             console.log(error);
                         });
                 }

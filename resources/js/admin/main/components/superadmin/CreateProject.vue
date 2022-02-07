@@ -19,35 +19,7 @@
                 <!-- {{ trans('data.complete_the_application_data') }}-->
             </v-stepper-step>
             
-            <v-divider></v-divider>
-
-            <v-stepper-step step="4" :complete="e1 > 4" color="teal">
-                <!-- {{ trans('data.limits_and_dimensions') }}-->
-            </v-stepper-step>
-
-            <v-divider></v-divider>
-
-            <v-stepper-step step="5" :complete="e1 > 5" color="teal">
-                <!-- {{ trans('data.building_components') }}-->
-            </v-stepper-step>
-            
-            <v-divider></v-divider>
-
-            <v-stepper-step step="6" :complete="e1 > 6" color="teal">
-                <!-- {{ trans('data.add_attachments') }}-->
-            </v-stepper-step>
-            
-            <v-divider></v-divider>
-
-            <v-stepper-step step="7" :complete="e1 > 7" color="teal">
-                <!-- {{ trans('data.choose_a_specific_interface') }}-->
-            </v-stepper-step>
-            
-            <v-divider></v-divider>
-
-            <v-stepper-step step="8" color="teal">
-                <!-- {{ trans('data.finish_the_request') }}-->
-            </v-stepper-step>
+      
             </v-stepper-header>
 
         <v-stepper-items>
@@ -93,68 +65,7 @@
         </v-layout> 
       </v-stepper-content>
 
-      <v-stepper-content step="4">
-        <v-layout row pt-3>
-            <div style="display: flex;" align="right">
-                <v-btn style="background-color:#06706d;color:white;" small @click="e1 = 5">
-                    {{ trans('messages.next') }}
-                </v-btn>
-                <v-btn color="teal" small outline @click="e1 = 3" >
-                    {{ trans('messages.back') }}
-                </v-btn> 
-            </div> 
-        </v-layout>
-      </v-stepper-content>
 
-      <v-stepper-content step="5">
-        <v-layout row pt-3>
-            <div style="display: flex;" align="right">
-                <v-btn style="background-color:#06706d;color:white;" small @click="e1 = 6">
-                    {{ trans('messages.next') }}
-                </v-btn>
-                <v-btn color="teal" small outline @click="e1 = 4" >
-                    {{ trans('messages.back') }}
-                </v-btn> 
-            </div> 
-        </v-layout>
-      </v-stepper-content>
-
-      <v-stepper-content step="6">
-        <v-layout row pt-3>
-            <div style="display: flex;" align="right">
-                <v-btn style="background-color:#06706d;color:white;" small @click="e1 = 7">
-                    {{ trans('messages.next') }}
-                </v-btn>
-                <v-btn color="teal" small outline @click="e1 = 5" >
-                    {{ trans('messages.back') }}
-                </v-btn> 
-            </div> 
-        </v-layout>
-      </v-stepper-content>
-      <v-stepper-content step="7">
-        <v-layout row pt-3>
-            <div style="display: flex;" align="right">
-                <v-btn style="background-color:#06706d;color:white;" small @click="e1 = 8">
-                    {{ trans('messages.next') }}
-                </v-btn>
-                <v-btn color="teal" small outline @click="e1 = 6" >
-                    {{ trans('messages.back') }}
-                </v-btn> 
-            </div> 
-        </v-layout>
-      </v-stepper-content>
-      <v-stepper-content step="8">
-        <v-layout row pt-3>
-            <div style="display: flex;" align="right">
-                <v-btn style="background-color:#06706d;color:white;" small @click="$router.push({})">
-                    {{ trans('messages.next') }}
-                </v-btn>
-                <v-btn color="teal" small outline @click="e1 = 7" >
-                    {{ trans('messages.back') }}
-                </v-btn> 
-            </div> 
-        </v-layout>
-      </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
 

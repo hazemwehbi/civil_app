@@ -94,16 +94,29 @@ const router = new Router({
                 },
             ],
         },
-        {
-            path: 'reports',
-            name: 'reports',
-            component: require('../common/projects/notes/Lists'),
-        },
+
         {
             path: '/requests-creating-projects',
             name: 'requests_creating_projects',
             component: require('./main/components/RequestsCreatingProjects'),
         },
+
+        {
+            path: '/reports',
+            name: 'reports_list',
+            component: require('../common/projects/notes/Lists'),
+        },
+        {
+            path: '/add_report',
+            name: 'add_report',
+            component: require('../common/projects/notes/Add'),
+        },
+        {
+            path: '/edit_report',
+            name: 'edit_report',
+            component: require('../common/projects/notes/Edit'),
+        },
+
         {
             path: '/project',
             component: require('../common/projects/Projects'),
@@ -139,7 +152,7 @@ const router = new Router({
                 },
                 {
                     path: '/add-project',
-                    name: 'add-project',
+                    name: 'add-project',//AddProject
                     component: require('../common/projects/components/AddProject'),
                 },
                 {
@@ -245,7 +258,7 @@ const router = new Router({
                     name: 'estimates.create',
                     component: require('../common/projects/invoices/Add'),
                 },
-                
+
                 {
                     path: '/invoice-scheme',
                     name: 'invoice_scheme.list',
@@ -340,7 +353,7 @@ const router = new Router({
             path: '/offices_types',
             name: 'offices_types',
             component: require('./main/components/OfficesTypes'),
-        },   
+        },
         {
             path: '/general_information',
             name: 'general_information     ',
@@ -379,26 +392,26 @@ const router = new Router({
         {
             path: '/to-do-list',
             component: require('./main/ToDoList'),
-            name:'todolist'
+            name: 'todolist'
         },
         {
             path: '/new_authorization_requests',
             component: require('./main/components/NewAuthorizationRequests'),
-            name:'newAuthorizationRequests'
+            name: 'newAuthorizationRequests'
         },
         {
             path: '/home',
             component: require('./main/Home'),
-            name:'home'
+            name: 'home'
         },
         {
             path: '/create-project',
-            name:'create_project',
-            component: require('./main/components/superadmin/CreateProject'),
+            name: 'create_project',
+            component: require('../common/tickets/CreateProjectRequest1'),
         },
         {
             path: '/test',
-            name:'create_project',
+            name: 'create_project',
             component: require('./main/components/superadmin/CreateProject'),
         }
     ],

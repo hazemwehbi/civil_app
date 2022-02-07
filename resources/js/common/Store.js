@@ -15,7 +15,7 @@ export default new Vuex.Store({
         showSnackbar: false,
         snackbarMessage: '',
         snackbarColor: '',
-        snackbarDuration: 3000,
+        snackbarDuration: 100,
 
         // dialog
         dialogShow: false,

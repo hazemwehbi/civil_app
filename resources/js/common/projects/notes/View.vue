@@ -42,6 +42,7 @@
                     <!-- /container -->
                 </v-card-text>
                 <v-divider></v-divider>
+                   <v-layout justify-center>
                 <v-card-actions>
                     <div class="caption">
                         <v-icon right>create</v-icon>
@@ -55,6 +56,7 @@
                         {{ trans('messages.close') }}
                     </v-btn>
                 </v-card-actions>
+                     </v-layout>
             </v-card>
             <!-- /card -->
         </v-dialog>

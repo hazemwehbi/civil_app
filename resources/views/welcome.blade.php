@@ -9,7 +9,13 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-
+    <script>
+                @auth
+                    window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
+                @else
+                    window.Permissions = [];
+                @endauth
+</script>
     <!-- Styles -->
     <style>
         html, body {

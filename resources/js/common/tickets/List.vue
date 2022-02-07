@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <v-spacer></v-spacer>
-                <v-btn style="background-color:#06706d;color:white;" v-if="$can('tickets.create')"  class="lighten-1" @click="$router.push({name: 'create_visit_request_list'})">
+                <v-btn style="background-color:#06706d;color:white;" v-if="$can('tickets.create')"  class="lighten-1" @click="$router.push({name: 'create_visit_request_list', params: {request_type:'visit_request' }})">
                     {{ trans('messages.add') }}
                     <v-icon right dark>add</v-icon>
                 </v-btn>
@@ -27,27 +27,33 @@
             >
                 <template slot="items" slot-scope="props">
                     <td>
-                        <div style="display:flex;" align="center">
-                            <v-btn  small fab dark color="teal"  v-if="$hasRole('employee') && props.item.status!=='new'" @click="$router.push({name: 'create_project',params: { project: props.item }})">
+                        <div style="display:inline-flex;padding-left:30%;" align="center">
+                        <!-- $hasRole('employee') && -->
+                        <!-- v-if="props.item.status!='accepted'" -->
+                            <v-btn  small fab dark color="teal" v-if='($hasRole("superadmin") || $hasRole("Engineering Office"))&& ( props.item.status=="accepted") && props.item.office_id == currentUser'    @click="$router.push({name: 'create_project',params: { project: props.item }})">
                                 <v-icon color="white">add</v-icon>
                                 <!-- {{trans('messages.add')}}-->
                             </v-btn>
-                            <v-btn  small v-if="!$can('superadmin')" fab dark color="success" @click="editRequest(props.item)">
+                             <!-- v-if="!$can('superadmin')" -->
+                       
+                            <v-btn    v-if='props.item.status!="accepted" && props.item.customer_id == currentUser'  small fab dark color="success" @click="editRequest(props.item)">
                                 <v-icon color="white">edit</v-icon>
                             </v-btn>
-                            <div v-if="$can('superadmin')">
-                                <v-btn color="primary" small fab v-if="props.item.status=='pending' || props.item.status=='new'" dark @click="acceptProject(props.item.status,props.item.id)">
+                            <!-- v-if="$can('superadmin')" -->
+                            <div >
+                                <v-btn color="primary"   small fab v-if=" ($hasRole('superadmin') || $hasRole('Engineering Office'))&& (props.item.status=='pending' || props.item.status=='new')" dark @click="acceptProject(props.item.status,props.item.id)">
                                     <v-icon color="white">check</v-icon>
                                     <!--{{trans('data.accept')}}-->
                                 </v-btn>
                             </div>
-                            <div v-if="!$can('superadmin')">
+                            <!-- v-if="!$can('superadmin')" -->
+                            <div >
                                 <v-btn color="primary" small fab v-if="props.item.sent==0" dark @click="sendRequest(props.item)">
                                     <v-icon color="white">mail</v-icon>
                                     <!--{{trans('data.accept')}}-->
                                 </v-btn>
                             </div>
-                            <v-btn color="error" small fab dark @click="removeProject(props.item.id)">
+                            <v-btn color="error" v-if='props.item.status!="accepted" ' small fab dark @click="removeProject(props.item.id)">
                                 <v-icon color="white">cancel</v-icon>
                                 <!-- {{trans('messages.cancel')}}-->
                             </v-btn> 
@@ -62,30 +68,30 @@
                     </td>
                     <td>
                         <div align="center">
-                            {{ props.item.customer_id==2?"John Tyson":"Mike" }}
+                            {{ props.item.customer.name }}
                         </div>
                     </td>
                     <td>
                         <div align="center">
-                            {{ getType(props.item) }}
+                            {{ getType(props.item.request_type) }}
                            <!-- {{ props.item.name?props.item.type_of_request:getVisitRequestType(props.item.id) }}-->
                         </div>
                     </td>
                     <td>
                         <div align="center">
-                            {{ props.item.name? props.item.name:props.item.title}}
+                             {{ props.item.project.name }}
                         </div>
                     </td>
                     <td>
                         <div align="center">
-                            {{props.item.start_date? createdDate(props.item.start_date):'-' }}
+                            {{props.item.created_at? createdDate(props.item.created_at):'-' }}
                         </div>
                     </td>                  
                 </template>
             </v-data-table>
         </v-card>
         <br>
-            <div align="right">
+            <div align="center">
                 <v-btn style="background-color:#06706d;color:white;" @click="$router.go(-1)">
                     {{ trans('messages.back') }}
                 </v-btn>
@@ -104,11 +110,13 @@ export default {
     data() {
         const self = this;
         return {
+            currentUser:'',
             projects:[],
             total_items: 0,
             loading: false,
             pagination: { totalItems: 0 },
             projectRequests:[],
+            request_types:[],
             headers: [
                 {
                     text: self.trans('messages.action'),
@@ -158,6 +166,8 @@ export default {
             tabs: 'tab-1',
             ticket_stats: [],
             type:'',
+            project_name:'',
+           
         };
     },
     watch: {
@@ -170,6 +180,7 @@ export default {
     },
     mounted() {
         const self = this;
+        self.getCurrentUser();
         //self.getFilters();
         // self.getStatistics();
         self.$eventBus.$on('updateTicketsTable', data => {
@@ -190,9 +201,22 @@ export default {
         const self = this;
         self.projectRequests=[];
         self.projects=[];
+         self.getRequestTypes();
         this.getAllProjectRequest();
+        
     },
     methods: {
+      getRequestTypes(){
+            const self = this;
+            axios
+                .get('/get-request-types')
+                .then(function(response) {
+                    self.request_types = response.data;
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        },
         sendRequest(request){
             const self = this;
             self.$store.commit('showDialog', {
@@ -215,19 +239,30 @@ export default {
             });
         },
         editRequest(request){
-            if( request.status ==  'new'){
+           // alert( request.status)
+           
+           // if( request.status ==  'new'){
                 this.$router.push({name: 'edit_visit_request_list',params:{visit_request:request}});
-            }else{
-                this.$router.push({name: 'edit-project',params:{project_request:request}});
-            }
+            // }
+            // else
+            // {
+            //     this.$router.push({name: 'edit-project',params:{project_request:request}});
+            // }
         },
         getType(visit){
-            const self = this;
-            if(visit.title === undefined){
-                return visit.type_of_request;
-            }else{
-                return "visit request";
-            }
+                const self = this;
+                return self.request_types.find((o)=>o.key==visit).value;
+            
+        },
+        getProject(project_id){
+         const self = this;
+            axios.get('/get-project/'+project_id).then(function(response) { 
+                self.project_name= response.data.name;
+                console.log(self.project_name)
+            }).catch(function(error) {
+               // self.project_name= '-';
+            });
+            return self.project_name;
         },
         getVisitRequestType(id){
             const self = this;
@@ -277,6 +312,11 @@ export default {
                 message: self.trans('messages.you_cant_restore_it'),
                 okCb: () => {
                     axios.delete('/delete-requests/' +id).then(function(response) {
+                         self.$store.commit('showSnackbar', {
+                                message: response.data.msg,
+                                color: response.data.success,
+                         });
+
                         self.projectRequest=[];
                         self.projects=[];
                         self.getAllProjectRequest();
@@ -303,29 +343,30 @@ export default {
             const self = this;          
             self.loading = true;
              axios.get('/sent-requests').then(function(response) { 
-                self.total_items = response.data.total;
-                self.projectRequests = response.data.data;
+               self.total_items = response.data.length;
+             //   self.projectRequests = response.data.data;
+                 self.projects=response.data;
                 self.loading = false;
-                if(response.data.data.length==1){
-                    response.data.data[0].visit_requests.forEach(el => {
-                        self.projects.push(el);               
-                    });
-                    response.data.data[0].projectrequest.forEach(el => {
-                        self.projects.push(el);
-                    });
-                }else{
-                    for (let k = 0; k < response.data.data.length; k++) {
-                        const element = response.data.data[k];
+            //     if(response.data.data.length==1){
+            //         response.data.data[0].visit_requests.forEach(el => {
+            //             self.projects.push(el);               
+            //         });
+            //         response.data.data[0].projectrequest.forEach(el => {
+            //             self.projects.push(el);
+            //         });
+            //     }else{
+            //         for (let k = 0; k < response.data.data.length; k++) {
+            //             const element = response.data.data[k];
 
-                        element.visit_requests.forEach(el => {
-                            self.projects.push(el);                
-                        });
+            //             element.visit_requests.forEach(el => {
+            //                 self.projects.push(el);                
+            //             });
                         
-                        element.projectrequest.forEach(el => {
-                            self.projects.push(el);
-                        });                    
-                    }
-               }
+            //             element.projectrequest.forEach(el => {
+            //                 self.projects.push(el);
+            //             });                    
+            //         }
+            //    }
             })
             .catch(function(error) {
                 console.log(error);
@@ -396,7 +437,6 @@ export default {
                                 message: response.data.msg,
                                 color: response.data.success,
                             });
-
                             if (response.data.success === true) {
                              //   self.getTicketFromApi();
                                 // self.getStatistics();
@@ -411,6 +451,22 @@ export default {
                     console.log('CANCEL');
                 },
             });
+        },
+
+        getCurrentUser(){
+              const self = this;
+                   axios
+                .get('/get-current-user', {
+                   
+                })
+                .then(function(response) {
+                   
+                    self.currentUser=response.data.id;
+              
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
         },
    /*    getFilters() {
             const self = this;

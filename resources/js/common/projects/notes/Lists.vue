@@ -1,11 +1,11 @@
 <template>
     <v-container grid-list-md>
         <!-- Add notes -->
-        <FormAdd ref="noteAdd"></FormAdd>
+        <!-- <FormAdd ref="noteAdd"></FormAdd> -->
         <!-- view notes -->
-        <NoteShow ref="noteShow"></NoteShow>
+        <NoteShow ref="noteShow" ></NoteShow>
         <!-- edit contact -->
-        <NoteEdit ref="noteEdit"></NoteEdit>
+        <NoteEdit ref="noteEdit" @updateReportTable="getProjectNotes($event)"></NoteEdit>
 
         <v-card>
             <v-card-title>
@@ -14,11 +14,11 @@
                         {{ trans('messages.documents_notes') }}
                     </div>
                 </div>
-                <v-spacer></v-spacer>
-                <v-btn style="background-color:#06706d;color:white;" class="lighten-1" dark @click="create">
+                <!-- <v-spacer></v-spacer>
+                <v-btn style="background-color:#06706d;color:white;" class="lighten-1" dark  @click="$router.push({name: 'add_report', params: {project:props.item }})">
                     {{ trans('messages.add') }}
                     <v-icon right dark>add</v-icon>
-                </v-btn>
+                </v-btn> -->
             </v-card-title>
             <v-divider></v-divider>
             <!-- v-datatable -->
@@ -32,41 +32,101 @@
             >
                 <template slot="items" slot-scope="props">
                     <td>
-                        <v-menu>
+                        <v-menu  align="center">
                             <v-btn icon slot="activator"> <v-icon>more_vert</v-icon> </v-btn>
                             <v-list>
-                                <v-list-tile @click="view(props.item.id)">
+                                <!-- <v-list-tile @click="view(props.item.id)">
                                     <v-list-tile-title>
                                         <v-icon small class="mr-2"> visibility </v-icon>
                                         {{ trans('messages.view') }}
                                     </v-list-tile-title>
-                                </v-list-tile>
-
-                                <v-list-tile @click="edit(props.item.id)">
+                                </v-list-tile> -->
+                                          
+                                <v-list-tile @click="  
+                                      $router.push({
+                                            name:'edit_report',
+                                            params: {report:props.item ,isEdit:true}
+                                            })"
+                                             v-if="$can('report.edit')"
+                                            >
                                     <v-list-tile-title>
-                                        <v-icon small class="mr-2"> edit </v-icon>
-                                        {{ trans('messages.edit') }}
+                                        <!-- <v-icon small class="mr-2"> edit </v-icon> -->
+                                        {{ trans('data.edit') }}
                                     </v-list-tile-title>
                                 </v-list-tile>
-
-                                <v-list-tile @click="deleteNote(props.item)">
+                     
+                              <v-list-tile @click="  
+                                      $router.push({
+                                            name:'edit_report',
+                                            params: {report:props.item , isEdit:false}
+                                            })"
+                                             v-if="$can('report.view')"
+                                            >
                                     <v-list-tile-title>
-                                        <v-icon small class="mr-2"> delete_forever </v-icon>
+                                        {{ trans('data.view') }}
+                                    </v-list-tile-title>
+                                </v-list-tile>
+                                
+
+
+                                <v-list-tile 
+                                @click="deleteNote(props.item)"
+                                 v-if="$can('report.delete')"
+                                >
+                                    <v-list-tile-title>
                                         {{ trans('messages.delete') }}
                                     </v-list-tile-title>
                                 </v-list-tile>
+                                
                             </v-list>
                         </v-menu>
                     </td>
-                    <td>{{ props.item.heading }}</td>
-                    <td>{{ props.item.user.name }}</td>
-                    <td>{{ props.item.created_at | formatDate }}</td>
-                    <td>{{ props.item.updated_at | formatDate }}</td>
+                     <td>
+                          <div align="center">
+                          {{ props.item.name }}
+                        </div>
+                     </td>
+                   
+                    <td>
+                          <div align="center">
+                           <div class="form-control" 
+                            type="text" :id="props.item.id" 
+                            readonly 
+                            v-html="props.item.description">
+                        </div>
+                        </div>
+                    </td>
+
+                     <td>
+                          <div align="center">
+                          {{ getType(props.item.type) }}
+                        </div>
+                     </td>
+
+                      <td>
+                          <div align="center">
+                          {{ props.item.project.name }}
+                        </div>
+                     </td>
+
+
+                      <td>
+                          <div align="center">
+                          {{ props.item.created_at | formatDate }}
+                        </div>
+                     </td>                                        
+
+
+                      <td>
+                          <div align="center">
+                          {{ props.item.updated_at | formatDate  }}
+                        </div>
+                     </td>  
                 </template>
             </v-data-table>
         </v-card>
         <br>
-        <div align="right">
+        <div align="center">
             <v-btn style="background-color:#06706d;color:white;" @click="$router.go(-1)">
                 {{ trans('messages.back') }}
             </v-btn>
@@ -91,35 +151,48 @@ export default {
             loading: true,
             pagination: { totalItems: 0, sortBy: 'created_at', descending: true },
             items: [],
+            report_types: [],
             headers: [
                 {
                     text: self.trans('messages.action'),
                     value: false,
-                    align: 'left',
+                    align: 'center',
                     sortable: false,
                 },
                 {
-                    text: self.trans('messages.heading'),
-                    value: 'heading',
-                    align: 'left',
+                    text: self.trans('messages.name'),
+                    value: 'name',
+                    align: 'center',
                     sortable: true,
                 },
                 {
-                    text: self.trans('messages.added_by'),
-                    value: 'user',
-                    align: 'left',
+                    text: self.trans('messages.description'),
+                    value: 'description',
+                    align: 'center',
                     sortable: false,
+                },
+                {
+                    text: self.trans('data.report_type'),
+                    value: 'report_type',
+                    align: 'center',
+                    sortable: false,
+                },
+                {
+                    text: self.trans('data.project_name'),
+                    value: 'project_id',
+                    align: 'center',
+                    sortable: true,
                 },
                 {
                     text: self.trans('messages.created_at'),
                     value: 'created_at',
-                    align: 'left',
+                    align: 'center',
                     sortable: true,
                 },
                 {
                     text: self.trans('messages.updated_at'),
                     value: 'updated_at',
-                    align: 'left',
+                    align: 'center',
                     sortable: true,
                 },
             ],
@@ -135,16 +208,30 @@ export default {
     },
     created() {
         const self = this;
-        self.projectId = self.$route.params.project_id;
-        self.$eventBus.$on('updateProjectNotesTable', data => {
-            self.getProjectNotes();
-        });
+        self.getReportTypes();
+         self.getProjectNotes();
+         
+        // self.projectId = self.$route.params.project_id;
+        // self.$eventBus.$on('updateProjectNotesTable', data => {
+        //     self.getProjectNotes();
+        // });
     },
     beforeDestroy() {
         const self = this;
-        self.$eventBus.$off('updateProjectNotesTable');
+        //self.$eventBus.$off('updateProjectNotesTable');
     },
     methods: {
+                getReportTypes() {
+            const self = this;
+            axios
+                .get('/get-report-types')
+                .then(function (response) {
+                    self.report_types = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         getProjectNotes() {
             const self = this;
 
@@ -153,7 +240,7 @@ export default {
             const { sortBy, descending, page, rowsPerPage } = self.pagination;
 
             axios
-                .get('/project-notes', {
+                .get('/reports', {
                     params: {
                         sort_by: sortBy,
                         descending: descending,
@@ -171,16 +258,30 @@ export default {
                     console.log(error);
                 });
         },
+
+        getType(type){
+                const self = this;
+                if(type!= null){
+                       return self.report_types.find((o)=>o.key==type).value;
+                }
+                else{
+                        return null
+                }
+                
+            
+        },
         create() {
+            alert(1)
             var data = { projectId: this.projectId };
-            this.$refs.noteAdd.add(data);
+           // this.$refs.noteAdd.add(data);
         },
         view(id) {
             var data = { id: id, projectId: this.projectId };
             this.$refs.noteShow.view(data);
         },
         edit(id) {
-            var data = { id: id, projectId: this.projectId };
+            //, projectId: this.project_id
+            var data = { id: id };
             this.$refs.noteEdit.edit(data);
         },
         deleteNote(item) {
@@ -192,7 +293,7 @@ export default {
                 message: self.trans('messages.you_cant_restore_it'),
                 okCb: () => {
                     axios
-                        .delete('/project-notes/' + item.id, {
+                        .delete('reports/' + item.id, {
                             params: { project_id: self.projectId },
                         })
                         .then(function(response) {

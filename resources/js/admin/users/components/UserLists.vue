@@ -177,7 +177,7 @@
             </v-data-table>
         </v-card>
         <br>
-            <div align="right">
+            <div align="center">
                 <v-btn style="background-color:#06706d;color:white;" @click="$router.go(-1)" :loading="loading" :disabled="loading">
                     {{ trans('messages.back') }}
                 </v-btn>
@@ -327,9 +327,9 @@ export default {
         roleName(role) {
             var name = [];
 
-            if (role.type == 'employee' || role.type == null) {
+           // if (role.type == 'employee' || role.type == null) {
                 name.push(role.name[0].toUpperCase() + role.name.slice(1));
-            }
+           // }
 
             return name.join();
         },

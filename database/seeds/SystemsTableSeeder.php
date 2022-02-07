@@ -1,8 +1,8 @@
 <?php
-
 use App\System;
 use Illuminate\Database\Seeder;
-
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 class SystemsTableSeeder extends Seeder
 {
     /**
@@ -45,5 +45,18 @@ class SystemsTableSeeder extends Seeder
         foreach ($datas as $key => $value) {
             System::updateOrCreate(['key' => $key], ['value' => $value]);
         }
+
+
+
+
+        $requests = [
+            ['id' => '1','name' => 'visit_request','created_at' => '2019-04-18 12:26:57','updated_at' => '2019-04-18 12:26:57'],
+            ['id' => '2','name' => 'design_request','created_at' => '2019-04-19 07:13:33','updated_at' => '2019-04-19 07:13:33'],
+            ['id' => '3','name' => 'support_service_request','created_at' => '2019-04-18 12:26:57','updated_at' => '2019-04-18 12:26:57'],
+            ['id' => '4','name' => 'contractor_request','created_at' => '2019-04-19 07:13:33','updated_at' => '2019-04-19 07:13:33'],
+            ['id' => '5','name' => 'supervision_request','created_at' => '2019-04-18 12:26:57','updated_at' => '2019-04-18 12:26:57'],
+          ];
+  
+          DB::table('request_types')->insert($requests);
     }
 }

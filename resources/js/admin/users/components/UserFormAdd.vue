@@ -233,7 +233,7 @@
                             >
                             </v-textarea>
                         </v-flex>
-                        <v-flex xs12 sm4>
+                        <v-flex xs12 sm3>
                             <v-autocomplete
                                 item-text="name"
                                 item-value="id"
@@ -247,13 +247,13 @@
                                 required
                             ></v-autocomplete>
                         </v-flex>
-                        <v-flex xs12 sm4>
+                        <v-flex xs12 sm3>
                             <v-switch
                                 :label="trans('messages.pre_Active_acount')"
                                 v-model="active"
                             ></v-switch>
                         </v-flex>
-                        <v-flex xs12 sm4>
+                        <v-flex xs12 sm3>
                             <v-checkbox
                                 :label="trans('messages.send_email')"
                                 value="true"
@@ -261,15 +261,29 @@
                             >
                             </v-checkbox>
                         </v-flex>
+                        <v-flex xs12 sm3>
+                                <v-text-field
+                            v-model="id_card_number"
+                                type="number"
+                            :label="trans('data.id_card_number')"
+                        ></v-text-field>
+                        </v-flex>
                     </v-layout>
                 </v-container>
             </v-card-text>
+              <v-layout justify-center>
             <v-card-actions>
                 <v-spacer></v-spacer>
+                
+              
                 <v-btn @click="save()" color="primary" dark>
                     {{ trans('messages.save') }}
                 </v-btn>
+                    <v-btn style="color:#06706d;" @click="$router.go(-1)">
+                        {{ trans('messages.back') }}
+                    </v-btn>
             </v-card-actions>
+              </v-layout>
         </v-card>
     </div>
 </template>
@@ -290,6 +304,7 @@ export default {
             birth_date: null,
             gender_types: [],
             email: '',
+            id_card_number:'',
             password: '',
             passwordRules: [
                 v => !!v || 'Password is required',
@@ -340,6 +355,7 @@ export default {
                 bank_identifier_code: self.form_fields.bank_identifier_code,
                 branch_location: self.form_fields.branch_location,
                 tax_payer_id: self.form_fields.tax_payer_id,
+                id_card_number: self.id_card_number,
             };
 
             self.$validator.validateAll().then(result => {

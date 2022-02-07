@@ -2,14 +2,16 @@
 export default {
     methods: {
         $can(permissionName) {
-            return _.get(
-                APP.USER_PERMISSIONS,
-                'superadmin',
-                _.get(APP.USER_PERMISSIONS, permissionName, false)
-            );
+            return _.get(APP.USER_PERMISSIONS, permissionName, false);
+            // return _.get(
+            //     APP.USER_PERMISSIONS,
+            //     'superadmin',
+            //     _.get(APP.USER_PERMISSIONS, permissionName, false)
+            // );
         },
         $hasRole(roleName) {
-            return _.get(APP.USER_ROLES, 'superadmin', _.get(APP.USER_ROLES, roleName, false));
+            return _.get(APP.USER_ROLES, roleName, false)
+          //  return _.get(APP.USER_ROLES, 'superadmin', _.get(APP.USER_ROLES, roleName, false));
         },
         trans(string, params = []) {
             var str = _.get(window.i18n, string);
@@ -38,7 +40,7 @@ export default {
             var step = goBackByStep || -1;
             setTimeout(() => {
                 this.$router.go(step);
-            }, 3000);
+            }, 1000);
         },
         defaultDateRange() {
             const self = this;

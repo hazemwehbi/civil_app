@@ -77,7 +77,7 @@
                 
             </v-layout>
         </v-container>
-        <v-layout row-wrap v-if="$can('superadmin')" mb-2>
+        <v-layout row-wrap  mb-2>
             <v-flex >
                 <v-card elevation="4" xs12 sm4 md4>
                     <v-card-title>

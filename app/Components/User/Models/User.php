@@ -10,7 +10,8 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
-
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Auth;
 /**
  * Class User.
  *
@@ -203,9 +204,19 @@ class User extends Authenticatable implements HasMedia
 
     public static function getRolesForEmployee()
     {
-        $roles = Role::where('type', 'employee')
-                    ->get()
-                    ->toArray();
+        // $roles = Role::where('type', 'employee')
+        //             ->get()
+        //             ->toArray();
+        $user=Auth::user();
+        if ($user->hasRole('Estate Owner'))
+         {
+            $roles = Role::where('type', 'ESTATE_OWNER')
+                      ->get()
+                        ->toArray();
+         }
+         else{
+            $roles=Role::all();
+         }
                     
         return $roles;
     }
@@ -230,6 +241,35 @@ class User extends Authenticatable implements HasMedia
             ];
     }
 
+
+    public static function getUserTypes()
+    {
+        return [
+                ['value' => 'ESTATE_OWNER',
+                 'text' => __('Estate Owner'),
+                ],
+                ['value' => 'ENGINEERING_OFFICE',
+                 'text' => __('Engineering Office'),
+                ],
+                ['value' => 'SUPPORT_SERVICES_OFFICE',
+                 'text' => __('Support Service Office'),
+                ],
+
+
+
+                ['value' => 'CONTRACTING_COMPANY',
+                'text' => __('Contracting  Company'),
+               ],
+               ['value' => 'GOVERNMENT_AGENCIES',
+                'text' => __('Government Agencies'),
+               ],
+               ['value' => 'SITE_MANAGENMENT',
+                'text' => __('Site Managnment'),
+               ],
+            ];
+    }
+    
+    
     /**
      * retrieve all the permissions
      * of user.
@@ -251,6 +291,40 @@ class User extends Authenticatable implements HasMedia
 
         return $permissions;
     }
+
+
+    public static function getUserByRoleType($id)
+    {
+      
+        //check if role not null
+        $role=Role::where('id', $id)->first();
+       //$role=Role::where('type', $type)->first();
+        $users=[];
+        if($role != null){
+            $users= $role->users() ->select('id', 'name')
+            ->orderBy('name')
+            ->get()
+            ->toArray();
+        }
+  
+         return $users;
+    }
+
+
+
+    //check user type
+    public static function getTypeOfUser($email,$id)
+    {
+        $user =User::where('email',$email)->first();
+        foreach ($user->roles as $role) {
+           if($role->id==$id){
+                return 'true';
+           }
+  
+        }
+        return 'false';
+    }
+
 
     /**
      * retrieve all the roles
@@ -305,4 +379,56 @@ class User extends Authenticatable implements HasMedia
 
         return $value;
     }
+
+
+    //add my code
+    public function visitRequests()
+    {
+        return $this->hasMany('App\VisitRequest','customer_id');
+    }
+
+    public function GetAgencies()
+    {
+        return $this->hasMany('App\Agency','user_id');
+    }
+
+
+    public function getAllPermissionsAttribute() {
+        $permissions = [];
+          foreach (Permission::all() as $permission) {
+            if (Auth::user()->can($permission->name)) {
+              $permissions[] = $permission->name;
+            }
+          }
+          return $permissions;
+      }
+
+
+
+      public static function getOfficeUsers($append_all = false)
+      {
+            //check if role not null
+        $role=Role::where('type', 'ENGINEERING_OFFICE')->first();
+        //$role=Role::where('type', $type)->first();
+         $users=[];
+         if($role != null){
+             $users= $role->users() ->select('id', 'name')
+             ->orderBy('name')
+             ->get()
+             ->toArray();
+         }
+   
+          return $users;
+        //   $users = User::where('office_id', null)
+        //                   ->select('id', 'name')
+        //                   ->orderBy('name')
+        //                   ->get()
+        //                   ->toArray();
+  
+        //   if ($append_all) {
+        //       $users = array_merge([['id' => 0, 'name' => __('messages.all')]], $users);
+        //   }
+          
+        //   return $users;
+      }
 }

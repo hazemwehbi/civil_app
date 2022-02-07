@@ -29,9 +29,10 @@ class ManageRolesController extends Controller
             $sort_by = 'id';
         }
 
-        $roles = Role::where('type', 'employee')
-                    ->select('name', 'created_at', 'id');
-
+        // $roles = Role::where('type', 'employee')
+        //             ->select('name', 'created_at', 'id');
+        $roles = Role::select('name', 'created_at', 'id');
+                    
         if (!empty($request->get('name'))) {
             $term = $request->get('name');
             $roles->where('name', 'like', "%$term%");
@@ -65,16 +66,18 @@ class ManageRolesController extends Controller
             DB::beginTransaction();
 
             $role_name = $request->input('name');
+            $is_primary = $request->input('is_primary');
             $permissions = $request->input('permissions');
             
             $count = Role::where('name', $role_name)
-                        ->where('type', 'employee')
+                       // ->where('type', 'employee')
                         ->count();
 
             if ($count == 0) {
                 $role = Role::create([
                             'name' => $role_name,
-                            'type' => 'employee',
+                            'is_primary'=>$is_primary,
+                            //'type' => 'employee',
                         ]);
 
                 if (!empty($permissions)) {
@@ -113,8 +116,11 @@ class ManageRolesController extends Controller
      */
     public function edit($id)
     {
-        $role = Role::where('type', 'employee')
-                ->find($id);
+        // $role = Role::where('type', 'employee')
+        //         ->find($id);
+
+          $role = Role::find($id);
+                
 
         $role_permissions = [];
         foreach ($role->permissions as $role_perm) {
@@ -122,7 +128,7 @@ class ManageRolesController extends Controller
         }
 
         $data = [
-                'role' => $role->name,
+                'role' => $role,
                 'permissions' => $role_permissions
             ];
 
@@ -138,29 +144,33 @@ class ManageRolesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
         try {
             DB::beginTransaction();
-
+        
             $role_name = $request->input('name');
+            $is_primary = $request->input('is_primary');
             $permissions = $request->input('permissions');
-            
+        
             $count = Role::where('name', $role_name)
-                        ->where('type', 'employee')
+                       // ->where('type', 'employee')
                         ->where('id', '!=', $id)
                         ->count();
-
+       
             if ($count == 0) {
                 $role = Role::find($id);
-
+          
                 $role->name = $role_name;
+                $role->is_primary=$is_primary;
+               
                 $role->save();
-                
+           
                 if (!empty($permissions)) {
                     $role->syncPermissions($permissions);
                 }
-
+           
                 DB::commit();
-                
+          
                 $output = $this->respondSuccess(__('messages.updated_successfully'));
             } else {
                 $output = $this->respondWithError(__('messages.role_already_existed'));
@@ -181,9 +191,9 @@ class ManageRolesController extends Controller
     public function destroy($id)
     {
         try {
-            $role = Role::where('type', 'employee')
-                        ->find($id);
-                        
+            // $role = Role::where('type', 'employee')
+            //             ->find($id);
+            $role = Role::find($id);   
             $role->delete();
 
             $output = $this->respondSuccess(__('messages.deleted_successfully'));
@@ -192,4 +202,23 @@ class ManageRolesController extends Controller
         }
         return $output;
     }
+    public function getTypes()
+    {
+      
+        $roles = Role::where('is_primary', 1) ->select('id', 'name')
+        ->orderBy('name')
+        ->get()
+        ->toArray();;
+        $data = [
+        'types' =>$roles,
+         ];
+                    
+
+         return $this->respond($data);
+    } 
+
+
+
 }
+
+
