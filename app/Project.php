@@ -142,6 +142,20 @@ class Project extends Model
         return $billing_types;
     }
 
+    public static function getProjectTypes()
+    {
+        $projectTypes = [
+                            ['key' => 'normal',
+                             'value' => __('messages.normal'),
+                            ],
+                            ['key' => 'not_normal',
+                             'value' => __('messages.not_normal'),
+                            ],
+                        ];
+
+        return $projectTypes;
+    }
+    
     /**
      * Return the status for the project.
      */

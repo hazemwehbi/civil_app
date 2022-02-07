@@ -73,7 +73,8 @@
                                             :items="status"
                                             v-model="project.status"
                                             :label="trans('messages.status')"
-                                            data-vv-name="status"
+                                            :data-vv-name="status"
+                                            not_started
                                             v-validate="'required'"
                                             :data-vv-as="trans('messages.status')"
                                             :error-messages="errors.collect('status')"
@@ -296,13 +297,13 @@
                                             item-text="value"
                                             item-value="key"
                                             :readonly="isEdit"
-                                            :items="billing_types"
-                                            v-model="project.billing_type"
-                                            :label="trans('data.billing_type')"
+                                            :items="project_types"
+                                            v-model="project.project_type"
+                                            :label="trans('data.project_type')"
                                             v-validate="'required'"
-                                            data-vv-name="billing_type"
-                                            :data-vv-as="trans('data.billing_type')"
-                                            :error-messages="errors.collect('billing_type')"
+                                            data-vv-name="project_type"
+                                            :data-vv-as="trans('data.project_type')"
+                                            :error-messages="errors.collect('project_type')"
                                             required
                                         ></v-autocomplete>
                                     </v-flex>
@@ -353,7 +354,7 @@ export default {
     props: ['projectId'],
     data() {
         return {
-            billing_types: [],
+            project_types: [],
             status: [],
             users: [],
             categories: [],
@@ -369,7 +370,7 @@ export default {
                 build_rate: '',
                 using: '',
                 name: '',
-                billing_type: '',
+                project_type: '',
                 total_rate: '',
                 authorization_request_number: '',
                 license_number: '',
@@ -422,17 +423,20 @@ export default {
                     .get('/projects/create')
                     .then(function (response) {
                         self.customers = response.data.customers;
-                        self.billing_types = response.data.billingTypes;
+                        self.project_types = response.data.projectTypes;
+
                         self.status = response.data.status;
                         self.users = response.data.users;
                         self.categories = response.data.categories;
                         self.buiding_types = response.data.buildingTypes;
                         self.using_types = response.data.buildUsing;
                         self.roles_number = response.data.roles_number;
+                         self.project.status=self.status.filter(c=>c.key=='not_started')[0]['key']
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
+                   
         },
         getProjectData() {
             const self = this;

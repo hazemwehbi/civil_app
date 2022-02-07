@@ -123,7 +123,8 @@ class ProjectController extends Controller
 
         $customers =User::getUsersForDropDown() ;//Customer::getCustomersForDropDown();
         $users = User::getUsersForDropDown();
-        $billingTypes = Project::getBillingTypes();
+      //  $billingTypes = Project::getBillingTypes();
+        $projectTypes = Project::getProjectTypes();
         $status = Project::getStatusForProject();
         $categories = Category::forDropdown('projects');
 
@@ -133,7 +134,7 @@ class ProjectController extends Controller
         $project = [
                 'customers' => $customers,
                 'users' => $users,
-                'billingTypes' => $billingTypes,
+                'projectTypes' => $projectTypes,
                 'status' => $status,
                 'categories' => $categories,
                 'buildingTypes'=>$buildingTypes,
@@ -164,7 +165,7 @@ class ProjectController extends Controller
             $project_data = $request->only(
                 'name',
                 'customer_id',
-                'billing_type',
+                'project_type',
                 'total_rate',
                 'price_per_hours',
                 'estimated_hours',
@@ -308,7 +309,8 @@ class ProjectController extends Controller
             $project_members = $this->getMembers($id);
             $customers = Customer::getCustomersForDropDown();
             $users = User::getUsersForDropDown();
-            $billingTypes = Project::getBillingTypes();
+          //  $billingTypes = Project::getBillingTypes();
+            $projectTypes = Project::getProjectTypes();
             $status = Project::getStatusForProject();
             $categories = Category::forDropdown('projects');
 
@@ -316,7 +318,7 @@ class ProjectController extends Controller
                     'customers' => $customers,
                     'project' => $project,
                     'users' => $users,
-                    'billingTypes' => $billingTypes,
+                    'projectTypes' => $projectTypes,
                     'status' => $status,
                     'categories' => $categories,
                     'project_members' => $project_members,
@@ -356,7 +358,7 @@ class ProjectController extends Controller
             $input = $request->only(
                 'name',
                 'customer_id',
-                'billing_type',
+                'project_type',
                 'total_rate',
                 'price_per_hours',
                 'estimated_hours',
@@ -866,13 +868,14 @@ class ProjectController extends Controller
         $user=Auth::user();
        if ($user->hasRole('Estate Owner'))
         {
-            echo $user->id;
             //$customers=User::where('parent_id',$user->id)->select('id', 'name','email','mobile','id_card_number') ->get()->toArray();
             $customers = User::
-            where(function ($query) use ($request) {
-                $query->where('parent_id',2);
-                $query->orWhere('id', 2);
-            })->get()->toArray();
+            where(function ($query) {
+                $query->where('parent_id',Auth::id());
+                $query->orWhere('id', Auth::id());
+            })->get();
+
+         
         }
         else{
          $customers=User::where('id','>',1)->select('id', 'name','email','mobile','id_card_number')->get()->toArray();
@@ -1120,7 +1123,7 @@ class ProjectController extends Controller
         $project->build_rate=$project_data['build_rate'];
         $project->using=$project_data['using'];
         $project->name=$project_data['name'];
-        $project->billing_type=$project_data['billing_type'];
+        $project->project_type=$project_data['project_type'];
         $project->total_rate=$project_data['total_rate'];
         $project->authorization_request_number=$project_data['authorization_request_number'];
         $project->license_number=$project_data['license_number'];

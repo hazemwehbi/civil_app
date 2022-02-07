@@ -207,7 +207,17 @@ class User extends Authenticatable implements HasMedia
         // $roles = Role::where('type', 'employee')
         //             ->get()
         //             ->toArray();
-            $roles=Role::all();        
+        $user=Auth::user();
+        if ($user->hasRole('Estate Owner'))
+         {
+            $roles = Role::where('type', 'ESTATE_OWNER')
+                      ->get()
+                        ->toArray();
+         }
+         else{
+            $roles=Role::all();
+         }
+                    
         return $roles;
     }
 

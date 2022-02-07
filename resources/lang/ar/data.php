@@ -196,7 +196,7 @@ return [
       'add_report'=>'إضافة تقرير',
       'view_report'=>'عرض تقرير',
       'edit_report'=>'تعديل تقرير',
-      'delete_report'=>'مسح تقرير'
-
+      'delete_report'=>'مسح تقرير',
+      'project_type'=>'نوع المشروع'
     
 ];

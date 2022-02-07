@@ -49,12 +49,34 @@ class UserRepository extends BaseRepository
 
         return true;
     }
+
     function checkEmail($email) {
         $find1 = strpos($email, '@');
         $find2 = strpos($email, '.');
         $x= ($find1 !== false && $find2 !== false && $find2 > $find1);
         return $x;
      }
+
+     public  function getType($email,$password)
+     {
+        $user=null;
+         if($this->checkEmail($email)){
+        
+          $user =User::where('email',$email)->first();
+      }
+      else{
+           $user =User::where('id_card_number',$email)->first();
+      }
+       if($user != null){
+       return  $user->roles->where('is_primary',1);
+     
+       }
+   
+                     
+         return [] ;
+     }
+
+
        //check user type
        public  function getTypeOfUser($email,$id)
        { 
@@ -75,4 +97,10 @@ class UserRepository extends BaseRepository
            return false;
       
        }
+
+
+
+     
+
+       
 }

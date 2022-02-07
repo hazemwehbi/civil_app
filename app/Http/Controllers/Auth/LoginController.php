@@ -56,9 +56,9 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         // echo $request->input('type_name');
-        $x= $this->userRepository->getTypeOfUser($request->input('email_id_card'), $request->input('user_type'));
+       // $x= $this->userRepository->getTypeOfUser($request->input('email_id_card'), $request->input('user_type'));
         
-        if($x==true){
+        if(true){
            
             $this->validateLogin($request);
             // If the class is using the ThrottlesLogins trait, we can automatically throttle
@@ -108,7 +108,7 @@ class LoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $this->validate($request, [
-            'email_id_card' => 'required', 'password' => 'required','user_type'=>'required'
+            'email_id_card' => 'required', 'password' => 'required',
         ]);
         // adjust as needed
     }

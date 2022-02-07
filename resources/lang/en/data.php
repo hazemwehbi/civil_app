@@ -201,8 +201,8 @@ return [
       'add_report'=>'Add Report',
       'view_report'=>'View Report',
       'edit_report'=>'Edit Report',
-      'delete_report'=>'Delete Report'
- 
+      'delete_report'=>'Delete Report',
+      'project_type'=>'Project Type'
 ];
 
 

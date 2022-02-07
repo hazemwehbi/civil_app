@@ -208,6 +208,20 @@
                                             ></v-text-field>
                                             </v-flex> 
                                         </v-layout> -->
+                                <v-layout row wrap>
+                                <v-flex md3>
+                                    <v-btn
+                                        @click="$router.push({ name: 'users.create' })"
+                                        large
+                                        dark
+                                        v-show="true"
+                                        style="background-color: #06706d; color: white"
+                                    >
+                                        Add User
+                                        <!-- //<v-icon>add</v-icon> -->
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
                             <v-layout row wrap>
                                 <v-flex md3>
                                     <v-btn

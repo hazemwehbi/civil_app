@@ -31,15 +31,64 @@ class UserController extends AdminController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {     
         if (!request()->user()->can('employee.view')) {
             abort(403, 'Unauthorized action.');
         }
 
-        $data = $this->userRepository->listUsers(request()->all());
+
+        $rowsPerPage = ($request->get('rowsPerPage') > 0) ? $request->get('rowsPerPage') : 0;
+        $sort_by = $request->get('sort_by');
+        $descending = $request->get('descending');
+
+        if ($descending == 'false') {
+            $orderby = 'asc';
+        } elseif ($descending == 'true') {
+            $orderby = 'desc';
+        } elseif ($descending == '') {
+            $orderby = 'desc';
+            $sort_by = 'id';
+        }
+
+        // $roles = Role::where('type', 'employee')
+        //             ->select('name', 'created_at', 'id');
+        $user=Auth::user();
+        if ($user->hasRole('superadmin')){
+             $users = User::with('roles');
+         }
+         else{
+            $users = User::with('roles')->where(function ($query) {
+                $query->where('parent_id',Auth::id());
+                $query->orWhere('id', Auth::id());
+            });
+         }
+
+
         
-        return $this->respond($data);
+
+        if (!empty($request->get('name'))) {
+            $term = $request->get('name');
+            $users->where('name', 'like', "%$term%");
+        }
+        if (!empty($request->get('email'))) {
+            $term = $request->get('email');
+            $users->where('email', 'like', "%$term%");
+        }
+
+        $users = $users->orderBy($sort_by, $orderby)
+                    ->paginate($rowsPerPage);
+
+  
+        return $this->respond($users);
+
+
+    //     $params=request()->all();
+    //     $params['parent_id']=Auth::id();
+       
+    //    $data = $this->userRepository->listUsers($params);
+   
+    //    return $this->respond($data);
     }
 
     /**
@@ -339,16 +388,15 @@ class UserController extends AdminController
     public function checkUserType(Request $request){
         $x= $this->userRepository->getTypeOfUser($request->get('email'), $request->get('user_type'));
         return $this->respond( $x);
-        // if($x==true){
-        //     return $this->respond(1);
-        // }
-        // else{
-        //     return $this->respond(0);
-        // }
         
     }
 
-    
+    public function getType(Request $request){
+        $x= $this->userRepository->getType($request->get('email'), $request->get('password'));
+        return $this->respond( $x);
+        
+    }
+
     public function getOffices()
     {
         $users = User::getOfficeUsers();

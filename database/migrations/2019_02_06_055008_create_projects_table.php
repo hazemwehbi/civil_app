@@ -32,7 +32,7 @@ class CreateProjectsTable extends Migration
                 ->references('id')->on('agencies')
                     ->onDelete('cascade');
 
-            $table->enum('billing_type', ['fixed_rate', 'project_hours', 'task_hours'])->default('fixed_rate');
+            $table->enum('project_type', ['normal', 'not_normal'])->default('normal');
             // $table->decimal('total_rate', 8, 2)->default(0);
             // $table->decimal('price_per_hours', 8, 2)->default(0);
             // $table->decimal('estimated_hours', 8, 2)->default(0);

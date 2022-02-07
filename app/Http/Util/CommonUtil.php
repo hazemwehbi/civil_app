@@ -457,4 +457,121 @@ class CommonUtil
 
 
 
+    public function getProvinceMunicipalities($append_all = false)
+    {
+        $provinceMunicipalities = [
+                        [
+                            'key' => 'province1',
+                            'value' => __('data.province1')
+                        ],
+                        [
+                            'key' => 'province2',
+                            'value' => __('data.province2')
+                        ],
+                        [
+                            'key' => 'province2',
+                            'value' => __('data.province3')
+                        ],
+                        
+                    ];
+
+        
+        return $provinceMunicipalities;
+    }
+
+    public function getMunicipalities($append_all = false)
+    {
+        $provinceMunicipalities = [
+                        [
+                            'key' => 'municipality1',
+                            'value' => __('data.municipality1')
+                        ],
+                        [
+                            'key' => 'municipality2',
+                            'value' => __('data.municipality2')
+                        ],
+                        [
+                            'key' => 'municipality3',
+                            'value' => __('data.municipality3')
+                        ],
+                        
+                    ];
+
+        
+        return $provinceMunicipalities;
+    }
+
+
+    public function getCategoriesLocation($append_all = false)
+    {
+        $categoriesLocation = [
+                        [
+                            'key' => 'category1',
+                            'value' => __('data.category1')
+                        ],
+                        [
+                            'key' => 'category2',
+                            'value' => __('data.category2')
+                        ],
+                        [
+                            'key' => 'category3',
+                            'value' => __('data.category3')
+                        ],
+                        
+                    ];
+
+        
+        return $categoriesLocation;
+    }
+
+
+    public function getNeighborhoods($append_all = false)
+    {
+        $provinceMunicipalities = [
+                        [
+                            'key' => 'municipality1',
+                            'value' => __('data.municipality1')
+                        ],
+                        [
+                            'key' => 'municipality2',
+                            'value' => __('data.municipality2')
+                        ],
+                        [
+                            'key' => 'municipality3',
+                            'value' => __('data.municipality3')
+                        ],
+                        
+                    ];
+
+        
+        return $provinceMunicipalities;
+    }
+
+
+
+    public function getDistrict($append_all = false)
+    {
+        $provinceMunicipalities = [
+                        [
+                            'key' => 'municipality1',
+                            'value' => __('data.municipality1')
+                        ],
+                        [
+                            'key' => 'municipality2',
+                            'value' => __('data.municipality2')
+                        ],
+                        [
+                            'key' => 'municipality3',
+                            'value' => __('data.municipality3')
+                        ],
+                        
+                    ];
+
+        
+        return $provinceMunicipalities;
+    }
+
+
+    
+
 }

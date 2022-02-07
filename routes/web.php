@@ -23,6 +23,7 @@ Auth::routes(['register' => true]);
 Route::post('ajaxRequest', [UserController::class, 'getUserData'])->name('ajaxRequest.post');
 Route::post('checkUser', [UserController::class, 'checkUserType'])->name('checkUser.post');
 Route::post('getTypes', [ManageRolesController::class, 'getTypes'])->name('getTypes.post');
+Route::post('getType', [UserController::class, 'getType'])->name('getType.post');
 
 
 
