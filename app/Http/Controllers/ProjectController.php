@@ -145,6 +145,20 @@ class ProjectController extends Controller
         return $project;
     }
 
+
+    public function getLocationInfo()
+    {
+        $data = [
+                'provinceMunicipalities' =>$this->CommonUtil->getProvinceMunicipalities(),
+                'municipalities' => $this->CommonUtil->getMunicipalities(),
+                'categoriesLocation' => $this->CommonUtil->getCategoriesLocation(),
+                'neighborhoods' => $this->CommonUtil->getNeighborhoods(),
+                'districts' => $this->CommonUtil->getDistricts(),
+            ];
+
+        return $data;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -878,7 +892,7 @@ class ProjectController extends Controller
          
         }
         else{
-         $customers=User::where('id','>',1)->select('id', 'name','email','mobile','id_card_number')->get()->toArray();
+         $customers=User::select('id', 'name','email','mobile','id_card_number')->get()->toArray();
         }
        
                

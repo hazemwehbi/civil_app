@@ -527,48 +527,48 @@ class CommonUtil
 
     public function getNeighborhoods($append_all = false)
     {
-        $provinceMunicipalities = [
+        $neighborhoods = [
                         [
-                            'key' => 'municipality1',
-                            'value' => __('data.municipality1')
+                            'key' => 'neighborhood1',
+                            'value' => __('data.neighborhood1')
                         ],
                         [
-                            'key' => 'municipality2',
-                            'value' => __('data.municipality2')
+                            'key' => 'neighborhood2',
+                            'value' => __('data.neighborhood2')
                         ],
                         [
-                            'key' => 'municipality3',
-                            'value' => __('data.municipality3')
+                            'key' => 'neighborhood3',
+                            'value' => __('data.neighborhood3')
                         ],
                         
                     ];
 
         
-        return $provinceMunicipalities;
+        return $neighborhoods;
     }
 
 
 
-    public function getDistrict($append_all = false)
+    public function getDistricts($append_all = false)
     {
-        $provinceMunicipalities = [
+        $districts = [
                         [
-                            'key' => 'municipality1',
-                            'value' => __('data.municipality1')
+                            'key' => 'district1',
+                            'value' => __('data.district1')
                         ],
                         [
-                            'key' => 'municipality2',
-                            'value' => __('data.municipality2')
+                            'key' => 'district2',
+                            'value' => __('data.district2')
                         ],
                         [
-                            'key' => 'municipality3',
-                            'value' => __('data.municipality3')
+                            'key' => 'district3',
+                            'value' => __('data.district3')
                         ],
                         
                     ];
 
         
-        return $provinceMunicipalities;
+        return $districts;
     }
 
 

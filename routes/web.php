@@ -191,6 +191,8 @@ Route::middleware(['auth'])
         Route::resource('ticket-comments', 'TicketCommentController');
 
         Route::get('get-current-user', 'Admin\UserController@getCurrentUser');
+        Route::get('get-location-info', 'ProjectController@getLocationInfo');
+        
         
     });
 

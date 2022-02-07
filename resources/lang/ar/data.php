@@ -197,6 +197,37 @@ return [
       'view_report'=>'عرض تقرير',
       'edit_report'=>'تعديل تقرير',
       'delete_report'=>'مسح تقرير',
-      'project_type'=>'نوع المشروع'
+      'project_type'=>'نوع المشروع',
+
+      'category'=>'الفئة',
+      'neighborhood'=>'المجاورة',
+      'district'=>'المنطقة',
     
+
+      'province1'=>'الامانة1',
+      'province2'=>'الامانة2',
+      'province3'=>'الامانة3',
+
+
+      'municipality1'=>'بلدية1',
+      'municipality1'=>'بلدية2',
+      'municipality1'=>'بلدية3',
+
+
+      'category1'=>'الفئة1',
+      'category2'=>'الفئة2',
+      'category3'=>'الفئة3 ',
+      
+
+
+      'neighborhood1'=>'المجاورة1',
+      'neighborhood1'=>'المجاورة2',
+      'neighborhood1'=>'3المجاورة ', 
+
+      'district1'=>'المنطقة1',
+      'district2'=>'المنطقة2',
+      'district3'=>'المنطقة3', 
+      'locate_map'=>'حدد على الخريطة',
+      'register'=>'تسجيل'
+
 ];

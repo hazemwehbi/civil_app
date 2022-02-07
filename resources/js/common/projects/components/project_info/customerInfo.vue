@@ -245,6 +245,7 @@
 </template>
 <script>
 import AddAgency from './AddAgency.vue';
+
 export default {
     components: {
         AddAgency,

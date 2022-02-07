@@ -220,12 +220,20 @@
                                                 </td>
                                                 <td >
                                                 <div align="center">
-                                                    {{
-                                                        projectProgress(
+                                                  <v-chip
+                                                        class="ma-2"
+                                                        color="red"
+                                                        text-color="white"
+                                                        >{{
+                                                              projectProgress(
                                                             props.item.tasks_count,
                                                             props.item.completed_task
                                                         )
-                                                    }}
+                                                        }}
+                                                    </v-chip> 
+                                                      
+
+                                                
                                                 </div>
                                                 </td>
                                             </template>

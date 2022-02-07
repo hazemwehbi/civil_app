@@ -2,18 +2,7 @@
 
 @section('content')
 <div class="container">
-    @if (session('status'))
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert @if(session('status.success')) alert-success @else alert-danger @endif alert-dismissible fade show mt-5" role="alert">
-                  {{ session('status.msg') }}
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-            </div>
-        </div>
-    @endif
+
     <div class="row">
         <form class="form-signin" id="form" method="POST" action="{{ route('login') }}">
             {{ csrf_field() }}
@@ -97,9 +86,9 @@
                                 Forgot Password?
                             </a>
                             @if(config('constants.enable_client_signup'))
-                                <a class="btn btn-link d-block text-center py-0" href="{{ route('register')}}">
+                                <a class="btn btn-link d-block text-center py-0"  style="color:#06706d;"  href="{{ route('register')}}">
                                     <!-- //route('client.register-form')  -->
-                                {{__('messages.client_register')}}
+                                {{__('data.register')}}
                                 </a>
                             @endif
                         </div>
@@ -113,7 +102,18 @@
             </div>
         </form>
     </div>
-
+    @if (session('status'))
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert @if(session('status.success')) alert-success @else alert-danger @endif alert-dismissible fade show mt-5" role="alert">
+                  {{ session('status.msg') }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+            </div>
+        </div>
+    @endif
     @if(config('app.env') == 'demo')
         <div class="row justify-content-md-center">
             <div class="col-md-4">

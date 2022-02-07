@@ -202,7 +202,39 @@ return [
       'view_report'=>'View Report',
       'edit_report'=>'Edit Report',
       'delete_report'=>'Delete Report',
-      'project_type'=>'Project Type'
+      'project_type'=>'Project Type',
+
+      'category'=>'Category',
+      'neighborhood'=>'Neighborhood',
+      'district'=>'District',
+
+
+      'province1'=>'Province1',
+      'province2'=>'Province2',
+      'province3'=>'Province3',
+
+      'municipality1'=>'Municipality1',
+      'municipality1'=>'Municipality1',
+      'municipality1'=>'Municipality1',
+
+
+      'category1'=>'Category1',
+      'category2'=>'Category2',
+      'category3'=>'Category3', 
+      
+
+
+      'neighborhood1'=>'Neighborhood1',
+      'neighborhood2'=>'Neighborhood2',
+      'neighborhood3'=>'Neighborhood3', 
+
+      'district1'=>'District1',
+      'district2'=>'District2',
+      'district3'=>'District3', 
+
+      'locate_map'=>'Locate on The Map',
+      'register'=>'Register'
+      
 ];
 
 

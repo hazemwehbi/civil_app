@@ -1,8 +1,9 @@
 
 <template>
     <v-container grid-list-md>
-       <Mapp  @fillCordinate="fillCordinate1($event)" ref="mapref" />
+                   <Mapp  @fillCordinate="fillCordinate1($event)" ref="mapref" />
         <v-layout row>
+
             <v-flex xs12 sm12>
                 <v-card class="elevation-3">
                     <v-card-title primary-title xs8 sm8>
@@ -17,24 +18,86 @@
                         <v-container grid-list-md>
                             <v-layout row wrap>
                                 <v-flex md3>
-                                    <v-text-field
-                                        v-model="location.province_municipality"
-                                        :label="trans('data.province_municipality')"
-                                        :readonly="isEdit"
-                                    >
-                                    </v-text-field>
+
+                                 
+                                       <v-select
+                                            item-text="value"
+                                            item-value="key"
+                                            :items="province_municipalities"
+                                             :v-model="location.province_municipality"
+                                            :label="trans('data.province_municipality')"
+                                            :data-vv-as="trans('data.province_municipality')"
+                                            :error-messages="errors.collect('province_municipality')"
+                                            :readonly="isEdit"
+                                        ></v-select>
                                 </v-flex>
                                 <v-flex md3>
-                                    <v-text-field
-                                        v-model="location.municipality"
-                                        :label="trans('data.municipality')"
-                                        :readonly="isEdit"
-                                    ></v-text-field>
+                                     <v-select
+                                            item-text="value"
+                                            item-value="key"
+                                            :items="municipalities"
+                                            v-model="location.municipality"
+                                            :label="trans('data.municipality')"
+                                            :data-vv-name="location.municipality"
+                                            :data-vv-as="trans('data.municipality')"
+                                            :error-messages="errors.collect('municipality')"
+                                            :readonly="isEdit"
+                                        ></v-select>
                                 </v-flex>
+
+
+                                 <v-flex md3>
+                                     <v-select
+                                            item-text="value"
+                                            item-value="key"
+                                            :items="categories_location"
+                                            v-model="location.category"
+                                            :label="trans('data.category')"
+                                            :data-vv-name="location.category"
+                                            :data-vv-as="trans('data.category')"
+                                            :error-messages="errors.collect('category')"
+                                            :readonly="isEdit"
+                                        ></v-select>
+                                </v-flex>
+
+
+
+                                 <v-flex md3>
+                                     <v-select
+                                            item-text="value"
+                                            item-value="key"
+                                            :items="neighborhoods"
+                                            v-model="location.neighborhood"
+                                            :label="trans('data.neighborhood')"
+                                            :data-vv-name="location.neighborhood"
+                                            :data-vv-as="trans('data.neighborhood')"
+                                            :error-messages="errors.collect('neighborhood')"
+                                            :readonly="isEdit"
+                                        ></v-select>
+                                </v-flex>
+
+
+
+                                 <v-flex md3>
+                                     <v-select
+                                            item-text="value"
+                                            item-value="key"
+                                            :items="districts"
+                                            v-model="location.district"
+                                            :label="trans('data.district')"
+                                            :data-vv-name="location.district"
+                                            :data-vv-as="trans('data.district')"
+                                            :error-messages="errors.collect('district')"
+                                            :readonly="isEdit"
+                                        ></v-select>
+                                </v-flex>
+
+
+
+
                                 <v-flex md3>
                                     <v-text-field
                                         v-model="location.plan_id"
-                                        type="number"
                                         :label="trans('data.plan_id')"
                                         :readonly="isEdit"
                                     ></v-text-field>
@@ -42,15 +105,11 @@
                                 <v-flex md3>
                                     <v-text-field
                                         v-model="location.piece_number"
-                                        type="number"
                                         :label="trans('data.piece_number')"
                                         :readonly="isEdit"
                                     ></v-text-field>
                                 </v-flex>
-                            </v-layout>
-
-                            <v-layout row wrap>
-                                <v-flex md3>
+                                        <v-flex md3>
                                     <v-text-field
                                         v-model="location.size_number"
                                         type="number"
@@ -59,17 +118,108 @@
                                     >
                                     </v-text-field>
                                 </v-flex>
+                            </v-layout>
+
+                            <v-layout row wrap>
+                     
+
+                                <v-flex md3>
+                                    <v-text-field
+                                        v-model="location.northern_border"
+                                        :label="trans('data.northern_border')"
+                                        :readonly="isEdit"
+                                    >
+                                    </v-text-field>
+                                </v-flex>
+                                         <v-flex md3>
+                                    <v-text-field
+                                        v-model="location.eastern_border"
+                                        :label="trans('data.eastern_border')"
+                                        :readonly="isEdit"
+                                    >
+                                    </v-text-field>
+                                </v-flex>
+                                <v-flex md3>
+                                    <v-text-field
+                                        v-model="location.western_border"
+                                        :label="trans('data.western_border')"
+                                        :readonly="isEdit"
+                                    ></v-text-field>
+                                </v-flex>
+                                <v-flex md3>
+                                    <v-text-field
+                                        v-model="location.southern_border"
+                                        :label="trans('data.southern_border')"
+                                        :readonly="isEdit"
+                                    ></v-text-field>
+                                </v-flex>
+                            </v-layout>
+
+                      
+
+                            <v-layout row wrap>
+                                         <v-flex md3>
+                                    <v-autocomplete
+                                        item-text="value"
+                                        item-value="key"
+                                        :items="statuses"
+                                        v-model="location.status"
+                                        :label="trans('messages.status')"
+                                        :readonly="isEdit"
+                                    ></v-autocomplete>
+                                </v-flex>
+                                <v-flex m3>
+                                     <v-dialog
+                                        ref="dialog"
+                                        v-model="modal"
+                                        :return-value.sync="location.instrument_date"
+                                        persistent
+                                        width="290px"
+                                    >
+                                        <template v-slot:activator="{ on, attrs }">
+                                        <v-text-field
+                                            v-model="location.instrument_date"
+                                            :label="trans('data.instrument_date')"
+                                            prepend-icon="mdi-calendar"
+                                            readonly
+                                            v-bind="attrs"
+                                            v-on="on"
+                                        ></v-text-field>
+                                        </template>
+                                        <v-date-picker
+                                        v-model="location.instrument_date"
+                                        scrollable
+                                        >
+                                        <v-spacer></v-spacer>
+                                        <v-btn
+                                            text
+                                            color="primary"
+                                            @click="modal = false"
+                                        >
+                                            Cancel
+                                        </v-btn>
+                                        <v-btn
+                                            text
+                                            color="primary"
+                                            @click="$refs.dialog.save(location.instrument_date)"
+                                        >
+                                            OK
+                                        </v-btn>
+                                        </v-date-picker>
+                                    </v-dialog>
+                                </v-flex>
+                              
                                 <v-flex md3>
                                     <v-text-field
                                         v-model="location.instrument_number"
-                                        type="number"
                                         :label="trans('data.instrument_number')"
                                         :readonly="isEdit"
                                     ></v-text-field>
                                 </v-flex>
-
+                               
                                 <v-flex md3>
-                                    <div class="v-input v-text-field theme--light">
+                                    
+                                    <!-- <div class="v-input v-text-field theme--light">
                                         <div class="v-input__control">
                                             <div class="v-input__slot">
                                                 <div class="v-text-field__slot">
@@ -98,56 +248,14 @@
                                                 {{ errors.first('instrument_date') }}
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
+                                    
                                 </v-flex>
-
-                                <v-flex md3>
-                                    <v-text-field
-                                        v-model="location.northern_border"
-                                        :label="trans('data.northern_border')"
-                                        :readonly="isEdit"
-                                    >
-                                    </v-text-field>
-                                </v-flex>
+                        
                             </v-layout>
-
-                            <v-layout row wrap>
-                                <v-flex md3>
-                                    <v-text-field
-                                        v-model="location.eastern_border"
-                                        :label="trans('data.eastern_border')"
-                                        :readonly="isEdit"
-                                    >
-                                    </v-text-field>
-                                </v-flex>
-                                <v-flex md3>
-                                    <v-text-field
-                                        v-model="location.western_border"
-                                        :label="trans('data.western_border')"
-                                        :readonly="isEdit"
-                                    ></v-text-field>
-                                </v-flex>
-                                <v-flex md3>
-                                    <v-text-field
-                                        v-model="location.southern_border"
-                                        :label="trans('data.southern_border')"
-                                        :readonly="isEdit"
-                                    ></v-text-field>
-                                </v-flex>
-                                <v-flex md3>
-                                    <v-autocomplete
-                                        item-text="value"
-                                        item-value="key"
-                                        :items="statuses"
-                                        v-model="location.status"
-                                        :label="trans('messages.status')"
-                                        :readonly="isEdit"
-                                    ></v-autocomplete>
-                                </v-flex>
-                            </v-layout>
-
-                            <v-layout row wrap>
-                                <v-flex md3>
+                                  <v-layout row wrap>
+                       
+                                  <v-flex md3>
                                     <v-text-field
                                         v-model="location.lon"
                                         :label="trans('data.lon')"
@@ -165,16 +273,19 @@
                                     ></v-text-field>
                                 </v-flex>
                                 <v-flex xs1 sm1 md1>
-                                    <v-btn
-                                        @click="createcordinate"
-                                        small
-                                        v-show="!isEdit"
-                                        fab
+                                     <v-btn
+                                       @click="createcordinate"
+                                        large
                                         dark
+                                        v-show="!isEdit"
                                         style="background-color: #06706d; color: white"
                                     >
-                                        <v-icon>add</v-icon>
+                                    {{trans('data.locate_map')}}
+                                      
+                                        <!-- //<v-icon>add</v-icon> -->
                                     </v-btn>
+                                     
+                                    
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -189,14 +300,30 @@
 <script>
 import Mapp from  './Mapp.vue'
 export default {
-
+    components: {
+        Mapp,
+    },
     props: ['customerId'],
     data() {
+             // https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#string-arguments
+
         return {
+   
+      menu: false,
+      modal: false,
+      menu2: false,
             isEdit:false,
+            province_municipalities:[],
+            municipalities:[],
+            categories_location : [],
+            neighborhoods : [],
+            districts :[],
             location: {
                 province_municipality: '',
                 municipality: '',
+                category:'',
+                neighborhood:'',
+                district:'',
                 plan_id: '',
                 piece_number: '',
                 size_number: '',
@@ -215,10 +342,10 @@ export default {
             statuses: [],
         };
     },
- 
     created() {
         const self = this;
         self.getLocationStatus();
+        self.getLocationInfo();
     },
     methods: {
         getLocationStatus() {
@@ -227,6 +354,22 @@ export default {
                 .get('/get-location-status')
                 .then(function (response) {
                     self.statuses = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        getLocationInfo(){
+               const self = this;
+            axios
+                .get('/get-location-info')
+                .then(function (response) {
+                    self.province_municipalities = response.data.provinceMunicipalities;
+                    self.municipalities = response.data.municipalities;
+                    self.categories_location = response.data.categoriesLocation;
+                    self.neighborhoods = response.data.neighborhoods;
+                    self.districts = response.data.districts;
                 })
                 .catch(function (error) {
                     console.log(error);

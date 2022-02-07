@@ -74,7 +74,7 @@
                                 <label for="confirm_password" style="padding-bottom: 5px;">
                                     {{__('messages.confirm_password')}}
                                 </label>
-                                <input type="confirm_password" id="confirm_password" name="confirm_password" class="form-control"   onchange="check_pass()" placeholder="{{__('messages.confirm_password')}}"   >
+                                <input type="password" id="confirm_password" name="confirm_password" class="form-control"   onchange="check_pass()" placeholder="{{__('messages.confirm_password')}}"   >
                                 <span id='message'></span>
                             </div>
 
