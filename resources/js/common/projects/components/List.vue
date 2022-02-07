@@ -29,7 +29,8 @@
                                             class="elevation-3"
                                         >
                                             <template slot="items" slot-scope="props">
-                                                <td>
+                                                <td >
+                                                 <div align="center">
                                                     <v-menu>
                                                         <v-btn icon slot="activator">
                                                             <v-icon>more_vert</v-icon>
@@ -174,12 +175,19 @@
                                                         </div>  -->
 
                                                     <!-- <td>{{ props.item.id }}</td> -->
+                                                     </div>
                                                 </td>
 
-                                                <td>{{ props.item.name }}</td>
-                                                <!-- <td> {{ props.item.customer.company }}</td> -->
                                                 <td>
-                                                    <v-chip
+                                                 <div align="center">
+                                                  {{ props.item.name }}
+                                                 </div>
+                                               </td>
+                                                <!-- <td> {{ props.item.customer.company }}</td> -->
+                                                <td >
+                                                  <div align="center">
+
+                                                               <v-chip
                                                         class="ma-2"
                                                         color="red"
                                                         text-color="white"
@@ -187,27 +195,38 @@
                                                             trans('messages.' + props.item.status)
                                                         }}
                                                     </v-chip>
+
+
+                                                 </div>
+                                       
                                                 </td>
-                                                <td>
+                                                <td >
+                                                <div align="center">
                                                     <v-btn icon @click="markAsFavorite(props.item)">
                                                         <v-icon :color="toggleFavorite(props.item)">
                                                             star
                                                         </v-icon>
                                                     </v-btn>
+                                                     </div>
                                                 </td>
-                                                <td>
+                                               
+                                                <td >
+                                                 <div align="center">
                                                     <avatar
                                                         :members="props.item.members"
                                                         class="mr-2"
                                                     ></avatar>
+                                                     </div>
                                                 </td>
-                                                <td>
+                                                <td >
+                                                <div align="center">
                                                     {{
                                                         projectProgress(
                                                             props.item.tasks_count,
                                                             props.item.completed_task
                                                         )
                                                     }}
+                                                </div>
                                                 </td>
                                             </template>
                                         </v-data-table>
@@ -250,7 +269,7 @@ export default {
                 {
                     text: self.trans('messages.action'),
                     value: false,
-                    align: 'left',
+                    align: 'center',
                     sortable: false,
                 },
                 // {
@@ -262,7 +281,7 @@ export default {
                 {
                     text: self.trans('messages.name'),
                     value: 'name',
-                    align: 'left',
+                    align: 'center',
                     sortable: true,
                 },
                 // {
@@ -274,25 +293,25 @@ export default {
                 {
                     text: self.trans('messages.status'),
                     value: 'status',
-                    align: 'left',
+                    align: 'center',
                     sortable: true,
                 },
                 {
                     text: self.trans('messages.favorited'),
                     value: 'favorited',
-                    align: 'left',
+                    align: 'center',
                     sortable: true,
                 },
                 {
                     text: self.trans('messages.members'),
                     value: 'members',
-                    align: 'left',
+                    align: 'center',
                     sortable: true,
                 },
                 {
                     text: self.trans('messages.project_progress'),
                     value: 'project_progress',
-                    align: 'left',
+                    align: 'center',
                     sortable: true,
                 },
             ],

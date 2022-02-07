@@ -34,8 +34,8 @@
                             </h5>
                         </div>
                         <div style="padding:20px;">
-                        <div class="form-outline mb-1">
-                                <input type="email" id="inputEmail" name="email" class="form-control form-control-lg" placeholder="Email Address" value="{{$email}}" required  ><br>
+                           <div class="form-outline mb-1">
+                                <input type="text" id="inputEmail" name="email_id_card" class="form-control form-control-lg" placeholder="Email Address OR ID Card"  required  ><br>
                                 @if ($errors->has('email'))
                                     <span class="help-block  text-danger">
                                         <small class="help-text span-email" span-email>
@@ -97,7 +97,8 @@
                                 Forgot Password?
                             </a>
                             @if(config('constants.enable_client_signup'))
-                                <a class="btn btn-link d-block text-center py-0" href="{{ route('client.register-form') }}">
+                                <a class="btn btn-link d-block text-center py-0" href="{{ route('register')}}">
+                                    <!-- //route('client.register-form')  -->
                                 {{__('messages.client_register')}}
                                 </a>
                             @endif

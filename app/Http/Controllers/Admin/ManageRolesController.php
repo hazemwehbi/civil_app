@@ -144,30 +144,33 @@ class ManageRolesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
         try {
             DB::beginTransaction();
-
+        
             $role_name = $request->input('name');
             $is_primary = $request->input('is_primary');
             $permissions = $request->input('permissions');
-            
+        
             $count = Role::where('name', $role_name)
                        // ->where('type', 'employee')
                         ->where('id', '!=', $id)
                         ->count();
-
+       
             if ($count == 0) {
                 $role = Role::find($id);
+          
                 $role->name = $role_name;
                 $role->is_primary=$is_primary;
+               
                 $role->save();
-                
+           
                 if (!empty($permissions)) {
                     $role->syncPermissions($permissions);
                 }
-
+           
                 DB::commit();
-                
+          
                 $output = $this->respondSuccess(__('messages.updated_successfully'));
             } else {
                 $output = $this->respondWithError(__('messages.role_already_existed'));

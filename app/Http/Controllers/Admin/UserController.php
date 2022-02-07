@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+
 class UserController extends AdminController
 {
     /**
@@ -85,7 +86,7 @@ class UserController extends AdminController
             DB::beginTransaction();
 
             $input = $request->only('name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number');
-
+            $input['parent_id']=Auth::id(); 
             /** @var User $user */
             $user = $this->userRepository->create($input);
 

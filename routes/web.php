@@ -18,7 +18,7 @@ Route::get('/', function () {
     return redirect(route('login'));
 });
 
-Auth::routes(['register' => false]);
+Auth::routes(['register' => true]);
 
 Route::post('ajaxRequest', [UserController::class, 'getUserData'])->name('ajaxRequest.post');
 Route::post('checkUser', [UserController::class, 'checkUserType'])->name('checkUser.post');
@@ -36,7 +36,7 @@ if (config('constants.enable_client_signup')) {
 // Employees & Superadmin
 Route::prefix('admin')
     ->namespace('Admin')
-    ->middleware(['auth', 'employee'])
+  //  ->middleware(['auth', 'employee'])
     ->name('admin')
     ->group(function () {
         // single page
@@ -196,7 +196,7 @@ Route::middleware(['auth'])
 // Employees & Superadmin
 Route::prefix('client')
     ->namespace('Client')
-    ->middleware(['auth', 'client'])
+    //->middleware(['auth', 'client'])
     ->name('client')
     ->group(function () {
         // single page
