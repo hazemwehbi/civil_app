@@ -6,18 +6,7 @@
             <v-card-text>
                 <v-container grid-list-md>
                     <v-layout row wrap>
-                        <v-flex xs12 sm6 md6>
-                            <v-text-field
-                                v-model="title"
-                                :label="trans('messages.title')"
-                                v-validate="'required'"
-                                data-vv-name="title"
-                                :data-vv-as="trans('messages.title')"
-                                :error-messages="errors.collect('title')"
-                                required
-                            ></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6 md6>
+                        <!-- <v-flex xs12 sm6 md6>
                             <v-autocomplete
                                 item-text="value"
                                 item-value="key"
@@ -28,6 +17,36 @@
                                 data-vv-name="request_type"
                                 :data-vv-as="trans('data.request_type')"
                                 :error-messages="errors.collect('request_type')"
+                                required
+                            ></v-autocomplete>
+                        </v-flex> -->
+
+                        <v-flex xs12 sm6 md6>
+                            <v-autocomplete
+                                item-text="name"
+                                item-value="id"
+                                :items="projects"
+                                v-model="project_id"
+                                :label="trans('data.project_name')"
+                                v-validate="'required'"
+                                data-vv-name="project_name"
+                                :data-vv-as="trans('data.project_name')"
+                                :error-messages="errors.collect('project_name')"
+                                required
+                            ></v-autocomplete>
+                        </v-flex>
+
+                        <v-flex xs12 sm6 md6>
+                            <v-autocomplete
+                                item-text="name"
+                                item-value="id"
+                                :items="customers"
+                                v-model="customer_id"
+                                :label="trans('messages.customer')"
+                                v-validate="'required'"
+                                data-vv-name="customer"
+                                :data-vv-as="trans('messages.customer')"
+                                :error-messages="errors.collect('customer')"
                                 required
                             ></v-autocomplete>
                         </v-flex>
@@ -44,20 +63,6 @@
                             </v-flex> -->
                     </v-layout>
                     <v-layout row>
-                        <v-flex xs12 sm4 md4>
-                            <v-autocomplete
-                                item-text="name"
-                                item-value="id"
-                                :items="projects"
-                                v-model="project_id"
-                                :label="trans('data.project_name')"
-                                v-validate="'required'"
-                                data-vv-name="project_name"
-                                :data-vv-as="trans('data.project_name')"
-                                :error-messages="errors.collect('project_name')"
-                                required
-                            ></v-autocomplete>
-                        </v-flex>
                         <!-- v-if="$hasRole('employee')" -->
                         <!-- <v-flex xs12 sm4 md4 >
                             <v-autocomplete
@@ -71,28 +76,56 @@
                                 :error-messages="errors.collect('status')"
                             ></v-autocomplete>
                         </v-flex> -->
-                        <v-flex xs12 sm4 md4>
+
+                        <v-flex xs12 sm6 md6>
                             <v-autocomplete
                                 item-text="name"
                                 item-value="id"
-                                :items="customers"
-                                v-model="customer_id"
-                                :label="trans('messages.customer')"
+                                :items="engennering_offices"
+                                v-model="office_id"
+                                :label="trans('data.enginnering_office_name')"
                                 v-validate="'required'"
-                                data-vv-name="customer"
-                                :data-vv-as="trans('messages.customer')"
-                                :error-messages="errors.collect('customer')"
+                                data-vv-name="enginnering_office_name"
+                                :data-vv-as="trans('data.enginnering_office_name')"
+                                :error-messages="errors.collect('enginnering_office_name')"
                                 required
                             ></v-autocomplete>
                         </v-flex>
-                        <v-flex xs12 sm4 md4>
+                       
+                        <v-flex xs12 sm6 md6>
+                            <v-datetime-picker
+                                :label="trans('visit_datetime')"
+                                :datetime="dead_line_date"
+                                v-model="dead_line_date"
+                            >
+                            </v-datetime-picker>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row>
+                        <v-flex xs12 sm12 md12>
                             <v-autocomplete
                                 item-text="value"
                                 item-value="key"
-                                :items="priorities"
-                                v-model="priority"
-                                :label="trans('messages.priority')"
-                            ></v-autocomplete>
+                                :items="enginnering_types"
+                                v-model="enginnering_type"
+                                :label="trans('data.enginnering_type')"
+                                multiple
+                                data-vv-name="enginnering_type"
+                                :data-vv-as="trans('data.enginnering_type')"
+                                :error-messages="errors.collect('enginnering_type')"
+                                required
+                            >
+                                <!-- <Popover
+                                    slot="append"
+                                    :helptext="trans('messages.project_member_tooltip')"
+                                >
+                                </Popover> -->
+                            </v-autocomplete>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row>
+                        <v-flex xs12 sm12 md12>
+                            <v-text-field v-model="note" :label="trans('data.note')"></v-text-field>
                         </v-flex>
                     </v-layout>
                     <!-- <v-flex xs1 sm1 md1>
@@ -132,7 +165,7 @@
                                     :label="trans('messages.assigned_to')"
                                 ></v-autocomplete>
                             </v-flex>-->
-                        <v-flex xs12 sm6 md6 v-if="$hasRole('employee')"> </v-flex>
+                        <!-- <v-flex xs12 sm6 md6 v-if="$hasRole('employee')"> </v-flex> -->
                     </v-layout>
                 </v-container>
             </v-card-text>
@@ -166,11 +199,19 @@ export default {
     components: {
         AddRequestType,
     },
+    props: {
+        propRequestId: {
+            required: true,
+        },
+    },
     data() {
         return {
+            id: '',
             type: '',
+            isView: false,
             project_id: '',
             projects: [],
+            enginnering_types: [],
             visit_request: null,
             loading: false,
             title: '',
@@ -186,40 +227,47 @@ export default {
             customers: [],
             priorities: [],
             request_type: '',
+            engennering_offices: [],
+            office_id: '',
+            dead_line_date: null,
+            note: '', //
+            enginnering_type: '',
         };
     },
-    created() {
-        const self = this;
-        self.visit_request = self.$route.params.visit_request;
-        self.getRequestTypes();
-        self.setVisitRequest();
-        self.getRequestTypes();
-        self.getCustomerProject();
-        self.getCustomers();
-         self.getpriority();
-    },
+    created() {},
     beforeDestroy() {
         const self = this;
         self.$eventBus.$off('updateCategoryList');
     },
     mounted() {
         const self = this;
+
+        self.getCustomerProject();
+        self.getCustomers();
+        self.getOffices();
+        this.loadRequest(() => {});
         self.$eventBus.$on('updateRequestTypeList', (data) => {
-         
             //  self.request_types = [];
             // self.request_types = data;
         });
     },
     methods: {
-        setVisitRequest() {
+        loadRequest() {
             const self = this;
-            self.title = self.visit_request.title;
-            self.request_type = self.visit_request.request_type;
-            self.project_id = self.visit_request.project_id;
-            self.description = self.visit_request.description;
-            self.status = self.visit_request.status;
-            self.priority = self.visit_request.priority;
-            self.customer_id = self.visit_request.customer_id;
+            axios.get('request/' + self.propRequestId).then(function (response) {
+                self.id = response.data.request.id;
+                self.enginnering_types = response.data.enginnering_types;
+                self.request_types = response.data.request_types;
+                self.request_type = response.data.request.request_type;
+                self.project_id = response.data.request.project_id;
+                self.description = response.data.request.description;
+                self.status = response.data.request.status;
+                self.customer_id = response.data.request.customer_id;
+                self.office_id = response.data.request.office_id;
+                self.enginnering_type = JSON.parse(response.data.request.enginnering_type);
+                self.note = response.data.request.note;
+                self.dead_line_date = response.data.request.dead_line_date;
+            });
         },
         getCustomers() {
             const self = this;
@@ -232,28 +280,18 @@ export default {
                     console.log(error);
                 });
         },
-        getpriority() {
+        getOffices() {
             const self = this;
             axios
-                .get('/get-priority')
+                .get('/get-offices')
                 .then(function (response) {
-                    self.priorities = response.data;
+                    self.engennering_offices = response.data;
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
         },
-        getRequestTypes() {
-            const self = this;
-            axios
-                .get('/get-request-types')
-                .then(function (response) {
-                    self.request_types = response.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
+
         reset() {
             const self = this;
             self.title = '';
@@ -263,18 +301,11 @@ export default {
             self.status = '';
             self.priority = '';
             self.customer_id = '';
+            self.office_id = '';
+            self.note = ''; //
+            self.enginnering_type = '';
         },
-        // getRequestTypes() {
-        //     const self = this;
-        //     axios
-        //         .get('/request-type')
-        //         .then(function (response) {
-        //             self.request_types = response.data;
-        //         })
-        //         .catch(function (error) {
-        //             console.log(error);
-        //         });
-        // },
+
         getCustomerProject() {
             const self = this;
             axios
@@ -293,7 +324,7 @@ export default {
         update() {
             const self = this;
             let data = {
-                id: self.visit_request.id,
+                id: self.id,
                 title: self.title,
                 request_type: self.request_type,
                 project_id: self.project_id,
@@ -301,6 +332,10 @@ export default {
                 status: 'new',
                 priority: self.priority,
                 customer_id: self.customer_id,
+                office_id: self.office_id,
+                note: self.note, //
+                dead_line_date: self.dead_line_date,
+                enginnering_type: self.enginnering_type,
             };
             self.$validator.validateAll().then((result) => {
                 if (result == true) {

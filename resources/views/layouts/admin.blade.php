@@ -124,7 +124,7 @@
                 <v-toolbar-side-icon @click="drawerToggle"></v-toolbar-side-icon> 
                 <v-toolbar-title class="hidden-sm-and-down">{{config('app.name')}}</v-toolbar-title>
                 -->
-        
+         
            
                 <img src="{{asset('img/logo.png')}}"  alt="logo" width="100" style="border-radius:20px;" />
                 <v-layout >
@@ -140,8 +140,8 @@
                         </router-link>                                      
                     </div>
                 </v-layout>
-
-                <v-menu
+                <notification></notification>
+                <v-menu 
                      attach
                         offset-y
                         bottom
@@ -149,12 +149,14 @@
                         nudge-bottom="14"
                         transition="slide-x-transition"
                         >
-                        <v-btn flat slot="activator">
+                         <v-btn flat slot="activator">
                             <b style="font-size:14px;">
                                 <v-icon>language</v-icon>
                                 {{trans('data.language')}}
                                 
-                        </v-btn>
+                        </v-btn> 
+                       
+                    
                         <v-list>
                             <v-list-tile style="background: darkgrey;" >
                                 <v-list-tile-title>
@@ -173,8 +175,14 @@
                         </v-list>
                        
 
-                     </v-menu>
 
+                     </v-menu>
+                    
+
+                     <v-menu>
+                
+
+                    </v-menu>
                     <v-menu
                         attach
                         offset-y
@@ -183,6 +191,7 @@
                         nudge-bottom="14"
                         transition="slide-x-transition"
                         >
+                       
                         <v-btn flat slot="activator">
                             <b style="font-size:14px;">
                                 {{trans('data.basic_information')}}
@@ -191,8 +200,10 @@
                             </avatar>&nbsp;<!--{{ $user->name }}-->
                             <v-icon dark medium>more_vert</v-icon>
                         </v-btn>
-
+                        
                         <v-list>
+                  
+
                             <v-list-tile @click="$router.push({ name: 'profile.list' })">
                                 <v-list-tile-title>
                                     <v-icon> account_circle </v-icon>

@@ -6,7 +6,7 @@
             <v-card-text>
                 <v-container grid-list-md>
                     <v-layout row wrap>
-                        <v-flex xs12 sm6 md6>
+                        <!-- <v-flex xs12 sm6 md6>
                             <v-text-field
                                 v-model="title"
                                 :label="trans('messages.title')"
@@ -16,8 +16,8 @@
                                 :error-messages="errors.collect('title')"
                                 required
                             ></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6 md6>
+                        </v-flex> -->
+                        <!-- <v-flex xs12 sm6 md6>
                             <v-autocomplete
                                 item-text="value"
                                 item-value="key"
@@ -30,7 +30,7 @@
                                 :error-messages="errors.collect('request_type')"
                                 required
                             ></v-autocomplete>
-                        </v-flex>
+                        </v-flex> -->
                         <!-- <v-flex xs1 sm1 md1>
                                 <v-btn
                                     @click="createRequestType"
@@ -42,9 +42,8 @@
                                     <v-icon>add</v-icon>
                                 </v-btn>
                             </v-flex> -->
-                    </v-layout>
-                    <v-layout row>
-                        <v-flex xs12 sm4 md4>
+
+                        <v-flex xs12 sm6 md6>
                             <v-autocomplete
                                 item-text="name"
                                 item-value="id"
@@ -58,8 +57,7 @@
                                 required
                             ></v-autocomplete>
                         </v-flex>
-                        <!-- v-if="$hasRole('employee')" -->
-                        <v-flex xs12 sm4 md4>
+                        <v-flex xs12 sm6 md6>
                             <v-autocomplete
                                 item-text="name"
                                 item-value="id"
@@ -73,8 +71,12 @@
                                 required
                             ></v-autocomplete>
                         </v-flex>
+                    </v-layout>
+                    <v-layout row>
                         <!-- v-if="$hasRole('employee')" -->
-                        <v-flex xs12 sm4 md4>
+
+                        <!-- v-if="$hasRole('employee')" -->
+                        <!-- <v-flex xs12 sm4 md4>
                             <v-autocomplete
                                 item-text="value"
                                 item-value="key"
@@ -82,7 +84,7 @@
                                 v-model="priority"
                                 :label="trans('messages.priority')"
                             ></v-autocomplete>
-                        </v-flex>
+                        </v-flex> -->
                         <!--    <v-flex xs1 sm1 md1>
                                 <v-btn
                                     @click="$router.push({name: 'add-project'})"
@@ -94,24 +96,7 @@
                                     <v-icon>add</v-icon>
                                 </v-btn>
                             </v-flex>-->
-                    </v-layout>
-                    <v-layout row>
-                        <v-flex xs12 sm12 md12>
-                            <v-textarea
-                                rows="4"
-                                v-model="description"
-                                :label="trans('messages.description')"
-                                v-validate="'required'"
-                                data-vv-name="description"
-                                :data-vv-as="trans('messages.description')"
-                                :error-messages="errors.collect('description')"
-                                required
-                            ></v-textarea>
-                        </v-flex>
-                    </v-layout>
-
-                    <v-layout row>
-                        <v-flex xs6 sm6 md6>
+                        <v-flex xs12 sm6 md6>
                             <v-autocomplete
                                 item-text="name"
                                 item-value="id"
@@ -125,7 +110,63 @@
                                 required
                             ></v-autocomplete>
                         </v-flex>
+                      
+                        <v-flex xs12 sm6 md6>
+                            <v-datetime-picker
+                                label="Select Datetime"
+                                :datetime="dead_line_date"
+                                v-model="dead_line_date"
+                            >
+                            </v-datetime-picker>
+                        </v-flex>
                     </v-layout>
+                    <v-layout row>
+                        <v-flex xs12 sm12 md12>
+                            <v-autocomplete
+                                item-text="value"
+                                item-value="key"
+                                :items="enginnering_types"
+                                v-model="enginnering_type"
+                                :label="trans('data.enginnering_type')"
+                                multiple
+                                data-vv-name="enginnering_type"
+                                :data-vv-as="trans('data.enginnering_type')"
+                                :error-messages="errors.collect('enginnering_type')"
+                                required
+                            >
+                                <!-- <Popover
+                                    slot="append"
+                                    :helptext="trans('messages.project_member_tooltip')"
+                                >
+                                </Popover> -->
+                            </v-autocomplete>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row>
+                        <v-flex xs12 sm12 md12>
+                            <v-text-field
+                                v-model="note"
+                                :label="trans('data.note')"
+                                :readonly="isEdit"
+                            ></v-text-field>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row>
+                        <v-flex xs12 sm12 md12>
+                            <v-textarea
+                                rows="4"
+                                v-model="description"
+                                :label="trans('data.description')"
+                                v-validate="'required'"
+                                data-vv-name="description"
+                                :data-vv-as="trans('data.description')"
+                                :error-messages="errors.collect('description')"
+                                required
+                            ></v-textarea>
+                        </v-flex>
+                    </v-layout>
+
+                    <v-layout row> </v-layout>
                     <!--    <v-layout row>
                             <v-flex xs12 sm6 md6 v-if="$hasRole('employee')">
                                 <v-autocomplete
@@ -170,10 +211,10 @@
                         :loading="loading"
                         :disabled="loading"
                     >
-                        {{ trans('messages.save') }}
+                        {{ trans('data.send') }}
                     </v-btn>
                     <v-btn style="color: #06706d" @click="$router.go(-1)">
-                        {{ trans('messages.back') }}
+                        {{ trans('data.back') }}
                     </v-btn>
                     <v-btn
                         style="background-color: #06706d; color: white"
@@ -182,7 +223,7 @@
                         :loading="loading"
                         :disabled="loading"
                     >
-                        {{ trans('messages.draft') }}
+                        {{ trans('data.draft') }}
                     </v-btn>
                 </v-card-actions>
             </v-layout>
@@ -191,12 +232,28 @@
 </template>
 <script>
 import AddRequestType from './AddRequestType';
+
 export default {
     components: {
         AddRequestType,
     },
     data() {
         return {
+            nullDatetime: null,
+            datetime: new Date(),
+            datetimeString: '2019-01-01 12:00',
+            formattedDatetime: '09/01/2019 12:00',
+            enginnering_types: [],
+            textFieldProps: {
+                appendIcon: 'event',
+            },
+            dateProps: {
+                headerColor: 'red',
+            },
+            timeProps: {
+                useSeconds: false,
+                ampmInTitle: false,
+            },
             type: '',
             project_id: '',
             projects: [],
@@ -216,7 +273,24 @@ export default {
             request_type: '',
             engennering_offices: [],
             office_id: '',
+            dead_line_date: null,
+            enginnering_type: '',
+            note: '',
         };
+    },
+    computed: {
+        computedDateFormattedMomentjs() {
+            const self = this;
+            return null; //self.dead_line_date
+            // ? moment(self.location.instrument_date).format('dddd, MMMM Do YYYY')
+            // : '';
+        },
+        computedDateFormattedDatefns() {
+            const self = this;
+            return self.dead_line_date;
+            // ? format(parseISO(self.location.instrument_date), 'EEEE, MMMM do yyyy')
+            //  : '';
+        },
     },
     created() {
         const self = this;
@@ -227,8 +301,9 @@ export default {
         self.getRequestTypes();
         self.getCustomerProject();
         self.getCustomers();
-        self.getpriority();
+        //self.getpriority();
         self.getOffices();
+        self.getEnginneringTypes();
     },
     beforeDestroy() {
         const self = this;
@@ -264,6 +339,17 @@ export default {
                     console.log(error);
                 });
         },
+        getEnginneringTypes() {
+            const self = this;
+            axios
+                .get('/get-enginnering-types')
+                .then(function (response) {
+                    self.enginnering_types = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         reset() {
             const self = this;
             self.title = '';
@@ -273,6 +359,7 @@ export default {
             self.status = '';
             self.priority = '';
             self.customer_id = '';
+            self.office_id = '';
             // self.request_types=[];
         },
 
@@ -322,17 +409,20 @@ export default {
                 request_type: self.request_type,
                 project_id: self.project_id,
                 description: self.description,
-                status: 'new',
+                //  status: 'new',
                 priority: self.priority,
                 customer_id: self.customer_id,
                 office_id: self.office_id,
+                dead_line_date: self.dead_line_date,
+                note: self.note, //
+                enginnering_type: self.enginnering_type,
             };
             console.log(data);
             self.$validator.validateAll().then((result) => {
                 if (result == true) {
                     self.loading = true;
                     axios
-                        .post('/visit-request', data)
+                        .post('request', data)
                         .then(function (response) {
                             self.loading = false;
                             self.$store.commit('showSnackbar', {

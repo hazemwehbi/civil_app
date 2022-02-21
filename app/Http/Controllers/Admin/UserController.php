@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
-
+use App\Notifications\AskPermissionNotification;
+use Notification;
+use App\Http\Responses\Response;
 class UserController extends AdminController
 {
     /**
@@ -108,6 +110,12 @@ class UserController extends AdminController
         
         return $this->respond(['gender_types' => $gender_types, 'roles' => $roles]);
     }
+
+
+
+
+
+ 
     /**
      * Store a newly created resource in storage.
      *
@@ -123,10 +131,11 @@ class UserController extends AdminController
         $validate = validator($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
+            'id_card_number' => 'required|unique:users',
             'password' => 'required',
         ]);
 
-        
+      
         if ($validate->fails()) {
             return $this->respondWithError($validate->errors()->first());
         }
@@ -403,18 +412,45 @@ class UserController extends AdminController
         return $users;
     }
 
-    public function getCurrentUser()
-    {
-        try {
-            $user=Auth::user();
 
-          $output=  $this->respond($user);
-        } catch (Exception $e) {
-            $output = $this->respondWentWrong($e);
-        }
-        return $output;
-    }
-    
-    
-    
+
+    // public function askPermissionForUser(Request $request)
+    // {
+    //     $role_id = $request->input('permission');
+    //     $role = Role::find($role_id);
+
+    //     $data = [
+    //     'user_id' => Auth::id(),
+    //     'permission_name' => $role->name,
+    //      ];
+    //    $this->_saveAskedPermissionNotifications(1,$data);
+    //    return Response::respondSuccess();
+    // }
+    // public function uploud(Request $request){
+    //     if ($request->hasFile('files')) {
+    //         $files = array();
+        
+    //         foreach ($request->file('files') as $file) {
+    //             if ($file->isValid()) {
+    //                 $name = time() . str_random(5) . '.' . $file->getClientOriginalExtension();
+    //                 Storage::disk('public')->put($name, $file);
+    //                 $files[] = $name;
+    //             }
+    //         }
+        
+    //         if (count($files) > 0) {
+    //             $response->assets = json_encode($files);
+    //         }
+    //     }
+    // }
+
+    // protected function _saveAskedPermissionNotifications($member, $data)
+    // {
+    //         $notifiable_users = User::find($member);
+    //         Notification::send($notifiable_users, new AskPermissionNotification($data));
+    // }
+
+
+
+ 
 }

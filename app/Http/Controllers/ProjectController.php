@@ -7,6 +7,8 @@ use App\Components\User\Models\User;
 use App\Customer;
 use App\Http\Util\CommonUtil;
 use App\Notifications\ProjectCreatedNotification;
+use App\Notifications\AskPermissionNotification;
+
 use App\Project;
 use App\ProjectMember;
 use App\ProjectMilestone;
@@ -23,6 +25,9 @@ use App\ProjectRequest;
 use App\VisitRequest;
 use App\Agency;
 use App\Location;
+use App\Http\Responses\Response;
+
+
 class ProjectController extends Controller
 {
     /**
@@ -58,10 +63,11 @@ class ProjectController extends Controller
             //     $projects->orWhere('projects.lead_id', $user->id)
             //         ->orWhereIn('projects.id', $project_ids);
             // }
-
+           
             //If customer, then get project for that customer.
             //if ($user->is_client) {
                 $projects->Where('customer_id', $user->id);
+               ;
            // }
         }
 
@@ -86,9 +92,9 @@ class ProjectController extends Controller
                 $q->where('category_id', $category_id);
             });
         }
-        if (!empty($request->input('customer_id'))) {
-            $projects->where('customer_id', $request->input('customer_id'));
-        }
+    //    if (!empty($request->input('customer_id'))) {
+      //      $projects->where('customer_id', $request->input('customer_id'));
+       // }
         if (!empty($request->input('user_id'))) {
             $user_id = $request->input('user_id');
             $projects->whereHas('members', function ($q) use ($user_id) {
@@ -115,14 +121,19 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $lang = $request->header('lang');
+        if (!isset($lang)) {
+            $lang = "ar";
+        }
         if (!request()->user()->can('project.create')) {
-            abort(403, 'Unauthorized action.');
+            
+            return Response::respondError('هذا الفعل غير مسموح');
         }
 
         $customers =User::getUsersForDropDown() ;//Customer::getCustomersForDropDown();
-        $users = User::getUsersForDropDown();
+        $users = User::getUsersMemberForDropDown();
       //  $billingTypes = Project::getBillingTypes();
         $projectTypes = Project::getProjectTypes();
         $status = Project::getStatusForProject();
@@ -142,7 +153,8 @@ class ProjectController extends Controller
                 'roles_number'=>$this->CommonUtil->getRolesNumber(),
             ];
 
-        return $project;
+        //return $project;
+        return Response::respondSuccess($project);
     }
 
 
@@ -244,55 +256,61 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id,Request $request)
     {
-        if (!request()->user()->can('project.'.$id.'.overview')) {
-            abort(403, 'Unauthorized action.');
+        
+        $lang = $request->header('lang');
+        if (!isset($lang)) {
+            $lang = "ar";
+        }
+        if (!request()->user()->can('project.list')) {
+            
+            return Response::respondError('هذا الفعل غير مسموح');
         }
 
-        $project = Project::with('customer', 'lead', 'lead.media', 'tasks', 'categories', 'members', 'members.media')
+        $project = Project::with('customer', 'lead','location','agency', 'lead.media', 'tasks', 'categories', 'members', 'members.media')
                             ->withCount(['tasks',
                                 'tasks as completed_task' => function ($query) {
                                     $query->where('is_completed', 1);
                                 }, ])
                             ->find($id);
 
-        $task_count = ProjectTask::where('project_id', $id)
-                        ->where('is_completed', 0)
-                        ->count();
+        // $task_count = ProjectTask::where('project_id', $id)
+        //                 ->where('is_completed', 0)
+        //                 ->count();
 
-        $milestone_count = ProjectMilestone::where('project_id', $id)
-                                            ->count();
+        // $milestone_count = ProjectMilestone::where('project_id', $id)
+        //                                     ->count();
 
-        $invoice_count = Transaction::OfTransaction('invoice')
-                                ->where('project_id', $id)
-                                ->where('status', 'final')
-                                ->count();
+        // $invoice_count = Transaction::OfTransaction('invoice')
+        //                         ->where('project_id', $id)
+        //                         ->where('status', 'final')
+        //                         ->count();
         //chart data
-        $project_task = ProjectTask::where('project_id', $id)
-                    ->where('created_at', '>=', Carbon::now()->startOfMonth())
-                    ->where('created_at', '<=', Carbon::now()->endOfMonth())
-                    ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(id) as task'))
-                    ->groupBy('date')
-                    ->get();
+        // $project_task = ProjectTask::where('project_id', $id)
+        //             ->where('created_at', '>=', Carbon::now()->startOfMonth())
+        //             ->where('created_at', '<=', Carbon::now()->endOfMonth())
+        //             ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(id) as task'))
+        //             ->groupBy('date')
+        //             ->get();
 
-        $x_axis = [];
-        $y_axis = [];
-        foreach ($project_task as $task) {
-            $x_axis[] = $task->date;
-            $y_axis[] = $task->task;
-        }
+        // $x_axis = [];
+        // $y_axis = [];
+        // foreach ($project_task as $task) {
+        //     $x_axis[] = $task->date;
+        //     $y_axis[] = $task->task;
+        // }
 
         $project_overview = [
                              'project' => $project,
-                             'task' => $task_count,
-                             'x_axis' => $x_axis,
-                             'y_axis' => $y_axis,
-                             'milestone' => $milestone_count,
-                             'invoice' => $invoice_count,
+                            //  'task' => $task_count,
+                            //  'x_axis' => $x_axis,
+                            //  'y_axis' => $y_axis,
+                            //  'milestone' => $milestone_count,
+                            //  'invoice' => $invoice_count,
                             ];
-
-        return $project_overview;
+         return Response::respondSuccess($project_overview);
+        
     }
 
     /**
@@ -627,8 +645,10 @@ class ProjectController extends Controller
      */
     protected function _saveProjectCreatedNotifications($members, $project_id)
     {
-        $notifiable_users = User::find($members);
-        Notification::send($notifiable_users, new ProjectCreatedNotification($project_id));
+        foreach ($members as $member){
+            $notifiable_users = User::find($member);
+            Notification::send($notifiable_users, new ProjectCreatedNotification($project_id));
+        }
     }
 
     /**
@@ -773,13 +793,48 @@ class ProjectController extends Controller
     }
     public function acceptProject(Request $request)
     {
-        if($request->status=="new"){
-            $project=VisitRequest::find($request->id);
-        }else{
-            $project=ProjectRequest::find($request->id);
+        $lang = $request->header('lang');
+        if (!isset($lang)) {
+            $lang = "en";
+        }   
+          if ($lang == "ar") {
+            if (!isset($request->enginner)) {
+                return Response::respondError('حقل وقت المهندس مطلوب ');
+            }
+    
+
+            }
+            if ($lang == "en") {
+                if (!isset($request->enginner)) {
+                    return Response::respondError('The field "Enginner" is required ');
+                }
+             
+            }
+        try{
+          $request=VisitRequest::find($request->id);
+        $request->status="accepted";
+        if(isset($request->dead_line_date)){
+            $request->dead_line_date=$request->dead_line_date;
         }
-        $project->status="accepted";
-        $project->save();
+        $request->save();
+        if(isset($request->enginner)){
+            DB::table('project_members')->insert([
+                //'title'=>$request->title,
+                'user_id'=>$request->enginner,
+                'project_id'=>$request->project_id,
+                //'created_at'=>Carbon::now()
+            ]);
+        }
+        return Response::respondSuccess(__('messages.updated_successfully'));
+       // return $this->respondSuccess();
+        }
+
+        catch (Exception $e) {
+            $output = $this->respondWentWrong($e);
+           return Response::respondError($e);
+         }
+         ;
+       
     }
 
     public function getCustomerProject(Request $request)
@@ -837,13 +892,14 @@ class ProjectController extends Controller
 
 
         DB::table('visit_requests')->insert([
-            'title'=>$request->title,
+            //'title'=>$request->title,
             'customer_id'=>$customer_id,
             'project_id'=>$request->project_id,
             'request_type'=>$request->request_type,
             'description'=>$request->description,
             'status'=>$status,
-            'priority'=>$priority,
+            'dead_line_date'=>$dead_line_date,
+           // 'priority'=>$priority,
             'sent'=>$request->sent,
             'office_id'=>$request->office_id,
             'created_at'=>Carbon::now()
@@ -916,11 +972,17 @@ class ProjectController extends Controller
     {
         try{
             $visitRequest=VisitRequest::find($request->id);
-            $visitRequest->title=$request->title;
+           // $visitRequest->title=$request->title;
             $visitRequest->customer_id=$request->customer_id;
             $visitRequest->project_id=$request->project_id;
             $visitRequest->request_type=$request->request_type;
             $visitRequest->description=$request->description;
+
+
+            $visitRequest->note=$request->note;
+            $visitRequest->dead_line_date=$request->dead_line_date;
+            $visitRequest->enginnering_type=\json_encode($request->enginnering_type);
+            
             if(isset($request->priority)){
                 $visitRequest->priority=$request->priority;
             }
@@ -928,7 +990,8 @@ class ProjectController extends Controller
                 $visitRequest->status=$request->status;
             }
             $visitRequest->save();
-            $output = $this->respondSuccess(__('messages.updated_successfully'));
+            $this->respondSuccess(__('messages.updated_successfully'));
+           // $output = 
         }catch (Exception $e) {
             $output = $this->respondWentWrong($e);
         }
@@ -1031,6 +1094,7 @@ class ProjectController extends Controller
     if (!request()->user()->can('project.create')) {
         abort(403, 'Unauthorized action.');
     }
+
     $project = $request['project'];
     $location = $request['location'];
     $customers = $request['customers'];
@@ -1039,7 +1103,6 @@ class ProjectController extends Controller
         //TODO: optimise the process.
         DB::beginTransaction();
 
-       
         //$location['created_by'] = $request->user()->id;
        $location_data= Location::create($location);
 
@@ -1109,7 +1172,7 @@ class ProjectController extends Controller
         abort(403, 'Unauthorized action.');
     }
 
-
+  
 
     $project_data = $request['project'];
     $location_data = $request['location'];
@@ -1189,7 +1252,7 @@ class ProjectController extends Controller
 
             DB::commit();
 
-         //   $this->_saveProjectCreatedNotifications($project_members, $project->id);
+        $this->_saveProjectCreatedNotifications($project_members, $project->id);
 
 
         $output = $this->respondSuccess(__('messages.saved_successfully'));
@@ -1201,34 +1264,34 @@ class ProjectController extends Controller
     }
     return $output;
    }
+  
    public function getLocationStatus(Request $request)
    {
        $location_status = [
            [
-               'key' => 'not_started',
-               'value' => __('messages.not_started')
+               'key' => 'status1',
+               'value' => __('data.status1')
            ],
            [
-               'key' => 'in_progress',
-               'value' => __('messages.in_progress')
+               'key' => 'status2',
+               'value' => __('data.status2')
            ],
            [
-               'key' => 'on_hold',
-               'value' => __('messages.on_hold')
+               'key' => 'status3',
+               'value' => __('data.status3')
            ],
            [
-               'key' => 'cancelled',
-               'value' => __('messages.cancelled')
+               'key' => 'status4',
+               'value' => __('data.status4')
            ],
            [
-               'key' => 'completed',
-               'value' => __('messages.completed')
+               'key' => 'status5',
+               'value' => __('data.status5')
            ],
        ];
        return  $location_status;
 
    }
-
 
    public function  getProject ($id){
     $project=Project::find($id);

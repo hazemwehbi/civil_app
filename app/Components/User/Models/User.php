@@ -198,9 +198,35 @@ class User extends Authenticatable implements HasMedia
         if ($append_all) {
             $users = array_merge([['id' => 0, 'name' => __('messages.all')]], $users);
         }
-        
         return $users;
     }
+
+
+    public static function getUsersMemberForDropDown($append_all = false)
+    {
+        $user=Auth::user();
+        if ($user->hasRole('superadmin')){
+            $users = User::where('customer_id', null)
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get()
+            ->toArray();
+        }
+        else{
+            $users=User::
+            where(function ($query) {
+                $query->where('parent_id',Auth::id());
+                $query->orWhere('id', Auth::id());
+            })->select('id', 'name')
+            ->orderBy('name')
+            ->get()->toArray();
+        }
+        if ($append_all) {
+            $users = array_merge([['id' => 0, 'name' => __('messages.all')]], $users);
+        }
+        return $users;
+    }
+
 
     public static function getRolesForEmployee()
     {
@@ -221,6 +247,23 @@ class User extends Authenticatable implements HasMedia
         return $roles;
     }
 
+    public static function getRolesForPermission()
+    {
+      
+        
+     
+        //where('type','!=', $userrole->type)
+       
+        $roles = Role:: where(function ($query) {
+            $roles_ids = Auth::user()->roles->pluck('id');
+            $query->where('is_primary',1);
+            $query->whereNotIn('id', $roles_ids);
+        })->select('id', 'name')
+                      ->get()
+                        ->toArray();
+                    
+        return $roles;
+    }
     /**
      * retrieve gender for dropdown.
      *
@@ -431,4 +474,24 @@ class User extends Authenticatable implements HasMedia
           
         //   return $users;
       }
+
+
+
+          /**
+     * Get the leaves for the employee.
+     */
+    public function documents()
+    {
+        return $this->hasMany('App\Document');
+    }
+
+
+
+        /**
+     * Get the leaves for the employee.
+     */
+    public function requestRoles()
+    {
+        return $this->hasMany('App\RequestRole');
+    }
 }

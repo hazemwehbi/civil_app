@@ -20,11 +20,53 @@
             >
                 <div v-for="(notification, index) in notifications" :key="index">
                     <!-- project notification -->
+
                     <v-list-tile
                         v-if="
                             notification.type &&
-                                notification.type ==
-                                    'App\\Notifications\\ProjectCreatedNotification'
+                            notification.type == 'App\\Notifications\\AskPermissionNotification'
+                        "
+                        @click="
+                            $router.push({
+                                name: 'requests_role.list',
+                              //  params: { id: notification.project.id },
+                            })
+                        "
+                        :style="notificationBackgroundColor(notification.read_at)"
+                        avatar
+                    >
+                        <v-list-tile-avatar>
+                            <avatar
+                                :members="convertObjectToArray(notification.user_admin.name)"
+                                :tooltip="true"
+                            >
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.user_admin.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                    trans('data.ask_permission_notification_text', {
+                                        user_name: notification.user.name,
+                                        permission_name: notification.data['permission_name'],
+                                    })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <v-list-tile
+                        v-if="
+                            notification.type &&
+                            notification.type == 'App\\Notifications\\ProjectCreatedNotification'
                         "
                         @click="
                             $router.push({
@@ -67,7 +109,7 @@
                         @click="view(notification.task)"
                         v-if="
                             notification.type &&
-                                notification.type == 'App\\Notifications\\TaskCreatedNotification'
+                            notification.type == 'App\\Notifications\\TaskCreatedNotification'
                         "
                         :style="notificationBackgroundColor(notification.read_at)"
                         avatar
@@ -107,7 +149,7 @@
                     <v-list-tile
                         v-if="
                             notification.type &&
-                                notification.type == 'App\\Notifications\\LeaveApplied'
+                            notification.type == 'App\\Notifications\\LeaveApplied'
                         "
                         :style="notificationBackgroundColor(notification.read_at)"
                         avatar
@@ -145,7 +187,7 @@
                     <v-list-tile
                         v-if="
                             notification.type &&
-                                notification.type == 'App\\Notifications\\LeaveResponded'
+                            notification.type == 'App\\Notifications\\LeaveResponded'
                         "
                         :style="notificationBackgroundColor(notification.read_at)"
                         avatar
@@ -183,7 +225,7 @@
                     <v-list-tile
                         v-if="
                             notification.type &&
-                                notification.type == 'App\\Notifications\\SendReminderNotification'
+                            notification.type == 'App\\Notifications\\SendReminderNotification'
                         "
                         :style="notificationBackgroundColor(notification.read_at)"
                         avatar
@@ -226,7 +268,7 @@
                     <v-list-tile
                         v-if="
                             notification.type &&
-                                notification.type == 'App\\Notifications\\TicketCreated'
+                            notification.type == 'App\\Notifications\\TicketCreated'
                         "
                         :style="notificationBackgroundColor(notification.read_at)"
                         avatar
@@ -323,7 +365,7 @@ export default {
             loading: false,
         };
     },
-    mounted: function() {
+    mounted: function () {
         const self = this;
         self.url = '/notifications-mark-as-read';
         self.getNotificationsFromApi();
@@ -336,10 +378,10 @@ export default {
             const self = this;
             axios
                 .get('/notifications')
-                .then(function(response) {
+                .then(function (response) {
                     self.notifications_count = response.data;
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log(error);
                 });
         },
@@ -354,13 +396,13 @@ export default {
 
             axios
                 .get(self.url)
-                .then(function(response) {
+                .then(function (response) {
                     self.loading = false;
                     self.notifications = _.concat(self.notifications, response.data.data);
                     self.url = _.get(response, 'data.next_page_url', null);
                     self.getNotificationsFromApi();
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log(error);
                 });
         },

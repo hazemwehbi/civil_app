@@ -572,6 +572,82 @@ class CommonUtil
     }
 
 
-    
+    public function getVisitRequestStatus($append_all = false)
+    {
+        $statuses = [
+                        [
+                            'key' => 'new',
+                            'value' => __('data.new')
+                        ],
+                        [
+                            'key' => 'pending',
+                            'value' => __('data.pending')
+                        ],
+                        [
+                            'key' => 'sent',
+                            'value' => __('data.sent')
+                        ],
+                        [
+                            'key' => 'accepted',
+                            'value' => __('data.accepted')
+                        ],
+                        
+                    ];
+
+        
+        return $statuses;
+    }
+
+
+    public function getRequestsTypes($append_all = false)
+    {
+        $requestTypes = [
+            [
+                'key' => 'visit_request',
+                'value' => __('data.visit_request')
+            ],
+            [
+                'key' => 'design_request',
+                'value' => __('data.design_request')
+            ],
+            [
+                'key' => 'support_service_request',
+                'value' => __('data.support_service_request')
+            ],
+            [
+                'key' => 'contractor_request',
+                'value' => __('data.contractor_request')
+            ],
+            [
+                'key' => 'supervision_request',
+                'value' => __('data.supervision_request')
+            ],
+        ];
+        return  $requestTypes;
+
+    }
+
+
+
+    public function getEnginneringTypes($append_all = false)
+    {
+        $enginneringTypes = [
+            [
+                'key' => 'civil_enginnering',
+                'value' => __('data.civil_enginnering')
+            ],
+            [
+                'key' => 'it_enginnering',
+                'value' => __('data.it_enginnering')
+            ],
+            [
+                'key' => 'architectural_enginnering',
+                'value' => __('data.architectural_enginnering')
+            ],
+           
+        ];
+        return  $enginneringTypes;
+
+    }
 
 }

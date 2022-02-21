@@ -210,8 +210,8 @@ return [
 
 
       'municipality1'=>'بلدية1',
-      'municipality1'=>'بلدية2',
-      'municipality1'=>'بلدية3',
+      'municipality2'=>'بلدية2',
+      'municipality3'=>'بلدية3',
 
 
       'category1'=>'الفئة1',
@@ -228,6 +228,66 @@ return [
       'district2'=>'المنطقة2',
       'district3'=>'المنطقة3', 
       'locate_map'=>'حدد على الخريطة',
-      'register'=>'تسجيل'
+      'register'=>'تسجيل',
+
+      'send'=>'ارسال',
+
+      'dead_line_date'=>'تاريخ موعد الزيارة',
+
+      'description'=>'الوصف',
+
+      'back'=>'رجوع',
+      'draft'=>'حفظ كمسودة',
+
+      'normal'=>'عادي',
+      'not_normal'=>'ليس عاديا',
+
+      'note'=>'ملاحظة',
+
+      'location_status'=>'خالة الموقع',
+      'status1'=>'حالة 1',
+      'status2'=>'2 حالة',
+      'status3'=>'حالة 3',
+      'status4'=>'حالة 4',
+      'status5'=>'حالة 5',
+
+      'visit_datetime'=>'موعد الزيارة',
+
+      'ok'=>'موافق',
+      'cancel'=>'الغاء',
+      'close'=>'اغلاق',
+
+      
+      'civil_enginnering'=>'Civil Enginnering',
+      'it_enginnering'=>'It Enginnering',
+      'architectural_enginnering'=>'Architectural Enginnering',
+
+      'enginnering_type'=>'نوع المهندس',
+      'ask_permission_notification_text'=>' :user_name طلب صلاحية :permision_name',
+
+      'ask_for_permission'=>'طلب صلاحية',
+
+      'choose_permission'=>'اختر صلاحية',
+      'select_document'=>'اختر وثيقة',
+
+      'enginner'=>'المهندس',
+
+//request role
+      'requester'=>'الطالب',
+      'role_name'=>'اسم الدور',
+      "created_at" => "أنشئت في",
+      'save'=>'حفظ',
+      'request_role'=>'طلبات الدور',
+      'document'=>'الوثيقة'
+
+
+     
+
+
+
+
+
+
+      
 
 ];

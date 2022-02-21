@@ -80,6 +80,7 @@ return [
     "saved_successfully" => "حفظ بنجاح.",
     "something_went_wrong" => "هناك خطأ ما!",
     "updated_successfully" => "تم التحديث بنجاح.",
+    "accepted_successfully" => "تم التحديث بنجاح.",
     "deleted_successfully" => "حذف بنجاح.",
     "success" => "نجاح",
     "view_contact" => "عرض الاتصال",
@@ -343,6 +344,8 @@ return [
     "updated_at" => "تم التحديث في",
     "invoice_count" => "عدد الفواتير",
     'id' => 'المعرف',
+
+    'required'=>'    :name  مطلوب',
 
 
 

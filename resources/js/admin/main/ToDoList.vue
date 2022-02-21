@@ -1,5 +1,7 @@
 <template>
     <div class="component-wrap">
+        <AskPermissionModal ref="permissionref" />
+
         <v-container grid-list-md>
             <v-flex pt-3 pb-5>
                 <h1 style="color: #0000008a" class="text-md-center">
@@ -41,7 +43,7 @@
 
                             <!--add after edititng -->
                             <!-- @click="$router.push({name: 'visit_request_list'})" -->
-                            <v-flex xs12 sm12 md4 v-if="$can('tickets.view')" >
+                            <v-flex xs12 sm12 md4 v-if="$can('tickets.view')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"
@@ -93,9 +95,6 @@
                                 </v-flex>
                             </v-flex>
 
-
-
-
                             <v-flex xs12 sm12 md4>
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
@@ -144,16 +143,18 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md4  v-if="$can('report.view')"> 
+                            <v-flex xs12 sm12 md4 v-if="$can('report.view')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"
                                         open-delay="100"
                                         close-delay="100"
                                     >
-                                        <v-card class="not_working" :elevation="hover ? 16 : 2"
-                                         @click="$router.push({ name: 'reports_list' })"
-                                         >
+                                        <v-card
+                                            class="not_working"
+                                            :elevation="hover ? 16 : 2"
+                                            @click="$router.push({ name: 'reports_list' })"
+                                        >
                                             <v-card-text>
                                                 <div class="text-md-center mt-2">
                                                     <p
@@ -170,7 +171,7 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md4  v-if="$can('customer.create')" >
+                            <v-flex xs12 sm12 md4 v-if="$can('customer.create')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"
@@ -421,28 +422,37 @@
                                     </v-hover>
                                 </v-flex>
                             </v-flex> -->
-
-                            <!-- 
-                                    <v-flex xs12 sm12 md4>
-                                    <v-flex xs12 sm12 md12>
-                                        <v-hover  v-slot:default="{ hover }" open-delay="100" close-delay="100">
-                                            <v-card :elevation="hover ? 16 : 2" @click="$router.push({name: 'surveydecisions'})">
-                                                <v-card-text>
-                                                    <v-flex xs12 sm12 md12>
-                                                        <div class="text-md-center mt-2">
-                                                            <p  style="font-size:18px; color:#06706d;" >
-                                                                <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
-                                                                {{ trans('messages.profile') }}&nbsp;&nbsp;
-                                                                <v-icon :color="'#06706d'">settings</v-icon>
-                                                            </p>
-                                                        </div>    
-                                                    </v-flex>
-                                                </v-card-text>
-                                            </v-card>
-                                        </v-hover>
-                                    </v-flex>
+                            <v-flex xs12 sm12 md4 v-if="!$hasRole('superadmin')">
+                                <v-flex xs12 sm12 md12>
+                                    <v-hover
+                                        v-slot:default="{ hover }"
+                                        open-delay="100"
+                                        close-delay="100"
+                                    >
+                                        <v-card
+                                            @click="askforpermission()"
+                                            :elevation="hover ? 16 : 2"
+                                        >
+                                            <v-card-text>
+                                                <div class="text-md-center mt-2">
+                                                    <p
+                                                        x-large
+                                                        style="font-size: 18px; color: #06706d"
+                                                    >
+                                                        {{
+                                                            trans('data.ask_for_permission')
+                                                        }}&nbsp;&nbsp;
+                                                        <v-icon :color="'#06706d'">settings</v-icon>
+                                                    </p>
+                                                </div>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-hover>
                                 </v-flex>
-                                -->
+                            </v-flex>
+
+
+
                         </v-layout>
                     </v-container>
                 </v-card-text>
@@ -529,13 +539,24 @@
 } */
 </style>
 <script>
+import AskPermissionModal from './components/AskPermissionModal.vue';
 export default {
-    components: {},
+    components: {
+        AskPermissionModal: AskPermissionModal,
+    },
     data() {
-        return {};
+        return {
+        
+            loading: false,
+        };
     },
     created() {},
-    methods: {},
+    methods: {
+        askforpermission() {
+            const self = this;
+            this.$refs.permissionref.create();
+        },
+    },
 };
 </script>
  

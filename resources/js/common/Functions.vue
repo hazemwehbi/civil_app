@@ -9,6 +9,11 @@ export default {
             //     _.get(APP.USER_PERMISSIONS, permissionName, false)
             // );
         },
+
+       
+        $checklang(){
+            return APP.RTL;
+        },
         $hasRole(roleName) {
             return _.get(APP.USER_ROLES, roleName, false)
           //  return _.get(APP.USER_ROLES, 'superadmin', _.get(APP.USER_ROLES, roleName, false));

@@ -38,17 +38,19 @@ class DashboardController extends Controller
     {
         $user = request()->user();
         $project_ids = $this->CommonUtil->getAssignedProjectForEmployee($user->id);
-        $customer_id = request()->get('customer_id');
+        $customer_id = $user->id;//request()->get('customer_id');
 
         //projects stats
         $projects = new Project();
-        if (!$user->hasRole('superadmin')) {
-            $projects = $projects->orWhere('projects.lead_id', $user->id)
-                    ->orWhereIn('projects.id', $project_ids);
+       if (!$user->hasRole('superadmin')) {
+          //  $projects = $projects->orWhere('projects.lead_id', $user->id)
+            //        ->orWhereIn('projects.id', $project_ids);
+
+            if (!empty($customer_id)) {
+                $projects = $projects->where('customer_id', $customer_id);
+            }
         }
-        if (!empty($customer_id)) {
-            $projects = $projects->where('customer_id', $customer_id);
-        }
+
         $project_counts = $projects->select(
             DB::raw("COALESCE(SUM(IF(status != 'completed', 1, 0)), 0) as incompleted"),
             DB::raw('count(*) as total')

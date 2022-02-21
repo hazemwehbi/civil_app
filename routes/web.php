@@ -37,7 +37,7 @@ if (config('constants.enable_client_signup')) {
 // Employees & Superadmin
 Route::prefix('admin')
     ->namespace('Admin')
-  //  ->middleware(['auth', 'employee'])
+   ->middleware(['auth', 'employee'])
     ->name('admin')
     ->group(function () {
         // single page
@@ -89,6 +89,10 @@ Route::prefix('admin')
         Route::resource('lead-notes', 'LeadNoteController');
         Route::resource('reminders', 'ReminderController');
 
+        
+       //request roles
+       
+
      
         
     });
@@ -102,7 +106,16 @@ Route::middleware(['auth'])
 
         Route::resource('media', 'MediaController');
 
-        Route::post('visit-request', 'ProjectController@addVisitRequest');
+      //  Route::post('visit-request', 'RequestTypeController@store');
+        Route::resource('request', 'RequestTypeController');
+        Route::get('/get-enginnering-types', 'RequestTypeController@getEnginneringTypes');
+
+
+
+        //project 
+
+        
+
         Route::post('add-new-project', 'ProjectController@addNewProject');
         Route::get('get-offices', 'Admin\UserController@getOffices');
         Route::get('all-customers', 'ProjectController@getAllCustomer');
@@ -117,7 +130,10 @@ Route::middleware(['auth'])
 
 
         Route::get('projects/mark-favorite', 'ProjectController@markAsFavorite');
+
         Route::resource('projects', 'ProjectController');
+
+        
         Route::resource('project-notes', 'ProjectDocumentsAndNotesController');
 
         Route::get('project-tasks/mark-completed', 'ProjectTaskController@markAsCompleted');
@@ -138,7 +154,7 @@ Route::middleware(['auth'])
 
         Route::get('get-location-status', 'ProjectController@getLocationStatus');
 
-
+       
         Route::post('customer-info', 'Admin\CustomerController@getCutomerInfo');
         Route::post('project-info', 'ProjectController@getProjectInfo');
         Route::post('getProject-Data', 'ProjectController@getProjectData');
@@ -190,8 +206,25 @@ Route::middleware(['auth'])
         
         Route::resource('ticket-comments', 'TicketCommentController');
 
-        Route::get('get-current-user', 'Admin\UserController@getCurrentUser');
+        Route::get('get-current-user', 'CommonController@getCurrentUser');
+        Route::get('get-roles-permission', 'CommonController@getPermissionsforAsk');
+        Route::post('ask-for-permission', 'CommonController@askPermissionForUser');
+        Route::get('get-my-users', 'CommonController@getMyUsers');
+        Route::get('get-role', 'CommonController@getRole');
+       // Route::get('get-download/{path}', 'CommonController@getDownload');
+        Route::get('get-download/{path}','CommonController@getDownload');
         Route::get('get-location-info', 'ProjectController@getLocationInfo');
+
+        
+
+        
+        Route::resource('requests-role', 'RequestRoleController');
+        
+        //
+
+
+
+
         
         
     });
@@ -199,7 +232,7 @@ Route::middleware(['auth'])
 // Employees & Superadmin
 Route::prefix('client')
     ->namespace('Client')
-    //->middleware(['auth', 'client'])
+    ->middleware(['auth', 'client'])
     ->name('client')
     ->group(function () {
         // single page

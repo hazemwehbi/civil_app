@@ -111,50 +111,16 @@ export default {
             agency_id: null,
             users_id: [],
             loading: false,
-            isEdit:false,
+            isEdit: false,
         };
     },
-    mounted() {
-        if (this.$route.params.isEdit==true) {
-            this.isEdit=false;
-            this.$refs.customerInfo.fillEditData(
-                this.$route.params.project_info_edit.customer,
-                this.$route.params.project_info_edit.agency,
-                 this.isEdit
-            );
-            this.$refs.locationInfo.fillEditData(this.$route.params.project_info_edit.location,this.isEdit);
-            this.$refs.projectInfo.fillEditData(this.$route.params.project_info_edit, this.isEdit);
-        }
-        else if(this.$route.params.isEdit==false){
-            this.isEdit=true;
-            this.$refs.customerInfo.fillEditData(
-                this.$route.params.project_info_edit.customer,
-                this.$route.params.project_info_edit.agency,
-                 this.isEdit
-            );
-            this.$refs.locationInfo.fillEditData(this.$route.params.project_info_edit.location,this.isEdit);
-            this.$refs.projectInfo.fillEditData(this.$route.params.project_info_edit,this.isEdit);
-        }
-    },
+    mounted() {},
 
     created() {
         const self = this;
-        //isEdit
-        //  alert(JSON.stringify(self.$route.params.project_info_edit.customer))
-        // alert(JSON.stringify(self.$route.params.project_info_edit.location))
-        //  alert(JSON.stringify(self.$route.params.project_info_edit.agency_id))
-
-        //   self.customer_id=self.$route.params.project.customer_id;
-        // self.project_id=self.$route.params.project.project_id;
     },
     methods: {
-
-        goTo(step, can, data) {
-            //    alert(JSON.stringify(data))
-            //   if (can) {
-            //     this.e1 = step;
-            //   }
-        },
+        goTo(step, can, data) {},
         getCustomerData(data) {
             this.customers = data.customers;
             this.agency_id = data.agency_id;
@@ -179,11 +145,6 @@ export default {
         getProjectInfo() {
             this.$refs.projectInfo.nextStep();
         },
-        click() {
-            //  this.$refs.customerInfo.nextStep();
-            //  this.$refs.locationInfo.nextStep();
-            //  this.$refs.projectInfo.nextStep();
-        },
         store(val) {
             const self = this;
             let data = {
@@ -194,117 +155,27 @@ export default {
                 agency_id: self.agency_id,
             };
             this.loading = true;
-            if (!self.isEdit) {
-                axios
-                    .post('/add-new-project', data)
-                    .then(function (response) {
-                        self.loading = false;
-                        self.$store.commit('showSnackbar', {
-                            message: response.data.msg,
-                            color: response.data.success,
-                        });
-                        self.$router.push({ path: '/project' });
-                        if (response.data.success) {
-                            // self.loading=false;
-                            //   self.dialog = false;
-                            self.$eventBus.$emit('updateTicketsTable');
-
-                            //   self.goBack();
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
+            axios
+                .post('/add-new-project', data)
+                .then(function (response) {
+                    self.loading = false;
+                    self.$store.commit('showSnackbar', {
+                        message: response.data.msg,
+                        color: response.data.success,
                     });
-            } else {
-                console.log(self.project);
-                axios
-                    .post('/edit-new-project', data)
-                    .then(function (response) {
-                        self.loading = false;
-                        self.$store.commit('showSnackbar', {
-                            message: response.data.msg,
-                            color: response.data.success,
-                        });
-                       self.$router.push({ path: '/project' });
-                        if (response.data.success) {
-                            // self.loading=false;
-                            //   self.dialog = false;
-                            self.$eventBus.$emit('updateTicketsTable');
+                    self.$router.push({ path: '/project' });
+                    if (response.data.success) {
+                        // self.loading=false;
+                        //   self.dialog = false;
+                        self.$eventBus.$emit('updateTicketsTable');
 
-                            //   self.goBack();
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            }
-            //    console.log(data)
-            //     self.$validator.validateAll().then(result => {
-            //         if (result == true) {
-            //             self.loading = true;
-            //             axios
-            //                 .post('/visit-request', data)
-            //                 .then(function(response) {
-            //                     self.loading = false;
-            //                     self.$store.commit('showSnackbar', {
-            //                         message: response.data.msg,
-            //                         color: response.data.success,
-            //                     });
-
-            //                     if (response.data.success === true) {
-            //                       //   self.dialog = false;
-            //                         self.$eventBus.$emit('updateTicketsTable');
-            //                          self.goBack();
-            //                     }
-
-            //                 })
-            //                 .catch(function(error) {
-            //                     console.log(error);
-            //                 });
-            //         }
-            //     });
-            //   self.reset();
+                        //   self.goBack();
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
-        // store() {
-        //   alert(JSON.stringify(this.customer))
-        // const self = this;
-        // let data = {
-        //     name: self.project.name,
-        //     category_id: self.category_id,
-        //     customer_id: self.project.customer_id,
-        //     billing_type: self.project.billing_type,
-        //     total_rate: self.project.total_rate,
-        //     price_per_hours: self.project.price_per_hours,
-        //     estimated_hours: self.project.estimated_hours,
-        //     estimated_cost: self.project.estimated_cost,
-        //     status: self.project.status,
-        //     lead_id: self.project.lead_id,
-        //     description: self.project.description,
-        //     user_id: self.project.user_id,
-        //     start_date: self.start_date,
-        //     end_date: self.end_date,
-        // };
-        // self.$validator.validateAll().then(result => {
-        //     if (result == true) {
-        //         self.loading = true;
-        //         axios
-        //             .post('/projects', data)
-        //             .then(function(response) {
-        //                 self.loading = false;
-        //                 self.$store.commit('showSnackbar', {
-        //                     message: response.data.msg,
-        //                     color: response.data.success,
-        //                 });
-        //                 if (response.data.success === true) {
-        //                     self.$eventBus.$emit('updateProjectTable');
-        //                 }
-        //             })
-        //             .catch(function(error) {
-        //                 console.log(error);
-        //             });
-        //     }
-        // });
-        //},
     },
 };
 </script>

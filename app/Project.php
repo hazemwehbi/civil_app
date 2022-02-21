@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-
+use ProjectMember;
 class Project extends Model
 {
     use LogsActivity;
@@ -146,10 +146,10 @@ class Project extends Model
     {
         $projectTypes = [
                             ['key' => 'normal',
-                             'value' => __('messages.normal'),
+                             'value' => __('data.normal'),
                             ],
                             ['key' => 'not_normal',
-                             'value' => __('messages.not_normal'),
+                             'value' => __('data.not_normal'),
                             ],
                         ];
 
@@ -297,4 +297,6 @@ class Project extends Model
 
         return $building_using;
     }
+
+    
 }

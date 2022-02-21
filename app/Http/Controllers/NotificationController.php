@@ -108,15 +108,28 @@ class NotificationController extends Controller
         $user->notifications()
                 ->orderBy('created_at', 'desc')
                 ->simplePaginate()->markAsRead();
-
+         
         foreach ($notifications as $notification) {
             if ('App\Notifications\ProjectCreatedNotification' == $notification->type) {
                 $notification['project'] = Project::with('creator')
                             ->findOrFail($notification->data['project_id']);
-            } elseif ('App\Notifications\TaskCreatedNotification' == $notification->type) {
+            }
+            elseif ('App\Notifications\AskPermissionNotification' == $notification->type) {
+               // echo \json_encode($notification->data['permission_name']);
+                //die();
+               // $notification['permission_name']='jjuiu';
+                $notification['user'] = User::
+                                findOrFail($notification->data['user_id']);
+              
+                 $notification['user_admin'] = User::
+                                    findOrFail($notification->notifiable_id);
+                                    
+            } 
+             elseif ('App\Notifications\TaskCreatedNotification' == $notification->type) {
                 $notification['task'] = ProjectTask::with('taskCreator', 'project')
                                 ->findOrFail($notification->data['task_id']);
-            } elseif ('App\Notifications\LeaveApplied' == $notification->type) {
+            } 
+            elseif ('App\Notifications\LeaveApplied' == $notification->type) {
                 $notification['applicant'] = User::findOrFail($notification->data['user_id']);
                 $notification['leave'] = Leave::findOrFail($notification->data['leave_id']);
             } elseif ('App\Notifications\LeaveResponded' == $notification->type) {

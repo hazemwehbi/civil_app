@@ -376,6 +376,7 @@ export default {
         },
         loadUser(cb) {
             const self = this;
+          //  alert(self.propUserId)
             axios.get('/admin/users/' + self.propUserId + '/edit').then(function(response) {
                 let User = response.data.user;
                 self.form_fields = User;

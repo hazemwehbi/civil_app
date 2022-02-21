@@ -73,7 +73,7 @@
                                                                 </v-list-tile-title>
                                                             </v-list-tile>
                                                             <v-list-tile
-                                                                @click="edit(props.item)"
+                                                                @click="edit(props.item.id)"
                                                                 v-if="$can('project.edit')"
                                                             >
                                                                 <v-list-tile-title>
@@ -81,7 +81,7 @@
                                                                 </v-list-tile-title>
                                                             </v-list-tile>
                                                             <v-list-tile
-                                                                @click="view(props.item)"
+                                                                @click="view(props.item.id)"
                                                                 v-if="$can('project.list')"
                                                             >
                                                                 <v-list-tile-title>
@@ -390,22 +390,20 @@ export default {
                     console.log(error);
                 });
         },
-        edit(item) {
-            console.log(item);
+        edit(id) {
             const self = this;
             self.$router.push({
-                name: 'add-project',
-                params: { project_info_edit: item, isEdit: true },
+                name: 'edit-project',
+                params: { id: id },
             });
 
             // self.$refs.projectEdit.edit(id);
         },
-        view(item) {
-            console.log(item);
+        view(id) {
             const self = this;
             self.$router.push({
-                name: 'add-project',
-                params: { project_info_edit: item, isEdit: false },
+                name: 'view_project',
+                params: { id: id },
             });
 
             // self.$refs.projectEdit.edit(id);

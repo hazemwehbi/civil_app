@@ -214,8 +214,8 @@ return [
       'province3'=>'Province3',
 
       'municipality1'=>'Municipality1',
-      'municipality1'=>'Municipality1',
-      'municipality1'=>'Municipality1',
+      'municipality2'=>'Municipality2',
+      'municipality3'=>'Municipality3',
 
 
       'category1'=>'Category1',
@@ -233,7 +233,60 @@ return [
       'district3'=>'District3', 
 
       'locate_map'=>'Locate on The Map',
-      'register'=>'Register'
+      'register'=>'Register',
+      'dead_line_date'=>'Dead Line Date',
+
+
+      'send'=>'Send',
+      'description'=>'Description',
+
+       'back'=>'Back',
+       'draft'=>'Draft',
+
+       'normal'=>'Normal',
+       'not_normal'=>'Not Normal',
+
+       'note'=>'Note',
+
+
+       'location_status'=>'Location Status',
+
+       'status1'=>'status 1',
+       'status2'=>'status 2',
+       'status3'=>'status 3',
+       'status4'=>'status 4',
+       'status5'=>'status 5',
+       'visit_datetime'=>'visit date',
+       'ok'=>'Ok',
+       'cancel'=>'Cancel',
+       'close'=>'Close',
+
+
+
+       'civil_enginnering'=>'Civil Enginnering',
+       'it_enginnering'=>'It Enginnering',
+       'architectural_enginnering'=>'Architectural Enginnering',
+
+       'enginnering_type'=>'Enginnering Type',
+
+       'ask_permission_notification_text'=>' :user_name asked for :permission_name',
+       
+       'ask_for_permission'=>'Ask for Permission',
+       'choose_permission'=>'Choose Permission',
+       'select_document'=>'Select Document',
+      
+       'enginner'=>'Enginner',
+
+
+
+       //request role
+       'requester'=>'Requester',
+       'role_name'=>'Role Name',
+       'created_at' => 'Created At',
+       'save'=>'Save',
+       'request_role'=>'Request Role',
+       'document'=>'Document'
+      
       
 ];
 

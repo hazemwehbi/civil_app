@@ -127,11 +127,19 @@ const router = new Router({
                     component: require('../common/projects/components/List'),
                 },
                 {
-                    path: ':id/show',
-                    name: '.project-tasks.list',
-                    component: require('../common/projects/components/Show'),
+                    path: 'edit/:id',
+                    name: 'edit-project',
+                    component: require('../common/projects/components/Edit_Project'),
                     props: route => ({ propProjectId: route.params.id }),
                 },
+                {
+                    path: 'view/:id',
+                    name: 'view_project',
+                    component: require('../common/projects/components/view_project'),
+                    props: route => ({ propProjectId: route.params.id }),
+                },
+
+                
                 /*{
                     path: ':id/invoices/create',
                     name: 'invoices.create',
@@ -155,11 +163,16 @@ const router = new Router({
                     name: 'add-project',//AddProject
                     component: require('../common/projects/components/AddProject'),
                 },
-                {
-                    path: '/edit-project',
-                    name: 'edit-project',
-                    component: require('../common/projects/components/editPrjectRequest'),
-                },
+                // {
+                //     path: '/edit-project',
+                //     name: 'edit-project',
+                //     component: require('../common/projects/components/Edit_Project'),
+                // },
+                // {
+                //     path: '/edit-project',
+                //     name: 'edit-project',
+                //     component: require('../common/projects/components/editPrjectRequest'),
+                // },
                 {
                     path: '/finished-projects',
                     name: 'finished-projects',
@@ -341,12 +354,12 @@ const router = new Router({
                     name: 'tickets.list',
                     component: require('../common/tickets/List'),
                 },
-                {
-                    path: ':id/show',
-                    name: 'tickets.view',
-                    component: require('../common/tickets/View'),
-                    props: route => ({ propTicketId: route.params.id }),
-                },
+                // {
+                //     path: ':id/show',
+                //     name: 'tickets.view',
+                //     component: require('../common/tickets/View'),
+                //     props: route => ({ propTicketId: route.params.id }),
+                // },
             ],
         },
         {
@@ -385,10 +398,24 @@ const router = new Router({
             component: require('../common/tickets/Create'),
         },
         {
-            path: '/edit-visit-request',
+            path: '/edit-visit-request/:id',
             name: 'edit_visit_request_list',
             component: require('../common/tickets/editVisitRequest'),
+            props: route => ({ propRequestId: route.params.id }),
         },
+        {
+            path: '/view_visit_request_list/:id',
+            name: 'view_visit_request_list',
+            component: require('../common/tickets/view_visit_request'),
+            props: route => ({ propRequestId: route.params.id }),
+        },
+
+
+ 
+
+
+
+        
         {
             path: '/to-do-list',
             component: require('./main/ToDoList'),
@@ -413,8 +440,32 @@ const router = new Router({
             path: '/test',
             name: 'create_project',
             component: require('./main/components/superadmin/CreateProject'),
-        }
+        },
+
+
+
+        //request role
+
+
+        {
+            path: '/requests-role',
+            component: require('./requests_role/RequestsRole'),
+            children: [
+                {
+                    path: '/',
+                    name: 'requests_role.list',
+                    component: require('./requests_role/List'),
+                },
+                {
+                    path: 'view/:id',
+                    name: 'requests_role.view',
+                    component: require('./requests_role/View'),
+                }
+     
+            ],
+        },
     ],
+   // mode: "history",
 });
 
 router.beforeEach((to, from, next) => {

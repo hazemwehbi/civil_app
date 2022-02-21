@@ -125,7 +125,21 @@ Vue.use(formatters);
 Vue.mixin(functions);
 
 
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+//import DatetimePicker from 'vuetify-datetime-picker'
+// (Optional) import 'vuetify-datetime-picker/src/stylus/main.styl'
+ 
+//Vue.use(DatetimePicker)
+
+// import { Datetime } from 'vue-datetime'
+// // You need a specific loader for CSS files
+// import 'vue-datetime/dist/vue-datetime.css'
+ 
+// Vue.use(Datetime)
+
+
+//Simport DatetimePicker from '@goldenm/vuetify-datetime-picker'
+
+import { BootstrapVue, IconsPlugin ,BootstrapVueIcons } from 'bootstrap-vue'
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 
@@ -134,10 +148,17 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
-//print  
+Vue.use(BootstrapVueIcons)
+
+//print  S
 
 
+//import DatetimePicker from 'vuetify-datetime-picker'
+import DatetimePicker from 'vuetify-datetime-picker';
 
+// (Optional) import 'vuetify-datetime-picker/src/stylus/main.styl'
+ 
+Vue.use(DatetimePicker)
 import * as VueGoogleMaps from 'vue2-google-maps'
 Vue.use(VueGoogleMaps, {
     load: {
@@ -145,3 +166,7 @@ Vue.use(VueGoogleMaps, {
         libraries: 'places',
     }
 });
+
+
+// import DatetimePicker from 'vuetify-datetime-picker'
+// Vue.use(DatetimePicker)

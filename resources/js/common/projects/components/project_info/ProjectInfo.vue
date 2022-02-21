@@ -17,7 +17,7 @@
                                 <v-layout row wrap>
                                     <v-flex xs12 md6>
                                         <v-text-field
-                                           :readonly="isEdit"
+                                            :readonly="isEdit"
                                             v-model="project.name"
                                             :label="trans('messages.name')"
                                             v-validate="'required'"
@@ -52,7 +52,11 @@
                                     <v-flex xs12 sm12 md12>
                                         {{ trans('messages.description') }}
                                         <br />
-                                        <quill-editor :readonly="isEdit" v-model="project.description"> </quill-editor>
+                                        <quill-editor
+                                            :readonly="isEdit"
+                                            v-model="project.description"
+                                        >
+                                        </quill-editor>
                                     </v-flex>
                                 </v-layout>
                                 <v-layout wrap>
@@ -362,7 +366,7 @@ export default {
 
             customers: [],
             //    project: [],
-             isEdit:false,
+            isEdit: false,
             project: {
                 buiding_type: '',
                 role_number: 0,
@@ -384,8 +388,8 @@ export default {
                 description: null,
                 lead_id: null,
                 status: null,
-                id:'',
-                
+                id: '',
+
                 //category_id: null,
 
                 // name:'',
@@ -419,24 +423,24 @@ export default {
             self.category_id = [];
             (self.start_date = null),
                 (self.end_date = null),
-                axios
-                    .get('/projects/create')
-                    .then(function (response) {
-                        self.customers = response.data.customers;
-                        self.project_types = response.data.projectTypes;
+                axios.get('/projects/create').then(function (response) {
+                    if (!response.data.error_code) {
+                        self.customers = response.data.data.customers;
+                        self.project_types = response.data.data.projectTypes;
 
-                        self.status = response.data.status;
-                        self.users = response.data.users;
-                        self.categories = response.data.categories;
-                        self.buiding_types = response.data.buildingTypes;
-                        self.using_types = response.data.buildUsing;
-                        self.roles_number = response.data.roles_number;
-                         self.project.status=self.status.filter(c=>c.key=='not_started')[0]['key']
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                   
+                        self.status = response.data.data.status;
+                        self.users = response.data.data.users;
+                        self.categories = response.data.data.categories;
+                        self.buiding_types = response.data.data.buildingTypes;
+                        self.using_types = response.data.data.buildUsing;
+                        self.roles_number = response.data.data.roles_number;
+                        self.project.status = self.status.filter((c) => c.key == 'not_started')[0][
+                            'key'
+                        ];
+                    } else {
+                    
+                    }
+                });
         },
         getProjectData() {
             const self = this;
@@ -464,36 +468,33 @@ export default {
                 }
             });
         },
-        fillEditData(data,isEdit) {
+        fillEditData(data, isEdit) {
             const self = this;
-           self.project = data;
-           self.isEdit=isEdit;
-                // self.buiding_type=data.buiding_type;
-                // self.role_number=data.buiding_type;
-                // self.unit_number=data.buiding_type;
-                // self.build_rate=data.buiding_type;
-                // self.using=data.buiding_type;
-                // self.name=data.buiding_type;
-                // self.billing_type=data.buiding_type;
-                // self.total_rate=data.buiding_type;
-                // self.authorization_request_number=data.buiding_type;
-                // self.license_number=data.buiding_type;
-                // //  type_of_request:'',
-                // self.plot_number=data.buiding_type;
-                // self.cadastral_decision_number=data.buiding_type;
-                // self.start_date=data.buiding_type;
-                // self.end_date=data.buiding_type;
-                // // customer_id:null,
-                // self.users_id=data.buiding_type;
-                // self.description=data.buiding_type;
-                // self.lead_id=data.buiding_type;
-                // self.status=data.buiding_type;
-                // self.id=data.buiding_type;
-                
-             
- 
-            self.project.users_id=data.members.map(({ id }) => id);
-           
+            self.project = data;
+            self.isEdit = isEdit;
+            // self.buiding_type=data.buiding_type;
+            // self.role_number=data.buiding_type;
+            // self.unit_number=data.buiding_type;
+            // self.build_rate=data.buiding_type;
+            // self.using=data.buiding_type;
+            // self.name=data.buiding_type;
+            // self.billing_type=data.buiding_type;
+            // self.total_rate=data.buiding_type;
+            // self.authorization_request_number=data.buiding_type;
+            // self.license_number=data.buiding_type;
+            // //  type_of_request:'',
+            // self.plot_number=data.buiding_type;
+            // self.cadastral_decision_number=data.buiding_type;
+            // self.start_date=data.buiding_type;
+            // self.end_date=data.buiding_type;
+            // // customer_id:null,
+            // self.users_id=data.buiding_type;
+            // self.description=data.buiding_type;
+            // self.lead_id=data.buiding_type;
+            // self.status=data.buiding_type;
+            // self.id=data.buiding_type;
+
+            self.project.users_id = data.members.map(({ id }) => id);
         },
     },
 };
