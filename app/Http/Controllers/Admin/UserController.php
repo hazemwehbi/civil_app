@@ -11,6 +11,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\AskPermissionNotification;
 use Notification;
+use Illuminate\Support\Facades\Redirect;
 use App\Http\Responses\Response;
 class UserController extends AdminController
 {
@@ -106,7 +107,7 @@ class UserController extends AdminController
 
         $gender_types = User::getGenders();
 
-        $roles = User::getRolesForEmployee();
+        $roles = User::getRolesForCreateEmployee();
         
         return $this->respond(['gender_types' => $gender_types, 'roles' => $roles]);
     }
@@ -133,7 +134,13 @@ class UserController extends AdminController
             'email' => 'required|email|unique:users,email',
             'id_card_number' => 'required|unique:users',
             'password' => 'required',
-        ]);
+        ],
+        [
+            'required'  => 'The :attribute field is required.',
+            'unique'    =>':attribute is already used',
+            'email'    => ':attribute  not email'
+        ]
+    );
 
       
         if ($validate->fails()) {
@@ -145,6 +152,8 @@ class UserController extends AdminController
 
             $input = $request->only('name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number');
             $input['parent_id']=Auth::id(); 
+            if(isset($request->enginnering_type))
+               $input['enginnering_type']=json_encode($request->enginnering_type);
             /** @var User $user */
             $user = $this->userRepository->create($input);
 
@@ -152,6 +161,18 @@ class UserController extends AdminController
             $role_id = $request->input('role');
             if (!empty($role_id)) {
                 $role = Role::findOrFail($role_id);
+                // if($role->is_primary){
+                //     if(Auth::user()->hasRole('superadmin'))
+                //     {
+                //         $user->assignRole($role->name);
+                //     }
+                //     else{
+                //        return  $this->respondWentWrong(__('messages.can_not_static_role'));
+                //     }
+                // }
+                // else{
+                //     $user->assignRole($role->name);
+                // }
                 $user->assignRole($role->name);
             }
 
@@ -210,7 +231,8 @@ class UserController extends AdminController
             $data = ['user' => $user,
                     'gender_types' => $gender_types,
                     'roles' => $roles,
-                    'role_id' => $role_id
+                    'role_id' => $role_id,
+                    // 'is_edit_role'=>User::canEditRole(),
                 ];
 
             return $this->respond($data);
@@ -228,15 +250,23 @@ class UserController extends AdminController
      */
     public function update(Request $request, $id)
     {
-        if (!request()->user()->can('employee.edit')) {
-            abort(403, 'Unauthorized action.');
-        }
-
+      //  if (!request()->user()->can('employee.edit')) {
+        //    abort(403, 'Unauthorized action.');
+        //}
+        //$user=User::findOrFail($id);
         $validate = validator($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
-        ]);
+        ],
+        [
+            'required'  => 'The :attribute field is required.',
+           // 'unique'    =>':attribute is already used',
+            'email'    => ':attribute  not email'
+        ]
+       
+    );
 
+      
         if ($validate->fails()) {
             return $this->respondWithError($validate->errors()->first());
         }
@@ -276,13 +306,15 @@ class UserController extends AdminController
             if (!Helpers::hasValue($payload['password'])) {
                 unset($payload['password']);
             }
-
-            $updated = $this->userRepository->update($id, $payload);
-
+            
+            if(isset($request->enginnering_type))
+               $payload['enginnering_type']=json_encode($request->enginnering_type);
+            $updated =$this->userRepository->update($id,$payload);
             if (!$updated) {
                 return $this->respondWithError(__('messages.failed_to_update'));
             }
-
+            
+          
             /** @var User $user */
             $user = $this->userRepository->find($id);
             
@@ -290,15 +322,25 @@ class UserController extends AdminController
             $role_id = $request->input('role');
             if (!empty($role_id)) {
                 $role = Role::findOrFail($role_id);
-                $user->syncRoles([$role->name]);
+                if(!Auth::user()->hasRole('superadmin') && $role->is_primary  && !$user->hasRole($role->name)){
+                            return $this->respondWithError(__('data.not_permiision_to_assign_primary_role'));
+                }
+                else{
+                    $user->syncRoles([$role->name]);
+                }
+               
+                
             }
 
             if (!empty($request->input('send_email')) && !empty($payload['password'])) {
                 $this->_sendEmailToEmployee($payload, $user);
             }
+           
+           
             DB::commit();
 
             $output = $this->respondSuccess(__('messages.updated_successfully'));
+            
         } catch (Exception $e) {
             DB::rollBack();
             $output = $this->respondWentWrong($e);
@@ -406,13 +448,26 @@ class UserController extends AdminController
         
     }
 
-    public function getOffices()
+    public function getAllOfficeUsers()
     {
-        $users = User::getOfficeUsers();
+       // $users = User::getOfficeUsers();
+       $users = User::getAllOfficeUsers();
         return $users;
     }
 
+    public function getAllOffices()
+    {
+       // $users = User::getOfficeUsers();
+       $users = User::getAllOffices();
+        return $users;
+    }
 
+    public function getUsersOffice($id)
+    {
+       // $users = User::getOfficeUsers();
+       $users = User::getUsersOffice($id);
+        return $users;
+    }
 
     // public function askPermissionForUser(Request $request)
     // {

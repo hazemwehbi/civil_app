@@ -109,21 +109,30 @@ Route::middleware(['auth'])
       //  Route::post('visit-request', 'RequestTypeController@store');
         Route::resource('request', 'RequestTypeController');
         Route::get('/get-enginnering-types', 'RequestTypeController@getEnginneringTypes');
-
+        Route::post('accept-project', 'RequestTypeController@acceptProject');
+        Route::post('request-cancel', 'RequestTypeController@cancelRequest');
+        
 
 
         //project 
+        
+        Route::get('projects/{id}/members', 'ProjectController@getMembers');
+        Route::get('get-default-members/{id}', 'ProjectController@getDefaultMembers');
 
+
+       Route::get('get-customer-project/{id}', 'ProjectController@getCustomer');
+        Route::post('add-new-project', 'ProjectController@addNewProject');
+        Route::get('get-offices', 'Admin\UserController@getAllOffices');
+        Route::get('get-users-office/{id}', 'Admin\UserController@getUsersOffice');
+        Route::get('all-customers', 'ProjectController@getAllCustomer');
+        Route::get('get-office-empoloyees/{id}', 'Admin\UserController@getUsersOffice');
         
 
-        Route::post('add-new-project', 'ProjectController@addNewProject');
-        Route::get('get-offices', 'Admin\UserController@getOffices');
-        Route::get('all-customers', 'ProjectController@getAllCustomer');
         Route::get('projects-statistics', 'ProjectController@getStatistics');
         Route::get('projects-customer', 'ProjectController@getCustomerProject');
         Route::get('projects/{id}/customer', 'ProjectController@getCustomerId');
         Route::get('projects/projects-list', 'ProjectController@getProjectsList');
-        Route::get('projects/{id}/members', 'ProjectController@getMembers');
+        
         Route::get('projects/update-status', 'ProjectController@updateStatus');
 
         Route::get('get-project_info/{id}', 'ProjectController@getProjectInfo');
@@ -147,7 +156,7 @@ Route::middleware(['auth'])
         Route::get('activities/project', 'ActivityController@project');
 
         Route::resource('project-milestones', 'ProjectMilestonesController');   
-        Route::post('confirm-send', 'ProjectController@confirmSendRequest');
+        Route::post('confirm-send', 'RequestTypeController@confirmSendRequest');
         Route::post('send_request', 'ProjectController@projectRequest'); 
         Route::post('edit-visit-request', 'ProjectController@editVisitRequest');   
         Route::post('edit-project-request', 'ProjectController@editProjectRequest');
@@ -163,7 +172,7 @@ Route::middleware(['auth'])
         Route::get('get-agencies/{user_id}', 'ProjectController@getAgencies');
         Route::get('get-project/{id}', 'ProjectController@getProject');
 
-        Route::post('accept-project', 'ProjectController@acceptProject');
+      
         Route::get('sent-requests', 'ProjectController@getProjectRequest');
         Route::delete('delete-requests/{id}', 'ProjectController@deleteRequest');
         Route::get('get-priority','RequestTypeController@getPriority');
@@ -211,6 +220,10 @@ Route::middleware(['auth'])
         Route::post('ask-for-permission', 'CommonController@askPermissionForUser');
         Route::get('get-my-users', 'CommonController@getMyUsers');
         Route::get('get-role', 'CommonController@getRole');
+        Route::get('/check-role-primary/{id}', 'CommonController@checkRole');
+        
+        Route::get('check-current-user-type/{type}', 'CommonController@checkCurrentUserType');
+        
        // Route::get('get-download/{path}', 'CommonController@getDownload');
         Route::get('get-download/{path}','CommonController@getDownload');
         Route::get('get-location-info', 'ProjectController@getLocationInfo');
@@ -219,6 +232,10 @@ Route::middleware(['auth'])
 
         
         Route::resource('requests-role', 'RequestRoleController');
+        Route::get('accept-requests-role/{id}','RequestRoleController@acceptRequestRole');
+        Route::get('reject-requests-role/{id}','RequestRoleController@rejectRequestRole');
+   
+
         
         //
 

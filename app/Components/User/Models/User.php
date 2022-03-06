@@ -234,17 +234,64 @@ class User extends Authenticatable implements HasMedia
         //             ->get()
         //             ->toArray();
         $user=Auth::user();
-        if ($user->hasRole('Estate Owner'))
+        if ($user->hasRole('superadmin'))
          {
-            $roles = Role::where('type', 'ESTATE_OWNER')
-                      ->get()
-                        ->toArray();
+            $roles=Role::all();
          }
          else{
-            $roles=Role::all();
+
+            $roles = Role:: where(function ($query) {
+                $roles_ids = Auth::user()->roles->pluck('id');
+                //$query->where('is_primary',0);
+
+                $query->whereIn('id', $roles_ids);
+                $query->orWhere('created_by',Auth::id());
+            })->select('id', 'name')
+                          ->get()
+                            ->toArray();
+           // $roles =$user->roles->where('is_primary',0)->get()
+             //                ->toArray();
+            
          }
                     
         return $roles;
+    }
+    public static function getRolesForCreateEmployee()
+    {
+        // $roles = Role::where('type', 'employee')
+        //             ->get()
+        //             ->toArray();
+        $user=Auth::user();
+        if ($user->hasRole('superadmin'))
+         {
+            $roles=Role::all();
+         }
+         else{
+
+            $roles = Role:: where(function ($query) {
+                $roles_ids = Auth::user()->roles->pluck('id');
+                $query->where('is_primary',0);
+                $query->whereIn('id', $roles_ids);
+                $query->orWhere('created_by',Auth::id());
+            })->select('id', 'name')
+                          ->get()
+                            ->toArray();
+           // $roles =$user->roles->where('is_primary',0)->get()
+             //                ->toArray();
+            
+         }
+                    
+        return $roles;
+    }
+    public static function canEditRole(){
+        $user=Auth::user();
+        if ($user->hasRole('superadmin'))
+         {
+            return true;
+         }
+         else{
+           return  false;             
+         }
     }
 
     public static function getRolesForPermission()
@@ -447,35 +494,61 @@ class User extends Authenticatable implements HasMedia
       }
 
 
-
-      public static function getOfficeUsers($append_all = false)
+      public static function checkIfUSerHasType($type)
       {
-            //check if role not null
-        $role=Role::where('type', 'ENGINEERING_OFFICE')->first();
-        //$role=Role::where('type', $type)->first();
-         $users=[];
-         if($role != null){
-             $users= $role->users() ->select('id', 'name')
-             ->orderBy('name')
-             ->get()
-             ->toArray();
-         }
+         $role = User::whereHas(
+            'roles', function($q){
+                $q->where('type', 'ENGINEERING_OFFICE');//''
+            },
+            
+        )->where('id',Auth::id())->first();
+          return $role;
+      }
+      public static function getAllOfficeUsers($append_all = false)
+      {
+         $users = User::whereHas(
+            'roles', function($q){
+                $q->where('type', 'ENGINEERING_OFFICE');
+            }
+        )->select('id', 'name')
+        ->orderBy('name')
+        ->get()
+        ->toArray();
+          return $users;
+      }
+  
+
+      public static function getAllOffices($append_all = false)
+      {
+        $users = User::whereHas(
+            'roles', function($q){
+                $q->where('type', 'ENGINEERING_OFFICE');
+                $q->where('is_primary',1);
+            }
+        )
+      //  ->where('parent_id',1)->select('id', 'name')
+        ->orderBy('name')
+        ->get()
+        ->toArray();
    
           return $users;
-        //   $users = User::where('office_id', null)
-        //                   ->select('id', 'name')
-        //                   ->orderBy('name')
-        //                   ->get()
-        //                   ->toArray();
-  
-        //   if ($append_all) {
-        //       $users = array_merge([['id' => 0, 'name' => __('messages.all')]], $users);
-        //   }
-          
-        //   return $users;
       }
-
-
+      
+      public static function getUsersOffice($id)
+      {
+        $users = User::
+        // whereHas(
+        //     // 'roles', function($q){
+        //     //     $q->where('type', 'ENGINEERING_OFFICE');
+        //     // }
+        // )-
+        where('parent_id',$id)->select('id', 'name')
+        ->orderBy('name')
+        ->get()
+        ->toArray();
+   
+          return $users;
+      }
 
           /**
      * Get the leaves for the employee.
@@ -494,4 +567,19 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany('App\RequestRole');
     }
+
+
+    public function children()
+    {        
+        return $this->hasMany('App\Components\User\Models\User','parent_id');
+    }
+
+    public function childrenIds($parent_id){
+      return   User::where('parent_id', $parent_id)
+        ->pluck('id')
+        ->toArray();
+    }
+
+
+
 }

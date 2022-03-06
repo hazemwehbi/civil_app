@@ -24,7 +24,7 @@ class CommonController extends Controller
         try {
             DB::beginTransaction();
 
-            $pat_document='';
+            $path_document='';
             if ($request->hasFile('file')) {
                  $file=$request->file;
                  $extension = $file->getClientOriginalExtension();
@@ -117,7 +117,16 @@ class CommonController extends Controller
        return Role::find($role_id);
     }
     
+   public function checkRole($role_id) {
+    return Role::find($role_id)->is_primary;
+   }
 
 
-
+   public function checkCurrentUserType($type){
+           // $user=Auth::user();
+           $role=  User::checkIfUSerHasType($type);
+           $output=!Empty($role);;
+           return Response::respondSuccess($output);
+           //return 
+   }
 }

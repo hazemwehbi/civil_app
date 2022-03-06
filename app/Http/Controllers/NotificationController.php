@@ -114,16 +114,27 @@ class NotificationController extends Controller
                 $notification['project'] = Project::with('creator')
                             ->findOrFail($notification->data['project_id']);
             }
+
+            elseif ('App\Notifications\AcceptedRequestOfficeNotification' == $notification->type) {
+                $notification['office'] = User::findOrFail($notification->data['office_id']);
+            } 
+
+            elseif ('App\Notifications\RejectedRequestOfficeNotification' == $notification->type) {
+                $notification['office'] = User::findOrFail($notification->data['office_id']);
+            } 
+
+
             elseif ('App\Notifications\AskPermissionNotification' == $notification->type) {
-               // echo \json_encode($notification->data['permission_name']);
-                //die();
-               // $notification['permission_name']='jjuiu';
-                $notification['user'] = User::
-                                findOrFail($notification->data['user_id']);
-              
-                 $notification['user_admin'] = User::
-                                    findOrFail($notification->notifiable_id);
-                                    
+                $notification['user'] = User::findOrFail($notification->data['user_id']);
+                $notification['user_admin'] = User::findOrFail($notification->notifiable_id);
+            } 
+            elseif ('App\Notifications\AcceptedPermissionNotification' == $notification->type) {
+                $notification['user'] = User::findOrFail($notification->data['user_id']);
+                $notification['requester'] = User::findOrFail($notification->notifiable_id);
+            } 
+            elseif ('App\Notifications\RejectedPermissionNotification' == $notification->type) {
+                $notification['user'] = User::findOrFail($notification->data['user_id']);
+                $notification['requester'] = User::findOrFail($notification->notifiable_id);
             } 
              elseif ('App\Notifications\TaskCreatedNotification' == $notification->type) {
                 $notification['task'] = ProjectTask::with('taskCreator', 'project')

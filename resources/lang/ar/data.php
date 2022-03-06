@@ -42,7 +42,7 @@ return [
     'plot_number'=>'رقم قطعة الأرض',
     'beneficiary_data'=>'بيانات المستفيد',
     'cadastral_decision_number'=>'رقم القرار المساحي',
-    'all_rights_are_save'=>'جميع الحقوق محفوظة',
+    
     'Notice Date'=>'تاريخ الإشعار',
     'notice_message'=>'رسالة الإشعار',
     'notice_period_in_days'=>'فترة الإشعار بالأيام',
@@ -221,8 +221,8 @@ return [
 
 
       'neighborhood1'=>'المجاورة1',
-      'neighborhood1'=>'المجاورة2',
-      'neighborhood1'=>'3المجاورة ', 
+      'neighborhood2'=>'المجاورة2',
+      'neighborhood3'=>'3المجاورة ', 
 
       'district1'=>'المنطقة1',
       'district2'=>'المنطقة2',
@@ -263,7 +263,7 @@ return [
       'architectural_enginnering'=>'Architectural Enginnering',
 
       'enginnering_type'=>'نوع المهندس',
-      'ask_permission_notification_text'=>' :user_name طلب صلاحية :permision_name',
+      
 
       'ask_for_permission'=>'طلب صلاحية',
 
@@ -278,7 +278,60 @@ return [
       "created_at" => "أنشئت في",
       'save'=>'حفظ',
       'request_role'=>'طلبات الدور',
-      'document'=>'الوثيقة'
+      'document'=>'الوثيقة',
+
+
+    ///acount Info
+      'Log_in_to_the_engineering_offices_system'=>'الدخول لموقع المكتب الهندسي',
+      'email_or_id_card'=>'اليريد الالكتروني ا رقم الهوية',
+      'password'=>'كلمة المرور',
+      'login'=>'الدخول',
+      'forget_password'=>'نسيت كلمة المرور؟',
+      'all_rights_are_save'=>'جميع الحقوق محفوظة',
+      'register_to_the_engineering_offices_system'=>'التسجيل لموقع المكتب الهندسي',
+      'back_to_login'=>'العودة لصفحة الدخول',
+      'reset_password'=>'تهيئة كلمة المرور',
+      'send_password_reset_link'=>'ارسال رابط لتهيئة كلمة المرور',
+      'email_address'=>'البريد الالكتروني',
+      'remember_me'=>'تذكرني'      ,
+
+
+
+      
+       //bank detail
+
+       'bank_details'=>'تفاصيل البنك',
+       'account_holder_name'=>'اسم صاحب الحساب',
+       'account_no'=>'رقم الحساب',
+       'bank_name'=>'اسم البنك',
+       'bank_identifier_code'=>'الرمز التعريفي للبنك',
+       'tooltip_bank_identifier_code'=>'رمز معرف بنك تلميح الأدوات',
+       'branch_location'=>'موقع الفرع',
+       'tax_payer_id'=>'معرف دافع الضرائب',
+
+
+       //users
+
+       'all_users'=>'جميع المستخدمين',
+       'edit_employee'=>'تعديل مستخدم',
+       'add_employee'=>'اضافة مستخدم',
+       'new_employee'=>'مستخدم جديد',
+
+       'all_roles'=>'جميع الادوار',
+       'add_enginner'=>'اضافة مهندس',
+       'is_default'=>'افتراضي',
+
+       'select_gender'=>'اختر الجنس',
+       'male'=>'رجل',
+       'female'=>'انثى',
+       'delete_project'=>'مسح مشروع',
+       'can_not_static_role'=>'لايمكنك اسناد دور اساسي',
+       'not_permiision_to_assign_primary_role'=>'لايمكنك اسناد دور رئيسي لمستخدم، يجب ان يطلب الأذن',
+
+       'speciality'=>'الاختصاص'
+
+
+
 
 
      

@@ -738,7 +738,21 @@ class ProjectController extends Controller
         ->toArray();
        }
        else{
-        $requests =  VisitRequest::with('customer', 'project')->where([['request_type','visit_request'],['customer_id',$user->id]])->orWhere([['request_type','visit_request'],['office_id',$user->id]])->get()
+        $childrens=$user->childrenIds($user->id);
+        array_push($childrens,$user->id);
+
+        $offices=$user->childrenIds($user->id);
+        array_push($childrens,$user->id);
+       // array_push($childrens,$user->id);
+        //echo json_encode($[$user->id,$childrens]);
+        // if (!$user->hasRole('superadmin')) { 
+        // $projects=Project::select('id', 'name')
+        //                 ->whereIn('customer_id',[$user->id,$childrens])
+        //                 ->get()
+        //                 ->toArray();                                                      
+                        
+        $requests =  VisitRequest::with('customer', 'project')->where('request_type','visit_request')->whereIn('customer_id', $childrens)->
+        orWhereIn('office_id',$childrens)->WhereIn('status',['sent','rejected','accepted'])->get()
         ->toArray();
        }
 
@@ -777,73 +791,16 @@ class ProjectController extends Controller
         // }        
     }
 
-    public function deleteRequest($id)
-    {
-        try{
-            if(VisitRequest::find($id)){
-                VisitRequest::destroy($id);
-            }else{
-                ProjectRequest::destroy($id);
-            }
-            $output = $this->respondSuccess(__('messages.deleted_successfully'));
-        }catch(\Exception $e){
-            $output = $this->respondWentWrong($e);
-        }
-        return $output;
-    }
-    public function acceptProject(Request $request)
-    {
-        $lang = $request->header('lang');
-        if (!isset($lang)) {
-            $lang = "en";
-        }   
-          if ($lang == "ar") {
-            if (!isset($request->enginner)) {
-                return Response::respondError('حقل وقت المهندس مطلوب ');
-            }
-    
 
-            }
-            if ($lang == "en") {
-                if (!isset($request->enginner)) {
-                    return Response::respondError('The field "Enginner" is required ');
-                }
-             
-            }
-        try{
-          $request=VisitRequest::find($request->id);
-        $request->status="accepted";
-        if(isset($request->dead_line_date)){
-            $request->dead_line_date=$request->dead_line_date;
-        }
-        $request->save();
-        if(isset($request->enginner)){
-            DB::table('project_members')->insert([
-                //'title'=>$request->title,
-                'user_id'=>$request->enginner,
-                'project_id'=>$request->project_id,
-                //'created_at'=>Carbon::now()
-            ]);
-        }
-        return Response::respondSuccess(__('messages.updated_successfully'));
-       // return $this->respondSuccess();
-        }
-
-        catch (Exception $e) {
-            $output = $this->respondWentWrong($e);
-           return Response::respondError($e);
-         }
-         ;
-       
-    }
 
     public function getCustomerProject(Request $request)
     {
         $user=User::find(request()->user()->id);
-
+         $childrens=$user->childrenIds($user->id);
+        array_push($childrens,$user->id);
         if (!$user->hasRole('superadmin')) { 
         $projects=Project::select('id', 'name')
-                        ->where('customer_id',Auth::id())
+                        ->whereIn('customer_id',$childrens)
                         ->get()
                         ->toArray();
   //      $projectRequest=ProjectRequest::select('id', 'name')
@@ -896,7 +853,7 @@ class ProjectController extends Controller
             'customer_id'=>$customer_id,
             'project_id'=>$request->project_id,
             'request_type'=>$request->request_type,
-            'description'=>$request->description,
+            'description'=> 'test',//$request->description,
             'status'=>$status,
             'dead_line_date'=>$dead_line_date,
            // 'priority'=>$priority,
@@ -955,29 +912,19 @@ class ProjectController extends Controller
         return $customers;
     }
 
-    public function confirmSendRequest(Request $request)
-    {
-        if(isset($request->title)){
-            $visitRequest=VisitRequest::find($request->id);
-            $visitRequest->sent=1;
-            $visitRequest->save();
-        }else{
-            $projectRequest=ProjectRequest::find($request->id);
-            $projectRequest->sent=1;
-            $projectRequest->save();
-        }
-    }
+  
 
     public function editVisitRequest(Request $request)
     {
         try{
+            DB::beginTransaction();
             $visitRequest=VisitRequest::find($request->id);
            // $visitRequest->title=$request->title;
             $visitRequest->customer_id=$request->customer_id;
             $visitRequest->project_id=$request->project_id;
-            $visitRequest->request_type=$request->request_type;
-            $visitRequest->description=$request->description;
-
+           // $visitRequest->request_type=$request->request_type;
+            $visitRequest->description='test';//$request->description;
+            $visitRequest->office_id=$request->office_id;
 
             $visitRequest->note=$request->note;
             $visitRequest->dead_line_date=$request->dead_line_date;
@@ -990,13 +937,22 @@ class ProjectController extends Controller
                 $visitRequest->status=$request->status;
             }
             $visitRequest->save();
-            $this->respondSuccess(__('messages.updated_successfully'));
+
+            if(isset($request->office_id)){
+                DB::table('project_members')->insert([
+                    'user_id'=>$request->office_id,
+                    'project_id'=>$request->project_id,
+                    'is_default'=>  0,
+                ]);
+            }
+            DB::commit();
+          return   $this->respondSuccess(__('messages.updated_successfully'));
            // $output = 
         }catch (Exception $e) {
-            $output = $this->respondWentWrong($e);
+            return $this->respondWentWrong($e);
         }
 
-        return $output;
+       // return $output;
         
     }
 
@@ -1005,7 +961,7 @@ class ProjectController extends Controller
         try{
             $projectRequest=ProjectRequest::find($request->id);
             $projectRequest->name=$request->name;
-            $projectRequest->description=$request->description;
+          //  $projectRequest->description=$request->description;
             $projectRequest->start_date=$request->start_date;
             $projectRequest->end_date=$request->end_date;
 
@@ -1126,13 +1082,13 @@ class ProjectController extends Controller
        // $category = $project['category_id'];
        // $project->categories()->sync($category);
 
-        $roles = $this->CommonUtil->createRoleAndPermissionsForProject($project->id);
+    /*    $roles = $this->CommonUtil->createRoleAndPermissionsForProject($project->id);
 
         //Assign project member role
         $users = User::find($project_members);
         foreach ($users as $user) {
             $user->assignRole($roles['member']);
-        }
+        }*/
         //Assign lead role
         //  $project_lead = User::find($project_data['lead_id']);
         //   $project_lead->assignRole($roles['lead']);
@@ -1296,6 +1252,28 @@ class ProjectController extends Controller
    public function  getProject ($id){
     $project=Project::find($id);
     return $project;
+   }
+
+
+
+   public function getCustomer($id){
+      
+        $project=Project::find($id);
+        $user =User::find($project->customer_id);
+        return $user;
+   }
+
+
+   public function getDefaultMembers($id)
+   {
+       $project_members = ProjectMember::where('project_id',$id)->where('is_default', 1)->pluck('user_id')->toArray();
+    //     where(function ($query) {
+    //        $query->where('project_id',$id);
+    //        $query->orWhere('id_default', true);
+    //    })->pluck('user_id')->toArray();
+       
+                           
+       return $project_members;
    }
 
 }

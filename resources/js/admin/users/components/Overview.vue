@@ -215,6 +215,17 @@
                                 </v-tooltip>
                             </v-flex>
                         </v-layout>
+                        <v-layout>
+                            <v-flex xs12 sm12 md12>
+                                <v-tooltip top>
+                                    <template slot="activator">
+                                        <v-icon>accessibility_new</v-icon>
+                                        {{ enginnering_type }}
+                                    </template>
+                                    <span>{{ trans('data.speciality') }}</span>
+                                </v-tooltip>
+                            </v-flex>
+                        </v-layout>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn
@@ -244,22 +255,56 @@ export default {
         return {
             userId: null,
             employee_data: [],
+            enginnering_types: [],
+            enginnering_type: '',
         };
     },
     created() {
         const self = this;
         self.userId = self.$route.params.id;
+
+        self.getEnginneringTypes();
         self.show(self.userId);
     },
+    mounted() {},
     methods: {
+        getEnginneringTypes() {
+            const self = this;
+            axios
+                .get('/get-enginnering-types')
+                .then(function (response) {
+                    self.enginnering_types = response.data;
+                    //alert(JSON.stringify(self.employee_data))
+                    //alert(JSON.stringify(response.data.find(x=>x.key==self.employee_data.enginnering_type)))
+                    self.enginnering_type =
+                        response.data.find((x) => x.key == self.employee_data.enginnering_type) !=
+                        undefined
+                            ? response.data.find((x) => x.key == self.employee_data.enginnering_type)
+                                  .value
+                            : '';
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         show(user_id) {
             const self = this;
             axios
                 .get('/admin/users/' + user_id)
-                .then(function(response) {
+                .then(function (response) {
                     self.employee_data = response.data;
+                    // self.getEnginneringTypes();
+                    axios
+                        .get('/get-enginnering-types')
+                        .then(function (response) {
+                            self.enginnering_types = response.data;
+                            self.enginnering_type =response.data.find(x=>x.key==JSON.parse(self.employee_data.enginnering_type)).value;
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log(error);
                 });
         },

@@ -25,7 +25,6 @@ return [
     'requests_under_procedure'=>'Requests under procedure',
     'previous_requests'=>'Previous requests',
     'supervision_requests'=>'Supervision_requests',
-    'Log_in_to_the_engineering_offices_system'=>'Log In To The Engineering Offices System',
     'authorization_request_number'=>'Authorization request number',
     'license_number'=>'License number',
     'beneficiary_id_number'=>'Beneficiary ID number',
@@ -35,7 +34,7 @@ return [
     'plot_number'=>'Plot number',
     'beneficiary_data'=>'Beneficiary data',
     'cadastral_decision_number'=>'Cadastral decision number',
-    'all_rights_are_save'=>'All Rights Are Save',
+   
     'notification'=>'Notification',
     'notice_date'=>'Notice Date',
     'notice_message'=>'Notice message',
@@ -269,7 +268,7 @@ return [
 
        'enginnering_type'=>'Enginnering Type',
 
-       'ask_permission_notification_text'=>' :user_name asked for :permission_name',
+      
        
        'ask_for_permission'=>'Ask for Permission',
        'choose_permission'=>'Choose Permission',
@@ -285,7 +284,69 @@ return [
        'created_at' => 'Created At',
        'save'=>'Save',
        'request_role'=>'Request Role',
-       'document'=>'Document'
+       'document'=>'Document',
+
+       'back_to_login'=>'Back To Login',
+
+
+
+       ///info account///
+       'Log_in_to_the_engineering_offices_system'=>'Log In To The Engineering Offices System',
+       'email_or_id_card'=>'EMail Or Id Card',
+       'password'=>'Password',
+       'login'=>'Login',
+       'forget_password'=>'Forget Password',
+       'all_rights_are_save'=>'All Rights Are Save',
+       'register_to_the_engineering_offices_system'=>'Register To The Enginerring Office System',
+       'back_to_login'=>'Back To Login',
+       'reset_password'=>'Reset Password',
+       'send_password_reset_link'=>'Send Password Reset Link',
+       'email_address'=>'Email Address',
+       'remember_me'=>'Remmeber Me',
+
+
+
+       //bank detail
+
+       'bank_details'=>'Bank detail',
+       'account_holder_name'=>'Account Holder Name',
+       'account_no'=>'Account Number',
+       'bank_name'=>'Bank Name',
+       'bank_identifier_code'=>'Bank Identifier Code',
+       'tooltip_bank_identifier_code'=>'Tooltip Bank Identifier Code',
+       'branch_location'=>'Branch Location',
+       'tax_payer_id'=>'Tax PAyer Id',
+
+
+
+
+      //users
+
+      'all_users'=>'All Users',
+      'edit_employee'=>'Edit User',
+      'add_employee'=>'Add Users',
+      'new_employee'=>'New User',
+      
+
+      'all_roles'=>'All Roles',
+      'add_enginner'=>'Add Enginner',
+      'is_default'=>'Is Default',
+
+
+      'select_gender'=>'Select Gendre',
+      'male'=>'Male',
+      'female'=>'Female',
+      'delete_project'=>'Delete Project',
+       'can_not_static_role'=>'Can Not Assign Primary Role ',
+       'not_permiision_to_assign_primary_role'=>'You can not assign primary role to user, you have to ask permission',
+
+       'speciality'=>'speciality'
+
+        
+
+
+
+
       
       
 ];

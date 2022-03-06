@@ -82,6 +82,9 @@ return [
     'something_went_wrong' => 'Something went wrong!',
     'updated_successfully' => 'Updated successfully.',
     'deleted_successfully' => 'Deleted successfully.',
+    "rejected_successfully" => "Rejected successfully ",
+    "accepted_successfully" => "Accepted successfully",
+
     'success' => 'Success',
     'view_contact' => 'View Contact',
     'view_customer' => 'View Customer',
@@ -515,4 +518,14 @@ return [
     'printed_saved_successfully'=>'Printed and Saved Successfully',
 
     'required'=>' :name is required',
+
+    //notifications
+    'ask_permission_notification_text'=>' :user_name asked for :permission_name',
+    'accept_permission_notification_text'=>' :user_name  accept to give you role :permission_name',
+
+    'reject_permission_notification_text'=>' :user_name  reject to give you role  :permission_name',
+
+
+    'office_accept_notification_text'=>' :office  accept your request',
+
 ];

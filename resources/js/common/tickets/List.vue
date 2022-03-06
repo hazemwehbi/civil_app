@@ -2,7 +2,10 @@
 <!-- For customer -->
 <template>
     <v-container grid-list-md>
-        <AcceptEnginneringOfficeModal ref="acceptenginneringoffice"   @next="getAllProjectRequest($event)"/>
+        <AcceptEnginneringOfficeModal
+            ref="acceptenginneringoffice"
+            @next="getAllProjectRequest($event)"
+        />
         <v-card class="mt-3">
             <ticket-edit ref="ticketEdit"></ticket-edit>
             <v-card-title primary-title xs8 sm8>
@@ -41,7 +44,7 @@
                         <div style="display: inline-flex; padding-left: 30%" align="center">
                             <!-- $hasRole('employee') && -->
                             <!-- v-if="props.item.status!='accepted'" -->
-                            <v-btn
+                            <!-- <v-btn
                                 small
                                 fab
                                 dark
@@ -60,14 +63,14 @@
                             >
                                 <v-icon color="white">add</v-icon>
                                 <!-- {{trans('messages.add')}}-->
-                            </v-btn>
+                            <!--/v-btn> -->
                             <!-- v-if="!$can('superadmin')" -->
                             <v-btn small fab dark color="success" @click="viewRequest(props.item)">
-                                <v-icon color="white">view</v-icon>
+                                <v-icon color="white">info</v-icon>
                             </v-btn>
                             <v-btn
                                 v-if="
-                                    props.item.status != 'accepted' &&
+                                    props.item.status == 'new' &&
                                     props.item.customer_id == currentUser
                                 "
                                 small
@@ -85,13 +88,13 @@
                                     small
                                     fab
                                     v-if="
-                                        ($hasRole('superadmin') ||
-                                            $hasRole('Engineering Office')) &&
-                                        (props.item.status == 'pending' ||props.item.status == 'sent'||
-                                            props.item.status == 'new')
+                                        $hasRole('superadmin') ||
+                                        ($hasRole('Engineering Office') &&
+                                            props.item.office_id == currentUser &&
+                                            props.item.status == 'sent')
                                     "
                                     dark
-                                    @click="acceptProject(props.item.status, props.item.id)"
+                                    @click="acceptProject(props.item)"
                                 >
                                     <v-icon color="white">check</v-icon>
                                     <!--{{trans('data.accept')}}-->
@@ -103,7 +106,10 @@
                                     color="primary"
                                     small
                                     fab
-                                    v-if="props.item.sent == 0"
+                                    v-if="
+                                        props.item.sent == 0 &&
+                                        props.item.customer_id == currentUser
+                                    "
                                     dark
                                     @click="sendRequest(props.item)"
                                 >
@@ -113,13 +119,31 @@
                             </div>
                             <v-btn
                                 color="error"
-                                v-if="props.item.status != 'accepted'"
+                                v-if="
+                                    props.item.status == 'sent' &&
+                                    props.item.office_id == currentUser
+                                "
+                                small
+                                fab
+                                dark
+                                @click="rejectProject(props.item.id)"
+                            >
+                                <v-icon color="white">cancel</v-icon>
+                                <!-- {{trans('messages.cancel')}}-->
+                            </v-btn>
+                            <v-btn
+                                color="error"
+                                v-if="
+                                    (props.item.status == 'new' ||
+                                        props.item.status == 'rejected') &&
+                                    props.item.customer_id == currentUser
+                                "
                                 small
                                 fab
                                 dark
                                 @click="removeProject(props.item.id)"
                             >
-                                <v-icon color="white">cancel</v-icon>
+                                <v-icon color="white">delete</v-icon>
                                 <!-- {{trans('messages.cancel')}}-->
                             </v-btn>
                         </div>
@@ -132,7 +156,11 @@
                                 :color="getColor(props.item.status)"
                                 text-color="white"
                             >
-                                {{ props.item.status }}
+                                {{
+                                    props.item.office_id == currentUser
+                                        ? props.item.office_status
+                                        : props.item.status
+                                }}
                             </v-chip>
                         </div>
                     </td>
@@ -187,7 +215,7 @@ export default {
     components: {
         TicketEdit,
         StatusLabel,
-        AcceptEnginneringOfficeModal:AcceptEnginneringOfficeModal
+        AcceptEnginneringOfficeModal: AcceptEnginneringOfficeModal,
     },
     data() {
         const self = this;
@@ -295,6 +323,9 @@ export default {
             } else if (status == 'accepted') {
                 return 'green';
             }
+           else if (status == 'rejected') {
+                return 'orange';
+            }
         },
         getRequestTypes() {
             const self = this;
@@ -315,10 +346,14 @@ export default {
                 title: self.trans('messages.are_you_sure'),
                 okCb: () => {
                     axios
-                        .post('/confirm-send', request)
+                        .post('confirm-send', { request_id: request.id })
                         .then(function (response) {
                             self.projectRequest = [];
                             self.projects = [];
+                            self.$store.commit('showSnackbar', {
+                                message: response.data.data,
+                                color: 'green',
+                            });
                             self.getAllProjectRequest();
                         })
                         .catch(function (error) {
@@ -342,7 +377,7 @@ export default {
                 params: { id: request.id },
             });
         },
-  
+
         getType(visit) {
             const self = this;
             return self.request_types.find((o) => o.key == visit).value;
@@ -376,7 +411,38 @@ export default {
             const current_datetime = new Date(date);
             return current_datetime.toLocaleDateString('en-US');
         },
-        acceptProject(status, id) {
+        rejectProject(request_id) {
+            const self = this;
+            self.$store.commit('showDialog', {
+                type: 'confirm',
+                icon: 'warning',
+                title: self.trans('messages.are_you_sure'),
+                message: self.trans('messages.you_cant_restore_it'),
+                okCb: () => {
+                    axios
+                        .post('request-cancel', { request_id: request_id })
+                        .then(function (response) {
+                            if (!response.data.error_code) {
+                                self.$store.commit('showSnackbar', {
+                                    message: response.data.data,
+                                    color: 'green',
+                                });
+
+                                self.projectRequest = [];
+                                self.projects = [];
+                                self.getAllProjectRequest();
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                cancelCb: () => {
+                    console.log('CANCEL');
+                },
+            });
+        },
+        acceptProject(item) {
             const self = this;
             self.$store.commit('showDialog', {
                 type: 'confirm',
@@ -384,12 +450,13 @@ export default {
                 title: self.trans('messages.are_you_sure'),
                 message: self.trans('messages.are_you_sure'),
                 okCb: () => {
-                     self.$refs.acceptenginneringoffice.create();
+                    self.$refs.acceptenginneringoffice.create(item.project_id);
                     let data = {
-                        status: status,
-                        id: id,
+                        status: item.status,
+                        id: item.id,
+                        office_id: item.office_id,
                     };
-                       self.$refs.acceptenginneringoffice.fillData(data);
+                    self.$refs.acceptenginneringoffice.fillData(data);
                     // let info = {
                     //     status: status,
                     //     id: id,
@@ -419,7 +486,7 @@ export default {
                 message: self.trans('messages.you_cant_restore_it'),
                 okCb: () => {
                     axios
-                        .delete('/delete-requests/' + id)
+                        .delete('request/' + id)
                         .then(function (response) {
                             self.$store.commit('showSnackbar', {
                                 message: response.data.msg,
@@ -547,29 +614,24 @@ export default {
 
         getCurrentUser() {
             const self = this;
-            axios
-                .get('/get-current-user', {})
-                .then(function (response) {
-                    if(!response.data.error_code){
-                       self.currentUser = response.data.data.original.id;
-                    }
-                    else{
-                            self.$store.commit('hideLoader');
-                        self.$store.commit('showSnackbar', {
-                            message: response.data.error_description,
-                            color: 'red',
-                        });
-                    }
-                    
-                })
-                
+            axios.get('/get-current-user', {}).then(function (response) {
+                if (!response.data.error_code) {
+                    self.currentUser = response.data.data.original.id;
+                } else {
+                    self.$store.commit('hideLoader');
+                    self.$store.commit('showSnackbar', {
+                        message: response.data.error_description,
+                        color: 'red',
+                    });
+                }
+            });
         },
 
         viewProject(id) {
             const self = this;
             self.$router.push({
                 name: 'edit-project',
-                params: { id: id},
+                params: { id: id },
             });
         },
         /*    getFilters() {

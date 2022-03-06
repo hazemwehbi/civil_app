@@ -82,6 +82,8 @@ return [
     "updated_successfully" => "تم التحديث بنجاح.",
     "accepted_successfully" => "تم التحديث بنجاح.",
     "deleted_successfully" => "حذف بنجاح.",
+    "rejected_successfully" => "تم الرفض  بنجاح.",
+
     "success" => "نجاح",
     "view_contact" => "عرض الاتصال",
     "view_customer" => "عرض العملاء",
@@ -349,6 +351,10 @@ return [
 
 
 
+ 
+
+
+
 
 
 
@@ -504,6 +510,8 @@ return [
     'send_reminder_notification_template' => 'Send Reminder Template',
     'enable_client_signup' => 'Enable Client Registration',
     'register' => 'Register',
+
+
     'registered_successfully' => 'Registered successfully',
     'client_register' => 'Client Register',
     'login' => 'Login',
@@ -531,5 +539,17 @@ return [
     'invoice_paid_versus_expense' => 'Invoice Paid Vs Expenses',
     'invoice_paid' => 'Invoice Paid',
     'id' => 'Id',
-    'printed_saved_successfully'=>'تمت الطباعة والحفظ بنجاح'
+    'printed_saved_successfully'=>'تمت الطباعة والحفظ بنجاح',
+
+          //notifications
+    'ask_permission_notification_text'=>' :user_name طلب صلاحية :permission_name',
+    'accept_permission_notification_text'=>' :user_name  وافق  اعطاءئك صلاحية :permission_name',
+
+    'reject_permission_notification_text'=>' :user_name  رفض  اعطاءئك صلاحية :permission_name',
+     
+
+    'office_accept_notification_text'=>' :office  وافق عل طلبك',
+    
+
+
     ];

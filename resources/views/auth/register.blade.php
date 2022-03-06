@@ -1,5 +1,20 @@
 @extends('layouts.front')
+<style>
+    .style_rtl{
+        text-align: right;
+    }
+    .style_lrt{
+        text-align: left;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+}
 
+input[type=number] {
+  -moz-appearance: textfield;
+}
+    </style>
 @section('content')
 <div class="container">
     <div class="row">
@@ -18,7 +33,9 @@
                     <div class="card-title p-4">
                             <h5 style="color:white;">
                               <!-- //  {{ trans('data.') }} -->
-                                  Register Form
+                               
+
+                                  {{ trans('data.register_to_the_engineering_offices_system') }}
                             </h5>
                         </div>
                   <div style="padding:20px;">
@@ -160,9 +177,9 @@
                                     {{__('messages.gender')}}
                                 </label>
                                 <select class="form-control" id="gender" name="gender" >
-                                    <option selected> select Gendre</option>
-                                    <option value='male'> Male</option>
-                                    <option value='female'> Female</option>
+                                    <option selected>{{__('data.select_gender')}} </option>
+                                    <option value='male'> {{__('data.male')}} </option>
+                                    <option value='female'> {{__('data.female')}} </option>
                                     </select>
                             </div>
                     </div>
@@ -173,16 +190,19 @@
 
             <div class="col-md-12">
                 <div class="card card-signin my-5">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4 mx-auto">
-                            <button class="btn btn-lg btn-block text-uppercase" style="background-color:#06706d;color:white;" id="submit" type="submit">
-                            {{__('messages.register')}}
+                    <div class="card-body container">
+                            <div class="d-flex justify-content-center">
+                            <button class="btn btn-lg btn-block text-uppercase  mx-auto" style="background-color:#06706d;color:white;width:30%" id="submit" type="submit">
+                            {{__('data.register')}}
                             </button>
-                            </div>
+                            <
                         </div>
+                        <a class="btn btn-link d-block text-center " style="color:#06706d;" href="{{ route('login') }}">
+                         {{__('data.back_to_login')}}
+                        </a>
                     </div>
                 </div>
+
             </div>
 
         </form>
@@ -207,6 +227,22 @@
 }
 
 $(document).ready(function(){
+    if(document.documentElement.lang=="ar"){
+        $(".container").css("text-align", "right");
+        $('input[type=text]').addClass('style_rtl');
+        $('input[type=number]').addClass('style_rtl');
+        $('input[type=number]').addClass('style_rtl');
+        $('input[type=email]').addClass('style_rtl');
+        $('input[type=password]').addClass('style_rtl');
+    }
+    else{
+        $(".container").css("text-align", "left");
+        $('input[type=text]').addClass('style_ltr');
+        $('input[type=email]').addClass('style_ltr');
+        $('input[type=number]').addClass('style_ltr');
+        $('input[type=password]').addClass('style_rtl');
+    }
+
     if ($("#password").val() ==$("#confirm_password").val() )  {
         $("#submit").disabled = false;
     } else {

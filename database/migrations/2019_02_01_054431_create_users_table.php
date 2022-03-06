@@ -61,6 +61,8 @@ class CreateUsersTable extends Migration
                 ->references('id')->on('customers')
                 ->onDelete('cascade');
 
+            $table->json('enginnering_type')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });

@@ -29,7 +29,7 @@
                         @click="
                             $router.push({
                                 name: 'requests_role.list',
-                              //  params: { id: notification.project.id },
+                                //  params: { id: notification.project.id },
                             })
                         "
                         :style="notificationBackgroundColor(notification.read_at)"
@@ -54,7 +54,81 @@
                             </v-list-tile-title>
                             <v-list-tile-sub-title>
                                 {{
-                                    trans('data.ask_permission_notification_text', {
+                                    trans('messages.ask_permission_notification_text', {
+                                        user_name: notification.user.name,
+                                        permission_name: notification.data['permission_name'],
+                                    })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <v-list-tile
+                        v-if="
+                            notification.type &&
+                            notification.type ==
+                                'App\\Notifications\\AcceptedPermissionNotification'
+                        "
+                        :style="notificationBackgroundColor(notification.read_at)"
+                        avatar
+                    >
+                        <v-list-tile-avatar>
+                            <avatar
+                                :members="convertObjectToArray(notification.requester.name)"
+                                :tooltip="true"
+                            >
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.requester.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                    trans('messages.accept_permission_notification_text', {
+                                        user_name: notification.user.name,
+                                        permission_name: notification.data['permission_name'],
+                                    })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <v-list-tile
+                        v-if="
+                            notification.type &&
+                            notification.type ==
+                                'App\\Notifications\\RejectedPermissionNotification'
+                        "
+                        :style="notificationBackgroundColor(notification.read_at)"
+                        avatar
+                    >
+                        <v-list-tile-avatar>
+                            <avatar
+                                :members="convertObjectToArray(notification.requester.name)"
+                                :tooltip="true"
+                            >
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.requester.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                    trans('messages.reject_permission_notification_text', {
                                         user_name: notification.user.name,
                                         permission_name: notification.data['permission_name'],
                                     })
@@ -70,8 +144,9 @@
                         "
                         @click="
                             $router.push({
-                                name: 'projects.project-tasks.list',
-                                params: { id: notification.project.id },
+                                //name: 'projects.project-tasks.list',
+                                name: 'projects.list',
+                                //params: { id: notification.project.id },
                             })
                         "
                         :style="notificationBackgroundColor(notification.read_at)"
@@ -98,6 +173,51 @@
                                 {{
                                     trans('messages.project_notification_text', {
                                         project_name: notification.project.name,
+                                    })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+
+                    <!-- request engineering office -->
+                      
+                        <v-list-tile
+                        v-if="
+                            notification.type &&
+                            notification.type == 'App\\Notifications\\AcceptedRequestOfficeNotification'
+                        "
+                        @click="
+                            $router.push({
+                                //name: 'projects.project-tasks.list',
+                                name: 'visit_request_list',
+                                //params: { id: notification.project.id },
+                            })
+                        "
+                        :style="notificationBackgroundColor(notification.read_at)"
+                        avatar
+                    >
+                        <v-list-tile-avatar>
+                            <avatar
+                                :members="convertObjectToArray(notification.office.name)"
+                                :tooltip="true"
+                            >
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.office.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                    trans('messages.office_accept_notification_text', {
+                                        office: notification.office.name,
                                     })
                                 }}
                             </v-list-tile-sub-title>

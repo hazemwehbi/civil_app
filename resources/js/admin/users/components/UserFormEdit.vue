@@ -4,7 +4,7 @@
             <v-card-title>
                 <v-icon medium>person</v-icon>
                 <span class="headline">
-                    {{ trans('messages.edit_employee') }}
+                    {{ trans('data.edit_employee') }}
                 </span>
             </v-card-title>
             <v-divider></v-divider>
@@ -44,6 +44,26 @@
                                 :data-vv-as="trans('messages.password')"
                                 :error-messages="errors.collect('password')"
                             ></v-text-field>
+                        </v-flex>
+                         <v-flex xs12 sm12 md12 v-if="is_office">
+                            <v-autocomplete
+                                item-text="value"
+                                item-value="key"
+                                multiple
+                                :items="enginnering_types"
+                                v-model="enginnering_type"
+                                :label="trans('data.enginnering_type')"
+                                data-vv-name="enginnering_type"
+                                :data-vv-as="trans('data.enginnering_type')"
+                                :error-messages="errors.collect('enginnering_type')"
+                                required
+                            >
+                                <!-- <Popover
+                                    slot="append"
+                                    :helptext="trans('messages.project_member_tooltip')"
+                                >
+                                </Popover> -->
+                            </v-autocomplete>
                         </v-flex>
                         <!-- communication details -->
                         <v-flex xs12 sm12 md12>
@@ -128,7 +148,11 @@
                                         <div class="v-text-field__slot">
                                             <label
                                                 aria-hidden="true"
-                                                class="v-label v-label--active theme--light flat_picker_label"
+                                                class="
+                                                    v-label v-label--active
+                                                    theme--light
+                                                    flat_picker_label
+                                                "
                                             >
                                                 {{ trans('messages.date_of_birth') }}
                                             </label>
@@ -158,42 +182,40 @@
                         </v-flex>
                         <!-- bank details -->
                         <v-flex xs12 sm12 md12>
-                            <v-icon small>
-                                account_balance_wallet
-                            </v-icon>
+                            <v-icon small> account_balance_wallet </v-icon>
                             <span class="subheading">
-                                {{ trans('messages.bank_details') }}
+                                {{ trans('data.bank_details') }}
                             </span>
                             <v-divider class="mb-2 mt-1"></v-divider>
                         </v-flex>
                         <v-flex xs12 sm6 md4>
                             <v-text-field
                                 v-model="form_fields.account_holder_name"
-                                :label="trans('messages.account_holder_name')"
+                                :label="trans('data.account_holder_name')"
                             ></v-text-field>
                         </v-flex>
                         <v-flex xs12 sm6 md4>
                             <v-text-field
                                 type="number"
                                 v-model="form_fields.account_no"
-                                :label="trans('messages.account_no')"
+                                :label="trans('data.account_no')"
                             >
                             </v-text-field>
                         </v-flex>
                         <v-flex xs12 sm6 md4>
                             <v-text-field
                                 v-model="form_fields.bank_name"
-                                :label="trans('messages.bank_name')"
+                                :label="trans('data.bank_name')"
                             ></v-text-field>
                         </v-flex>
                         <v-flex xs12 sm6 md4>
                             <v-text-field
                                 v-model="form_fields.bank_identifier_code"
-                                :label="trans('messages.bank_identifier_code')"
+                                :label="trans('data.bank_identifier_code')"
                             >
                                 <Popover
                                     slot="append"
-                                    :helptext="trans('messages.tooltip_bank_identifier_code')"
+                                    :helptext="trans('data.tooltip_bank_identifier_code')"
                                 >
                                 </Popover>
                             </v-text-field>
@@ -201,13 +223,13 @@
                         <v-flex xs12 sm6 md4>
                             <v-text-field
                                 v-model="form_fields.branch_location"
-                                :label="trans('messages.branch_location')"
+                                :label="trans('data.branch_location')"
                             ></v-text-field>
                         </v-flex>
                         <v-flex xs12 sm6 md4>
                             <v-text-field
                                 v-model="form_fields.tax_payer_id"
-                                :label="trans('messages.tax_payer_id')"
+                                :label="trans('data.tax_payer_id')"
                             >
                                 <Popover
                                     slot="append"
@@ -252,24 +274,28 @@
                             >
                             </v-checkbox>
                         </v-flex>
-                             <v-flex xs12 sm3>
-                                <v-text-field
-                            v-model="id_card_number"
+                        <v-flex xs12 sm3>
+                            <v-text-field
+                                v-model="id_card_number"
                                 type="number"
-                            :label="trans('data.id_card_number')"
-                        ></v-text-field>
+                                :label="trans('data.id_card_number')"
+                            ></v-text-field>
                         </v-flex>
                     </v-layout>
                 </v-container>
             </v-card-text>
-              <v-layout justify-center>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn @click="save()" color="primary" dark>
-                    {{ trans('messages.update') }}
-                </v-btn>
-            </v-card-actions>
-             </v-layout>
+            <v-layout justify-center>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn @click="save()" color="primary" dark>
+                        {{ trans('messages.update') }}
+                    </v-btn>
+
+                    <v-btn style="color: #06706d" @click="$router.go(-1)">
+                        {{ trans('data.cancel') }}
+                    </v-btn>
+                </v-card-actions>
+            </v-layout>
         </v-card>
     </div>
 </template>
@@ -298,16 +324,32 @@ export default {
             password: '',
             active: '',
             roles: [],
-             id_card_number:'',
+            enginnering_types: [],
+            id_card_number: '',
             send_email: false,
+            is_edit_role: false,
+            enginnering_type: '',
+            is_office: false,
         };
     },
     mounted() {
         const self = this;
-
+        self.getEnginneringTypes();
+        self.checkCurrentUserType();
         this.loadUser(() => {});
     },
     methods: {
+        getEnginneringTypes() {
+            const self = this;
+            axios
+                .get('/get-enginnering-types')
+                .then(function (response) {
+                    self.enginnering_types = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         save() {
             const self = this;
 
@@ -336,15 +378,16 @@ export default {
                 bank_identifier_code: self.form_fields.bank_identifier_code,
                 branch_location: self.form_fields.branch_location,
                 tax_payer_id: self.form_fields.tax_payer_id,
-                 id_card_number: self.id_card_number,
+                id_card_number: self.id_card_number,
+                enginnering_type:self.enginnering_type,
             };
 
-            self.$validator.validateAll().then(result => {
+            self.$validator.validateAll().then((result) => {
                 if (result == true) {
                     self.$store.commit('showLoader');
                     axios
                         .put('/admin/users/' + self.propUserId, payload)
-                        .then(function(response) {
+                        .then(function (response) {
                             self.$store.commit('showSnackbar', {
                                 message: response.data.msg,
                                 color: response.data.success,
@@ -356,7 +399,7 @@ export default {
                                 self.goBack();
                             }
                         })
-                        .catch(function(error) {
+                        .catch(function (error) {
                             self.$store.commit('hideLoader');
 
                             if (error.response) {
@@ -376,19 +419,42 @@ export default {
         },
         loadUser(cb) {
             const self = this;
-          //  alert(self.propUserId)
-            axios.get('/admin/users/' + self.propUserId + '/edit').then(function(response) {
+            //  alert(self.propUserId)
+            axios.get('/admin/users/' + self.propUserId + '/edit').then(function (response) {
                 let User = response.data.user;
                 self.form_fields = User;
                 self.gender_types = response.data.gender_types;
                 self.birth_date = User.birth_date;
                 self.name = User.name;
                 self.email = User.email;
-                self.id_card_number=User.id_card_number;
+                self.id_card_number = User.id_card_number;
                 self.active = User.active !== null;
                 self.roles = response.data.roles;
                 self.form_fields.role_id = response.data.role_id;
+                self.checkRolePrimary(self.propUserId);
+                self.enginnering_type=JSON.parse(User.enginnering_type);
+                alert(JSON.parse(User.enginnering_type))
+                //   self.is_edit_role = response.data.is_edit_role;
             });
+        },
+        checkRolePrimary(id) {
+            const self = this;
+            //  alert(self.propUserId)
+            axios.get('/check-role-primary/' + id).then(function (response) {
+                // self.is_edit_role = response.data.is_edit_role==0 ? false : true;
+                //  alert(response.data==0 )
+                self.is_edit_role = response.data == 0 ? false : true;
+            });
+        },
+        checkCurrentUserType(type) {
+            const self = this;
+            axios
+                .get('/check-current-user-type/' + type)
+                .then(function (response) {
+                    //alert()
+                    self.is_office = response.data.data;
+                })
+                .catch(function (error) {});
         },
     },
 };

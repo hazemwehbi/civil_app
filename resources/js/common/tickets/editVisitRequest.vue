@@ -94,7 +94,7 @@
                        
                         <v-flex xs12 sm6 md6>
                             <v-datetime-picker
-                                :label="trans('visit_datetime')"
+                                :label="trans('data.visit_datetime')"
                                 :datetime="dead_line_date"
                                 v-model="dead_line_date"
                             >
@@ -140,7 +140,7 @@
                             </v-btn>
                         </v-flex> -->
 
-                    <v-layout row>
+                    <!-- <v-layout row>
                         <v-flex xs12 sm12 md12>
                             <v-textarea
                                 rows="4"
@@ -153,7 +153,7 @@
                                 required
                             ></v-textarea>
                         </v-flex>
-                    </v-layout>
+                    </v-layout> -->
 
                     <v-layout row wrap>
                         <!--    <v-flex xs12 sm6 md6 v-if="$hasRole('employee')">
@@ -324,7 +324,6 @@ export default {
         update() {
             const self = this;
             let data = {
-                id: self.id,
                 title: self.title,
                 request_type: self.request_type,
                 project_id: self.project_id,
@@ -340,8 +339,8 @@ export default {
             self.$validator.validateAll().then((result) => {
                 if (result == true) {
                     self.loading = true;
-                    axios
-                        .post('/edit-visit-request', data)
+                   axios
+                        .put('/request/' + self.id, data)
                         .then(function (response) {
                             self.loading = false;
                             self.$store.commit('showSnackbar', {
