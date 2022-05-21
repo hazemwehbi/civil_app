@@ -56,13 +56,16 @@ class CreateUsersTable extends Migration
                 ->references('id')->on('users')
                     ->onDelete('cascade');
 
-            $table->unsignedInteger('customer_id')->nullable();
-            $table->foreign('customer_id')
-                ->references('id')->on('customers')
-                ->onDelete('cascade');
-
+            // $table->unsignedInteger('customer_id')->nullable();
+            // $table->foreign('customer_id')
+            //     ->references('id')->on('customers')
+            //     ->onDelete('cascade');
+            //'support_service_office','contacting_company','goverment_agencies','site_management'
             $table->json('enginnering_type')->nullable();
 
+            $table->boolean('isActive')->default(0);
+
+           $table->enum('user_type_log', ['ESTATE_OWNER', 'ENGINEERING_OFFICE' ,'SUPPORT_SERVICES_OFFICE', 'CONTRACTING_COMPANY','GOVERNMENT_AGENCIES','SITE_MANAGENMENT'])->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

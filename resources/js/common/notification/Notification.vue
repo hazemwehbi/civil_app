@@ -11,35 +11,21 @@
                 </v-badge>
             </v-btn>
 
-            <v-list
-                three-line
-                dense
-                v-if="notifications.length"
-                style="max-height: 400px"
-                class="scroll-y"
-            >
+            <v-list three-line dense v-if="notifications.length > 0" style="max-height: 400px" class="scroll-y">
                 <div v-for="(notification, index) in notifications" :key="index">
                     <!-- project notification -->
 
-                    <v-list-tile
-                        v-if="
-                            notification.type &&
-                            notification.type == 'App\\Notifications\\AskPermissionNotification'
-                        "
-                        @click="
-                            $router.push({
-                                name: 'requests_role.list',
-                                //  params: { id: notification.project.id },
-                            })
-                        "
-                        :style="notificationBackgroundColor(notification.read_at)"
-                        avatar
-                    >
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type == 'App\\Notifications\\AskPermissionNotification'
+                    " @click="
+    $router.push({
+        name: 'requests_role.list',
+        //  params: { id: notification.project.id },
+    })
+" :style="notificationBackgroundColor(notification.read_at)" avatar>
                         <v-list-tile-avatar>
-                            <avatar
-                                :members="convertObjectToArray(notification.user_admin.name)"
-                                :tooltip="true"
-                            >
+                            <avatar :members="convertObjectToArray(notification.user_admin.name)" :tooltip="true">
                             </avatar>
                         </v-list-tile-avatar>
 
@@ -54,29 +40,22 @@
                             </v-list-tile-title>
                             <v-list-tile-sub-title>
                                 {{
-                                    trans('messages.ask_permission_notification_text', {
-                                        user_name: notification.user.name,
-                                        permission_name: notification.data['permission_name'],
-                                    })
+                                        trans('messages.ask_permission_notification_text', {
+                                            user_name: notification.user.name,
+                                            permission_name: notification.data['permission_name'],
+                                        })
                                 }}
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
                     </v-list-tile>
 
-                    <v-list-tile
-                        v-if="
-                            notification.type &&
-                            notification.type ==
-                                'App\\Notifications\\AcceptedPermissionNotification'
-                        "
-                        :style="notificationBackgroundColor(notification.read_at)"
-                        avatar
-                    >
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type ==
+                        'App\\Notifications\\AcceptedPermissionNotification'
+                    " :style="notificationBackgroundColor(notification.read_at)" avatar>
                         <v-list-tile-avatar>
-                            <avatar
-                                :members="convertObjectToArray(notification.requester.name)"
-                                :tooltip="true"
-                            >
+                            <avatar :members="convertObjectToArray(notification.requester.name)" :tooltip="true">
                             </avatar>
                         </v-list-tile-avatar>
 
@@ -91,29 +70,22 @@
                             </v-list-tile-title>
                             <v-list-tile-sub-title>
                                 {{
-                                    trans('messages.accept_permission_notification_text', {
-                                        user_name: notification.user.name,
-                                        permission_name: notification.data['permission_name'],
-                                    })
+                                        trans('messages.accept_permission_notification_text', {
+                                            user_name: notification.user.name,
+                                            permission_name: notification.data['permission_name'],
+                                        })
                                 }}
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
                     </v-list-tile>
 
-                    <v-list-tile
-                        v-if="
-                            notification.type &&
-                            notification.type ==
-                                'App\\Notifications\\RejectedPermissionNotification'
-                        "
-                        :style="notificationBackgroundColor(notification.read_at)"
-                        avatar
-                    >
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type ==
+                        'App\\Notifications\\RejectedPermissionNotification'
+                    " :style="notificationBackgroundColor(notification.read_at)" avatar>
                         <v-list-tile-avatar>
-                            <avatar
-                                :members="convertObjectToArray(notification.requester.name)"
-                                :tooltip="true"
-                            >
+                            <avatar :members="convertObjectToArray(notification.requester.name)" :tooltip="true">
                             </avatar>
                         </v-list-tile-avatar>
 
@@ -128,80 +100,32 @@
                             </v-list-tile-title>
                             <v-list-tile-sub-title>
                                 {{
-                                    trans('messages.reject_permission_notification_text', {
-                                        user_name: notification.user.name,
-                                        permission_name: notification.data['permission_name'],
-                                    })
+                                        trans('messages.reject_permission_notification_text', {
+                                            user_name: notification.user.name,
+                                            permission_name: notification.data['permission_name'],
+                                        })
                                 }}
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
                     </v-list-tile>
 
-                    <v-list-tile
-                        v-if="
-                            notification.type &&
-                            notification.type == 'App\\Notifications\\ProjectCreatedNotification'
-                        "
-                        @click="
-                            $router.push({
-                                //name: 'projects.project-tasks.list',
-                                name: 'projects.list',
-                                //params: { id: notification.project.id },
-                            })
-                        "
-                        :style="notificationBackgroundColor(notification.read_at)"
-                        avatar
-                    >
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type ==
+                        'App\\Notifications\\ProjectRequestCreatedNotification'
+                    " @click="
+    $router.push({
+        /*   $router.push({
+        //
+        name: 'view_visit_enginner_office_request_list',
+        params: { id: notification.data['request_id'] },
+    })*/
+        name: 'visit_request_enginner_office_list',
+        params: { id: notification.project.id },
+    })
+" :style="notificationBackgroundColor(notification.read_at)" avatar>
                         <v-list-tile-avatar>
-                            <avatar
-                                :members="convertObjectToArray(notification.project.creator)"
-                                :tooltip="true"
-                            >
-                            </avatar>
-                        </v-list-tile-avatar>
-
-                        <v-list-tile-content>
-                            <v-list-tile-title>
-                                <span class="text-uppercase font-weight-bold">
-                                    {{ notification.project.creator.name }}
-                                </span>
-                                <span class="pl-5">
-                                    {{ notification.created_at | formatDateTime }}
-                                </span>
-                            </v-list-tile-title>
-                            <v-list-tile-sub-title>
-                                {{
-                                    trans('messages.project_notification_text', {
-                                        project_name: notification.project.name,
-                                    })
-                                }}
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-
-
-                    <!-- request engineering office -->
-                      
-                        <v-list-tile
-                        v-if="
-                            notification.type &&
-                            notification.type == 'App\\Notifications\\AcceptedRequestOfficeNotification'
-                        "
-                        @click="
-                            $router.push({
-                                //name: 'projects.project-tasks.list',
-                                name: 'visit_request_list',
-                                //params: { id: notification.project.id },
-                            })
-                        "
-                        :style="notificationBackgroundColor(notification.read_at)"
-                        avatar
-                    >
-                        <v-list-tile-avatar>
-                            <avatar
-                                :members="convertObjectToArray(notification.office.name)"
-                                :tooltip="true"
-                            >
+                            <avatar :members="convertObjectToArray(notification.project.creator)" :tooltip="true">
                             </avatar>
                         </v-list-tile-avatar>
 
@@ -216,29 +140,159 @@
                             </v-list-tile-title>
                             <v-list-tile-sub-title>
                                 {{
-                                    trans('messages.office_accept_notification_text', {
-                                        office: notification.office.name,
-                                    })
+                                        trans('messages.project_request_notification_text', {
+                                            project_name: notification.project.name,
+                                        })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type == 'App\\Notifications\\ProjectCreatedNotification'
+                    " @click="
+    $router.push({
+        name: 'view_project',
+        params: { id: notification.project.id },
+    })
+" :style="notificationBackgroundColor(notification.read_at)" avatar>
+                        <v-list-tile-avatar>
+                            <avatar :members="convertObjectToArray(notification.project.creator)" :tooltip="true">
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.project.creator.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                        trans('messages.project_notification_text', {
+                                            project_name: notification.project.name,
+                                        })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type == 'App\\Notifications\\ProjectEditedNotification'
+                    " @click="
+    $router.push({
+        name: 'view_project',
+        params: { id: notification.project.id },
+    })
+" :style="notificationBackgroundColor(notification.read_at)" avatar>
+                        <v-list-tile-avatar>
+                            <avatar :members="convertObjectToArray(notification.project.creator)" :tooltip="true">
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.user.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                        trans('messages.project_edit_notification_text', {
+                                            project_name: notification.project.name,
+                                        })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <!-- request engineering office -->
+
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type ==
+                        'App\\Notifications\\AcceptedRequestOfficeNotification'
+                    " @click="
+    $router.push({
+        //name: 'projects.project-tasks.list',
+        name: 'visit_request_list',
+        //params: { id: notification.project.id },
+    })
+" :style="notificationBackgroundColor(notification.read_at)" avatar>
+                        <v-list-tile-avatar>
+                            <avatar :members="convertObjectToArray(notification.office.name)" :tooltip="true">
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.office.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                        trans('messages.office_accept_notification_text', {
+                                            office: notification.office.name,
+                                        })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type ==
+                        'App\\Notifications\\RejectedRequestOfficeNotification'
+                    " @click="
+    $router.push({
+        //name: 'projects.project-tasks.list',
+        name: 'visit_request_list',
+        //params: { id: notification.project.id },
+    })
+" :style="notificationBackgroundColor(notification.read_at)" avatar>
+                        <v-list-tile-avatar>
+                            <avatar :members="convertObjectToArray(notification.office.name)" :tooltip="true">
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.office.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                        trans('messages.office_reject_notification_text', {
+                                            office: notification.office.name,
+                                        })
                                 }}
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
                     </v-list-tile>
 
                     <!-- task notification -->
-                    <v-list-tile
-                        @click="view(notification.task)"
-                        v-if="
-                            notification.type &&
-                            notification.type == 'App\\Notifications\\TaskCreatedNotification'
-                        "
-                        :style="notificationBackgroundColor(notification.read_at)"
-                        avatar
-                    >
+                    <v-list-tile @click="view(notification.task)" v-if="
+                        notification.type &&
+                        notification.type == 'App\\Notifications\\TaskCreatedNotification'
+                    " :style="notificationBackgroundColor(notification.read_at)" avatar>
                         <v-list-tile-avatar>
-                            <avatar
-                                :members="convertObjectToArray(notification.task.task_creator)"
-                                :tooltip="true"
-                            >
+                            <avatar :members="convertObjectToArray(notification.task.task_creator)" :tooltip="true">
                             </avatar>
                         </v-list-tile-avatar>
 
@@ -253,9 +307,9 @@
                             </v-list-tile-title>
                             <v-list-tile-sub-title>
                                 {{
-                                    trans('messages.task_notification_text', {
-                                        task_subject: notification.task.subject,
-                                    })
+                                        trans('messages.task_notification_text', {
+                                            task_subject: notification.task.subject,
+                                        })
                                 }}
                             </v-list-tile-sub-title>
                             <v-list-tile-sub-title>
@@ -266,19 +320,12 @@
                     </v-list-tile>
 
                     <!-- leave notification (applied)-->
-                    <v-list-tile
-                        v-if="
-                            notification.type &&
-                            notification.type == 'App\\Notifications\\LeaveApplied'
-                        "
-                        :style="notificationBackgroundColor(notification.read_at)"
-                        avatar
-                    >
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type == 'App\\Notifications\\LeaveApplied'
+                    " :style="notificationBackgroundColor(notification.read_at)" avatar>
                         <v-list-tile-avatar>
-                            <avatar
-                                :members="convertObjectToArray(notification.applicant)"
-                                :tooltip="true"
-                            >
+                            <avatar :members="convertObjectToArray(notification.applicant)" :tooltip="true">
                             </avatar>
                         </v-list-tile-avatar>
 
@@ -304,19 +351,12 @@
                     </v-list-tile>
 
                     <!-- leave notification (responded)-->
-                    <v-list-tile
-                        v-if="
-                            notification.type &&
-                            notification.type == 'App\\Notifications\\LeaveResponded'
-                        "
-                        :style="notificationBackgroundColor(notification.read_at)"
-                        avatar
-                    >
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type == 'App\\Notifications\\LeaveResponded'
+                    " :style="notificationBackgroundColor(notification.read_at)" avatar>
                         <v-list-tile-avatar>
-                            <avatar
-                                :members="convertObjectToArray(notification.answered_by)"
-                                :tooltip="true"
-                            >
+                            <avatar :members="convertObjectToArray(notification.answered_by)" :tooltip="true">
                             </avatar>
                         </v-list-tile-avatar>
 
@@ -342,19 +382,12 @@
                     </v-list-tile>
 
                     <!-- reminder -->
-                    <v-list-tile
-                        v-if="
-                            notification.type &&
-                            notification.type == 'App\\Notifications\\SendReminderNotification'
-                        "
-                        :style="notificationBackgroundColor(notification.read_at)"
-                        avatar
-                    >
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type == 'App\\Notifications\\SendReminderNotification'
+                    " :style="notificationBackgroundColor(notification.read_at)" avatar>
                         <v-list-tile-avatar>
-                            <avatar
-                                :members="convertObjectToArray(notification.remind_to)"
-                                :tooltip="true"
-                            >
+                            <avatar :members="convertObjectToArray(notification.remind_to)" :tooltip="true">
                             </avatar>
                         </v-list-tile-avatar>
                         <v-list-tile-content>
@@ -372,8 +405,7 @@
                                 </span>
                             </v-list-tile-sub-title>
                             <v-list-tile-sub-title>
-                                <span class="text-capitalize"
-                                    >{{ notification.reminder.remind_for }}
+                                <span class="text-capitalize">{{ notification.reminder.remind_for }}
                                 </span>
                             </v-list-tile-sub-title>
                             <v-list-tile-sub-title>
@@ -385,25 +417,17 @@
                     </v-list-tile>
 
                     <!-- ticket created -->
-                    <v-list-tile
-                        v-if="
-                            notification.type &&
-                            notification.type == 'App\\Notifications\\TicketCreated'
-                        "
-                        :style="notificationBackgroundColor(notification.read_at)"
-                        avatar
-                        @click="
-                            $router.push({
-                                name: 'tickets.view',
-                                params: { id: notification.ticket.id },
-                            })
-                        "
-                    >
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type == 'App\\Notifications\\TicketCreated'
+                    " :style="notificationBackgroundColor(notification.read_at)" avatar @click="
+    $router.push({
+        name: 'tickets.view',
+        params: { id: notification.ticket.id },
+    })
+">
                         <v-list-tile-avatar>
-                            <avatar
-                                :members="convertObjectToArray(notification.created_by)"
-                                :tooltip="true"
-                            >
+                            <avatar :members="convertObjectToArray(notification.created_by)" :tooltip="true">
                             </avatar>
                         </v-list-tile-avatar>
                         <v-list-tile-content>
@@ -416,13 +440,11 @@
                                 </span>
                             </v-list-tile-title>
                             <v-list-tile-sub-title>
-                                <span
-                                    v-html="
-                                        trans('messages.created_ticket', {
-                                            ref_no: notification.ticket.reference_no,
-                                        })
-                                    "
-                                ></span>
+                                <span v-html="
+                                    trans('messages.created_ticket', {
+                                        ref_no: notification.ticket.reference_no,
+                                    })
+                                "></span>
                             </v-list-tile-sub-title>
                             <v-list-tile-sub-title>
                                 <span class="text-capitalize">
@@ -431,18 +453,334 @@
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
                     </v-list-tile>
+
+                    <!--design reuquest  !-->
+
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type == 'App\\Notifications\\ShowDesignRequestOffer'
+                    " @click="
+    $router.push({
+        name: 'show_design_request_price_estate_list',
+        params: { id: notification.data['design_enginner_id'] },
+    })
+" :style="notificationBackgroundColor(notification.read_at)" avatar>
+                        <v-list-tile-avatar>
+                            <avatar :members="convertObjectToArray(notification.project.creator)" :tooltip="true">
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.enginner.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                        trans('messages.design_request_offer_notification_text', {
+                                            stage: notification.stage.value,
+                                        })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <!------------------------------------Accepted design----------------------------------------------------!-->
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type ==
+                        'App\\Notifications\\AcceptDesignRequestByEstateOwner'
+                    " @click="
+    $router.push({
+        name: 'design_request_enginnering_office_list',
+        // params: { id: notification.data['design_enginner_id'] },
+    })
+" :style="notificationBackgroundColor(notification.read_at)" avatar>
+                        <v-list-tile-avatar>
+                            <avatar :members="convertObjectToArray(notification.estate)" :tooltip="true">
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.estate.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                        trans('messages.design_request_accept_notification_text', {
+                                            stage: notification.stage.value,
+                                        })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <!------------------------------------rejected design----------------------------------------------------!-->
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type ==
+                        'App\\Notifications\\RejectDesignRequestByEstateOwner'
+                    " @click="
+    $router.push({
+        name: 'design_request_enginnering_office_list',
+        // params: { id: notification.data['design_enginner_id'] },
+    })
+" :style="notificationBackgroundColor(notification.read_at)" avatar>
+                        <v-list-tile-avatar>
+                            <avatar :members="convertObjectToArray(notification.estate)" :tooltip="true">
+                            </avatar>
+                        </v-list-tile-avatar> >
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    <!-- {{ notification.estate.name }} -->
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                        trans('messages.design_request_reject_notification_text', {
+                                            stage: notification.stage.value,
+                                        })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <!------------------------------------senf design to employee design----------------------------------------------------!-->
+
+                    <v-list-tile v-if="
+                    notification.type &&
+                    notification.type == 'App\\Notifications\\DesignRequestSendedToEmployees'" @click="
+        $router.push({
+            name: 'design_request_enginnering_office_list',
+            // params: { id: notification.data['design_enginner_id'] },
+        })
+    " :style="notificationBackgroundColor(notification.read_at)" avatar>
+                        <v-list-tile-avatar>
+                            <avatar :members="convertObjectToArray(notification.office)" :tooltip="true">
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.office.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                        trans('messages.design_request_send_to_employee_notification_text', {
+                                            stage: notification.stage.value,
+                                        })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <!--------------------------------------------send support sevice------------------------------------>
+
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type ==
+                        'App\\Notifications\\AskSupportRequestOffer'
+                        " @click="
+                            $router.push({
+                                name:notification.data['link'] ,
+                                // params: { id: notification.data['design_enginner_id'] },
+                            })
+                        " :style="notificationBackgroundColor(notification.read_at)" avatar>
+                        <v-list-tile-avatar>
+                            <avatar :members="convertObjectToArray(notification.estate)" :tooltip="true">
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.estate.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                        trans('messages.ask_for_support_request_notification_text', {
+                                            /// stage: notification.stage.value,
+                                        })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+
+
+
+
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type ==
+                        'App\\Notifications\\AcceptSupportRequestByEstateOwner'
+                        " @click="
+                            $router.push({
+                                name: notification.data['link'],
+                               params: { id: notification.data['support_service_id'] },
+                            })
+                        " :style="notificationBackgroundColor(notification.read_at)" avatar>
+                        <v-list-tile-avatar>
+                            <avatar :members="convertObjectToArray(notification.estate)" :tooltip="true">
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.estate.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                        trans('messages.support_request_accepted_notification_text', {
+                                            /// stage: notification.stage.value,
+                                        })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+
+                    
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type ==
+                        'App\\Notifications\\RejectSupportRequestByEstateOwner'
+                        " @click="
+                            $router.push({
+                                name: notification.data['link'] ,
+                                 params: { id: notification.data['support_service_id'] },
+                            })
+                        " :style="notificationBackgroundColor(notification.read_at)" avatar>
+                        <v-list-tile-avatar>
+                            <avatar :members="convertObjectToArray(notification.estate)" :tooltip="true">
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.estate.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                        trans('messages.support_request_reject_notification_text', {
+                                            /// stage: notification.stage.value,
+                                        })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+
+
+
+                    <!----------------------------------------show offer support to owner-->
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type == 'App\\Notifications\\ShowSupportRequestOffer'
+                              " @click="
+                                $router.push({
+                                    name:  notification.data['link'] ,
+                                    params: { id: notification.data['support_user_id'] },
+                                })
+                            " :style="notificationBackgroundColor(notification.read_at)" avatar>
+                        <v-list-tile-avatar>
+                            <avatar :members="convertObjectToArray(notification.project.creator)" :tooltip="true">
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.supporter.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                        trans('messages.support_request_offer_notification_text')
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+
+
+
+
+
+                    <!------------------------------------senf design to office----------------------------------------------------!-->
+
+                    <v-list-tile v-if="
+                        notification.type &&
+                        notification.type ==
+                        'App\\Notifications\\AskDesignRequestOffer'
+                    " @click="
+    $router.push({
+        name: 'design_request_enginnering_office_list',
+        // params: { id: notification.data['design_enginner_id'] },
+    })
+" :style="notificationBackgroundColor(notification.read_at)" avatar>
+                        <v-list-tile-avatar>
+                            <avatar :members="convertObjectToArray(notification.estate)" :tooltip="true">
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.estate.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                        trans('messages.ask_for_design_request_enginnering_office_notification_text', {
+                                            /// stage: notification.stage.value,
+                                        })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
                     <v-divider v-if="index + 1 < notifications.length" :key="index"></v-divider>
                 </div>
                 <v-list-tile>
-                    <v-btn
-                        outline
-                        small
-                        color="info"
-                        dark
-                        block
-                        v-if="!_.isNull(url)"
-                        @click="markAsRead"
-                    >
+                    <v-btn outline small color="info" dark block v-if="!_.isNull(url)" @click="markAsRead">
                         {{ trans('messages.load_more') }}
                     </v-btn>
                 </v-list-tile>
@@ -455,10 +793,8 @@
                                 {{ trans('messages.loading') }}
                             </p>
 
-                            <p
-                                v-if="notifications.length == 0 && loading == false"
-                                class="text-md-center font-weight-medium"
-                            >
+                            <p v-if="notifications.length == 0 && loading == false"
+                                class="text-md-center font-weight-medium">
                                 {{ trans('messages.no_notification_found') }}
                             </p>
                         </v-list-tile-title>

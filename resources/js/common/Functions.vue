@@ -2,6 +2,7 @@
 export default {
     methods: {
         $can(permissionName) {
+            console.log(APP.USER_PERMISSIONS);
             return _.get(APP.USER_PERMISSIONS, permissionName, false);
             // return _.get(
             //     APP.USER_PERMISSIONS,
@@ -10,18 +11,26 @@ export default {
             // );
         },
 
-       
-        $checklang(){
+        $checklang() {
             return APP.RTL;
         },
+        checkType() {
+            return APP.USER_TYPE_LOG;
+        },
+        getCurrentUser() {
+            return APP.CURRENT_USER;
+        },
+        checkActive() {
+            return APP.CURRENT_USER.active !=null;
+        },
         $hasRole(roleName) {
-            return _.get(APP.USER_ROLES, roleName, false)
-          //  return _.get(APP.USER_ROLES, 'superadmin', _.get(APP.USER_ROLES, roleName, false));
+            return _.get(APP.USER_ROLES, roleName, false);
+            //  return _.get(APP.USER_ROLES, 'superadmin', _.get(APP.USER_ROLES, roleName, false));
         },
         trans(string, params = []) {
             var str = _.get(window.i18n, string);
 
-            _.forEach(params, function(value, key) {
+            _.forEach(params, function (value, key) {
                 str = _.replace(str, ':' + key, value);
             });
 
@@ -57,65 +66,43 @@ export default {
                 {
                     label: self.trans('messages.yesterday'),
                     range: [
-                        moment()
-                            .subtract(1, 'days')
-                            .format('YYYY-MM-DD'),
-                        moment()
-                            .subtract(1, 'days')
-                            .format('YYYY-MM-DD'),
+                        moment().subtract(1, 'days').format('YYYY-MM-DD'),
+                        moment().subtract(1, 'days').format('YYYY-MM-DD'),
                     ],
                 },
                 {
                     label: self.trans('messages.last_7_days'),
                     range: [
-                        moment()
-                            .subtract(6, 'days')
-                            .format('YYYY-MM-DD'),
+                        moment().subtract(6, 'days').format('YYYY-MM-DD'),
                         moment().format('YYYY-MM-DD'),
                     ],
                 },
                 {
                     label: self.trans('messages.last_30_days'),
                     range: [
-                        moment()
-                            .subtract(29, 'days')
-                            .format('YYYY-MM-DD'),
+                        moment().subtract(29, 'days').format('YYYY-MM-DD'),
                         moment().format('YYYY-MM-DD'),
                     ],
                 },
                 {
                     label: self.trans('messages.this_month'),
                     range: [
-                        moment()
-                            .startOf('month')
-                            .format('YYYY-MM-DD'),
-                        moment()
-                            .endOf('month')
-                            .format('YYYY-MM-DD'),
+                        moment().startOf('month').format('YYYY-MM-DD'),
+                        moment().endOf('month').format('YYYY-MM-DD'),
                     ],
                 },
                 {
                     label: self.trans('messages.last_month'),
                     range: [
-                        moment()
-                            .subtract(1, 'month')
-                            .startOf('month')
-                            .format('YYYY-MM-DD'),
-                        moment()
-                            .subtract(1, 'month')
-                            .endOf('month')
-                            .format('YYYY-MM-DD'),
+                        moment().subtract(1, 'month').startOf('month').format('YYYY-MM-DD'),
+                        moment().subtract(1, 'month').endOf('month').format('YYYY-MM-DD'),
                     ],
                 },
                 {
                     label: self.trans('messages.this_year'),
                     range: [
-                        moment()
-                            .startOf('year')
-                            .format('YYYY-MM-DD'),
-                        moment()
-                            .endOf('year')
-                            .format('YYYY-MM-DD'),
+                        moment().startOf('year').format('YYYY-MM-DD'),
+                        moment().endOf('year').format('YYYY-MM-DD'),
                     ],
                 },
             ];

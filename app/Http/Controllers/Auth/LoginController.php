@@ -57,34 +57,29 @@ class LoginController extends Controller
     {
         // echo $request->input('type_name');
        // $x= $this->userRepository->getTypeOfUser($request->input('email_id_card'), $request->input('user_type'));
-        
-        if(true){
-           
-            $this->validateLogin($request);
-            // If the class is using the ThrottlesLogins trait, we can automatically throttle
-            // the login attempts for this application. We'll key this by the username and
-            // the IP address of the client making these requests into this application.
-            if ($this->hasTooManyLoginAttempts($request)) {
-                $this->fireLockoutEvent($request);
-    
-                return $this->sendLockoutResponse($request);
+            if($this->checkEmail($request->input('email_id_card'))){
+                $user = User::where('email', $request->input('email_id_card'))->first();
             }
-   
-            if ($this->attemptLogin($request)) {
-                $this->guard()->user()->logLastLogin();
-                return $this->sendLoginResponse($request);
+            else{
+                $user = User::where('id_card_number', $request->input('email_id_card'))->first();
             }
-    
-            // If the login attempt was unsuccessful we will increment the number of attempts
-            // to login and redirect the user back to the login form. Of course, when this
-            // user surpasses their maximum number of attempts they will get locked out.
-            $this->incrementLoginAttempts($request);
-    
-            return $this->sendFailedLoginResponse($request);
-        }
-        else{
-            return $this->sendFailedLoginResponse($request);
-        }
+
+            if(isset($user)){
+                if (Hash::check($request->password, $user->password)) {
+                    $user->last_login=\Carbon\Carbon::now();
+                    if(isset($request->user_type))
+                        $user->user_type_log=$request->user_type;
+                
+                    
+                    
+                    $user->save();
+                
+                    return    Auth::login($user);
+                }
+            }
+            else{
+                return false;
+            }
         
     }
 
@@ -133,7 +128,14 @@ class LoginController extends Controller
         if(isset($user)){
             if (Hash::check($request->password, $user->password)) {
                 $user->last_login=\Carbon\Carbon::now();
+                
+                if(isset($request->user_type))
+                    $user->user_type_log=$request->user_type;
+               
+                
+                
                 $user->save();
+               
                 return    Auth::login($user);
             }
         }
@@ -149,6 +151,14 @@ class LoginController extends Controller
         $find2 = strpos($email, '.');
         $x= ($find1 !== false && $find2 !== false && $find2 > $find1);
         return $x;
+     }
+
+   
+     public function show_all_prescription()
+     {
+         echo 'gdfffffffffffffffffffg';
+         die();
+         return view('auth.type');
      }
   
 }

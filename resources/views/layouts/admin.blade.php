@@ -43,6 +43,9 @@
             APP.USER_ROLES = {!! json_encode($user->getUserRoles($user), true) !!};
             APP.DATE_FORMAT = {!! json_encode($user->appDateFormat()) !!};
             APP.TIME_FORMAT = {!! json_encode($user->appTimeFormat()) !!};
+            APP.USER_TYPE_LOG = {!! json_encode($user->user_type_log) !!};
+            APP.CURRENT_USER = {!! json_encode($user) !!};
+            
         @else
              window.Permissions = [];
             @php
@@ -135,7 +138,7 @@
                             {{trans('data.home')}}
                         </router-link>    
                         &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
-                        <router-link to="/to-do-list" style="color:white;">
+                        <router-link to="/to-do" style="color:white;">
                             {{trans('data.to_do_list')}}
                         </router-link>                                      
                     </div>
@@ -317,6 +320,20 @@ $(document).ready(function(){
    
 </body>
 <style type="text/css">
+
+div[aria-required=true].v-input .v-label::after {
+    content: " *";
+    color: red;
+  }
+  .v-label  > .required.sign {
+    color: rgb(248, 14, 14);
+    font-weight: bold;
+    margin-left: .25em;
+}
+div[aria-required=true].v-autocomplete .v-label::after {
+  content: " *";
+  color: red;
+}
     /* quill editor toolbar */
    #inspire {
     font-family: 'Tajawal', sans-serif;

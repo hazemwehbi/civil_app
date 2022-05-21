@@ -150,11 +150,23 @@
                             </v-flex>
                         </v-layout>
                         <v-layout>
+                            <v-flex xs12 sm6 md6>
+                                <v-tooltip top>
+                                    <template slot="activator">
+                                        <v-icon>home</v-icon>
+                                        {{ data.id_card_number }}
+                                    </template>
+
+                                    <span>{{ trans('messages.id_card_number') }}</span>
+                                </v-tooltip>
+                            </v-flex>
+                        </v-layout>
+                        <v-layout>
                             <v-flex xs12 sm12 md12>
                                 <v-tooltip top>
                                     <template slot="activator">
                                         <v-icon>accessibility_new</v-icon>
-                                        {{ enginnering_type }}
+                                        {{ data.specialty != null ?  data.specialty.name : ''  }}
                                     </template>
                                     <span>{{ trans('data.speciality') }}</span>
                                 </v-tooltip>
@@ -163,7 +175,7 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-btn
-                            v-if="$can('profile.edit')"
+                            v-if="true"
                             block
                             outline
                             color="accent"
@@ -192,7 +204,7 @@ export default {
         return {
             data: [],
             profileImg: [],
-            enginnering_type: '',
+        //    enginnering_type: '',
         };
     },
     created() {
@@ -206,12 +218,12 @@ export default {
                 .get('/manage-profiles')
                 .then(function (response) {
                     self.data = response.data;
-                    axios.get('/get-enginnering-types').then(function (response) {
-                        self.enginnering_types = response.data;
-                        self.enginnering_type = response.data.find(
-                            (x) => x.key == JSON.parse(self.data.enginnering_type)
-                        ).value;
-                    });
+                    // axios.get('/get-enginnering-types').then(function (response) {
+                    //     self.enginnering_types = response.data;
+                    //     self.enginnering_type = response.data.find(
+                    //         (x) => x.key == JSON.parse(self.data.enginnering_type)
+                    //     ).value;
+                    // });
                 })
                 .catch(function (error) {
                     console.log(error);

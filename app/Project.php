@@ -1,13 +1,14 @@
 <?php
 
 namespace App;
-
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use ProjectMember;
-class Project extends Model
+class Project extends Model implements HasMedia
 {
-    use LogsActivity;
+    use LogsActivity , HasMediaTrait;
 
     /**
      * The attributes that aren't mass assignable.
@@ -19,6 +20,16 @@ class Project extends Model
     protected static $logUnguarded = true;
     protected static $logOnlyDirty = true;
 
+
+       /**
+    * Get all of the owning notable models.
+    */
+    public function notable()
+    {
+        return $this->morphTo();
+    }
+
+    
     /**
     * The accessors to append to the model's array form.
     *
@@ -298,5 +309,14 @@ class Project extends Model
         return $building_using;
     }
 
-    
+    public static  function getProjectsIdForCustomer()
+    {
+        $user = request()->user();
+        $customer_id=$user->id;
+        $childrens=$user->childrenIds($user->id);
+        array_push($childrens,$user->id);
+        $projects_id=Project::whereIn('customer_id',$childrens)->pluck('id')
+        ->toArray();
+        return $projects_id;
+    }
 }

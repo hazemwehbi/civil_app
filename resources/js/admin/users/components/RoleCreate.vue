@@ -664,6 +664,70 @@
                     </v-layout>
                     <v-divider></v-divider>
 
+                    <v-divider
+                        v-if="
+                            $can('task.edit') ||
+                            $can('task.delete') ||
+                            $can('task.create') ||
+                            $can('task.view')
+                        "
+                    ></v-divider>
+                    <v-layout row wrap class="mt-2">
+                        <v-flex
+                            xs12
+                            sm3
+                            md3
+                            v-if="
+                                $can('task.edit') ||
+                                $can('task.delete') ||
+                                $can('task.create') ||
+                                $can('task.view')
+                            "
+                        >
+                            <h4>{{ trans('data.task') }}</h4>
+                        </v-flex>
+                        <v-flex
+                            xs12
+                            sm3
+                            md3
+                            v-if="
+                                $can('task.edit') ||
+                                $can('task.delete') ||
+                                $can('task.create') ||
+                                $can('task.view')
+                            "
+                        >
+                            <v-checkbox
+                                v-if="$can('task.create')"
+                                v-model="permissions"
+                                :label="trans('data.add_task')"
+                                value="task.create"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-if="$can('task.view')"
+                                v-model="permissions"
+                                :label="trans('data.view_task')"
+                                value="task.view"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-if="$can('task.edit')"
+                                v-model="permissions"
+                                :label="trans('data.edit_task')"
+                                value="task.edit"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-if="$can('task.delete')"
+                                v-model="permissions"
+                                :label="trans('data.delete_task')"
+                                value="task.delete"
+                            >
+                            </v-checkbox>
+                        </v-flex>
+                    </v-layout>
+                    <v-divider></v-divider>
                     <v-layout row wrap class="mt-2">
                         <v-flex
                             xs12

@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ManageRolesController;
-
+use App\Http\Controllers\Auth\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,12 +18,20 @@ Route::get('/', function () {
     return redirect(route('login'));
 });
 
+Route::get('show', function () {
+    echo 'dfdfdfdf';
+      die();
+});
+
 Auth::routes(['register' => true]);
+
+
 
 Route::post('ajaxRequest', [UserController::class, 'getUserData'])->name('ajaxRequest.post');
 Route::post('checkUser', [UserController::class, 'checkUserType'])->name('checkUser.post');
 Route::post('getTypes', [ManageRolesController::class, 'getTypes'])->name('getTypes.post');
 Route::post('getType', [UserController::class, 'getType'])->name('getType.post');
+
 
 
 
@@ -35,8 +43,8 @@ if (config('constants.enable_client_signup')) {
 }
 
 // Employees & Superadmin
-Route::prefix('admin')
-    ->namespace('Admin')
+Route::prefix('admin')->
+    namespace('Admin')
    ->middleware(['auth', 'employee'])
     ->name('admin')
     ->group(function () {
@@ -106,12 +114,15 @@ Route::middleware(['auth'])
 
         Route::resource('media', 'MediaController');
 
+
       //  Route::post('visit-request', 'RequestTypeController@store');
         Route::resource('request', 'RequestTypeController');
         Route::get('/get-enginnering-types', 'RequestTypeController@getEnginneringTypes');
-        Route::post('accept-project', 'RequestTypeController@acceptProject');
 
-
+      
+        Route::get('get-requests', 'RequestTypeController@getRequests');
+        Route::get('get-requests-enginners/{id}', 'RequestTypeController@getRequestEnginners');
+        
         //project 
         
         Route::get('projects/{id}/members', 'ProjectController@getMembers');
@@ -123,8 +134,8 @@ Route::middleware(['auth'])
         Route::get('get-offices', 'Admin\UserController@getAllOffices');
         Route::get('get-users-office/{id}', 'Admin\UserController@getUsersOffice');
         Route::get('all-customers', 'ProjectController@getAllCustomer');
-
-
+      
+        
 
         Route::get('projects-statistics', 'ProjectController@getStatistics');
         Route::get('projects-customer', 'ProjectController@getCustomerProject');
@@ -154,7 +165,7 @@ Route::middleware(['auth'])
         Route::get('activities/project', 'ActivityController@project');
 
         Route::resource('project-milestones', 'ProjectMilestonesController');   
-        Route::post('confirm-send', 'ProjectController@confirmSendRequest');
+        Route::post('confirm-send', 'RequestTypeController@confirmSendRequest');
         Route::post('send_request', 'ProjectController@projectRequest'); 
         Route::post('edit-visit-request', 'ProjectController@editVisitRequest');   
         Route::post('edit-project-request', 'ProjectController@editProjectRequest');
@@ -171,7 +182,7 @@ Route::middleware(['auth'])
         Route::get('get-project/{id}', 'ProjectController@getProject');
 
       
-        Route::get('sent-requests', 'ProjectController@getProjectRequest');
+       
         Route::delete('delete-requests/{id}', 'ProjectController@deleteRequest');
         Route::get('get-priority','RequestTypeController@getPriority');
         Route::resource('request-type','RequestTypeController');
@@ -213,24 +224,30 @@ Route::middleware(['auth'])
         
         Route::resource('ticket-comments', 'TicketCommentController');
 
-        Route::get('get-current-user', 'CommonController@getCurrentUser');
+        Route::get('get-current-user', 'CommonController@getProjects');
         Route::get('get-roles-permission', 'CommonController@getPermissionsforAsk');
         Route::post('ask-for-permission', 'CommonController@askPermissionForUser');
         Route::get('get-my-users', 'CommonController@getMyUsers');
         Route::get('get-role', 'CommonController@getRole');
         Route::get('/check-role-primary/{id}', 'CommonController@checkRole');
         
+        Route::get('check-current-user-type/{type}', 'CommonController@checkCurrentUserType');
+        Route::get('get-project-customer','CommonController@getProjects');
+        
        // Route::get('get-download/{path}', 'CommonController@getDownload');
         Route::get('get-download/{path}','CommonController@getDownload');
         Route::get('get-location-info', 'ProjectController@getLocationInfo');
 
-        
+  
+       
 
         
         Route::resource('requests-role', 'RequestRoleController');
         Route::get('accept-requests-role/{id}','RequestRoleController@acceptRequestRole');
         Route::get('reject-requests-role/{id}','RequestRoleController@rejectRequestRole');
-   
+
+       
+      //  Route::get('get-office-requests','RequestRoleController@getOfficeRequests1');
 
         
         //
@@ -242,7 +259,61 @@ Route::middleware(['auth'])
         
     });
 
-// Employees & Superadmin
+// Employees & Estate Owner
+
+Route::prefix('estate_owner')
+    ->namespace('EstateOwner')
+    ->middleware(['auth','estate_owner'])
+    ->name('estate_owner')
+    ->group(function () {
+            Route::get('/', 'SinglePageController@displaySPA')
+            ->name('estate_owner.spa');
+            Route::resource('dashboards', 'DashboardController')->only(['index']);
+
+            Route::get('user-statistics', 'UserController@getStatistics');
+            Route::get('users-all', 'UserController@getAllEmployee');
+            Route::get('users/{id}/name', 'UserController@getEmployee');
+            
+            
+            Route::resource('users', 'UserController');
+        // Route::get('dashboards', 'DashboardController@index');
+    });
+
+
+    /// Enginnering OFFICE
+
+    Route::prefix('enginner_office')
+    ->namespace('EnginneringOffice')
+    ->middleware(['auth','enginner_office'])
+    ->name('enginner_office')
+    ->group(function () {
+            Route::get('/', 'SinglePageController@displaySPA')
+            ->name('estate_owner.spa');
+            Route::resource('dashboards', 'DashboardController')->only(['index']);
+
+            Route::get('user-statistics', 'UserController@getStatistics');
+            Route::get('users-all', 'UserController@getAllEmployee');
+            Route::get('users/{id}/name', 'UserController@getEmployee');
+            Route::get('get-office-empoloyees/{id}', 'UserController@getUsersOffice');
+            Route::get('get-office-empoloyees-request/{id}', 'UserController@getUsersOfficeForRequest');
+            Route::resource('users', 'UserController');
+            
+             //    request     
+             Route::post('accept-project', 'RequestTypeController@acceptProject');
+            Route::post('request-cancel', 'RequestTypeController@cancelRequest');
+            Route::get('get-office-requests','RequestTypeController@getOfficeRequests');
+            
+            Route::resource('roles', 'ManageRolesController');
+
+
+            //customer
+            Route::post('add-customer', 'UserController@addCustomer');
+        // Route::get('dashboards', 'DashboardController@index');
+    });
+
+
+
+
 Route::prefix('client')
     ->namespace('Client')
     ->middleware(['auth', 'client'])

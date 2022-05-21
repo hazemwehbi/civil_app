@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 use App\Http\Util\CommonUtil;
 use Illuminate\Http\Request;
 use App\RequestType;
+use App\SpecialtiyRequestProject;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\ProjectMember;
+use App\RequestEnginner;
 use App\Components\User\Models\User;
 use App\Notifications\ProjectCreatedNotification;
+use App\Notifications\ProjectRequestCreatedNotification;
+use App\Notifications\AcceptedRequestOfficeNotification;
+use App\Notifications\RejectedRequestOfficeNotification;
+
+
 use Notification;
 use App\VisitRequest;
 use App\DefaultEnginnersRequest;
@@ -44,14 +51,7 @@ class RequestTypeController extends Controller
             }
             $customer_id=$user_id;//User::find($user_id)->customer_id;
             
-            // if($request->priority==null){
-            //     $priority='medium';
-               
-            // }else{
-            //     $priority=$request->priority;
-            // }
-    
-            $user = $request->user();
+           $user = $request->user();
     
             // if(!$user->hasRole('superadmin')){
                 // $status=config('enums.visit_request_status.new');
@@ -61,37 +61,103 @@ class RequestTypeController extends Controller
             // }
     
     //        $projects = Project::with('customer', 'categories', 'members', 'members.media');
-             // echo \json_encode($request->enginnering_type);
-              //die();
+
               DB::beginTransaction();
-            DB::table('visit_requests')->insert([
-                //'title'=>$request->title,
+              $status=$request->sent==0 ? 'new' : 'sent';
+              $enginners=[];
+              $i=0;
+              if($request->sent== 1)
+              {
+                 $deafault_members=SpecialtiyRequestProject::where('project_id',$request->project_id)->get()->toArray();
+               //  echo json_encode($deafault_members);
+                 foreach($request->enginnering_type  as $item){
+
+
+                    $results = array_filter($deafault_members, function($item1) use($item){
+                        return ($item1['specialty_id'] === $item);
+                     });
+                     if ($results)
+                     {
+                         foreach($results as $item2){
+                            $i=$i+1;
+                            if(!in_array($item2['user_id'], $enginners)){
+                                
+                                array_push($enginners,$item2['user_id']);
+                            }
+                          
+                         }
+                       
+                     }
+                 }
+               
+                 if(count($request->enginnering_type)==$i){
+                    $status='accepted';
+
+                 }
+                 /*foreach($deafault_members as $item){
+                     array_push($enginners,$item['user_id']);
+                 }*/
+                 
+             }
+             
+            $visit_request = VisitRequest::create([
                 'customer_id'=>$customer_id,
                 'project_id'=>$request->project_id,
                 'request_type'=>'visit_request',//$request->request_type,
                 'description'=> 'test',//$request->description,
-                'status'=> $request->sent==0 ? 'new' : 'sent',
+                'status'=> $status,
                  'office_status'=>$request->sent== 1? 'recieved' : '',
                 'dead_line_date'=>$request->dead_line_date,
                // 'priority'=>$priority,
                 'sent'=>$request->sent,
                 'office_id'=>$request->office_id,
                 'note'=>$request->note,
-                'enginnering_type'=>json_encode($request->enginnering_type),
                 'created_at'=>Carbon::now()
             ]);
-            if(isset($request->office_id)){
-                if(!ProjectMember::where('project_id',$request->project_id)->where('user_id', $request->office_id)->first()){
+            $visit_request->specialties()->sync($request->enginnering_type);
+          
+            //if($status=='accepted'){
+                foreach($enginners as $item){
+                    DB::table('request_enginners')->insert([
+                        'user_id'=>$item,
+                        'request_id'=>$visit_request->id,
+                        'request_type'=>'visit_request',
+                        'is_show'=>1,
+                    ]);
 
-                DB::table('project_members')->insert([
-                    'user_id'=>$request->office_id,
+
+                    $data=[
+                        'project_id'=>$visit_request->project_id,
+                        'office_id'=>$visit_request->office_id ,//$visit_request->office_id,
+                        'request_id'=>$visit_request->id,
+                    ];
+                   $this->_saveProjectRequestCreatedNotifications([$item],$data);
+                }
+             
+            //}
+      
+            // if(isset($request->office_id)){
+            //     if(!ProjectMember::where('project_id',$request->project_id)->where('user_id', $request->office_id)->first()){
+
+            //     DB::table('project_members')->insert([
+            //         'user_id'=>$request->office_id,
+            //         'project_id'=>$request->project_id,
+            //         'is_default'=>  0,
+            //     ]);
+            // }
+            // }
+           DB::commit();
+            if($request->sent== 1)
+            {
+                
+                $data=[
                     'project_id'=>$request->project_id,
-                    'is_default'=>  0,
-                ]);
+                     'office_id'=>Auth::id(),
+                     'request_id'=>0,
+                ];
+               $this->_saveProjectCreatedNotifications([$request->office_id], $data);
             }
-            }
-            DB::commit();
-            $this->_saveProjectCreatedNotifications([$request->office_id], $request->project_id);
+              
             return $this->respondSuccess(__('messages.saved_successfully'));
             }
 
@@ -102,23 +168,22 @@ class RequestTypeController extends Controller
     }
 
 
-    
+  
 
     public function show($id)
     {
-        if (!request()->user()->can('tickets.edit')) {
-            abort(403, 'Unauthorized action.');
-        }
-        $request = VisitRequest::findOrFail($id);
+        // if (!request()->user()->can('tickets.edit')) {
+        //     abort(403, 'Unauthorized action.');
+        // }
+        $request = VisitRequest::with('specialties')->findOrFail($id);
         $enginnering_types=$this->CommonUtil->getEnginneringTypes();
         $request_types=$this->CommonUtil->getRequestsTypes();
         $data = [
                     'request' => $request,
-                    'enginnering_types' => $enginnering_types,
                     'request_types' => $request_types,
                 ];
 
-        return $this->respond($data);
+        return $this->respondSuccess($data);
     }
 
 
@@ -160,7 +225,7 @@ class RequestTypeController extends Controller
 
             $visitRequest->note=$request->note;
             $visitRequest->dead_line_date=$request->dead_line_date;
-            $visitRequest->enginnering_type=\json_encode($request->enginnering_type);
+         //   $visitRequest->enginnering_type=\json_encode($request->enginnering_type);
             
             if(isset($request->priority)){
                 $visitRequest->priority=$request->priority;
@@ -168,18 +233,19 @@ class RequestTypeController extends Controller
             if(isset($request->status)){
                 $visitRequest->status=$request->status;
             }
+            $visitRequest->specialties()->sync($request->enginnering_type);
             $visitRequest->save();
 
-            if(!ProjectMember::where('project_id',$visitRequest->project_id)->where('user_id',$visitRequest->office_id)->first()){
-                if(isset($request->office_id)){
-                    DB::table('project_members')->insert([
-                        'user_id'=>$visitRequest->office_id,
-                        'project_id'=>$visitRequest->project_id,
-                        'is_default'=>  0,
-                    ]);
-                }
-            }
-        
+            // if(!ProjectMember::where('project_id',$visitRequest->project_id)->where('user_id',$visitRequest->office_id)->first()){
+            //     if(isset($request->office_id)){
+            //         DB::table('project_members')->insert([
+            //             'user_id'=>$visitRequest->office_id,
+            //             'project_id'=>$visitRequest->project_id,
+            //             'is_default'=>  0,
+            //         ]);
+            //     }
+            // }
+          
             DB::commit();
           return   $this->respondSuccess(__('messages.updated_successfully'));
            // $output = 
@@ -220,6 +286,17 @@ class RequestTypeController extends Controller
        $visit_request->save();
        $this->_saveAcceptedRequestNotifications($visit_request->customer_id,$visit_request->office_id);
 
+
+        if(!ProjectMember::where('project_id',$visit_request->project_id)->where('user_id',$visit_request->office_id)->first()){
+            if(isset($visit_request->office_id)){
+                DB::table('project_members')->insert([
+                    'user_id'=>$visit_request->office_id,
+                    'project_id'=>$visit_request->project_id,
+                    'is_default'=>  0,
+                ]);
+            }
+        }
+
         if(isset($request->default_enginners)){
             foreach ($request->default_enginners as $item ) {
                 if(!empty($item['enginner_id'])){
@@ -230,8 +307,14 @@ class RequestTypeController extends Controller
                         'is_default'=> isset($item['is_default']) ? $item['is_default'] : 0,
                     ]);
                 }
+                if(!RequestEnginner::where('request_id',$visit_request->id)->where('user_id', $item['enginner_id'])->first()){
+                    DB::table('request_enginners')->insert([
+                        'user_id'=>$item['enginner_id'],
+                        'request_id'=>$visit_request->id,
+                        'request_type'=>'visit_request',
+                    ]);
                 }
-                
+            }
             }
         }
         if(isset($request->enginners)){
@@ -264,7 +347,18 @@ class RequestTypeController extends Controller
     }
 
 
-
+    public function getRequestEnginners($requestId)
+    {
+        # code...
+        $enginners=RequestEnginner::with('employee')->where('request_id',$requestId)->get()->toArray();
+      /*  $users=[];
+       
+        foreach($enginners as $item){
+            $user=User::find($item['user_id']);
+            array_push($users,$user->name);
+        }*/
+        return $enginners;
+    }
     public function getPriority(Request $request)
     {
         $priority = [
@@ -349,34 +443,126 @@ class RequestTypeController extends Controller
                 $visitRequest->sent=1;
                 //$visitRequest->office_status='recieved';
                 $visitRequest->save();
-                $this->_saveRejectedRequestNotifications($visitRequest->office_id,$visitRequest->customer_id);
+                $this->_saveRejectedRequestNotifications($visitRequest->customer_id,$visitRequest->office_id);
                 return Response::respondSuccess(__('messages.updated_successfully'));
             }
         }
     }
     public function confirmSendRequest(Request $request)
     {
+        
         if(isset($request['request_id'])){
-            $visitRequest=VisitRequest::find($request['request_id']);
+            DB::beginTransaction();
+          
+            $visitRequest=VisitRequest::with('specialties')->findOrFail($request['request_id']);
+            $enginners=[];
             if($visitRequest != null){
                 $visitRequest->status='sent';
                 $visitRequest->sent=1;
                 $visitRequest->office_status='recieved';
+///
+                $i=0;
+              $deafault_members=SpecialtiyRequestProject::where('project_id',$visitRequest->project_id)->get()->toArray();
+            //  echo json_encode($deafault_members);
+              foreach($visitRequest->specialties  as $item){
+                        $results = array_filter($deafault_members, function($item1) use($item){
+                            return ($item1['specialty_id'] === $item->id);
+                        });
+                        if ($results)
+                        {
+                            foreach($results as $item2){
+                                $i=$i+1;
+                                if(!in_array($item2['user_id'], $enginners)){
+                                    
+                                    array_push($enginners,$item2['user_id']);
+                                }
+                            
+                            }
+                            
+                        }
+            }
+
+            if(count($visitRequest->specialties)===$i){
+                $visitRequest->status='accepted';
+               // $status='accepted';
+
+            }
+
+
+              
+
+
                 $visitRequest->save();
+
+
+                //if($visitRequest->status=='accepted'){
+                    foreach($enginners as $item){
+                        DB::table('request_enginners')->insert([
+                            'user_id'=>$item,
+                            'request_id'=>$visitRequest->id,
+                            'request_type'=>'visit_request',
+                            'is_show'=>1
+                        ]);
+
+
+                        $data=[
+                            'project_id'=>$visitRequest->project_id,
+                            'office_id'=>$visitRequest->office_id ,//$visit_request->office_id,
+                            'request_id'=>$visitRequest->id,
+                        ];
+                       $this->_saveProjectRequestCreatedNotifications([$item],$data);
+                    }
+                 
+                //}
+
+              
+
+                DB::commit();
+                $data=[
+                    'project_id'=>$visitRequest->project_id,
+                     'office_id'=>Auth::id(),
+                     'request_id'=>$visitRequest->id,
+                ];
+               $this->_saveProjectCreatedNotifications([$visitRequest->office_id], $data);
                 return Response::respondSuccess(__('messages.updated_successfully'));
             }
         }
     }
+    public function getRequests(Request $request){
+        $project_id = request()->get('projectId', false);
+        $user=User::find(request()->user()->id);
+        if($user->hasRole('superadmin')){
+         $requests =  VisitRequest::with('customer', 'project','specialties')->where('request_type','visit_request');
+         if (!empty($project_id)) {
+            $requests =$requests->where('project_id',$project_id);
+         }
+         $requests=$requests->get()->toArray();
+        }
+        else{
+         $childrens=$user->childrenIds($user->id);
+         array_push($childrens,$user->id);
+         $requests =  VisitRequest::with('customer', 'project','specialties')->where('request_type','visit_request')->whereIn('customer_id', $childrens);
+         if (!empty($project_id)) {
+            $requests =$requests->where('project_id',$project_id);
+         }
+         $requests=$requests->get()->toArray();
+        }
+ 
+     
+         return $this->respond($requests);
+    }
+  
     public function getRequesStatus()
     {
         return $this->CommonUtil->getVisitRequestStatus();
       
     }
-    protected function _saveProjectCreatedNotifications($members, $project_id)
+    
+    protected function _saveProjectCreatedNotifications($members, $data)
     {
         foreach ($members as $member){
             $notifiable_users = User::find($member);
-            Notification::send($notifiable_users, new ProjectCreatedNotification($project_id));
+            Notification::send($notifiable_users, new ProjectRequestCreatedNotification($data));
         }
     }
 
@@ -384,7 +570,7 @@ class RequestTypeController extends Controller
     {
        // foreach ($members as $member){
             $notifiable_users = User::find($member);
-            Notification::send($notifiable_users, new ProjectCreatedNotification($office_id));
+            Notification::send($notifiable_users, new RejectedRequestOfficeNotification($office_id));
         //}
     }
 
@@ -392,7 +578,20 @@ class RequestTypeController extends Controller
     {
         //foreach ($members as $member){
             $notifiable_users = User::find($member);
-            Notification::send($notifiable_users, new ProjectCreatedNotification($office_id));
+            Notification::send($notifiable_users, new AcceptedRequestOfficeNotification($office_id));
       //  }
     }
+
+
+    
+    protected function _saveProjectRequestCreatedNotifications($member, $data)
+    {
+        //foreach ($members as $member){
+            $notifiable_users = User::find($member);
+            Notification::send($notifiable_users, new ProjectRequestCreatedNotification($data));
+      //  }
+    }
+
+
+ 
 }

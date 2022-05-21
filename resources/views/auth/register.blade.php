@@ -14,6 +14,25 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+.required:after {
+    content:" *";
+    color: red;
+  }
+  :-webkit-autofill,
+:-webkit-autofill:hover,
+:-webkit-autofill:focus,
+:-webkit-autofill:active {
+    /* use animation hack, if you have hard styled input */
+    transition: all 5000s ease-in-out 0s;
+    transition-property: background-color, color;
+    /* if input has one color, and didn't have bg-image use shadow */
+    -webkit-box-shadow: 0 0 0 1000px #fff inset;
+    /* text color */
+    -webkit-text-fill-color: #000;
+    /* font weigth */
+    font-weight: 300!important;
+}
+
     </style>
 @section('content')
 <div class="container">
@@ -41,13 +60,13 @@ input[type=number] {
                   <div style="padding:20px;">
                     <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label for="name" style="padding-bottom: 5px;">
+                                <label for="name" style="padding-bottom: 5px;" class="required">
                                     {{__('messages.name')}}
                                 </label>
-                                <input type="text" id="name" name="name" class="form-control" placeholder="{{__('messages.name')}}" value="{{ old('name') }}"  required >
+                                <input type="text" id="name" name="name"  class="form-control" placeholder="{{__('messages.name')}}" value="{{ old('name') }}"  required >
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="id_card_number" style="padding-bottom: 5px;">
+                                <label for="id_card_number" style="padding-bottom: 5px;" class="required">
                                     {{__('data.id_card_number')}}
                                 </label>
                                 <input type="number" id="id_card_number" name="id_card_number" class="form-control" placeholder="{{__('data.id_card_number')}}" value="{{ old('id_card_number') }}"   required >
@@ -61,28 +80,14 @@ input[type=number] {
                             </div>
 
                             <div class="form-group col-md-4">
-                                <label for="company" style="padding-bottom: 5px;">
+                                <label for="company" style="padding-bottom: 5px;" class="required">
                                     {{__('messages.email')}}
                                 </label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="{{__('messages.email')}}"  required  value="{{ old('email') }}">
+                                <input type="email" id="email" name="email" class="form-control" placeholder="{{__('messages.email')}}" autocomplete="email"  required  value="{{ old('email') }}">
                                 @if ($errors->has('email'))
                                     <span class="help-block  text-danger">
                                         <small class="help-text span-email" span-email>
                                             {{ $errors->first('email') }}
-                                        </small>
-                                    </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                <label for="password" style="padding-bottom: 5px;">
-                                    {{__('messages.password')}}
-                                </label>
-                                <input type="password" id="password" name="password" class="form-control" placeholder="{{__('messages.password')}}" onchange="check_pass()"  required >
-                                @if ($errors->has('password'))
-                                    <span class="help-block  text-danger">
-                                        <small class="help-text span-email" span-email>
-                                            {{ $errors->first('password') }}
                                         </small>
                                     </span>
                                 @endif
@@ -94,6 +99,20 @@ input[type=number] {
                                 <input type="password" id="confirm_password" name="confirm_password" class="form-control"   onchange="check_pass()" placeholder="{{__('messages.confirm_password')}}"   >
                                 <span id='message'></span>
                             </div>
+                            <div class="form-group col-md-6">
+                                <label for="password" style="padding-bottom: 5px;" class="required">
+                                    {{__('messages.password')}}
+                                </label>
+                                <input type="password" id="password" autocomplete="new-password" name="password" class="form-control" placeholder="{{__('messages.password')}}" onchange="check_pass()"  required >
+                                @if ($errors->has('password'))
+                                    <span class="help-block  text-danger">
+                                        <small class="help-text span-email" span-email>
+                                            {{ $errors->first('password') }}
+                                        </small>
+                                    </span>
+                                @endif
+                            </div>
+                        
 
                    
 

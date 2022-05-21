@@ -25,11 +25,11 @@
             >
                 <template slot="items" slot-scope="props">
                     <td>
-                        <div style="display: flex;justify-content: center" align="center">
+                        <div style="display: flex; justify-content: center" align="center">
                             <!-- v-if="!$can('superadmin')" -->
                             <div>
                                 <v-btn
-                                   v-if="props.item.status==null"
+                                    v-if="props.item.status == null"
                                     color="primary"
                                     small
                                     fab
@@ -42,17 +42,19 @@
                                 </v-btn>
                             </div>
                             <div>
-                                <v-btn color="primary" small fab dark
-                                  v-if="props.item.status==null"
-                                @click="rejectRequest(props.item.id)"
-                                
+                                <v-btn
+                                    color="primary"
+                                    small
+                                    fab
+                                    dark
+                                    v-if="props.item.status == null"
+                                    @click="rejectRequest(props.item.id)"
                                 >
                                     <v-icon color="white">close</v-icon>
                                     <!--{{trans('data.accept')}}-->
                                 </v-btn>
                             </div>
                             <v-btn
-                             
                                 color="error"
                                 small
                                 fab
@@ -69,9 +71,15 @@
                             {{ props.item.user.name }}
                         </div>
                     </td>
+                
                     <td>
                         <div align="center">
                             {{ getType(props.item.role_id) }}
+                        </div>
+                    </td>
+                        <td>
+                        <div align="center">
+                            {{ props.item.status==1 ? 'Accepted' :'Rejected' }}
                         </div>
                     </td>
                     <td>
@@ -131,6 +139,12 @@ export default {
                     value: 'role_name',
                     align: 'center',
                     sortable: false,
+                },
+                {
+                    text: self.trans('messages.status'),
+                    value: 'status',
+                    align: 'center',
+                    sortable: true,
                 },
                 {
                     text: self.trans('data.document'),

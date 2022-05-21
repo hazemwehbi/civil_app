@@ -217,6 +217,8 @@ return [
     'my_tasks' => 'My Tasks',
     'welcome' => 'Welcome :name!',
     'project_notification_text' => 'Added you to a project :project_name',
+    'project_request_notification_text' => 'invited you to a project :project_name',
+    'project_edit_notification_text' => 'Edited on  a project :project_name',
     'task_notification_text' => 'Assigned you a task :task_subject',
     'application_copyright' => ':name - :version | &copy; :year All rights reserved.',
     'upload_doc' => 'Upload A Document',
@@ -527,5 +529,36 @@ return [
 
 
     'office_accept_notification_text'=>' :office  accept your request',
+    'office_reject_notification_text'=>':office  reject  your request',
+
+    'design_request_offer_notification_text'=>'enginnering office send design for a :stage',
+
+
+    'design_request_accept_notification_text'=>' design accepted for a   :stage',
+
+    'design_request_reject_notification_text'=>'design rejected for a :stage',
+
+
+    'design_request_send_to_employee_notification_text'=>'enginnering office send a request design for :stage',
+
+
+    'ask_for_design_request_enginnering_office_notification_text'=>'recieve new request design ',
+
+ ///////////////////notifications for support service////////////////
+
+ 'ask_for_support_request_notification_text'=>'recieve new request ',
+ 'support_request_offer_notification_text'=>'supporter send a offer price',
+
+ 'support_request_accepted_notification_text'=>'offer Accepted by Owner',
+ 'support_request_reject_notification_text'=>'offer rejected by Owner',
+
+
+    'email_valid'=>'Email must be valid',
+
+    'string_length'=>' :name must be at least :length characters  ',
+
+    'password_not_match'=>'Password not match',
+    'user_not_found'=>'User Not Found',
+    'unauthorized_action'=>'Unauthorized Action'
 
 ];

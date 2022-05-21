@@ -326,6 +326,8 @@ return [
       'edit_employee'=>'Edit User',
       'add_employee'=>'Add Users',
       'new_employee'=>'New User',
+
+     
       
 
       'all_roles'=>'All Roles',
@@ -340,15 +342,94 @@ return [
        'can_not_static_role'=>'Can Not Assign Primary Role ',
        'not_permiision_to_assign_primary_role'=>'You can not assign primary role to user, you have to ask permission',
 
-       'speciality'=>'speciality'
 
+       //enignnering office
+       'speciality'=>'speciality',
+       'new_employee_off'=>'New Employee',
+       'all_employees'=>'All Employees',
+       'add_employee_off'=>'Add Employee',
+       'edit_employee_off'=>'Edit Employee' ,
+       'employees'=>'Employees',
+
+       'engennering_request'=>'Request Enginners',
+       'add_project'=>'Add Project',
+       'clear'=>'clear',
         
 
 
+  /////tasks 
+  'tasks'=>'Tasks',
+  'add_task'=>'Add Task',
+  'delete_task'=>'Delete Task',
+  'edit_task'=>'Edit Task',
+  'view_task'=>'View Task',
+  'task'=>'Task',
+  'id' => 'Id',
+  'employee_and_Dead_lines'=>'Employeea And Dead Lines',
+  'specialties'=>'Specialties',
+
+  'new_specialty'=>'New Specialty',
 
 
-      
-      
+  'specialty'=>'Specialty',
+
+  'add_specialty'=>'Add Specialty',
+  'view_specialty'=>'View Specialty',
+  'created_by'=>'Created By'    ,
+  'edit_specialty'=>'Edit Specialty',
+  'create_specialty'=>'Create Specialty',
+  'ar_name'=>'Arabic Name',
+  'en_name'=>'Englih Name',
+
+  'office'=>'Office Engineering',
+
+
+
+  'create_design'=>'Create Design Request',
+  'edit_design'=>'Edit Design',
+  'view_design'=>'Design Info',
+  'stage'=>'Stage',
+  'accept_design_request'=>'Design Request Acception',
+
+
+  'create_support'=>'Create Support  Request',
+  'edit_support'=>'Edit Support',
+  'view_support'=>'Support Info',
+
+  
+  'price'=>'price',
+  'enginner_name'=>'Enginner Name',
+  'generate_pdf'=>'Generate As Pdf',
+  'reject'=>'Reject',
+  'reject_done'=>'Rejected Done',
+  'accepted_done'=>'Accepted Done',
+  'document_info'=>'Documents',
+  'view_design_details'=>'design details',
+  'offer_detail'=>'Offer Details',
+  'supporters'=>'Supporters',
+  'requests'=>'Requests',
+  'support_name'=>'Supporter Name',
+  'supporters_name'=>'Supporters Name',
+  'view_support'=>'Support Info',
+  'view_support_details'=>'Request Info',
+
+  'new'=>'new',
+  'pending'=>'pending',
+  'sent'=>'sent',
+  'accepted'=>'accepted',
+  'rejected'=>'rejected',
+  'completed'=>'completed',
+  'in_progress'=>'In Progress',
+
+
+  'contract_requests'=>'Contract Requests', 
+  'create_contract'=>'Create Contract',
+  'edit_contract'=>'Edit Contract',
+  'contractors'=>'Contractors',
+  'view_contractt'=>'View Contract',
+  'view_contract_details'=>'View Contract Details'  ,
+  'contractors_name'=>'Contractors Name'   ,
+  'contract_name'=>'Contract Name' 
 ];
 
 

@@ -14,8 +14,12 @@
                     </v-stepper-step>
 
                     <v-divider></v-divider>
-
                     <v-stepper-step step="3" :complete="e1 > 3" color="teal">
+                        {{ trans('data.document_info') }}
+                    </v-stepper-step>
+                    
+                    <v-divider></v-divider>
+                    <v-stepper-step step="4" :complete="e1 > 4" color="teal">
                         {{ trans('data.project_info') }}
                     </v-stepper-step>
                 </v-stepper-header>
@@ -44,7 +48,7 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="2">
-                        <LocationInfo @next="getLocationData($event)" ref="locationInfo"   />
+                        <LocationInfo @next="getLocationData($event)" ref="locationInfo" />
                         <v-layout row pt-3 justify-center>
                             <v-btn color="teal" small outline @click="e1 = 1">
                                 {{ trans('messages.back') }}
@@ -62,9 +66,27 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <ProjectInfo @next="getProjectData($event)" ref="projectInfo" />
+                        <Document @next="getDocumentData($event)" ref="documentInfo" />
                         <v-layout row pt-3 justify-center>
                             <v-btn color="teal" small outline @click="e1 = 2">
+                                {{ trans('messages.back') }}
+                            </v-btn>
+                            <div style="display: flex" align="right">
+                                <v-btn
+                                    style="background-color: #06706d; color: white"
+                                    small
+                                    @click="getDocumentInfo"
+                                >
+                                    {{ trans('messages.next') }}
+                                </v-btn>
+                            </div>
+                        </v-layout>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="4">
+                        <ProjectInfo @next="getProjectData($event)" ref="projectInfo" />
+                        <v-layout row pt-3 justify-center>
+                            <v-btn color="teal" small outline @click="e1 = 3">
                                 {{ trans('messages.back') }}
                             </v-btn>
                             <div style="display: flex" align="right">
@@ -92,12 +114,15 @@ import CustomerInfo from './project_info/customerInfo.vue';
 import LocationInfo from './project_info/locationInfo.vue';
 import ProjectInfo from './project_info/ProjectInfo.vue';
 import Popover from '../../../admin/popover/Popover';
+import Document from './project_info/documnets.vue';
+
 export default {
     components: {
         CustomerInfo,
         LocationInfo,
         ProjectInfo,
         Popover,
+        Document,
     },
     props: {
         propProjectId: {
@@ -115,6 +140,7 @@ export default {
             agency_id: null,
             users_id: [],
             loading: false,
+            medias: [],
             isEdit: false,
         };
     },
@@ -135,9 +161,14 @@ export default {
                         response.data.data.project.agency,
                         false
                     );
-                    self.$refs.locationInfo.fillEditData(response.data.data.project.location, false);
+                    self.$refs.locationInfo.fillEditData(
+                        response.data.data.project.location,
+                        false
+                    );
                     console.log(response.data.data.project.location);
                     self.$refs.projectInfo.fillEditData(response.data.data.project, false);
+
+                    self.$refs.documentInfo.fillEditData(response.data.data.media, true);
                 } else {
                     self.$store.commit('hideLoader');
                     self.$store.commit('showSnackbar', {
@@ -172,6 +203,14 @@ export default {
         getProjectInfo() {
             this.$refs.projectInfo.nextStep();
         },
+
+        getDocumentInfo() {
+            this.$refs.documentInfo.nextStep();
+        },
+        getDocumentData(data) {
+            this.medias = data;
+            this.e1 = 4;
+        },
         store(val) {
             const self = this;
             let data = {
@@ -180,6 +219,7 @@ export default {
                 customers: self.customers,
                 users_id: self.users_id,
                 agency_id: self.agency_id,
+                medias: self.medias,
             };
             this.loading = true;
             axios

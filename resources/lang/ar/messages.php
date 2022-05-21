@@ -216,6 +216,10 @@ return [
     "my_tasks" => "مهامي",
     'welcome' => 'أهلا بك :name!',
     'project_notification_text' => 'أضافك إلى مشروع :project_name',
+    'project_edit_notification_text' => 'عدل على مشروع :project_name',
+    'project_request_notification_text' => 'تم دعوتك للمشروع :project_name',
+
+    
     'task_notification_text' => 'كلفتك بمهمة :task_subject',
     'application_copyright' => ':name - :version | &copy; :year كل الحقوق محفوظة',
     "upload_doc" => "تحميل مستند",
@@ -348,6 +352,8 @@ return [
     'id' => 'المعرف',
 
     'required'=>'    :name  مطلوب',
+
+
 
 
 
@@ -549,7 +555,41 @@ return [
      
 
     'office_accept_notification_text'=>' :office  وافق عل طلبك',
+    'office_reject_notification_text'=>' :office رفض طلبك',
+    'design_request_offer_notification_text'=>'المكتب الهندسي ارسل عرض تصميم للمرحلة :stage',
+
+    'design_request_accept_notification_text'=>'تم قبول التصميم للمرحلة :stage',
+
+    'design_request_reject_notification_text'=>'تم رفض التصميم للمرحلة :stage',
+
+
+    'design_request_send_to_employee_notification_text'=>'المكتب الهندسي ارسل الك طلب  تصميم للمرحلة :stage',
+
+     'ask_for_design_request_enginnering_office_notification_text'=>'استقبال طلب تصميم جديد',
+     
     
+    'email_valid'=>'حقل البريد الالكتروني يجب ان يكون صالح',
+
+   // 'string_length'=>
+     'string_length'=>':name   يجب انو تكون    على الاقل :length احرف  ',
+
+     'password_not_match'=>'كلمة السر غير متطابقة',
+     'user_not_found'=>'المستخدم غير موجود'
+,
+'unauthorized_action'=>'ليش لديك الصلاحية لهذه الفعل',
 
 
+
+
+
+
+
+
+
+ ///////////////////notifications for support service////////////////
+ 'ask_for_support_request_notification_text'=>'استقبال طلب  جديد',
+'support_request_offer_notification_text'=>'المخدم ارسل عرض السعر',
+
+'support_request_accepted_notification_text'=>'تم قبول العرض',
+'support_request_reject_notification_text'=>'تم رفض العرض',
     ];

@@ -344,7 +344,7 @@
                                         close-delay="100"
                                     >
                                         <v-card
-                                            @click="$router.push('/employees')"
+                                            @click="$router.push({ name: 'users.list' })"
                                             :elevation="hover ? 16 : 2"
                                         >
                                             <v-card-text>
@@ -390,6 +390,59 @@
                                     </v-hover>
                                 </v-flex>
                             </v-flex>
+
+                            <v-flex xs12 sm12 md4>
+                                <v-flex xs12 sm12 md12>
+                                    <v-hover
+                                        v-slot:default="{ hover }"
+                                        open-delay="100"
+                                        close-delay="100"
+                                    >
+                                        <v-card
+                                            @click="$router.push({ name: 'requests_role.list' })"
+                                            :elevation="hover ? 16 : 2"
+                                        >
+                                            <v-card-text>
+                                                <div class="text-md-center mt-2">
+                                                    <p
+                                                        x-large
+                                                        style="font-size: 18px; color: #06706d"
+                                                    >
+                                                        {{ trans('data.request_role') }}&nbsp;&nbsp;
+                                                        <v-icon :color="'#06706d'">settings</v-icon>
+                                                    </p>
+                                                </div>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-hover>
+                                </v-flex>
+                            </v-flex>
+                            <v-flex xs12 sm12 md4 v-if="$can('specialty.view')">
+                                <v-flex xs12 sm12 md12>
+                                    <v-hover
+                                        v-slot:default="{ hover }"
+                                        open-delay="100"
+                                        close-delay="100"
+                                    >
+                                        <v-card
+                                            @click="$router.push({ name: 'specialties.list' })"
+                                            :elevation="hover ? 16 : 2"
+                                        >
+                                            <v-card-text>
+                                                <div class="text-md-center mt-2">
+                                                    <p
+                                                        x-large
+                                                        style="font-size: 18px; color: #06706d"
+                                                    >
+                                                        {{ trans('data.specialties') }}&nbsp;&nbsp;
+                                                        <v-icon :color="'#06706d'">settings</v-icon>
+                                                    </p>
+                                                </div>
+                                            </v-card-text>
+                                        </v-card>
+                                    </v-hover>
+                                </v-flex>
+                            </v-flex>
                             <!-- <v-flex xs12 sm12 md4>
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
@@ -422,37 +475,6 @@
                                     </v-hover>
                                 </v-flex>
                             </v-flex> -->
-                            <v-flex xs12 sm12 md4 v-if="!$hasRole('superadmin')">
-                                <v-flex xs12 sm12 md12>
-                                    <v-hover
-                                        v-slot:default="{ hover }"
-                                        open-delay="100"
-                                        close-delay="100"
-                                    >
-                                        <v-card
-                                            @click="askforpermission()"
-                                            :elevation="hover ? 16 : 2"
-                                        >
-                                            <v-card-text>
-                                                <div class="text-md-center mt-2">
-                                                    <p
-                                                        x-large
-                                                        style="font-size: 18px; color: #06706d"
-                                                    >
-                                                        {{
-                                                            trans('data.ask_for_permission')
-                                                        }}&nbsp;&nbsp;
-                                                        <v-icon :color="'#06706d'">settings</v-icon>
-                                                    </p>
-                                                </div>
-                                            </v-card-text>
-                                        </v-card>
-                                    </v-hover>
-                                </v-flex>
-                            </v-flex>
-
-
-
                         </v-layout>
                     </v-container>
                 </v-card-text>
@@ -546,7 +568,6 @@ export default {
     },
     data() {
         return {
-        
             loading: false,
         };
     },

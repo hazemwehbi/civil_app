@@ -17,7 +17,7 @@
                                 <v-layout row wrap>
                                     <v-flex xs12 md6>
                                         <v-text-field
-                                            :readonly="isEdit"
+                                             :disabled="isEdit"
                                             v-model="project.name"
                                             :label="trans('messages.name')"
                                             v-validate="'required'"
@@ -53,7 +53,8 @@
                                         {{ trans('messages.description') }}
                                         <br />
                                         <quill-editor
-                                            :readonly="isEdit"
+                                        :disabled="isEdit"
+                                          
                                             v-model="project.description"
                                         >
                                         </quill-editor>
@@ -72,6 +73,7 @@
 
                                     <v-flex xs12 md4>
                                         <v-select
+                                           :disabled="isEdit"
                                             item-text="value"
                                             item-value="key"
                                             :items="status"
@@ -82,7 +84,7 @@
                                             v-validate="'required'"
                                             :data-vv-as="trans('messages.status')"
                                             :error-messages="errors.collect('status')"
-                                            :readonly="isEdit"
+                                           
                                             required
                                         ></v-select>
                                     </v-flex>
@@ -124,7 +126,7 @@
                                                         </label>
                                                         <flat-pickr
                                                             v-model="project.start_date"
-                                                            :readonly="isEdit"
+                                                           :disabled="isEdit"
                                                             name="start_date"
                                                             required
                                                             :config="flatPickerDate()"
@@ -142,17 +144,31 @@
                                     </v-flex>
                                     <v-flex xs12 md4>
                                         <v-autocomplete
-                                            item-text="name"
+                                             class="content-sign"
+                                               multiple
+                                              :disabled="isEdit"
+                                            :clearable="true"
+                                            :deletable-chips="true"
+                                            :dense="true"
+                                            search-input=""
+                                            :solo-inverted="false"
+                                            :eager="true"
+                                            :loading="false"
+                                            :validate-on-blur="false"
+                                            :persistent-placeholder="false"
+                                             item-text="name"
                                             item-value="id"
                                             :items="users"
                                             :readonly="isEdit"
                                             v-model="project.users_id"
                                             :label="trans('messages.members')"
-                                            v-validate="'required'"
-                                            multiple
-                                            data-vv-name="members"
-                                            :data-vv-as="trans('messages.members')"
-                                            :error-messages="errors.collect('members')"
+                                            :rules="[
+                                                (v) =>
+                                                    !!v ||
+                                                    trans('messages.required', {
+                                                        name: trans('messages.members'),
+                                                    }),
+                                            ]"
                                             required
                                         >
                                             <Popover
@@ -160,7 +176,14 @@
                                                 :helptext="trans('messages.project_member_tooltip')"
                                             >
                                             </Popover>
+                                            <!-- <Popover
+                                    slot="append"
+                                    :helptext="trans('messages.project_member_tooltip')"
+                                >
+                                </Popover> -->
                                         </v-autocomplete>
+
+                                     
                                     </v-flex>
                                     <v-flex xs12 md4>
                                         <div class="v-input v-text-field theme--light">
@@ -179,7 +202,7 @@
                                                         </label>
                                                         <flat-pickr
                                                             v-model="project.end_date"
-                                                            :readonly="isEdit"
+                                                            :disabled="isEdit"
                                                             name="end_date"
                                                             required
                                                             :config="flatPickerDate()"
@@ -197,7 +220,7 @@
                                     <v-flex xs12 md4>
                                         <v-text-field
                                             v-model="project.authorization_request_number"
-                                            :readonly="isEdit"
+                                            :disabled="isEdit"
                                             :label="trans('data.authorization_request_number')"
                                             data-vv-name="Authorization Request Number"
                                             :data-vv-as="trans('data.authorization_request_number')"
@@ -212,7 +235,7 @@
                                     <v-flex xs12 md4>
                                         <v-text-field
                                             v-model="project.license_number"
-                                            :readonly="isEdit"
+                                            :disabled="isEdit"
                                             :label="trans('data.license_number')"
                                             data-vv-name="Authorization Request Number"
                                             :data-vv-as="trans('data.license_number')"
@@ -225,7 +248,7 @@
                                     <v-flex xs12 md4>
                                         <v-text-field
                                             v-model="project.plot_number"
-                                            :readonly="isEdit"
+                                             :disabled="isEdit"
                                             :label="trans('data.plot_number')"
                                             data-vv-name="Authorization Request Number"
                                             :data-vv-as="trans('data.plot_number')"
@@ -251,7 +274,7 @@
                                     <v-flex xs12 md4>
                                         <v-text-field
                                             v-model="project.cadastral_decision_number"
-                                            :readonly="isEdit"
+                                            :disabled="isEdit"
                                             :label="trans('data.cadastral_decision_number')"
                                             data-vv-name="Authorization Request Number"
                                             :data-vv-as="trans('data.cadastral_decision_number')"
@@ -267,7 +290,7 @@
                                         <v-autocomplete
                                             item-text="value"
                                             item-value="key"
-                                            :readonly="isEdit"
+                                             :disabled="isEdit"
                                             :items="buiding_types"
                                             v-model="project.buiding_type"
                                             :label="trans('data.buiding_type')"
@@ -279,7 +302,7 @@
                                         <v-text-field
                                             type="number"
                                             ref="input"
-                                            :readonly="isEdit"
+                                          :disabled="isEdit"
                                             :label="trans('data.unit_number')"
                                             v-model.number="project.unit_number"
                                         ></v-text-field>
@@ -289,7 +312,7 @@
                                             v-model="project.build_rate"
                                             :label="trans('data.build_rate')"
                                             v-validate="'required'"
-                                            :readonly="isEdit"
+                                           :disabled="isEdit"
                                             data-vv-name="build_rate"
                                             :data-vv-as="trans('data.build_rate')"
                                             :error-messages="errors.collect('build_rate')"
@@ -300,7 +323,7 @@
                                         <v-autocomplete
                                             item-text="value"
                                             item-value="key"
-                                            :readonly="isEdit"
+                                           :disabled="isEdit"
                                             :items="project_types"
                                             v-model="project.project_type"
                                             :label="trans('data.project_type')"
@@ -315,7 +338,7 @@
                                         <v-autocomplete
                                             item-text="value"
                                             item-value="key"
-                                            :readonly="isEdit"
+                                            :disabled="isEdit"
                                             :items="roles_number"
                                             v-model="project.role_number"
                                             :label="trans('data.role_number')"
@@ -326,7 +349,7 @@
                                         <v-autocomplete
                                             item-text="value"
                                             item-value="key"
-                                            :readonly="isEdit"
+                                          :disabled="isEdit"
                                             :items="using_types"
                                             v-model="project.using"
                                             :label="trans('data.using')"
@@ -438,7 +461,6 @@ export default {
                             'key'
                         ];
                     } else {
-                    
                     }
                 });
         },

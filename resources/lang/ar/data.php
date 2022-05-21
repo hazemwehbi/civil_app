@@ -118,8 +118,8 @@ return [
     'eastern_border'=>'الحد الشرقي',
     'western_border'=>'الحد الغربي',
     'southern_border'=>'الحد الجنوبي',
-    'lon'=>'الاحداثيات',
-    'lat'=>'الاحداثيات',
+    'lon'=>'خط الطول',
+    'lat'=>'خط العرض',
     'using'=>'الاستخدام', 
     'buiding_type'=>'نوع المبنى ',
     'role_number'=>'عدد الادوار',
@@ -328,9 +328,101 @@ return [
        'can_not_static_role'=>'لايمكنك اسناد دور اساسي',
        'not_permiision_to_assign_primary_role'=>'لايمكنك اسناد دور رئيسي لمستخدم، يجب ان يطلب الأذن',
 
-       'speciality'=>'الاختصاص'
 
 
+       //enginnering office
+       'speciality'=>'الاختصاص',
+        'new_employee_off'=>'موظف جديد',
+        'all_employees'=>'جميع الموظفين',
+        'add_employee_off'=>'اضافة موظف',
+        'edit_employee_off'=>'تعديل موظف',
+        'employees'=>'الموظفين',
+
+
+        'engennering_request'=>'مهندسيين الطلب',
+
+        'add_project'=>'اضف مشروع',
+        'clear'=>'الغاء',
+
+
+
+        ////taskss
+        'tasks'=>'المهام'
+        ,
+        'add_task'=>'اضافة مهمة',
+        'delete_task'=>'مسح مهمة',
+        'edit_task'=>'تعديل مهمة',
+        'view_task'=>'عرض مهمة'
+        ,
+        'task'=>'المهمة',
+
+        'id' => 'المعرف',
+
+        'employee_and_Dead_lines'=>'الموظفيين ومواعيدهم',
+
+
+        'specialties'=>'التخصصات',
+        'new_specialty'=>'تخصص جديد',
+
+        'specialty'=>'التخصص',
+
+        'add_specialty'=>'اضافة تخصص',
+        'view_specialty'=>'عرض التخصص',
+        'created_by'=>'انشئت من قبل',
+        'edit_specialty'=>'تعديل التخصص',
+        'create_specialty'=>'انشاء تخصص',
+
+        'ar_name'=>'الاسم بالعربي',
+        'en_name'=>'الاسم بالانكليزية',
+
+
+
+        'office'=>'المكتب الهندسي',
+
+
+        'create_design'=>'انشاء طلب تصميم',
+        'edit_design'=>'تعديل التصميم',
+        'view_design'=>'عرض التصميم',
+        'stage'=>'المرحلة',
+        'accept_design_request'=>'الموافقة على طلب التصميم',
+
+
+        'create_support'=>'انشاء طلب حدمة مساندة',
+        'edit_support'=>'تعديل خدمة المساندة',
+        'view_support'=>'تفاصيل خدمة المساندة',
+
+
+        'price'=>'السعر',
+        'enginner_name'=>'اسم المهندس',
+        'generate_pdf'=>'توليد ملف pdf',
+        'reject'=>'رفض',
+        'accepted_done'=>'تمت الموافقة',
+        'reject_done'=>'لم تتم الموافقة',
+        'document_info'=>'المستندات',
+        'view_design_details'=>'تفاصيل التصميم',
+        'offer_detail'=>'تفاصيل العروض',
+        'supporters'=>'مساندي الخدمة',
+        'requests'=>'الطلبات',
+        'support_name'=>'اسم مساند الخدمة',
+        'supporters_name'=>'اسماء مساندي الخدمة',
+        'view_support'=>'تفاصيل طلب خدمة المساندة',
+        'view_support_details'=>'تفاصيل الطلب',
+         'new'=>'جديد',
+         'pending'=>'معلق',
+         'sent'=>'تم الارسال',
+         'accepted'=>'تم الموافقة',
+         'rejected'=>'تم الرفض',
+         'completed'=>'مكتمل',
+         'in_progress'=>'في تَقَدم',
+
+         'contract_requests'=>'طلبات المقاولة',
+         'create_contract'=>'انشاء طلب مقاولة',
+         'edit_contract'=>'تعديل طلب المقاولة',
+         'contractors'=>'المقاوليين',
+         'view_contractt'=>' تفاصيل الطلب ',
+         'view_contract_details'=>'عرض تفاصيل الطلب',
+         'contractors_name'=>'اسماء المقاولين',
+         'contract_name'=>'اسم المقاول'
 
 
 

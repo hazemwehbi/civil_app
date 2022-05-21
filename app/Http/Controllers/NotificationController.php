@@ -8,7 +8,11 @@ use App\Leave;
 use App\Project;
 use App\ProjectTask;
 use App\Reminder;
+use App\DesignRequest;
 use App\Ticket;
+use App\DesignEnginner;
+use App\StageProject;
+use App\SupportRequestUsers;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -110,11 +114,66 @@ class NotificationController extends Controller
                 ->simplePaginate()->markAsRead();
          
         foreach ($notifications as $notification) {
+
+            if ('App\Notifications\AskDesignRequestOffer' == $notification->type) {
+                $notification['estate'] = User::
+                            findOrFail($notification->data['estate_id']);
+        
+                                
+            }
+        
+            if ('App\Notifications\AcceptDesignRequestByEstateOwner' == $notification->type) {
+                $notification['estate'] = User::
+                            findOrFail($notification->data['estate_id']);
+                $notification['stage'] = StageProject::
+                            findOrFail($notification->data['stage_id']);
+                                
+            }
+            if ('App\Notifications\RejectDesignRequestByEstateOwner' == $notification->type) {
+                $notification['estate'] = User::
+                            findOrFail($notification->data['estate_id']);
+                $notification['stage'] = StageProject::
+                             findOrFail($notification->data['stage_id']);
+            }
+
+            if ('App\Notifications\DesignRequestSendedToEmployees' == $notification->type) {
+                $notification['office'] = User::
+                            findOrFail($notification->data['office_id']);
+                            $notification['stage'] = StageProject::
+                                findOrFail($notification->data['stage_id']);
+                                
+            }
+            if ('App\Notifications\ShowDesignRequestOffer' == $notification->type) {
+                $notification['enginner'] = User::
+                            findOrFail($notification->data['enginner_id']);
+                $notification['project'] = Project::with('creator')
+                                ->findOrFail($notification->data['project_id']);
+               
+               $notification['design_enginner'] = DesignEnginner::
+                                findOrFail($notification->data['design_enginner_id']);
+                $notification['stage'] = StageProject::
+                                    findOrFail($notification->data['stage_id']);
+                                
+            }
+
             if ('App\Notifications\ProjectCreatedNotification' == $notification->type) {
                 $notification['project'] = Project::with('creator')
                             ->findOrFail($notification->data['project_id']);
+               
             }
-
+            if ('App\Notifications\ProjectEditedNotification' == $notification->type) {
+                $notification['project'] = Project::with('creator')
+                            ->findOrFail($notification->data['project_id']);
+                  $notification['user'] = User::findOrFail($notification->data['user_id']);
+                            
+            }
+            
+            if ('App\Notifications\ProjectRequestCreatedNotification' == $notification->type) {
+                $notification['project'] = Project::with('creator')
+                            ->findOrFail($notification->data['project_id']);
+                   $notification['office'] = User::findOrFail($notification->data['office_id']);
+            }
+            
             elseif ('App\Notifications\AcceptedRequestOfficeNotification' == $notification->type) {
                 $notification['office'] = User::findOrFail($notification->data['office_id']);
             } 
@@ -154,8 +213,50 @@ class NotificationController extends Controller
                 $notification['ticket'] = Ticket::findOrFail($notification->data['ticket_id']);
                 $notification['created_by'] = User::findOrFail($notification->data['created_by']);
             }
-        }
 
+
+
+            ///support  service 
+            elseif ('App\Notifications\AskSupportRequestOffer' == $notification->type) {
+                $notification['estate'] = User::
+                            findOrFail($notification->data['estate_id']);
+        
+                                
+            }
+
+            elseif ('App\Notifications\AcceptSupportRequestByEstateOwner' == $notification->type) {
+                $notification['estate'] = User::
+                            findOrFail($notification->data['estate_id']);
+
+
+                           
+        
+                                
+            }
+
+
+            elseif ('App\Notifications\RejectSupportRequestByEstateOwner' == $notification->type) {
+                $notification['estate'] = User::
+                            findOrFail($notification->data['estate_id']);
+        
+                                
+            }
+
+
+            
+            elseif ('App\Notifications\ShowSupportRequestOffer' == $notification->type) {
+                $notification['supporter'] = User::
+                            findOrFail($notification->data['supporter_id']);
+                $notification['project'] = Project::with('creator')
+                                ->findOrFail($notification->data['project_id']);
+               
+            //    $notification['support_user_id'] = SupportRequestUsers::
+            //                     findOrFail($notification->data['support_user_id']);
+             
+                                
+            }
+        }
+        
         return $this->respond($notifications);
     }
 }

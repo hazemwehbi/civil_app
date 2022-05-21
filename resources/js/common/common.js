@@ -12,6 +12,8 @@ window.Vue = require('vue');
 import VeeValidate from 'vee-validate';
 Vue.use(VeeValidate, { validity: true, fieldsBagName: 'veeFields' });
 
+
+
 //to use lodash in templates
 Vue.prototype._ = _;
 
@@ -106,7 +108,7 @@ flatpickr.setDefaults({
     },
 });
 
-Dropzone.autoDiscover = false;
+
 Vue.component('moon-loader', require('vue-spinner/src/MoonLoader.vue'));
 Vue.component('notification', require('../common/notification/Notification.vue'));
 Vue.component('calendar', require('../common/calendar/Calendar.vue'));
@@ -181,6 +183,11 @@ import DatetimePicker from 'vuetify-datetime-picker';
 // (Optional) import 'vuetify-datetime-picker/src/stylus/main.styl'
  
 Vue.use(DatetimePicker)
+
+import VuetifyMoney from "vuetify-money";
+Vue.use(VuetifyMoney);
+
+
 import * as VueGoogleMaps from 'vue2-google-maps'
 Vue.use(VueGoogleMaps, {
     load: {

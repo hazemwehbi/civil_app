@@ -12,7 +12,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Notifications\AskPermissionNotification;
 use App\Components\User\Models\User;
 use Carbon\Carbon;
+use App\Project;
+use App\StageProject;
+use App\SupportRequestUsers;
 use File;
+use Lang;
 use Illuminate\Support\Facades\Storage;
 
 class CommonController extends Controller
@@ -106,6 +110,23 @@ class CommonController extends Controller
         return $my_users;
     }
 
+    public function getUser($id)
+    {
+        $user=User::findOrFail($id);
+      
+        return $user;
+    }
+
+    public function getStage($id)
+    {
+        $stage=StageProject::findOrFail($id);
+      
+        return $stage;
+    }
+
+
+
+    
     protected function _saveAskedPermissionNotifications($member, $data)
     {
             $notifiable_users = User::find($member);
@@ -113,9 +134,10 @@ class CommonController extends Controller
     }
 
 
-    public function getRole($role_id){
-       return Role::find($role_id);
-    }
+
+
+
+  
     
    public function checkRole($role_id) {
     return Role::find($role_id)->is_primary;
@@ -128,5 +150,63 @@ class CommonController extends Controller
            $output=!Empty($role);;
            return Response::respondSuccess($output);
            //return 
+   }
+   public function getAllCustomer()
+   {
+      
+        $customers=User::select('id', 'name','email','mobile','id_card_number')->get()->toArray();
+       return $customers;
+   }
+   public function getRole($role_id){
+    return Role::find($role_id);
+ }
+   public function getProjects( Request $request)
+   {
+      
+    $user=Auth::user();
+    $projects=[];
+    if(!$user->hasRole('superadmin')){
+        $childrens=$user->childrenIds($user->id);
+        array_push($childrens,$user->id);
+        $projects=Project::select('id', 'name')->whereIn('customer_id',$childrens)->get()->toArray();
+    }
+    else{
+        $projects=Project::select('id', 'name')->get()->toArray();
+    }
+    return Response::respondSuccess($projects);
+     
+   }
+
+   public function getSupporters()
+   {
+      
+       return User::getAllSupporters();
+   }
+   
+   
+   public function getContrators()
+   {
+      
+       return User::getAllContrators();
+   }
+
+   public function  showOfferRequestDetails(Request $request){
+    try {
+
+        $support_user = SupportRequestUsers::with('supporter')->where('id',$request->support_user_id)->first();
+        if($support_user!=  null){
+            return $this->respondSuccess($support_user);
+        }
+        else{
+            $message = Lang::get('site.object_not_found');
+            return $this->respondWentWrong($message);
+        }
+
+    }
+     catch (Exception $e) {
+        $output = $this->respondWentWrong($e);
+        return $output ;
+    }
+
    }
 }

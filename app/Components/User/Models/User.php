@@ -182,6 +182,11 @@ class User extends Authenticatable implements HasMedia
         return $this->belongsTo('App\Customer');
     }
 
+    public function specialty()
+    {
+        return $this->belongsTo('App\Specialty');
+    }
+    
     /**
      * retrieve users for dropdown.
      *
@@ -189,8 +194,8 @@ class User extends Authenticatable implements HasMedia
      */
     public static function getUsersForDropDown($append_all = false)
     {
-        $users = User::where('customer_id', null)
-                        ->select('id', 'name')
+        $users = User::
+                        select('id', 'name')
                         ->orderBy('name')
                         ->get()
                         ->toArray();
@@ -206,8 +211,7 @@ class User extends Authenticatable implements HasMedia
     {
         $user=Auth::user();
         if ($user->hasRole('superadmin')){
-            $users = User::where('customer_id', null)
-            ->select('id', 'name')
+            $users = User::select('id', 'name')
             ->orderBy('name')
             ->get()
             ->toArray();
@@ -227,33 +231,49 @@ class User extends Authenticatable implements HasMedia
         return $users;
     }
 
+///Enginnering OFFICE 
 
+    public static function getRolesForEnginneringOffice()
+    {
+                $roles = Role:: where(function ($query) {
+                $roles_ids = Auth::user()->roles->pluck('id');
+                $query->where('is_primary',0);
+                ///$query->whereIn('id', $roles_ids);
+                $query->orWhere('created_by',Auth::id());
+            })->select('id', 'name')
+                        ->get()
+                            ->toArray();
+
+
+            return $roles;
+
+    }
     public static function getRolesForEmployee()
     {
         // $roles = Role::where('type', 'employee')
         //             ->get()
         //             ->toArray();
-        $user=Auth::user();
-        if ($user->hasRole('superadmin'))
-         {
-            $roles=Role::all();
-         }
-         else{
-
-            $roles = Role:: where(function ($query) {
-                $roles_ids = Auth::user()->roles->pluck('id');
-                //$query->where('is_primary',0);
-
-                $query->whereIn('id', $roles_ids);
-                $query->orWhere('created_by',Auth::id());
-            })->select('id', 'name')
-                          ->get()
-                            ->toArray();
-           // $roles =$user->roles->where('is_primary',0)->get()
-             //                ->toArray();
+        // $user=Auth::user();
+        // if ($user->hasRole('superadmin'))
+        //  {
             
-         }
-                    
+        //  }
+        //  else{
+
+        //     $roles = Role:: where(function ($query) {
+        //         $roles_ids = Auth::user()->roles->pluck('id');
+        //         //$query->where('is_primary',0);
+
+        //         $query->whereIn('id', $roles_ids);
+        //         $query->orWhere('created_by',Auth::id());
+        //     })->select('id', 'name')
+        //                   ->get()
+        //                     ->toArray();
+        //    // $roles =$user->roles->where('is_primary',0)->get()
+        //      //                ->toArray();
+            
+        //  }
+         $roles=Role::all();      
         return $roles;
     }
     public static function getRolesForCreateEmployee()
@@ -550,6 +570,53 @@ class User extends Authenticatable implements HasMedia
           return $users;
       }
 
+
+      public static function getUsersOfficeForSpecialty($office_id,$specialty_id)
+      {
+        $users = User::
+       
+        where('parent_id',$office_id)
+        ->where('is_emp',1)
+        ->where('specialty_id',$specialty_id)
+        ->permission('project.list')
+        ->select('id', 'name')
+        ->orderBy('name')
+        ->get()->toArray();
+        return  $users;//  $employees;
+
+      }
+
+      public static function getUsersOfficeForRequest($id)
+      {
+        $users = User::
+       
+        where('parent_id',$id)
+        ->where('is_emp',1)
+        ->permission('project.list')
+        ->select('id', 'name')
+        ->orderBy('name')
+        ->get()->toArray();
+        return  $users;//  $employees;
+
+      }
+      public static function getAllEmployee($id)
+      {
+        $users = User::
+       
+        where('parent_id',$id)
+        ->where('is_emp',1)
+       // ->permission('project.list')
+        ->select('id', 'name')
+        ->orderBy('name')
+        ->get()->toArray();
+       
+       // $permission = Permission::findByName('project.list')->toArray();;
+        
+       
+        // ->toArray();
+        return  $users;//  $employees;
+         // return $users;
+      }
           /**
      * Get the leaves for the employee.
      */
@@ -579,7 +646,39 @@ class User extends Authenticatable implements HasMedia
         ->pluck('id')
         ->toArray();
     }
+    
+    public static function getAllSupporters($append_all = false)
+    {
+      $users = User::whereHas(
+          'roles', function($q){
+              $q->where('type', 'SUPPORT_SERVICES_OFFICE');
+              $q->where('is_primary',1);
+          }
+      )->select('id','name')
+    //  ->where('parent_id',1)->select('id', 'name')
+      ->orderBy('name')
+      ->get()
+      ->toArray();
+ 
+        return $users;
+    }
+    //////////////////////
 
+    public static function getAllContrators($append_all = false)
+    {
+      $users = User::whereHas(
+          'roles', function($q){
+              $q->where('type', 'CONTRACTING_COMPANY');
+              $q->where('is_primary',1);
+          }
+      )->select('id','name')
+    //  ->where('parent_id',1)->select('id', 'name')
+      ->orderBy('name')
+      ->get()
+      ->toArray();
+ 
+        return $users;
+    }
 
 
 }

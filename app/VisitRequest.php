@@ -8,6 +8,12 @@ class VisitRequest extends Model
 {
     protected $guarded = ['id'];
 
+
+    public function specialties()
+    {
+        return $this->belongsToMany('App\Specialty', 'specialtiy_visit_request', 'rquest_id', 'specialty_id' );
+    }
+
     public function customer()
     {
         return $this->belongsTo('App\Components\User\Models\User');
@@ -18,7 +24,10 @@ class VisitRequest extends Model
         return $this->belongsTo('App\Project');
     }
 
-
+    public function requestEnginners()
+    {
+        return $this->hasMany('App\RequestEnginner','request_id');
+    }
        /**
      * The member that belong to the project.
      */

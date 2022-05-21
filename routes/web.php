@@ -35,8 +35,8 @@ if (config('constants.enable_client_signup')) {
 }
 
 // Employees & Superadmin
-Route::prefix('admin')
-    ->namespace('Admin')
+Route::prefix('admin')->
+    namespace('Admin')
    ->middleware(['auth', 'employee'])
     ->name('admin')
     ->group(function () {
@@ -106,26 +106,30 @@ Route::middleware(['auth'])
 
         Route::resource('media', 'MediaController');
 
-      //  Route::post('visit-request', 'RequestTypeController@store');
-        Route::resource('request', 'RequestTypeController');
-        Route::get('/get-enginnering-types', 'RequestTypeController@getEnginneringTypes');
-        Route::post('accept-project', 'RequestTypeController@acceptProject');
-        Route::post('request-cancel', 'RequestTypeController@cancelRequest');
+        Route::post('removeFile', 'MediaController@removeFile');
         
 
+      //  Route::post('visit-request', 'RequestTypeController@store');
+        Route::resource('request', 'RequestTypeController');
+        
 
+      
+        Route::get('get-requests', 'RequestTypeController@getRequests');
+        Route::get('get-requests-enginners/{id}', 'RequestTypeController@getRequestEnginners');
+        
         //project 
         
         Route::get('projects/{id}/members', 'ProjectController@getMembers');
         Route::get('get-default-members/{id}', 'ProjectController@getDefaultMembers');
-
+        Route::get('get-project/{id}', 'ProjectController@getProject');
+        
 
        Route::get('get-customer-project/{id}', 'ProjectController@getCustomer');
         Route::post('add-new-project', 'ProjectController@addNewProject');
         Route::get('get-offices', 'Admin\UserController@getAllOffices');
         Route::get('get-users-office/{id}', 'Admin\UserController@getUsersOffice');
-        Route::get('all-customers', 'ProjectController@getAllCustomer');
-        Route::get('get-office-empoloyees/{id}', 'Admin\UserController@getUsersOffice');
+        
+      
         
 
         Route::get('projects-statistics', 'ProjectController@getStatistics');
@@ -152,6 +156,9 @@ Route::middleware(['auth'])
         Route::get('project-task-description', 'ProjectTaskController@updateDescription');
         Route::resource('project-tasks', 'ProjectTaskController');
         Route::resource('project-comments', 'ProjectCommentController');
+
+      
+        
         //Activities related route
         Route::get('activities/project', 'ActivityController@project');
 
@@ -173,7 +180,7 @@ Route::middleware(['auth'])
         Route::get('get-project/{id}', 'ProjectController@getProject');
 
       
-        Route::get('sent-requests', 'ProjectController@getProjectRequest');
+       
         Route::delete('delete-requests/{id}', 'ProjectController@deleteRequest');
         Route::get('get-priority','RequestTypeController@getPriority');
         Route::resource('request-type','RequestTypeController');
@@ -215,14 +222,21 @@ Route::middleware(['auth'])
         
         Route::resource('ticket-comments', 'TicketCommentController');
 
+
+        Route::get('get-user/{id}', 'CommonController@getUser');
+
         Route::get('get-current-user', 'CommonController@getCurrentUser');
         Route::get('get-roles-permission', 'CommonController@getPermissionsforAsk');
         Route::post('ask-for-permission', 'CommonController@askPermissionForUser');
         Route::get('get-my-users', 'CommonController@getMyUsers');
         Route::get('get-role', 'CommonController@getRole');
         Route::get('/check-role-primary/{id}', 'CommonController@checkRole');
-        
+        Route::get('get-project-customer','CommonController@getProjects');
         Route::get('check-current-user-type/{type}', 'CommonController@checkCurrentUserType');
+        Route::get('all-customers-admin', 'CommonController@getAllCustomer');
+        Route::get('all-customers', 'CommonController@getAllCustomer');
+        
+        Route::get('get-supporters', 'CommonController@getSupporters');
         
        // Route::get('get-download/{path}', 'CommonController@getDownload');
         Route::get('get-download/{path}','CommonController@getDownload');
@@ -234,19 +248,188 @@ Route::middleware(['auth'])
         Route::resource('requests-role', 'RequestRoleController');
         Route::get('accept-requests-role/{id}','RequestRoleController@acceptRequestRole');
         Route::get('reject-requests-role/{id}','RequestRoleController@rejectRequestRole');
-   
+      //  Route::get('get-office-requests','RequestRoleController@getOfficeRequests1');
 
-        
+        Route::resource('get-document-project', 'ProjectDocumnetsController');
         //
 
+        Route::resource('specialty', 'SpecialtyController');
 
+        Route::get('/get-enginnering-types', 'SpecialtyController@getspecialties');
 
-
+        Route::resource('project-document', 'ProjectDocumentsController');
         
+        Route::post('show-design-request-details', 'DesignRequestController@showDesignRequestDetails');
+
+
+        Route::get('get-stage/{id}','CommonController@getStage');
+
+
+        Route::post('show-support-request-offer-details', 'CommonController@showOfferRequestDetails');
         
+
+
+        Route::get('get-contractors', 'CommonController@getContrators');
+
     });
 
-// Employees & Superadmin
+// Employees & Estate Owner
+
+
+
+Route::prefix('estate_owner')
+    ->namespace('EstateOwner')
+    ->middleware(['auth','estate_owner'])
+    ->name('estate_owner')
+    ->group(function () {
+            Route::get('/', 'SinglePageController@displaySPA')
+            ->name('estate_owner.spa');
+            Route::resource('dashboards', 'DashboardController')->only(['index']);
+
+            Route::get('user-statistics', 'UserController@getStatistics');
+            Route::get('users-all', 'UserController@getAllEmployee');
+            Route::get('users/{id}/name', 'UserController@getEmployee');
+            Route::get('customers', 'UserController@getCustomers');
+             
+            Route::resource('users', 'UserController');
+
+            Route::resource('request-design', 'DesignRequestController');
+            
+            Route::resource('request-support', 'SupportRequestController');
+            Route::post('confirm-support', 'SupportRequestController@confirmSupport');
+            Route::post('accept-support-request-offer', 'SupportRequestController@acceptSupport');
+
+            Route::post('confirm-design', 'DesignRequestController@confirmDesign');
+
+            Route::post('accept-design-request-offer', 'DesignRequestController@acceptDesign');
+            Route::resource('request-contract', 'ContractRequestController');
+            Route::post('confirm-contract', 'ContractRequestController@confirmContract');
+            Route::post('accept-contract-request-offer', 'ContractRequestController@acceptContract');
+        // Route::get('dashboards', 'DashboardController@index');
+    });
+
+///SupportService
+
+Route::prefix('support_service')
+    ->namespace('SupportService')
+    ->middleware(['auth','support_service'])
+    ->name('support_service')
+    ->group(function () {
+            Route::get('/', 'SinglePageController@displaySPA')
+            ->name('estate_owner.spa');
+            Route::resource('dashboards', 'DashboardController')->only(['index']);
+
+      //      Route::get('user-statistics', 'UserController@getStatistics');
+         ///   Route::get('users-all', 'UserController@getAllEmployee');
+         //   Route::get('users/{id}/name', 'UserController@getEmployee');
+         //   Route::resource('users', 'UserController');
+            Route::resource('request-support', 'SupportRequestController');
+
+            Route::post('send-support-service-offer', 'SupportRequestController@sendSupportServiceOffer');
+
+            Route::post('show-support-service-details', 'SupportRequestController@showSupportServiceDetails');
+
+            
+    
+    });
+
+
+
+
+
+
+
+///Contacting Company
+
+Route::prefix('contract_company')
+->namespace('ContractCompany')
+->middleware(['auth','contract_company'])
+->name('contract_company')
+->group(function () {
+        Route::get('/', 'SinglePageController@displaySPA')
+        ->name('contract_company.spa');
+        Route::resource('dashboards', 'DashboardController')->only(['index']);
+
+  //      Route::get('user-statistics', 'UserController@getStatistics');
+     ///   Route::get('users-all', 'UserController@getAllEmployee');
+     //   Route::get('users/{id}/name', 'UserController@getEmployee');
+     //   Route::resource('users', 'UserController');
+        Route::resource('request-contract', 'ContractRequestController');
+
+        Route::post('send-contract-offer', 'ContractRequestController@sendContractOffer');
+      
+        Route::post('show-contract-details', 'ContractRequestController@showContractDetails');
+
+        
+
+});
+
+
+
+ /// Enginnering OFFICE
+
+    Route::prefix('enginner_office')
+    ->namespace('EnginneringOffice')
+    ->middleware(['auth','enginner_office'])
+    ->name('enginner_office')
+    ->group(function () {
+            Route::get('/', 'SinglePageController@displaySPA')
+            ->name('estate_owner.spa');
+            Route::resource('dashboards', 'DashboardController')->only(['index']);
+
+            Route::get('user-statistics', 'UserController@getStatistics');
+            Route::get('users-all', 'UserController@getAllEmployee');
+            Route::get('users/{id}/name', 'UserController@getEmployee');
+            Route::get('get-office-empoloyees/{id}', 'UserController@getUsersOffice');
+            Route::post('get-office-empoloyees-specialty', 'UserController@getEmployeesOfficeForSpecialty');
+            Route::resource('users', 'UserController');
+            Route::get('/customers', 'UserController@getCustomers');
+             //    request     
+             Route::post('get-office-empoloyees-request', 'RequestTypeController@getEmployeesOfficeForRequest');
+
+             Route::post('accept-project', 'RequestTypeController@acceptProject');
+            Route::post('request-cancel', 'RequestTypeController@cancelRequest');
+            Route::get('get-office-requests','RequestTypeController@getOfficeRequests');
+            Route::get('projects-request','RequestTypeController@getProjectRequests');
+
+            Route::resource('request', 'RequestTypeController');
+            Route::post('accept-request-by-enginner','RequestTypeController@acceptRequestByEnginner');
+            Route::resource('roles', 'ManageRolesController');
+
+            Route::get('project-tasks/mark-completed', 'ProjectTaskController@markAsCompleted');
+
+            Route::get('project-tasks/filter-data/{project_id}', 'ProjectTaskController@getFilterData');
+            
+            Route::get('project-task-description', 'ProjectTaskController@updateDescription');
+            Route::resource('project-tasks', 'ProjectTaskController');
+            //customer
+            Route::post('add-customer', 'UserController@addCustomer');
+
+            Route::get('all-employee/{id}', 'UserController@getAllEmployeeForRequest');
+
+
+            Route::resource('request-design', 'DesignRequestController');
+
+            Route::post('get-stages-design-request', 'DesignRequestController@getStagesDesignRequest');
+           
+            Route::post('accept-design-request', 'DesignRequestController@acceptDesignRequest');
+
+
+
+            Route::post('send-design-request-offer', 'DesignRequestController@sendDesignRequestOffer');
+
+            Route::post('show-design-request-details', 'DesignRequestController@showDesignRequestDetails');
+
+            
+            
+            
+            
+        // Route::get('dashboards', 'DashboardController@index');
+    });
+
+
+
+
 Route::prefix('client')
     ->namespace('Client')
     ->middleware(['auth', 'client'])

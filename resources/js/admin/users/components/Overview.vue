@@ -227,8 +227,11 @@
                             </v-flex>
                         </v-layout>
                     </v-card-text>
-                    <v-card-actions>
-                        <v-btn
+                    <v-card-actions justify-center>
+                          <v-btn style="color: #06706d" @click="$router.go(-1)">
+                            {{ trans('messages.back') }}
+                        </v-btn>
+                        <!-- <v-btn
                             v-if="$can('employee.edit')"
                             block
                             outline
@@ -242,7 +245,7 @@
                         >
                             <v-icon>edit</v-icon>
                             {{ trans('messages.edit') }}
-                        </v-btn>
+                        </v-btn> -->
                     </v-card-actions>
                 </v-card>
             </v-flex>

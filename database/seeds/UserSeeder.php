@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
             'last_login' => \Carbon\Carbon::now(),
             'active' => \Carbon\Carbon::now(),
             'activation_key' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
+            'user_type_log'=>'SITE_MANAGENMENT'
         ]);
         $AdminUser->assignRole('superadmin');
 

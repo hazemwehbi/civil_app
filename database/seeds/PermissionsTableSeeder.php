@@ -83,6 +83,11 @@ class PermissionsTableSeeder extends Seeder
                     ['name' => 'role.view'],
                     ['name' => 'role.edit'],
                     ['name' => 'role.delete'],
+
+                    ['name' => 'task.create'],
+                    ['name' => 'task.view'],
+                    ['name' => 'task.edit'],
+                    ['name' => 'task.delete'],
                 ];
 
 
@@ -114,6 +119,12 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'role.view'],
             ['name' => 'role.edit'],
             ['name' => 'role.delete'],
+
+            
+            ['name' => 'task.create'],
+            ['name' => 'task.view'],
+            ['name' => 'task.edit'],
+            ['name' => 'task.delete'],
         ];
 
         //add static roles for create acount

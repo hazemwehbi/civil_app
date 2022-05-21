@@ -17,7 +17,7 @@
                 <v-spacer></v-spacer>
                 <v-btn
                     style="background-color: #06706d; color: white"
-                    v-if="$can('tickets.create')"
+                    v-if="$can('tickets.create') && false"
                     class="lighten-1"
                     @click="
                         $router.push({
@@ -42,110 +42,14 @@
                 <template slot="items" slot-scope="props">
                     <td>
                         <div style="display: inline-flex; padding-left: 30%" align="center">
-                            <!-- $hasRole('employee') && -->
-                            <!-- v-if="props.item.status!='accepted'" -->
-                            <!-- <v-btn
-                                small
-                                fab
-                                dark
-                                color="teal"
-                                v-if="
-                                    ($hasRole('superadmin') || $hasRole('Engineering Office')) &&
-                                    props.item.status == 'accepted' &&
-                                    props.item.office_id == currentUser
-                                "
-                                @click="
-                                    $router.push({
-                                        name: 'create_project',
-                                        params: { project: props.item },
-                                    })
-                                "
-                            >
-                                <v-icon color="white">add</v-icon>
-                                <!-- {{trans('messages.add')}}-->
-                            <!--/v-btn> -->
-                            <!-- v-if="!$can('superadmin')" -->
                             <v-btn small fab dark color="success" @click="viewRequest(props.item)">
                                 <v-icon color="white">info</v-icon>
                             </v-btn>
-                            <v-btn
-                                v-if="
-                                    props.item.status == 'new' &&
-                                    props.item.customer_id == currentUser
-                                "
-                                small
-                                fab
-                                dark
-                                color="success"
-                                @click="editRequest(props.item)"
-                            >
-                                <v-icon color="white">edit</v-icon>
-                            </v-btn>
-                            <!-- v-if="$can('superadmin')" -->
-                            <div>
-                                <v-btn
-                                    color="primary"
-                                    small
-                                    fab
-                                    v-if="
-                                        $hasRole('superadmin') ||
-                                        ($hasRole('Engineering Office') &&
-                                            props.item.office_id == currentUser &&
-                                            props.item.status == 'sent')
-                                    "
-                                    dark
-                                    @click="acceptProject(props.item)"
-                                >
-                                    <v-icon color="white">check</v-icon>
-                                    <!--{{trans('data.accept')}}-->
-                                </v-btn>
-                            </div>
-                            <!-- v-if="!$can('superadmin')" -->
-                            <div>
-                                <v-btn
-                                    color="primary"
-                                    small
-                                    fab
-                                    v-if="
-                                        props.item.sent == 0 &&
-                                        props.item.customer_id == currentUser
-                                    "
-                                    dark
-                                    @click="sendRequest(props.item)"
-                                >
-                                    <v-icon color="white">mail</v-icon>
-                                    <!--{{trans('data.accept')}}-->
-                                </v-btn>
-                            </div>
-                            <v-btn
-                                color="error"
-                                v-if="
-                                    props.item.status == 'sent' &&
-                                    props.item.office_id == currentUser
-                                "
-                                small
-                                fab
-                                dark
-                                @click="rejectProject(props.item.id)"
-                            >
-                                <v-icon color="white">cancel</v-icon>
-                                <!-- {{trans('messages.cancel')}}-->
-                            </v-btn>
-                            <v-btn
-                                color="error"
-                                v-if="
-                                    (props.item.status == 'new' ||
-                                        props.item.status == 'rejected') &&
-                                    props.item.customer_id == currentUser
-                                "
-                                small
-                                fab
-                                dark
-                                @click="removeProject(props.item.id)"
-                            >
-                                <v-icon color="white">delete</v-icon>
-                                <!-- {{trans('messages.cancel')}}-->
-                            </v-btn>
+                        </div>
+                    </td>
+                    <td>
+                        <div align="center">
+                            {{ props.item.id }}
                         </div>
                     </td>
                     <td>
@@ -217,8 +121,14 @@ export default {
         StatusLabel,
         AcceptEnginneringOfficeModal: AcceptEnginneringOfficeModal,
     },
+    props: {
+        id: {
+            required: false,
+        },
+    },
     data() {
         const self = this;
+
         return {
             currentUser: '',
             projects: [],
@@ -230,6 +140,12 @@ export default {
             headers: [
                 {
                     text: self.trans('messages.action'),
+                    value: false,
+                    align: 'center',
+                    sortable: false,
+                },
+                {
+                    text: self.trans('data.id'),
                     value: false,
                     align: 'center',
                     sortable: false,
@@ -307,6 +223,7 @@ export default {
     },
     created() {
         const self = this;
+
         self.projectRequests = [];
         self.projects = [];
         self.getRequestTypes();
@@ -322,8 +239,7 @@ export default {
                 return 'blue';
             } else if (status == 'accepted') {
                 return 'green';
-            }
-           else if (status == 'rejected') {
+            } else if (status == 'rejected') {
                 return 'orange';
             }
         },
@@ -521,8 +437,11 @@ export default {
         getAllProjectRequest() {
             const self = this;
             self.loading = true;
+            let params = {};
+            params['projectId'] = self.id;
+            //  {'projectId':self.id}
             axios
-                .get('/sent-requests')
+                .get('get-requests', { params: params })
                 .then(function (response) {
                     self.total_items = response.data.length;
                     //   self.projectRequests = response.data.data;
@@ -630,7 +549,7 @@ export default {
         viewProject(id) {
             const self = this;
             self.$router.push({
-                name: 'edit-project',
+                name: 'view_project',
                 params: { id: id },
             });
         },

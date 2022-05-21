@@ -25,7 +25,7 @@
                         <v-flex xs12 sm6 md6>
                             <v-autocomplete
                                 item-text="name"
-                                 :readonly="true"
+                                :readonly="true"
                                 item-value="id"
                                 :items="projects"
                                 v-model="project_id"
@@ -48,12 +48,12 @@
                                     <v-icon>add</v-icon>
                                 </v-btn>
                             </v-flex> -->
-                            <v-flex xs12 sm6 md6>
+                        <v-flex xs12 sm6 md6>
                             <v-autocomplete
                                 item-text="name"
                                 item-value="id"
                                 :items="customers"
-                                 :readonly="true"
+                                :readonly="true"
                                 v-model="customer_id"
                                 :label="trans('messages.customer')"
                                 v-validate="'required'"
@@ -78,7 +78,6 @@
                                 :error-messages="errors.collect('status')"
                             ></v-autocomplete>
                         </v-flex> -->
-                  
 
                         <v-flex xs12 sm6 md6>
                             <v-autocomplete
@@ -86,7 +85,7 @@
                                 item-value="id"
                                 :items="engennering_offices"
                                 v-model="office_id"
-                                 :readonly="true"
+                                :readonly="true"
                                 :label="trans('data.enginnering_office_name')"
                                 v-validate="'required'"
                                 data-vv-name="enginnering_office_name"
@@ -95,13 +94,14 @@
                                 required
                             ></v-autocomplete>
                         </v-flex>
-                        
-                     
+
                         <v-flex xs12 sm6 md6>
                             <v-datetime-picker
                                 :label="trans('data.visit_datetime')"
                                 :datetime="dead_line_date"
-                                 :readonly="true"
+                                :okText="trans('data.ok')"
+                                :clearText="trans('data.clear')"
+                                :readonly="true"
                                 v-model="dead_line_date"
                             >
                             </v-datetime-picker>
@@ -109,38 +109,59 @@
                     </v-layout>
                     <v-layout row>
                         <v-flex xs12 sm12 md12>
-                            <v-autocomplete
-                                item-text="value"
-                                item-value="key"
-                                :items="enginnering_types"
-                                v-model="enginnering_type"
-                                 :readonly="true"
-                                :label="trans('data.enginnering_type')"
-                                multiple
-                                data-vv-name="enginnering_type"
-                                :data-vv-as="trans('data.enginnering_type')"
-                                :error-messages="errors.collect('enginnering_type')"
-                                required
-                            >
-                                <!-- <Popover
-                                    slot="append"
-                                    :helptext="trans('messages.project_member_tooltip')"
-                                >
-                                </Popover> -->
-                            </v-autocomplete>
+                           
+                                    <v-text-field
+                                        v-model="enginnering_type"
+                                        :label="trans('data.enginnering_type')"
+                                    ></v-text-field>
+                            
                         </v-flex>
-                       
                     </v-layout>
                     <v-layout row>
                         <v-flex xs12 sm12 md12>
                             <v-text-field
                                 v-model="note"
-                                 :readonly="true"
+                                :readonly="true"
                                 :label="trans('data.note')"
                             ></v-text-field>
                         </v-flex>
-
                     </v-layout>
+                    <!-- <v-layout row v-if="status == 'accepted'">
+                        <v-flex xs12 sm12 md12>
+                            <v-text-field
+                                v-model="enginnering_request"
+                                :readonly="true"
+                                :label="trans('data.engennering_request')"
+                            ></v-text-field>
+                        </v-flex>
+                    </v-layout> -->
+                    <v-container grid-list-md v-if="request_enginners.length > 0">
+                        <h3>{{ trans('data.employee_and_Dead_lines') }}</h3>
+                        <v-layout v-for="enginner in request_enginners" :key="enginner.id">
+                            <v-flex xs12 md12>
+                                <v-card light>
+                                    <v-card-text>
+                                        <div>
+                                            <!-- <v-icon small>create</v-icon> -->
+                                            <h3>
+                                                {{ enginner.employee.name }}
+                                            </h3>
+                                            {{ trans('data.dead_line_date') }}
+                                            ::
+                                            <!-- <v-icon small>date_range</v-icon> -->
+                                            <span>
+                                                {{
+                                                    enginner.dead_line_date != null
+                                                        ? enginner.dead_line_date
+                                                        : 'لم يحدد بعد'
+                                                }}
+                                            </span>
+                                        </div>
+                                    </v-card-text>
+                                </v-card>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
                     <!-- <v-flex xs1 sm1 md1>
                             <v-btn
                                 @click="$router.push({ name: 'add-project' })"
@@ -152,7 +173,7 @@
                                 <v-icon>add</v-icon>
                             </v-btn>
                         </v-flex> -->
-<!-- 
+                    <!-- 
                     <v-layout row>
                         <v-flex xs12 sm12 md12>
                             <v-textarea
@@ -184,7 +205,7 @@
                 </v-container>
             </v-card-text>
             <v-divider></v-divider>
-                  <v-layout justify-center>
+            <v-layout justify-center>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn style="color: #06706d" @click="$router.go(-1)">
@@ -239,48 +260,67 @@ export default {
             dead_line_date: null,
             note: '', //
             enginnering_type: '',
+            request_enginners: [],
         };
     },
-    created() {
-    
-    },
+    created() {},
     beforeDestroy() {
         const self = this;
         self.$eventBus.$off('updateCategoryList');
     },
     mounted() {
         const self = this;
-      
+
         self.getCustomerProject();
+        self.getEnginners();
         self.getCustomers();
         self.getOffices();
         this.loadRequest(() => {});
-          self.$eventBus.$on('updateRequestTypeList', (data) => {
+        self.$eventBus.$on('updateRequestTypeList', (data) => {
             //  self.request_types = [];
             // self.request_types = data;
         });
     },
     methods: {
+        getEnginners() {
+            const self = this;
+            axios.get('get-requests-enginners/' + self.propRequestId).then(function (response) {
+                self.request_enginners = response.data;
+            });
+        },
         loadRequest() {
             const self = this;
             axios.get('request/' + self.propRequestId).then(function (response) {
-                self.enginnering_types = response.data.enginnering_types;
-                self.request_types = response.data.request_types;
-                self.request_type = response.data.request.request_type;
-                self.project_id = response.data.request.project_id;
-                self.description = response.data.request.description;
-                self.status = response.data.request.status;
-                self.customer_id = response.data.request.customer_id;
-                self.office_id = response.data.request.office_id;
-                self.enginnering_type = JSON.parse(response.data.request.enginnering_type);
-                self.note = response.data.request.note;
-                self.dead_line_date = response.data.request.dead_line_date;
+                if (response.data.success) {
+                    console.log(response.data);
+                    var tem = response.data.msg;
+                    //self.enginnering_types = tem.enginnering_types;
+                    self.request_types = tem.request_types;
+                    self.request_type = tem.request.request_type;
+                    self.project_id = tem.request.project_id;
+                    self.description = tem.request.description;
+                    self.status = tem.request.status;
+                    self.customer_id = tem.request.customer_id;
+                    self.office_id = tem.request.office_id;
+                    self.enginnering_type =
+                        tem.request.specialties != undefined
+                            ? tem.request.specialties.map((x) => x.name).join(',')
+                            : '';
+
+                    self.note = tem.request.note;
+                    self.dead_line_date = tem.request.dead_line_date;
+                } else {
+                    self.$store.commit('showSnackbar', {
+                        message: response.data.msg,
+                        color: response.data.success,
+                    });
+                }
             });
         },
         getCustomers() {
             const self = this;
             axios
-                .get('/all-customers')
+                .get('all-customers-admin')
                 .then(function (response) {
                     self.customers = response.data;
                 })
@@ -299,7 +339,7 @@ export default {
                     console.log(error);
                 });
         },
-      
+
         reset() {
             const self = this;
             self.title = '';
@@ -313,7 +353,7 @@ export default {
             self.note = ''; //
             self.enginnering_type = '';
         },
-      
+
         getCustomerProject() {
             const self = this;
             axios
@@ -325,8 +365,6 @@ export default {
                     console.log(error);
                 });
         },
-     
-
     },
 };
 </script>

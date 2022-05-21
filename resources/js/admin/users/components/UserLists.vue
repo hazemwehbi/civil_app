@@ -81,8 +81,10 @@
                 <v-btn
                     v-if="$can('employee.create')"
                     @click="$router.push({ name: 'users.create' })"
-                    style="background-color:#06706d"
-                    dark
+                      style="background-color: #06706d; color: white"
+                    class="lighten-1"
+                    :disabled="!checkActive()"
+                    
                 >
                     {{ trans('data.new_employee') }}
                     <v-icon right dark>add</v-icon>
@@ -134,6 +136,7 @@
                                 </v-list-tile>
                                 <v-list-tile
                                     v-if="$can('employee.edit')"
+                                     :disabled="!checkActive()"
                                     @click="
                                         $router.push({
                                             name: 'users.edit',
@@ -147,6 +150,7 @@
                                     </v-list-tile-title>
                                 </v-list-tile>
                                 <v-list-tile
+                                 :disabled="!checkActive()"
                                     v-if="$can('employee.delete')"
                                     @click="trash(props.item)"
                                 >

@@ -62,5 +62,13 @@ class Kernel extends HttpKernel
         'employee' => \App\Http\Middleware\CheckEmployee::class,
         'client' => \App\Http\Middleware\CheckClient::class,
         'cors' => \App\Http\Middleware\Cors::class,
+        'estate_owner' => \App\Http\Middleware\CheckEstateOwner::class,
+        'enginner_office' => \App\Http\Middleware\CheckEnginneringOffice::class,
+        'support_service' => \App\Http\Middleware\CheckSupportService::class,
+        'contract_company' => \App\Http\Middleware\CheckContractCompany::class,
+        
+
+
+        
     ];
 }

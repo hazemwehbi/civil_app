@@ -14,6 +14,21 @@
                                     {{ trans('data.current_projects') }}
                                 </div>
                             </div>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                style="background-color: #06706d; color: white"
+                                class="lighten-1"
+                                v-if="projectData.length==0 || isshow"
+                                @click="
+                                    $router.push({
+                                        name: 'add-project',
+                                       
+                                    })
+                                "
+                            >
+                                {{ trans('data.add_project') }}
+                                <v-icon right dark>add</v-icon>
+                            </v-btn>
                         </v-card-title>
                         <v-divider></v-divider>
                         <v-card-text>
@@ -38,6 +53,7 @@
                                                             <v-list>
                                                                 <v-list-tile
                                                                     v-if="$can('tickets.create')"
+                                                                    :disabled="!checkActive()"
                                                                     @click="
                                                                         $router.push({
                                                                             name: 'create_visit_request_list',
@@ -63,6 +79,7 @@
                                                                 </v-list-tile>
 
                                                                 <v-list-tile
+                                                                    :disabled="!checkActive()"
                                                                     @click="
                                                                         deleteProject(props.item.id)
                                                                     "
@@ -75,6 +92,7 @@
                                                                     </v-list-tile-title>
                                                                 </v-list-tile>
                                                                 <v-list-tile
+                                                                    :disabled="!checkActive()"
                                                                     @click="edit(props.item.id)"
                                                                     v-if="$can('project.edit')"
                                                                 >
@@ -92,6 +110,8 @@
                                                                 </v-list-tile>
 
                                                                 <v-list-tile
+                                                                 v-if="$can('report.create')"
+                                                                    :disabled="!checkActive()"
                                                                     @click="
                                                                         $router.push({
                                                                             name: 'add_report',
@@ -121,6 +141,7 @@
                                                                 </v-list-tile>
 
                                                                 <v-list-tile
+                                                                    :disabled="!checkActive()"
                                                                     @click="
                                                                         $router.push({
                                                                             name: 'project.schedule',
@@ -137,6 +158,7 @@
                                                                 </v-list-tile>
 
                                                                 <v-list-tile
+                                                                    :disabled="!checkActive()"
                                                                     @click="
                                                                         $router.push({
                                                                             name: 'project.attachments',
@@ -157,6 +179,7 @@
                                                                 </v-list-tile>
 
                                                                 <v-list-tile
+                                                                    :disabled="!checkActive()"
                                                                     @click="$router.push({})"
                                                                 >
                                                                     <v-list-tile-title>
@@ -202,9 +225,10 @@
                                                     <div align="center">
                                                         <v-chip
                                                             class="ma-2"
-                                                            color="red"
+                                                            :color="getColor(props.item.status)"
                                                             text-color="white"
-                                                            >{{
+                                                        >
+                                                            {{
                                                                 trans(
                                                                     'messages.' + props.item.status
                                                                 )
@@ -238,7 +262,7 @@
                                                 <td>
                                                     <v-progress-linear
                                                         striped
-                                                        :value="projectProgress(10, 5)"
+                                                        :value="getprogress(props.item.status)"
                                                     ></v-progress-linear>
                                                 </td>
                                             </template>
@@ -276,6 +300,7 @@ export default {
         const self = this;
         return {
             total_items: 0,
+            isshow:false,
             progress: 80,
             items: [],
             pagination: { totalItems: 0 },
@@ -406,7 +431,8 @@ export default {
             // self.$refs.projectEdit.edit(id);
         },
         view(id) {
-            const self = this;
+    
+               const self = this;
             self.$router.push({
                 name: 'view_project',
                 params: { id: id },
@@ -505,6 +531,32 @@ export default {
                     .catch(function (error) {
                         console.log(error);
                     });
+            }
+        },
+        getColor(status) {
+            if (status == 'not_started') {
+                return 'grey';
+            } else if (status == 'in_progress') {
+                return 'blue';
+            } else if (status == 'on_hold') {
+                return 'red';
+            } else if (status == 'completed') {
+                return 'green';
+            } else if (status == 'cancelled') {
+                return 'orange';
+            }
+        },
+        getprogress(status) {
+            if (status == 'not_started') {
+                return this.projectProgress(5, 1);
+            } else if (status == 'in_progress') {
+                return this.projectProgress(5, 2);
+            } else if (status == 'on_hold') {
+                return this.projectProgress(5, 3);
+            } else if (status == 'completed') {
+                return this.projectProgress(5, 5);
+            } else if (status == 'cancelled') {
+                return this.projectProgress(5, 0);
             }
         },
         getEnginneringTypes() {
