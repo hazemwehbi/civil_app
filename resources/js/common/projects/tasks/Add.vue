@@ -145,7 +145,7 @@
                                     <v-icon>add</v-icon>
                                 </v-btn>
                             </v-flex>
-                            <v-flex xs12 md2 v-if="$hasRole('employee')">
+                            <v-flex xs12 md2 >
                                 <v-checkbox
                                     :label="trans('messages.show_to_customer')"
                                     color="primary"
@@ -160,7 +160,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="green darken-1" flat @click="dialog = false">
-                        {{ trans('messages.close') }}
+                        {{ trans('data.cancel') }}
                     </v-btn>
                     <v-btn color="success" @click="store" :loading="loading" :disabled="loading">
                         {{ trans('messages.save') }}
@@ -227,8 +227,9 @@ export default {
                 self.create_task_from_dashboard = true;
             }
             axios
-                .get('/project-tasks/create', { params: { project_id: self.projectId } })
+                .get('project-tasks/create', { params: { project_id: self.projectId } })
                 .then(function(response) {
+                    console.log(response.data.project.members)
                     self.task = [];
                     self.start_date = null;
                     self.category_id = null;
@@ -264,7 +265,7 @@ export default {
                 if (result == true) {
                     self.loading = true;
                     axios
-                        .post('/project-tasks', data)
+                        .post('project-tasks', data)
                         .then(function(response) {
                             self.loading = false;
                             self.dialog = false;
@@ -290,7 +291,7 @@ export default {
         getProjectMember() {
             const self = this;
             axios
-                .get('/projects/' + self.projectId + '/members', { params: { type: 'task' } })
+                .get('projects/' + self.projectId + '/members', { params: { type: 'task' } })
                 .then(function(response) {
                     self.taskMembers = response.data;
                 })

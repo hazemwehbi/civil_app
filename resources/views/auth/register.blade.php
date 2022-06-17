@@ -1,5 +1,39 @@
 @extends('layouts.front')
+<style>
+    .style_rtl{
+        text-align: right;
+    }
+    .style_lrt{
+        text-align: left;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+}
 
+input[type=number] {
+  -moz-appearance: textfield;
+}
+.required:after {
+    content:" *";
+    color: red;
+  }
+  :-webkit-autofill,
+:-webkit-autofill:hover,
+:-webkit-autofill:focus,
+:-webkit-autofill:active {
+    /* use animation hack, if you have hard styled input */
+    transition: all 5000s ease-in-out 0s;
+    transition-property: background-color, color;
+    /* if input has one color, and didn't have bg-image use shadow */
+    -webkit-box-shadow: 0 0 0 1000px #fff inset;
+    /* text color */
+    -webkit-text-fill-color: #000;
+    /* font weigth */
+    font-weight: 300!important;
+}
+
+    </style>
 @section('content')
 <div class="container">
     <div class="row">
@@ -18,19 +52,21 @@
                     <div class="card-title p-4">
                             <h5 style="color:white;">
                               <!-- //  {{ trans('data.') }} -->
-                                  Register Form
+                               
+
+                                  {{ trans('data.register_to_the_engineering_offices_system') }}
                             </h5>
                         </div>
                   <div style="padding:20px;">
                     <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label for="name" style="padding-bottom: 5px;">
+                                <label for="name" style="padding-bottom: 5px;" class="required">
                                     {{__('messages.name')}}
                                 </label>
-                                <input type="text" id="name" name="name" class="form-control" placeholder="{{__('messages.name')}}" value="{{ old('name') }}"  required >
+                                <input type="text" id="name" name="name"  class="form-control" placeholder="{{__('messages.name')}}" value="{{ old('name') }}"  required >
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="id_card_number" style="padding-bottom: 5px;">
+                                <label for="id_card_number" style="padding-bottom: 5px;" class="required">
                                     {{__('data.id_card_number')}}
                                 </label>
                                 <input type="number" id="id_card_number" name="id_card_number" class="form-control" placeholder="{{__('data.id_card_number')}}" value="{{ old('id_card_number') }}"   required >
@@ -44,10 +80,10 @@
                             </div>
 
                             <div class="form-group col-md-4">
-                                <label for="company" style="padding-bottom: 5px;">
+                                <label for="company" style="padding-bottom: 5px;" class="required">
                                     {{__('messages.email')}}
                                 </label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="{{__('messages.email')}}"  required  value="{{ old('email') }}">
+                                <input type="email" id="email" name="email" class="form-control" placeholder="{{__('messages.email')}}" autocomplete="email"  required  value="{{ old('email') }}">
                                 @if ($errors->has('email'))
                                     <span class="help-block  text-danger">
                                         <small class="help-text span-email" span-email>
@@ -56,12 +92,18 @@
                                     </span>
                                 @endif
                             </div>
-
                             <div class="form-group col-md-6">
-                                <label for="password" style="padding-bottom: 5px;">
+                                <label for="confirm_password" style="padding-bottom: 5px;">
+                                    {{__('messages.confirm_password')}}
+                                </label>
+                                <input type="password" id="confirm_password" name="confirm_password" class="form-control"   onchange="check_pass()" placeholder="{{__('messages.confirm_password')}}"   >
+                                <span id='message'></span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="password" style="padding-bottom: 5px;" class="required">
                                     {{__('messages.password')}}
                                 </label>
-                                <input type="password" id="password" name="password" class="form-control" placeholder="{{__('messages.password')}}" onchange="check_pass()"  required >
+                                <input type="password" id="password" autocomplete="new-password" name="password" class="form-control" placeholder="{{__('messages.password')}}" onchange="check_pass()"  required >
                                 @if ($errors->has('password'))
                                     <span class="help-block  text-danger">
                                         <small class="help-text span-email" span-email>
@@ -70,13 +112,7 @@
                                     </span>
                                 @endif
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="confirm_password" style="padding-bottom: 5px;">
-                                    {{__('messages.confirm_password')}}
-                                </label>
-                                <input type="confirm_password" id="confirm_password" name="confirm_password" class="form-control"   onchange="check_pass()" placeholder="{{__('messages.confirm_password')}}"   >
-                                <span id='message'></span>
-                            </div>
+                        
 
                    
 
@@ -160,9 +196,9 @@
                                     {{__('messages.gender')}}
                                 </label>
                                 <select class="form-control" id="gender" name="gender" >
-                                    <option selected> select Gendre</option>
-                                    <option value='male'> Male</option>
-                                    <option value='female'> Female</option>
+                                    <option selected>{{__('data.select_gender')}} </option>
+                                    <option value='male'> {{__('data.male')}} </option>
+                                    <option value='female'> {{__('data.female')}} </option>
                                     </select>
                             </div>
                     </div>
@@ -173,16 +209,19 @@
 
             <div class="col-md-12">
                 <div class="card card-signin my-5">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4 mx-auto">
-                            <button class="btn btn-lg btn-block text-uppercase" style="background-color:#06706d;color:white;" id="submit" type="submit">
-                            {{__('messages.register')}}
+                    <div class="card-body container">
+                            <div class="d-flex justify-content-center">
+                            <button class="btn btn-lg btn-block text-uppercase  mx-auto" style="background-color:#06706d;color:white;width:30%" id="submit" type="submit">
+                            {{__('data.register')}}
                             </button>
-                            </div>
+                            <
                         </div>
+                        <a class="btn btn-link d-block text-center " style="color:#06706d;" href="{{ route('login') }}">
+                         {{__('data.back_to_login')}}
+                        </a>
                     </div>
                 </div>
+
             </div>
 
         </form>
@@ -207,6 +246,22 @@
 }
 
 $(document).ready(function(){
+    if(document.documentElement.lang=="ar"){
+        $(".container").css("text-align", "right");
+        $('input[type=text]').addClass('style_rtl');
+        $('input[type=number]').addClass('style_rtl');
+        $('input[type=number]').addClass('style_rtl');
+        $('input[type=email]').addClass('style_rtl');
+        $('input[type=password]').addClass('style_rtl');
+    }
+    else{
+        $(".container").css("text-align", "left");
+        $('input[type=text]').addClass('style_ltr');
+        $('input[type=email]').addClass('style_ltr');
+        $('input[type=number]').addClass('style_ltr');
+        $('input[type=password]').addClass('style_rtl');
+    }
+
     if ($("#password").val() ==$("#confirm_password").val() )  {
         $("#submit").disabled = false;
     } else {

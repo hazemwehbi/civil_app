@@ -18,6 +18,8 @@ class AddRoleTypeToRolesTable extends Migration
                 ->after('guard_name')
                 ->nullable();
                 $table->boolean('is_primary')->default(0);
+                $table->integer('created_by')->nullable();
+               // $table->create_by('is_primary')->default(0);
         });
     }
 

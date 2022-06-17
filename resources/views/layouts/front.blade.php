@@ -93,7 +93,7 @@
 
   background-image:url("{{asset('img/welcome.jpg')}}");
 /* Center and scale the image nicely */
-background-position: center;
+/*background-position: center;*/
 background-repeat: no-repeat;
 background-size: cover;
             
@@ -110,6 +110,9 @@ background-size: cover;
             @yield('content')
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="{{ asset('front/js/jquery-3.2.1.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('front/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>

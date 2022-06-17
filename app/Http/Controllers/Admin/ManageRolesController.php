@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
-
+use Illuminate\Support\Facades\Auth;
 class ManageRolesController extends Controller
 {
     /**
@@ -31,8 +31,22 @@ class ManageRolesController extends Controller
 
         // $roles = Role::where('type', 'employee')
         //             ->select('name', 'created_at', 'id');
-        $roles = Role::select('name', 'created_at', 'id');
-                    
+       // $roles = Role::select('name', 'created_at', 'id');
+        //$roles =  Auth::user()->roles->select('name', 'created_at', 'id');
+        if (Auth::user()->hasRole('superadmin')) {
+            $roles = Role::select('name', 'created_at', 'id','is_primary');
+        }
+        else{
+            $roles = Role:: where(function ($query) {
+                $roles_ids = Auth::user()->roles->pluck('id');
+              
+             //   $query->where('is_primary',1);
+                $query->whereIn('id', $roles_ids);
+                $query->orWhere('created_by',Auth::id());
+            })->select('name', 'created_at', 'id','is_primary');
+        }
+  
+
         if (!empty($request->get('name'))) {
             $term = $request->get('name');
             $roles->where('name', 'like', "%$term%");
@@ -66,8 +80,15 @@ class ManageRolesController extends Controller
             DB::beginTransaction();
 
             $role_name = $request->input('name');
-            $is_primary = $request->input('is_primary');
-            $permissions = $request->input('permissions');
+            
+            if($request->input('is_primary')!= null){
+                $is_primary = $request->input('is_primary');
+            }
+            else{
+                $is_primary =0;
+            }
+         
+            $permissions= $request->input('permissions');
             
             $count = Role::where('name', $role_name)
                        // ->where('type', 'employee')
@@ -77,7 +98,8 @@ class ManageRolesController extends Controller
                 $role = Role::create([
                             'name' => $role_name,
                             'is_primary'=>$is_primary,
-                            //'type' => 'employee',
+                            'created_by'=>Auth::id()
+                            //'type' => 'employee',hasRole
                         ]);
 
                 if (!empty($permissions)) {
@@ -85,7 +107,7 @@ class ManageRolesController extends Controller
                 }
 
                 DB::commit();
-                
+              //  Auth::user()->assignRole($role_name);
                 $output = $this->respondSuccess(__('messages.saved_successfully'));
             } else {
                 $output = $this->respondWithError(__('messages.role_already_existed'));

@@ -22,6 +22,8 @@ class CreateProjectMembersTable extends Migration
                 ->onDelete('cascade');
 
             $table->integer('user_id')->index();
+
+            $table->boolean('is_default')->default(0)->nullable();
         });
     }
 

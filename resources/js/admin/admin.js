@@ -5,11 +5,27 @@ require('../common/common');
 import router from './router';
 import eventBus from '../common/Event';
 import store from '../common/Store';
-
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css'
+var x=APP.RTL;
+Vue.use(Vuetify, {
+    // rtl: true,
+     rtl: x,
+     theme: {
+         primary: '#1976D2',
+         secondary: '#424242',
+         accent: '#82B1FF',
+         error: '#FF5252',
+         info: '#2196F3',
+         success: '#4CAF50',
+         warning: '#FFC107',
+     },
+ });
 Vue.use(eventBus);
 
 const admin = new Vue({
     el: '#admin',
+    vuetify: Vuetify,
     eventBus,
     router,
     store,

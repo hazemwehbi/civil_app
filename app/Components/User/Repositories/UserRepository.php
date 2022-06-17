@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Components\Core\BaseRepository;
 use App\Components\User\Models\User;
 use App\Http\Util\CommonUtil;
+use Illuminate\Support\Facades\Hash;
 class UserRepository extends BaseRepository
 {
     public function __construct(User $model)
@@ -59,21 +60,56 @@ class UserRepository extends BaseRepository
 
      public  function getType($email,$password)
      {
+        $success=false;
         $user=null;
          if($this->checkEmail($email)){
-        
           $user =User::where('email',$email)->first();
-      }
-      else{
-           $user =User::where('id_card_number',$email)->first();
-      }
+       
+          
+        }
+        else{
+            $user =User::where('id_card_number',$email)->first();
+             
+        }
        if($user != null){
-       return  $user->roles->where('is_primary',1);
+            if (Hash::check($password, $user->password)) {
+                $roles=$user->roles->where('is_primary',1);
+                $data=[
+                    'success'=>true,
+                    'roles'=>$roles,
+                    'description'=>[],
+                    'user'=>$user,
+                    
+                ];
+              return  $data;
+               
+            }
+            else{
+                $data=[
+                    'success'=>false,
+                    'roles'=>[],
+                     'pass'=>false,
+                     'description'=>__('messages.password_not_match') ,
+                    'user'=>null,
+                ];
+                return  $data;
+            }
+         
      
+       }
+       else{
+        $data=[
+            'success'=>false,
+            'roles'=>[],
+            'pass'=>true,
+            'description'=>__('messages.user_not_found') ,
+            'user'=>null,
+        ];
+        return  $data;
        }
    
                      
-         return [] ;
+        
      }
 
 

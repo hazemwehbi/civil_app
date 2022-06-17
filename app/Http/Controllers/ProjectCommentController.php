@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Project;
 use App\Note;
+use App\Media;
 use App\ProjectTask;
 use Illuminate\Http\Request;
 
@@ -15,15 +16,16 @@ class ProjectCommentController extends Controller
      */
     public function index()
     {
-        $project_task_id = request()->get('project_task_id');
+        $project_id = request()->get('project_id');
 
-        $task_note = Note::where('notable_id', $project_task_id)
-                        ->where('notable_type', 'App\ProjectTask')
-                        ->with(['user', 'media'])
-                        ->latest()
+        $project_document = Media::where('model_id', 5)
+                     ->where('model_type', 'App\Project')
+                      //  ->with(['media'])
+                       ->latest()
                         ->get();
 
-        return $this->respond($task_note);
+
+        return $this->respond($project_document);
     }
 
     /**

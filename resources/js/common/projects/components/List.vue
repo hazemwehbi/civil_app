@@ -14,6 +14,21 @@
                                     {{ trans('data.current_projects') }}
                                 </div>
                             </div>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                style="background-color: #06706d; color: white"
+                                class="lighten-1"
+                                v-if="projectData.length==0 || isshow"
+                                @click="
+                                    $router.push({
+                                        name: 'add-project',
+                                       
+                                    })
+                                "
+                            >
+                                {{ trans('data.add_project') }}
+                                <v-icon right dark>add</v-icon>
+                            </v-btn>
                         </v-card-title>
                         <v-divider></v-divider>
                         <v-card-text>
@@ -29,133 +44,155 @@
                                             class="elevation-3"
                                         >
                                             <template slot="items" slot-scope="props">
-                                                <td >
-                                                 <div align="center">
-                                                    <v-menu>
-                                                        <v-btn icon slot="activator">
-                                                            <v-icon>more_vert</v-icon>
-                                                        </v-btn>
-                                                        <v-list>
-                                                            <v-list-tile
-                                                                v-if="$can('tickets.create')"
-                                                                @click="
-                                                                    $router.push({
-                                                                        name: 'create_visit_request_list',
-                                                                        params: {
-                                                                            project_id:
-                                                                                props.item.id,
-                                                                            customer_id:
-                                                                                props.item
-                                                                                    .customer_id,
-                                                                            request_type:
-                                                                                'visit_request',
-                                                                        },
-                                                                    })
-                                                                "
-                                                            >
-                                                                <v-list-tile-title>
-                                                                    {{
-                                                                        trans(
-                                                                            'data.create_a_visit_request'
-                                                                        )
-                                                                    }}
-                                                                </v-list-tile-title>
-                                                            </v-list-tile>
+                                                <td>
+                                                    <div align="center">
+                                                        <v-menu>
+                                                            <v-btn icon slot="activator">
+                                                                <v-icon>more_vert</v-icon>
+                                                            </v-btn>
+                                                            <v-list>
+                                                                <v-list-tile
+                                                                    v-if="$can('tickets.create')"
+                                                                    :disabled="!checkActive()"
+                                                                    @click="
+                                                                        $router.push({
+                                                                            name: 'create_visit_request_list',
+                                                                            params: {
+                                                                                project_id:
+                                                                                    props.item.id,
+                                                                                customer_id:
+                                                                                    props.item
+                                                                                        .customer_id,
+                                                                                request_type:
+                                                                                    'visit_request',
+                                                                            },
+                                                                        })
+                                                                    "
+                                                                >
+                                                                    <v-list-tile-title>
+                                                                        {{
+                                                                            trans(
+                                                                                'data.create_a_visit_request'
+                                                                            )
+                                                                        }}
+                                                                    </v-list-tile-title>
+                                                                </v-list-tile>
 
-                                                            <v-list-tile
-                                                                @click="
-                                                                    deleteProject(props.item.id)
-                                                                "
-                                                                v-if="$can('project.delete')"
-                                                            >
-                                                                <v-list-tile-title>
-                                                                    {{ trans('messages.delete') }}
-                                                                </v-list-tile-title>
-                                                            </v-list-tile>
-                                                            <v-list-tile
-                                                                @click="edit(props.item)"
-                                                                v-if="$can('project.edit')"
-                                                            >
-                                                                <v-list-tile-title>
-                                                                    {{ trans('messages.edit') }}
-                                                                </v-list-tile-title>
-                                                            </v-list-tile>
-                                                            <v-list-tile
-                                                                @click="view(props.item)"
-                                                                v-if="$can('project.list')"
-                                                            >
-                                                                <v-list-tile-title>
-                                                                    {{ trans('data.view') }}
-                                                                </v-list-tile-title>
-                                                            </v-list-tile>
+                                                                <v-list-tile
+                                                                    :disabled="!checkActive()"
+                                                                    @click="
+                                                                        deleteProject(props.item.id)
+                                                                    "
+                                                                    v-if="$can('project.delete')"
+                                                                >
+                                                                    <v-list-tile-title>
+                                                                        {{
+                                                                            trans('messages.delete')
+                                                                        }}
+                                                                    </v-list-tile-title>
+                                                                </v-list-tile>
+                                                                <v-list-tile
+                                                                    :disabled="!checkActive()"
+                                                                    @click="edit(props.item.id)"
+                                                                    v-if="$can('project.edit')"
+                                                                >
+                                                                    <v-list-tile-title>
+                                                                        {{ trans('messages.edit') }}
+                                                                    </v-list-tile-title>
+                                                                </v-list-tile>
+                                                                <v-list-tile
+                                                                    @click="view(props.item.id)"
+                                                                    v-if="$can('project.list')"
+                                                                >
+                                                                    <v-list-tile-title>
+                                                                        {{ trans('data.view') }}
+                                                                    </v-list-tile-title>
+                                                                </v-list-tile>
 
-                                                            <v-list-tile
-                                                                @click="
-                                                                    $router.push({
-                                                                        name: 'add_report',
-                                                                        params: {
-                                                                            project: props.item,
-                                                                        },
-                                                                    })
-                                                                "
-                                                            >
-                                                                <v-list-tile-title>
-                                                                    {{
-                                                                        trans(
-                                                                            'data.create_a_report'
-                                                                        )
-                                                                    }}
-                                                                </v-list-tile-title>
-                                                            </v-list-tile>
+                                                                <v-list-tile
+                                                                 v-if="$can('report.create')"
+                                                                    :disabled="!checkActive()"
+                                                                    @click="
+                                                                        $router.push({
+                                                                            name: 'add_report',
+                                                                            params: {
+                                                                                project: props.item,
+                                                                            },
+                                                                        })
+                                                                    "
+                                                                >
+                                                                    <v-list-tile-title>
+                                                                        {{
+                                                                            trans(
+                                                                                'data.create_a_report'
+                                                                            )
+                                                                        }}
+                                                                    </v-list-tile-title>
+                                                                </v-list-tile>
 
-                                                            <v-list-tile>
-                                                                <v-list-tile-title>
-                                                                    {{
-                                                                        trans('data.reports_review')
-                                                                    }}
-                                                                </v-list-tile-title>
-                                                            </v-list-tile>
+                                                                <v-list-tile>
+                                                                    <v-list-tile-title>
+                                                                        {{
+                                                                            trans(
+                                                                                'data.reports_review'
+                                                                            )
+                                                                        }}
+                                                                    </v-list-tile-title>
+                                                                </v-list-tile>
 
-                                                            <v-list-tile
-                                                                @click="
-                                                                    $router.push({
-                                                                        name: 'project.schedule',
-                                                                        params: {
-                                                                            project_id:
-                                                                                props.item.id,
-                                                                        },
-                                                                    })
-                                                                "
-                                                            >
-                                                                <v-list-tile-title>
-                                                                    {{ trans('data.schedule') }}
-                                                                </v-list-tile-title>
-                                                            </v-list-tile>
+                                                                <v-list-tile
+                                                                    :disabled="!checkActive()"
+                                                                    @click="
+                                                                        $router.push({
+                                                                            name: 'project.schedule',
+                                                                            params: {
+                                                                                project_id:
+                                                                                    props.item.id,
+                                                                            },
+                                                                        })
+                                                                    "
+                                                                >
+                                                                    <v-list-tile-title>
+                                                                        {{ trans('data.schedule') }}
+                                                                    </v-list-tile-title>
+                                                                </v-list-tile>
 
-                                                            <v-list-tile
-                                                                @click="
-                                                                    $router.push({
-                                                                        name: 'project.attachments',
-                                                                        params: {
-                                                                            project_id:
-                                                                                props.item.id,
-                                                                        },
-                                                                    })
-                                                                "
-                                                            >
-                                                                <v-list-tile-title>
-                                                                    {{ trans('data.attachments') }}
-                                                                </v-list-tile-title>
-                                                            </v-list-tile>
+                                                                <v-list-tile
+                                                                    :disabled="!checkActive()"
+                                                                    @click="
+                                                                        $router.push({
+                                                                            name: 'project.attachments',
+                                                                            params: {
+                                                                                project_id:
+                                                                                    props.item.id,
+                                                                            },
+                                                                        })
+                                                                    "
+                                                                >
+                                                                    <v-list-tile-title>
+                                                                        {{
+                                                                            trans(
+                                                                                'data.attachments'
+                                                                            )
+                                                                        }}
+                                                                    </v-list-tile-title>
+                                                                </v-list-tile>
 
-                                                            <v-list-tile @click="$router.push({})">
-                                                                <v-list-tile-title>
-                                                                    {{ trans('messages.invoices') }}
-                                                                </v-list-tile-title>
-                                                            </v-list-tile>
-                                                        </v-list>
-                                                    </v-menu>
-                                                    <!--      <div style="display: flex;">
+                                                                <v-list-tile
+                                                                    :disabled="!checkActive()"
+                                                                    @click="$router.push({})"
+                                                                >
+                                                                    <v-list-tile-title>
+                                                                        {{
+                                                                            trans(
+                                                                                'messages.invoices'
+                                                                            )
+                                                                        }}
+                                                                    </v-list-tile-title>
+                                                                </v-list-tile>
+                                                            </v-list>
+                                                        </v-menu>
+                                                        <!--      <div style="display: flex;">
                                                             <v-btn color="success" small v-if=" $can('project.' + props.item.id + '.status') ||
                                                                     $can('project.' + props.item.id + '.edit') ||
                                                                     $can('project.' + props.item.id + '.delete')
@@ -174,59 +211,59 @@
                                                             </v-btn>
                                                         </div>  -->
 
-                                                    <!-- <td>{{ props.item.id }}</td> -->
-                                                     </div>
+                                                        <!-- <td>{{ props.item.id }}</td> -->
+                                                    </div>
                                                 </td>
 
                                                 <td>
-                                                 <div align="center">
-                                                  {{ props.item.name }}
-                                                 </div>
-                                               </td>
+                                                    <div align="center">
+                                                        {{ props.item.name }}
+                                                    </div>
+                                                </td>
                                                 <!-- <td> {{ props.item.customer.company }}</td> -->
-                                                <td >
-                                                  <div align="center">
-
-                                                               <v-chip
-                                                        class="ma-2"
-                                                        color="red"
-                                                        text-color="white"
-                                                        >{{
-                                                            trans('messages.' + props.item.status)
-                                                        }}
-                                                    </v-chip>
-
-
-                                                 </div>
-                                       
+                                                <td>
+                                                    <div align="center">
+                                                        <v-chip
+                                                            class="ma-2"
+                                                            :color="getColor(props.item.status)"
+                                                            text-color="white"
+                                                        >
+                                                            {{
+                                                                trans(
+                                                                    'messages.' + props.item.status
+                                                                )
+                                                            }}
+                                                        </v-chip>
+                                                    </div>
                                                 </td>
-                                                <td >
-                                                <div align="center">
-                                                    <v-btn icon @click="markAsFavorite(props.item)">
-                                                        <v-icon :color="toggleFavorite(props.item)">
-                                                            star
-                                                        </v-icon>
-                                                    </v-btn>
-                                                     </div>
+                                                <td>
+                                                    <div align="center">
+                                                        <v-btn
+                                                            icon
+                                                            @click="markAsFavorite(props.item)"
+                                                        >
+                                                            <v-icon
+                                                                :color="toggleFavorite(props.item)"
+                                                            >
+                                                                star
+                                                            </v-icon>
+                                                        </v-btn>
+                                                    </div>
                                                 </td>
-                                               
-                                                <td >
-                                                 <div align="center">
-                                                    <avatar
-                                                        :members="props.item.members"
-                                                        class="mr-2"
-                                                    ></avatar>
-                                                     </div>
+
+                                                <td>
+                                                    <div align="center">
+                                                        <avatar
+                                                            :members="props.item.members"
+                                                            class="mr-2"
+                                                        ></avatar>
+                                                    </div>
                                                 </td>
-                                                <td >
-                                                <div align="center">
-                                                    {{
-                                                        projectProgress(
-                                                            props.item.tasks_count,
-                                                            props.item.completed_task
-                                                        )
-                                                    }}
-                                                </div>
+                                                <td>
+                                                    <v-progress-linear
+                                                        striped
+                                                        :value="getprogress(props.item.status)"
+                                                    ></v-progress-linear>
                                                 </td>
                                             </template>
                                         </v-data-table>
@@ -263,6 +300,8 @@ export default {
         const self = this;
         return {
             total_items: 0,
+            isshow:false,
+            progress: 80,
             items: [],
             pagination: { totalItems: 0 },
             headers: [
@@ -382,22 +421,21 @@ export default {
                     console.log(error);
                 });
         },
-        edit(item) {
-            console.log(item);
+        edit(id) {
             const self = this;
             self.$router.push({
-                name: 'add-project',
-                params: { project_info_edit: item, isEdit: true },
+                name: 'edit-project',
+                params: { id: id },
             });
 
             // self.$refs.projectEdit.edit(id);
         },
-        view(item) {
-            console.log(item);
-            const self = this;
+        view(id) {
+    
+               const self = this;
             self.$router.push({
-                name: 'add-project',
-                params: { project_info_edit: item, isEdit: false },
+                name: 'view_project',
+                params: { id: id },
             });
 
             // self.$refs.projectEdit.edit(id);
@@ -495,7 +533,51 @@ export default {
                     });
             }
         },
-
+        getColor(status) {
+            if (status == 'not_started') {
+                return 'grey';
+            } else if (status == 'in_progress') {
+                return 'blue';
+            } else if (status == 'on_hold') {
+                return 'red';
+            } else if (status == 'completed') {
+                return 'green';
+            } else if (status == 'cancelled') {
+                return 'orange';
+            }
+        },
+        getprogress(status) {
+            if (status == 'not_started') {
+                return this.projectProgress(5, 1);
+            } else if (status == 'in_progress') {
+                return this.projectProgress(5, 2);
+            } else if (status == 'on_hold') {
+                return this.projectProgress(5, 3);
+            } else if (status == 'completed') {
+                return this.projectProgress(5, 5);
+            } else if (status == 'cancelled') {
+                return this.projectProgress(5, 0);
+            }
+        },
+        getEnginneringTypes() {
+            const self = this;
+            axios
+                .get('/get-enginnering-types')
+                .then(function (response) {
+                    self.enginnering_types = response.data;
+                    //alert(JSON.stringify(self.employee_data))
+                    //alert(JSON.stringify(response.data.find(x=>x.key==self.employee_data.enginnering_type)))
+                    self.enginnering_type =
+                        response.data.find((x) => x.key == employee_data.enginnering_type) !=
+                        undefined
+                            ? response.data.find((x) => x.key == employee_data.enginnering_type)
+                                  .value
+                            : '';
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         filterChanged() {
             const self = this;
             self.url = '/projects';

@@ -1,141 +1,537 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from '../common/Store';
-
+import Home from './dashboard/Home';
+import List from './dashboard/List';
+import EstateOwnerHome from '../estate_owner/dashboard/Home';
+import ToDoList from '../estate_owner/main/ToDoList';
+import UserLists from '../estate_owner/users/components/UserLists';
+import UserFormAdd from '../estate_owner/users/components/UserFormAdd';
+import EnginneringOfficeHome from '../enginnering_office/dashboard/Home'
+import EnginneringOfficeList from '../enginnering_office/dashboard/List'
+import EnginneringOfficeToDoList from '../enginnering_office/main/ToDoList'
+import AddCustomer from '../enginnering_office/users/components/AddCustomer'
+import EnginneringOfficeUserLists from '../enginnering_office/users/components/UserLists'
+import EnginneringOfficeUserFormAdd from '../enginnering_office/users/components/UserFormAdd'
+import ViewVisitRequest from '../estate_owner/tickets/view_visit_request'
+import ProjectManagement from '../estate_owner/main/components/ProjectManagement'
+import TasksList from '../common/tasks/List'
+import DesignRequestList from '../estate_owner/designRequest/List'
+import ShowDesignRequestReport from '../estate_owner/designRequest/showDesignRequestReport';
+import UserFormEdit from '../estate_owner/users/components/UserFormEdit';
+import EstateOnerView from '../estate_owner/users/components/View';
+import TicketsList from '../estate_owner/tickets/List';
+import TicketsCreate from '../estate_owner/tickets/Create'
+import EditVisitRequest from '../estate_owner/tickets/editVisitRequest';
+import EnginneringOfficeProjectList from '../enginnering_office/projects/components/List';
+import EnginneringOfficeProjectManagement from '../enginnering_office/main/components/ProjectManagement';
+import EnginneringOfficeTasksList from '../enginnering_office/tasks/List';
+import EnginneringOfficeTasks from '../enginnering_office/tasks/Tasks';
+import EnginneringOfficeViewVisitRequest from '../enginnering_office/tickets/view_visit_request';
+import EnginneringOfficeTicketsCreate from '../enginnering_office/tickets/Create';
+import EnginneringOfficeTicketsList from '../enginnering_office/tickets/List';
+import EnginneringOfficeRoleEdit from '../enginnering_office/users/components/RoleEdit';
+import EnginneringOfficeRoleCreate from '../enginnering_office/users/components/RoleCreate';
+import EnginneringOfficeRoleLists from '../enginnering_office/users/components/RoleLists';
+import EnginneringOfficeView from '../enginnering_office/users/components/View';
+import EnginneringOfficeUserFormEdit from '../enginnering_office/users/components/UserFormEdit';
+import CommonTasks from '../common/tasks/Tasks'
+import EnginneringOfficeDesignRequestList from '../enginnering_office/designRequest/List'
+import EnginneringOfficeCreatePriceDesignForENginner from '../enginnering_office/designRequest/CreatePriceDesignForENginner'
+import Users_List from './users/components/UserLists'
+import Users_FormAdd from './users/components/UserFormAdd'
+import Users_FormEdit from './users/components/UserFormEdit'
+import Users_View from './users/components/View'
+import RolesList from './users/components/RoleLists'
+import EnginneringOfficeAddProject from '../enginnering_office/projects/components/AddProject'
+import EnginneringOfficeFinishedProjects from '../enginnering_office/projects/components/FinishedProjects'
+import EnginneringOfficeEditProject from '../enginnering_office/projects/components/Edit_Project'
+import EnginneringOfficeViewProject from '../enginnering_office/projects/components/view_project'
+import SpecialtiesList from '../enginnering_office/specialities/List'
+import Employees from './users/Users'
+import Projects from '../common/projects/Projects'
+import edit_report from '../common/reports/Edit'
+import add_report from '../common/reports/Add'
+import reportsList from '../common/reports/Lists'
+import requestsCreatingProjects from './main/components/RequestsCreatingProjects'
+import customersNotesList from './customers/components/notes/List'
+import customersContactsList from './customers/components/contacts/List'
+import CustomersShow from './customers/components/Show'
+import CustomersList from './customers/components/List'
+import Customers from './customers/Customers'
+import EstateOwnerTicketsList from '../estate_owner/tickets/List'
+import EolesEdit from './users/components/RoleEdit'
+import RolesCreate from './users/components/RoleCreate'
+import add_project from '../common/projects/components/AddProject'
+import finished_projects from '../common/projects/components/FinishedProjects'
+import projectSchedule from '../common/projects/milestones/Lists'
+import projectAttachments from '../common/projects/notes/Lists'
+import view_project from '../common/projects/components/view_project'
+import editProject from '../common/projects/components/Edit_Project'
+import projectsList from '../common/projects/components/List'
+import backups from './backup/Backup'
+import backupsList from './backup/List'
+import schedule from '../common/projects/components/schedule'
+import invoices_edit from '../common/projects/invoices/Edit'
+import settings from './settings/Settings'
+import settings_create from './settings/Create'
+import profiles from '../common/profile/Profile'
+import profileList from '../common/profile/List'
+import profileEdit from '../common/profile/Edit'
+import Invoices from './invoices/Invoices'
+import invoices_list from './invoices/List'
+import salesInvoicesCreate from '../common/projects/invoices/Add'
+import estimatesList from './invoices/estimates/List'
+import estimatesCreate from '../common/projects/invoices/Add'
+import invoiceSchemeList from '../admin/invoice_schemes/List'
+import leadShow from './leads/Tab'
+import leadsList from './leads/List'
+import leads from './leads/Leads'
+import expensesList from './expenses/List'
+import expenses from './expenses/Expenses'
+import knowledge_base from './knowledgebase/KnowledgeBase'
+import KnowledgebaseList from './knowledgebase/List'
+import KnowledgebaseCreate from './knowledgebase/Create'
+import KnowledgebaseEdit from './knowledgebase/Edit'
+import KnowledgebaseView from './knowledgebase/View'
+import leaves from './leaves/Leaves'
+import leavesList from './leaves/List'
+import tickets from '../common/tickets/Ticket'
+import tickets_list from '../common/tickets/List'
+import edit_visit_request_list from '../common/tickets/editVisitRequest'
+import constructionlicenses from './main/components/StructionLicenses'
+import general_information from './main/components/GeneralInformation'
+import offices_types from './main/components/OfficesTypes'
+import create_visit_request_list from '../common/tickets/Create'
+import view_visit_request_list from '../common/tickets/view_visit_request'
+import home from  './main/Home'
+import newAuthorizationRequests from './main/components/NewAuthorizationRequests'
+import todolist from './main/ToDoList'
+import project_management from './main/components/ProjectManagement'
+import visit_request_list from '../common/tickets/List'
+import surveydecisions from './main/components/SurveyDecisions'
+import requests_role_view from './requests_role/View'
+import create_project from '../common/tickets/CreateProjectRequest1'
+import create_project2 from './main/components/superadmin/CreateProject'
+import requestsRole from './requests_role/RequestsRole'
+import requests_role_list from './requests_role/List'
+import EstateOwnerList from '../estate_owner/dashboard/List'
+import EnginneringOfficeEditVisitRequest from '../enginnering_office/tickets/editVisitRequest'
+import Archives from '../common/archives/ArchivesData'
 Vue.use(Router);
 
 const router = new Router({
+    // mode: 'history',
+    //hash: false,
     routes: [
         {
             path: '/',
-            redirect: '/dashboard',
+            redirect: APP.USER_TYPE_LOG == 'ESTATE_OWNER' ? '/es' : APP.USER_TYPE_LOG == 'ENGINEERING_OFFICE' ? '/en' : '/dashboard',
+        },
+        {
+            path: '/to-do"',
+            // redirect: APP.USER_TYPE_LOG=='ESTATE_OWNER' ?  '/es/to-do-list' :'/to-do-list',
         },
         {
             name: 'dashboard',
             path: '/dashboard',
-            component: require('./dashboard/Home'),
+            component: Home,
             children: [
                 {
                     path: '/',
                     name: 'dashboard.list',
-                    component: require('./dashboard/List'),
+                    component: List,
                 },
+                ,
             ],
         },
+
+
+        //estate owner 
+        {
+            name: 'dashboard_estate',
+            path: '/es',
+            component: EstateOwnerHome,
+            children: [
+                {
+                    path: '/',
+                    name: 'dashboard_estate.list',
+                    component: EstateOwnerList,
+                },
+                {
+                    path: 'to-do-list',
+                    name: 'to-do-list_estate.list',
+                    component: ToDoList,
+                    name: 'todolist'
+                },
+
+
+                //employee
+
+                {
+                    path: 'employees',
+                    name: 'users_estate.list',
+                    component: UserLists,
+                },
+                {
+                    path: 'employees/create',
+                    name: 'users_estate.create',
+                    component: UserFormAdd,
+                },
+                {
+                    path: 'employees/edit/:id',
+                    name: 'users_estate.edit',
+                    component: UserFormEdit,
+                    props: route => ({ propUserId: route.params.id }),
+                },
+                {
+                    path: 'employees/:id/show',
+                    name: 'users_estate.view',
+                    component: EstateOnerView,
+                    props: route => ({ propUserId: route.params.id }),
+                },
+                {
+                    path: 'visit-requests',
+                    name: 'visit_request_estate_list',
+                    component: TicketsList,
+
+
+                },
+
+                {
+                    path: 'create-visit-request',
+                    name: 'create_visit_estate_request_list',
+                    component: TicketsCreate,
+                },
+                {
+                    path: 'edit-visit-request/:id',
+                    name: 'edit_visit_request_estate_list',
+                    component: EditVisitRequest,
+                    props: route => ({ propRequestId: route.params.id }),
+                },
+
+                {
+                    path: 'view_visit_request/:id',
+                    name: 'view_visit_request_estate_list',
+                    component: ViewVisitRequest,
+                    props: route => ({ propRequestId: route.params.id }),
+                },
+
+                {
+                    path: 'project-management',
+                    name: 'project_management_estate_owner',
+                    component: ProjectManagement,
+                },
+                {
+                    path: '/tasks',
+                    component: CommonTasks,
+                    children: [
+                        {
+                            path: '/',
+                            name: 'tasks.list',
+                            component: TasksList,
+                        },
+                    ],
+                },
+///////////////////////request design
+                {
+                    path: 'design-request',
+                    name: 'design_request_estate_list',
+                    component: DesignRequestList,
+                },
+
+
+                {
+                    path: 'show-design-price/:id',
+                    name: 'show_design_request_price_estate_list',
+                    component: ShowDesignRequestReport,
+                    props: route => ({ design_id: route.params.id }),
+                }
+
+
+            ],
+        },
+
+        //end estate owner 
+        ///enginner office
+        {
+            name: 'dashboard_enginner_office',
+            path: '/en',
+            component: EnginneringOfficeHome,
+            children: [
+                {
+                    path: '/',
+                    name: 'dashboard_enginner_office.list',
+                    component: EnginneringOfficeList,
+                },
+                {
+                    path: 'to-do-list',
+                    name: 'to-do-list_enginner_office.list',
+                    component: EnginneringOfficeToDoList,
+                    name: 'todolist'
+                },
+
+
+                //employee
+                {
+                    path: 'AddCustomer/',
+                    name: 'customer_office.create',
+                    component: AddCustomer,
+                },
+                {
+                    path: 'employees',
+                    name: 'users_enginner_office.list',
+                    component: EnginneringOfficeUserLists,
+                },
+                {
+                    path: 'employees/create',
+                    name: 'users_enginner_office.create',
+                    component: EnginneringOfficeUserFormAdd,
+                },
+                {
+                    path: 'employees/edit/:id',
+                    name: 'users_enginner_office.edit',
+                    component: EnginneringOfficeUserFormEdit,
+                    props: route => ({ propUserId: route.params.id }),
+                },
+                {
+                    path: 'employees/:id/show',
+                    name: 'users_enginner_office.view',
+                    component: EnginneringOfficeView,
+                    props: route => ({ propUserId: route.params.id }),
+                },
+                {
+                    path: 'roles',
+                    name: 'roles_enginner_office.list',
+                    component: EnginneringOfficeRoleLists,
+                },
+                {
+                    path: 'roles/create',
+                    name: 'roles_enginner_office.create',
+                    component: EnginneringOfficeRoleCreate,
+                },
+                {
+                    path: 'roles/edit/:id',
+                    name: 'roles_enginner_office.edit',
+                    component: EnginneringOfficeRoleEdit,
+                    props: route => ({ propRoleId: route.params.id }),
+                },
+
+
+                {
+                    path: 'visit-requests',
+                    name: 'visit_request_enginner_office_list',
+                    component: EnginneringOfficeTicketsList,
+                },
+                {
+                    path: 'create-visit-request',
+                    name: 'create_visit_enginner_office_request_list',
+                    component: EnginneringOfficeTicketsCreate,
+                },
+                {
+                    path: 'edit-visit-request/:id',
+                    name: 'edit_visit_request_enginner_office_list',
+                    component: EnginneringOfficeEditVisitRequest,
+                    props: route => ({ propRequestId: route.params.id }),
+                },
+                {
+                    path: 'view_visit_request/:id',
+                    name: 'view_visit_enginner_office_request_list',
+                    component: EnginneringOfficeViewVisitRequest,
+                    props: route => ({ propRequestId: route.params.id }),
+                },
+                {
+                    path: 'tasks',
+                    component: EnginneringOfficeTasks,
+                    children: [
+                        {
+                            path: '/',
+                            name: 'tasks_enginnering_office.list',
+                            component: EnginneringOfficeTasksList,
+                        },
+                    ],
+                },
+                {
+                    path: 'project-management',
+                    name: 'project_management_enginnering_office',
+                    component: EnginneringOfficeProjectManagement,
+                },
+                ////////////////////////projects
+                {
+                    path: 'projects',
+                    name: 'projects_enginnering_office.list',
+                    component: EnginneringOfficeProjectList,
+                },
+                {
+                    path: 'addProject',
+                    name: 'add_project_enginnering_office',//AddProject
+                    component: EnginneringOfficeAddProject,
+                },
+                {
+                    path: 'finished-projects',
+                    name: 'finished_projects_enginnering_office',
+                    component: EnginneringOfficeFinishedProjects,
+                },
+                {
+                    path: 'edit/:id',
+                    name: 'edit_project_enginnering_office',
+                    component: EnginneringOfficeEditProject,
+                    props: route => ({ propProjectId: route.params.id }),
+                },
+                {
+                    path: 'view/:id',
+                    name: 'view_project_enginnering_office',
+                    component: EnginneringOfficeViewProject,
+                    props: route => ({ propProjectId: route.params.id }),
+                },
+                {
+                    path: 'specialties',
+                    name: 'specialties.list',
+                    component: SpecialtiesList,
+
+                },
+                {
+                    path: 'design-request',
+                    name: 'design_request_enginnering_office_list',
+                    component: EnginneringOfficeDesignRequestList,
+                },
+
+                {
+                    path: 'create-design-price/:id',
+                    name: 'create_design_request_price__enginnering_office',
+                    component: EnginneringOfficeCreatePriceDesignForENginner,
+                    props: route => ({ design_enginner_id: route.params.id }),
+                }
+                
+            ],
+        },
+        //end enginner  office 
         {
             path: '/employees',
-            component: require('./users/Users'),
+            component: Employees,
             children: [
                 {
                     path: '/',
                     name: 'users.list',
-                    component: require('./users/components/UserLists'),
+                    component: Users_List,
                 },
                 {
                     path: 'create',
                     name: 'users.create',
-                    component: require('./users/components/UserFormAdd'),
+                    component: Users_FormAdd,
                 },
                 {
                     path: 'edit/:id',
                     name: 'users.edit',
-                    component: require('./users/components/UserFormEdit'),
+                    component: Users_FormEdit,
                     props: route => ({ propUserId: route.params.id }),
                 },
                 {
                     path: ':id/show',
                     name: 'users.view',
-                    component: require('./users/components/View'),
+                    component: Users_View,
                     props: route => ({ propUserId: route.params.id }),
                 },
                 {
                     path: '/roles',
                     name: 'roles.list',
-                    component: require('./users/components/RoleLists'),
+                    component: RolesList,
                 },
                 {
                     path: '/roles/create',
                     name: 'roles.create',
-                    component: require('./users/components/RoleCreate'),
+                    component: RolesCreate,
                 },
                 {
                     path: '/roles/edit/:id',
                     name: 'roles.edit',
-                    component: require('./users/components/RoleEdit'),
+                    component: EolesEdit,
                     props: route => ({ propRoleId: route.params.id }),
+                },
+                {
+                    path: '/visit-requests',
+                    name: 'visit_request_estate_list',
+                    component: EstateOwnerTicketsList,
                 },
             ],
         },
         {
             path: '/customers',
-            component: require('./customers/Customers'),
+            component: Customers,
             children: [
                 {
                     path: '/',
                     name: 'customers.list',
-                    component: require('./customers/components/List'),
+                    component: CustomersList,
                 },
                 {
                     path: ':id/show',
                     name: 'customers.show',
-                    component: require('./customers/components/Show'),
+                    component: CustomersShow,
                 },
                 {
                     path: ':id/contacts',
                     name: 'customers.contacts.list',
-                    component: require('./customers/components/contacts/List'),
+                    component: customersContactsList,
                     props: route => ({ propCustomerId: route.params.id }),
                 },
                 {
                     path: ':id/notes',
                     name: 'customers.notes.list',
-                    component: require('./customers/components/notes/List'),
+                    component: customersNotesList,
                     props: route => ({ propCustomerId: route.params.id }),
                 },
             ],
         },
-
         {
             path: '/requests-creating-projects',
             name: 'requests_creating_projects',
-            component: require('./main/components/RequestsCreatingProjects'),
+            component: requestsCreatingProjects,
         },
 
         {
             path: '/reports',
             name: 'reports_list',
-            component: require('../common/projects/notes/Lists'),
+            component: reportsList,
         },
         {
             path: '/add_report',
             name: 'add_report',
-            component: require('../common/projects/notes/Add'),
+            component: add_report,
         },
         {
             path: '/edit_report',
             name: 'edit_report',
-            component: require('../common/projects/notes/Edit'),
+            component: edit_report,
         },
 
         {
             path: '/project',
-            component: require('../common/projects/Projects'),
+            component: Projects,
             children: [
                 {
                     path: '/',
                     name: 'projects.list',
-                    component: require('../common/projects/components/List'),
+                    component: projectsList,
                 },
                 {
-                    path: ':id/show',
-                    name: '.project-tasks.list',
-                    component: require('../common/projects/components/Show'),
+                    path: 'edit/:id',
+                    name: 'edit-project',
+                    component: editProject,
                     props: route => ({ propProjectId: route.params.id }),
                 },
+                {
+                    path: 'view/:id',
+                    name: 'view_project',
+                    component: view_project,
+                    props: route => ({ propProjectId: route.params.id }),
+                },
+
+
                 /*{
                     path: ':id/invoices/create',
                     name: 'invoices.create',
-                    component: require('../common/projects/invoices/Add'),
+                    component: ('../common/projects/invoices/Add'),
                     props: route => ({
                         propProjectId: route.params.id,
                     }),
@@ -143,37 +539,42 @@ const router = new Router({
                 {
                     path: 'attachments',
                     name: 'project.attachments',
-                    component: require('../common/projects/notes/Lists'),
+                    component: projectAttachments
                 },
                 {
                     path: 'project-schedule',
                     name: 'project.schedule',
-                    component: require('../common/projects/milestones/Lists'),
+                    component: projectSchedule,
                 },
                 {
                     path: '/add-project',
                     name: 'add-project',//AddProject
-                    component: require('../common/projects/components/AddProject'),
+                    component: add_project,
                 },
-                {
-                    path: '/edit-project',
-                    name: 'edit-project',
-                    component: require('../common/projects/components/editPrjectRequest'),
-                },
+                // {
+                //     path: '/edit-project',
+                //     name: 'edit-project',
+                //     component: ('../common/projects/components/Edit_Project'),
+                // },
+                // {
+                //     path: '/edit-project',
+                //     name: 'edit-project',
+                //     component: ('../common/projects/components/editPrjectRequest'),
+                // },
                 {
                     path: '/finished-projects',
                     name: 'finished-projects',
-                    component: require('../common/projects/components/FinishedProjects'),
+                    component: finished_projects,
                 },
                 {
                     path: '/schedule',
                     name: 'schedule',
-                    component: require('../common/projects/components/schedule'),
+                    component: schedule,
                 },
                 {
                     path: ':project_id/invoices/:id/edit',
                     name: 'invoices.edit',
-                    component: require('../common/projects/invoices/Edit'),
+                    component: invoices_edit,
                     props: route => ({
                         propInvoiceId: route.params.id,
                         propProjectId: route.params.project_id,
@@ -182,250 +583,300 @@ const router = new Router({
             ],
         },
         {
-            path: '/tasks',
-            component: require('../common/tasks/Tasks'),
-            children: [
-                {
-                    path: '/',
-                    name: 'tasks.list',
-                    component: require('../common/tasks/List'),
-                },
-            ],
-        },
-
-        {
             path: '/settings',
-            component: require('./settings/Settings'),
+            component: settings,
             children: [
                 {
                     path: '/',
                     name: 'settings.create',
-                    component: require('./settings/Create'),
+                    component: settings_create,
                 },
             ],
         },
 
         {
             path: '/backups',
-            component: require('./backup/Backup'),
+            component: backups,
             children: [
                 {
                     path: '/',
                     name: 'backups.list',
-                    component: require('./backup/List'),
+                    component: backupsList,
                 },
             ],
         },
-
         {
             path: '/profiles',
-            component: require('../common/profile/Profile'),
+            component: profiles,
             children: [
                 {
                     path: '/',
                     name: 'profile.list',
-                    component: require('../common/profile/List'),
+                    component: profileList,
                 },
                 {
                     path: 'edit/:id',
                     name: 'profile.edit',
-                    component: require('../common/profile/Edit'),
+                    component: profileEdit,
                     props: route => ({ propUserId: route.params.id }),
                 },
             ],
         },
         {
             path: '/projects',
-            component: require('./invoices/Invoices'),
+            component: Invoices,
             children: [
                 {
                     path: '/invoice',
                     name: 'invoices.list',
-                    component: require('./invoices/List'),
+                    component: invoices_list,
                 },
                 {
                     path: '/invoices/create',
                     name: 'sales.invoices.create',
-                    component: require('../common/projects/invoices/Add'),
+                    component:salesInvoicesCreate,
                 },
                 {
                     path: '/estimates',
                     name: 'estimates.list',
-                    component: require('./invoices/estimates/List'),
+                    component: estimatesList,
                 },
                 {
                     path: '/estimates/create',
                     name: 'estimates.create',
-                    component: require('../common/projects/invoices/Add'),
+                    component: estimatesCreate,
                 },
 
                 {
                     path: '/invoice-scheme',
                     name: 'invoice_scheme.list',
-                    component: require('../admin/invoice_schemes/List'),
+                    component: invoiceSchemeList,
                 },
             ],
         },
         {
             path: '/knowledge-base',
-            component: require('./knowledgebase/KnowledgeBase'),
+            component: knowledge_base,
             children: [
                 {
                     path: '/knowledge-base',
                     name: 'Knowledgebase.list',
-                    component: require('./knowledgebase/List'),
+                    component: KnowledgebaseList,
                 },
                 {
                     path: '/knowledge-base/create',
                     name: 'Knowledgebase.create',
-                    component: require('./knowledgebase/Create'),
+                    component: KnowledgebaseCreate,
                 },
                 {
                     path: '/knowledge-base/:id/edit',
                     name: 'Knowledgebase.edit',
-                    component: require('./knowledgebase/Edit'),
+                    component: KnowledgebaseEdit,
                     props: route => ({ propKnowladgebaseId: route.params.id }),
                 },
                 {
                     path: '/knowledge-base/:id/view',
                     name: 'Knowledgebase.view',
-                    component: require('./knowledgebase/View'),
+                    component: KnowledgebaseView,
                     props: route => ({ propKnowladgebaseId: route.params.id }),
                 },
             ],
         },
         {
             path: '/expenses',
-            component: require('./expenses/Expenses'),
+            component: expenses,
             children: [
                 {
                     path: '/expenses',
                     name: 'expenses.list',
-                    component: require('./expenses/List'),
+                    component: expensesList,
                 },
             ],
         },
         {
             path: '/leaves',
-            component: require('./leaves/Leaves'),
+            component: leaves,
             children: [
                 {
                     path: '/leaves',
                     name: 'leaves.list',
-                    component: require('./leaves/List'),
+                    component: leavesList,
                 },
             ],
         },
         {
             path: '/leads',
-            component: require('./leads/Leads'),
+            component: leads,
             children: [
                 {
                     path: '/leads',
                     name: 'leads.list',
-                    component: require('./leads/List'),
+                    component: leadsList,
                 },
                 {
                     path: ':id/view',
                     name: 'lead.show',
-                    component: require('./leads/Tab'),
+                    component: leadShow,
                 },
             ],
         },
         {
             path: '/tickets',
-            component: require('../common/tickets/Ticket'),
+            component: tickets,
             children: [
                 {
                     path: '/tickets',
                     name: 'tickets.list',
-                    component: require('../common/tickets/List'),
+                    component: tickets_list,
                 },
-                {
-                    path: ':id/show',
-                    name: 'tickets.view',
-                    component: require('../common/tickets/View'),
-                    props: route => ({ propTicketId: route.params.id }),
-                },
+                // {
+                //     path: ':id/show',
+                //     name: 'tickets.view',
+                //     component: ('../common/tickets/View'),
+                //     props: route => ({ propTicketId: route.params.id }),
+                // },
             ],
         },
         {
             path: '/offices_types',
             name: 'offices_types',
-            component: require('./main/components/OfficesTypes'),
+            component: offices_types,
         },
         {
             path: '/general_information',
             name: 'general_information     ',
-            component: require('./main/components/GeneralInformation'),
+            component: general_information,
         },
         {
             path: '/construction-licenses',
             name: 'constructionlicenses',
-            component: require('./main/components/StructionLicenses'),
+            component: constructionlicenses,
         },
         {
             path: '/survey-decisions',
             name: 'surveydecisions',
-            component: require('./main/components/SurveyDecisions'),
+            component: surveydecisions,
         },
         {
             path: '/visit-requests',
             name: 'visit_request_list',
-            component: require('../common/tickets/List'),
-        },
-        {
-            path: '/project-management',
-            name: 'project-management',
-            component: require('./main/components/ProjectManagement'),
+            component: visit_request_list,
+
+
         },
         {
             path: '/create-visit-request',
             name: 'create_visit_request_list',
-            component: require('../common/tickets/Create'),
+            component: create_visit_request_list,
         },
         {
-            path: '/edit-visit-request',
+            path: '/edit-visit-request/:id',
             name: 'edit_visit_request_list',
-            component: require('../common/tickets/editVisitRequest'),
+            component: edit_visit_request_list,
+            props: route => ({ propRequestId: route.params.id }),
+        },
+        {
+            path: '/view_visit_request_list/:id',
+            name: 'view_visit_request_list',
+            component: view_visit_request_list,
+            props: route => ({ propRequestId: route.params.id }),
+        },
+        {
+            path: '/project-management',
+            name: 'project-management',
+            component: project_management,
         },
         {
             path: '/to-do-list',
-            component: require('./main/ToDoList'),
+            component: todolist,
             name: 'todolist'
         },
         {
             path: '/new_authorization_requests',
-            component: require('./main/components/NewAuthorizationRequests'),
+            component: newAuthorizationRequests,
             name: 'newAuthorizationRequests'
         },
         {
             path: '/home',
-            component: require('./main/Home'),
+            component: home,
             name: 'home'
         },
         {
             path: '/create-project',
             name: 'create_project',
-            component: require('../common/tickets/CreateProjectRequest1'),
+            component: create_project,
         },
         {
             path: '/test',
             name: 'create_project',
-            component: require('./main/components/superadmin/CreateProject'),
-        }
+            component: create_project2,
+        },
+        //request role
+        {
+            path: '/requests-role',
+            component: requestsRole,
+            children: [
+                {
+                    path: '/',
+                    name: 'requests_role.list',
+                    component: requests_role_list,
+                },
+                {
+                    path: 'view/:id',
+                    name: 'requests_role.view',
+                    component:  requests_role_view,
+                }
+            ],
+        },
+        {
+            path: '/archives',
+            name: 'archives',
+            component: Archives,
+        },
     ],
+    // mode: "history",
 });
+
 
 router.beforeEach((to, from, next) => {
     store.commit('showLoader');
-    next();
+    if (to.path == '/to-do') {
+        //  alert(to.path)
+        if (APP.USER_TYPE_LOG == 'ESTATE_OWNER') {
+            if (from.path != '/es/to-do-list')
+                next('/es/to-do-list')
+            else
+                next('/')
+            // return ;
+        }
+        else if (APP.USER_TYPE_LOG == 'ENGINEERING_OFFICE') {
+            if (from.path != '/es/to-do-list')
+                next('/en/to-do-list')
+            else
+                next('/')
+        }
+        else {
+            next('/to-do-list')
+        }
+    }
+    if (localStorage.getItem("currenpathaftercjange") != null) {
+        var path = localStorage.getItem("currenpathaftercjange");
+        localStorage.removeItem("currenpathaftercjange");
+
+        next(path)
+    }
+    else {
+        next();
+    }
+
+
 });
 
 router.afterEach((to, from) => {
+    //   alert(JSON.stringify(to.path))
+    localStorage.setItem("currenpath", to.path);
     setTimeout(() => {
         store.commit('hideLoader');
     }, 1000);
 });
-
 export default router;

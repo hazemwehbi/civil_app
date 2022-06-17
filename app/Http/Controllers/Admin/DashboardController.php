@@ -38,23 +38,29 @@ class DashboardController extends Controller
     {
         $user = request()->user();
         $project_ids = $this->CommonUtil->getAssignedProjectForEmployee($user->id);
-        $customer_id = request()->get('customer_id');
+        $customer_id = $user->id;//request()->get('customer_id');
 
         //projects stats
         $projects = new Project();
-        if (!$user->hasRole('superadmin')) {
-            $projects = $projects->orWhere('projects.lead_id', $user->id)
-                    ->orWhereIn('projects.id', $project_ids);
+       if (!$user->hasRole('superadmin')) {
+          //  $projects = $projects->orWhere('projects.lead_id', $user->id)
+            //        ->orWhereIn('projects.id', $project_ids);
+
+            if (!empty($customer_id)) {
+                $projects = $projects->where('customer_id', $customer_id);
+            }
         }
-        if (!empty($customer_id)) {
-            $projects = $projects->where('customer_id', $customer_id);
-        }
+
         $project_counts = $projects->select(
             DB::raw("COALESCE(SUM(IF(status != 'completed', 1, 0)), 0) as incompleted"),
             DB::raw('count(*) as total')
             )
             ->first();
-
+            $project_counts_completed = $projects->select(
+                DB::raw("COALESCE(SUM(IF(status ='completed', 1, 0)), 0) as completed"),
+                DB::raw('count(*) as total')
+                )
+                ->first();
         //Task
         $task_counts = Project::join('project_tasks as PT', 'projects.id', '=', 'PT.project_id');
         if (!$user->hasRole('superadmin')) {
@@ -157,12 +163,12 @@ class DashboardController extends Controller
 
 
         //Ticket Pie Chart
-        $tickets = Ticket::select('status', DB::raw("COUNT(id) as status_count"));
+        /*$tickets = Ticket::select('status', DB::raw("COUNT(id) as status_count"));
 
         if ($user->hasRole('employee') && !$user->hasRole('superadmin')) {
             $tickets->where('tickets.assigned_to', $user->id);
         }
-        $tickets = $tickets->groupBy('status')
+       /* $tickets = $tickets->groupBy('status')
                             ->get();
 
         $ticket_pie_chart_label = [];
@@ -171,7 +177,7 @@ class DashboardController extends Controller
             $ticket_pie_chart_label[] = __('messages.'.$ticket->status);
             $ticket_pie_chart_dataset[] = $ticket->status_count;
         }
-
+*/
         //TRANSACTION:invoice paid vs expense pie chart
         $invoice = Transaction::OfTransaction('invoice')
                             ->where('status', 'final')
@@ -193,6 +199,7 @@ class DashboardController extends Controller
 
         $dashboard_data = [
                 'project_counts' => $project_counts,
+                'project_counts_completed'=>$project_counts_completed,
                 'task_counts' => $task_counts,
                 'invoice_counts' => $invoice_counts,
                 'invoice_totals' => $invoice_totals,
@@ -201,10 +208,10 @@ class DashboardController extends Controller
                 'business_currency' => $business_currency,
                 'payment_status_count' => $payment_status_count,
                 'sticky_notes' => $user->sticky_notes,
-                'ticket_pie_chart_label' => $ticket_pie_chart_label,
-                'ticket_pie_chart_dataset' => $ticket_pie_chart_dataset,
-                'transaction_pie_chart_label' => $transaction_pie_chart_label,
-                'transaction_pie_chart_datasets' => $transaction_pie_chart_datasets
+              //  'ticket_pie_chart_label' => $ticket_pie_chart_label,
+               // 'ticket_pie_chart_dataset' => $ticket_pie_chart_dataset,
+                //'transaction_pie_chart_label' => $transaction_pie_chart_label,
+                ///'transaction_pie_chart_datasets' => $transaction_pie_chart_datasets
             ];
 
         return $dashboard_data;

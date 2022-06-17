@@ -91,6 +91,31 @@ class PermissionsTableSeeder extends Seeder
             Permission::create($permission);
         }
 
+
+        $deafult_permissions=[
+            ['name' => 'tickets.create'],
+            ['name' => 'tickets.view'],
+            ['name' => 'tickets.edit'],
+            ['name' => 'tickets.delete'],
+
+            
+            ['name' => 'project.list'],
+            ['name' => 'project.create'],
+            ['name' => 'project.edit'],
+            ['name' => 'project.delete'],
+
+            ['name' => 'employee.create'],
+            ['name' => 'employee.view'],
+            ['name' => 'employee.edit'],
+            ['name' => 'employee.delete'],
+
+
+            ['name' => 'role.create'],
+            ['name' => 'role.view'],
+            ['name' => 'role.edit'],
+            ['name' => 'role.delete'],
+        ];
+
         //add static roles for create acount
         foreach(array_keys(config('constants.user_types'))  as $type){
 
@@ -102,6 +127,22 @@ class PermissionsTableSeeder extends Seeder
                 ]);
                 $StaticRole->syncPermissions($permissions);
 
+            }
+            else if($type=='ESTATE_OWNER'  ){
+                $StaticRole = Role::create([
+                    'name' => 'Estate Owner',
+                    'type' =>$type,
+                    'is_primary'=>1,
+                ]);
+                $StaticRole->syncPermissions($deafult_permissions);
+            }
+            else if($type=='ENGINEERING_OFFICE'){
+                $StaticRole = Role::create([
+                    'name' => 'Engineering Office',
+                    'type' =>$type,
+                    'is_primary'=>1,
+                ]);
+                $StaticRole->syncPermissions($deafult_permissions);
             }
             else{
                 $StaticRole = Role::create([

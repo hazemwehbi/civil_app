@@ -74,17 +74,19 @@
             <v-card-title>
                 <div>
                     <div class="headline">
-                        {{ trans('messages.all_employees') }}
+                        {{ trans('data.all_users') }}
                     </div>
                 </div>
                 <v-spacer></v-spacer>
                 <v-btn
                     v-if="$can('employee.create')"
                     @click="$router.push({ name: 'users.create' })"
-                    style="background-color:#06706d"
-                    dark
+                      style="background-color: #06706d; color: white"
+                    class="lighten-1"
+                    :disabled="!checkActive()"
+                    
                 >
-                    {{ trans('messages.new_employee') }}
+                    {{ trans('data.new_employee') }}
                     <v-icon right dark>add</v-icon>
                 </v-btn>
             </v-card-title>
@@ -114,6 +116,7 @@
                 </template>
                 <template slot="items" slot-scope="props">
                     <td>
+                          <div align="center">
                         <v-menu>
                             <v-btn icon slot="activator"> <v-icon>more_vert</v-icon> </v-btn>
                             <v-list>
@@ -133,6 +136,7 @@
                                 </v-list-tile>
                                 <v-list-tile
                                     v-if="$can('employee.edit')"
+                                     :disabled="!checkActive()"
                                     @click="
                                         $router.push({
                                             name: 'users.edit',
@@ -146,6 +150,7 @@
                                     </v-list-tile-title>
                                 </v-list-tile>
                                 <v-list-tile
+                                 :disabled="!checkActive()"
                                     v-if="$can('employee.delete')"
                                     @click="trash(props.item)"
                                 >
@@ -156,22 +161,27 @@
                                 </v-list-tile>
                             </v-list>
                         </v-menu>
+                          </div>
                     </td>
-                    <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.email }}</td>
-                    <td>
+                  <td > <div align="center"> {{ props.item.name }}</div> </td>
+                  <td> <div align="center">{{ props.item.email }}</div></td>
+                  <td>
+                        <div align="center">
                         <span v-for="(role,index) in props.item.roles" :key="index">
                             {{ roleName(role) }}
                         </span>
+                        </div>
                     </td>
-                    <td>{{ props.item.last_login | formatDateTime }}</td>
+                  <td><div align="center"> {{ props.item.last_login | formatDateTime }} </div></td>
                     <td>
+                        <div align="center">
                         <v-avatar outline>
                             <v-icon v-if="props.item.active != null" class="green--text"
                                 >check_circle</v-icon
                             >
                             <v-icon class="grey--text" v-else>error_outline</v-icon>
                         </v-avatar>
+                        </div>
                     </td>
                 </template>
             </v-data-table>
@@ -187,6 +197,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 export default {
     data() {
         const self = this;
@@ -195,37 +206,37 @@ export default {
                 {
                     text: self.trans('messages.action'),
                     value: false,
-                    align: 'left',
+                    align: 'center',
                     sortable: false,
                 },
                 {
                     text: self.trans('messages.name'),
                     value: 'name',
-                    align: 'left',
+                    align: 'center',
                     sortable: false,
                 },
                 {
                     text: self.trans('messages.email'),
                     value: 'email',
-                    align: 'left',
+                    align: 'center',
                     sortable: false,
                 },
                 {
                     text: self.trans('messages.roles'),
                     value: 'roles',
-                    align: 'left',
+                    align: 'center',
                     sortable: false,
                 },
                 {
                     text: self.trans('messages.last_login'),
                     value: 'last_login',
-                    align: 'left',
+                    align: 'center',
                     sortable: false,
                 },
                 {
                     text: self.trans('messages.active'),
                     value: 'active',
-                    align: 'left',
+                    align: 'center',
                     sortable: false,
                 },
             ],
@@ -257,11 +268,11 @@ export default {
         'pagination.rowsPerPage': function() {
             this.loadUsers(() => {});
         },
-        'filters.name': _.debounce(function() {
+        'filters.name': _.debounce(() => {
             const self = this;
             self.loadUsers(() => {});
         }, 700),
-        'filters.email': _.debounce(function() {
+        'filters.email': _.debounce(() => {
             const self = this;
             self.loadUsers(() => {});
         }, 700),

@@ -43,6 +43,9 @@
             APP.USER_ROLES = {!! json_encode($user->getUserRoles($user), true) !!};
             APP.DATE_FORMAT = {!! json_encode($user->appDateFormat()) !!};
             APP.TIME_FORMAT = {!! json_encode($user->appTimeFormat()) !!};
+            APP.USER_TYPE_LOG = {!! json_encode($user->user_type_log) !!};
+            APP.CURRENT_USER = {!! json_encode($user) !!};
+            
         @else
              window.Permissions = [];
             @php
@@ -53,11 +56,8 @@
         @endauth
     </script>
 </head>
-
-
 <body>
 <div id="admin">
-
     <template>
         <v-app id="inspire">
          <!--   <v-navigation-drawer
@@ -118,13 +118,13 @@
         <!--    </v-navigation-drawer>-->
 
 
-            <v-toolbar style="background-color:#06706d;" app dark flat fixed dense height="100"
+            <v-toolbar style="background-color:#06706d;z-index: 100" app dark flat fixed dense height="100"
                 :clipped-left="true">
                 <!-- this Line to hide 3 lines in navbar
                 <v-toolbar-side-icon @click="drawerToggle"></v-toolbar-side-icon> 
                 <v-toolbar-title class="hidden-sm-and-down">{{config('app.name')}}</v-toolbar-title>
                 -->
-        
+         
            
                 <img src="{{asset('img/logo.png')}}"  alt="logo" width="100" style="border-radius:20px;" />
                 <v-layout >
@@ -135,13 +135,13 @@
                             {{trans('data.home')}}
                         </router-link>    
                         &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; 
-                        <router-link to="/to-do-list" style="color:white;">
+                        <router-link to="/to-do" style="color:white;">
                             {{trans('data.to_do_list')}}
                         </router-link>                                      
                     </div>
                 </v-layout>
-
-                <v-menu
+                <notification></notification>
+                <v-menu 
                      attach
                         offset-y
                         bottom
@@ -149,14 +149,16 @@
                         nudge-bottom="14"
                         transition="slide-x-transition"
                         >
-                        <v-btn flat slot="activator">
+                         <v-btn flat slot="activator">
                             <b style="font-size:14px;">
                                 <v-icon>language</v-icon>
                                 {{trans('data.language')}}
                                 
-                        </v-btn>
+                        </v-btn> 
+                       
+                    
                         <v-list>
-                            <v-list-tile style="background: darkgrey;" >
+                            <v-list-tile style="background: darkgrey;"  @click="save()"> 
                                 <v-list-tile-title>
                                 <span class="flag-icon flag-icon-{{Config::get('languages')[App::getLocale()]['flag-icon']}}"></span> {{ Config::get('languages')[App::getLocale()]['display'] }}
                                 </v-list-tile-title>
@@ -165,7 +167,7 @@
                                 <v-list-tile-title>
                                 @foreach (Config::get('languages') as $lang => $language)
                                 @if ($lang != App::getLocale())
-                                        <a class="dropdown-item" href="{{ route('lang.switch', $lang) }}"><span class="flag-icon flag-icon-{{$language['flag-icon']}}"></span> {{$language['display']}}</a>
+                                        <a class="dropdown-item" href='javascript:;' onclick='change("{{ $lang}}");' ><span class="flag-icon flag-icon-{{$language['flag-icon']}}"></span> {{$language['display']}}</a>
                                     @endif
                                 @endforeach
                                 </v-list-tile-title>
@@ -173,8 +175,14 @@
                         </v-list>
                        
 
-                     </v-menu>
 
+                     </v-menu>
+                    
+
+                     <v-menu>
+                
+
+                    </v-menu>
                     <v-menu
                         attach
                         offset-y
@@ -183,6 +191,7 @@
                         nudge-bottom="14"
                         transition="slide-x-transition"
                         >
+                       
                         <v-btn flat slot="activator">
                             <b style="font-size:14px;">
                                 {{trans('data.basic_information')}}
@@ -191,8 +200,10 @@
                             </avatar>&nbsp;<!--{{ $user->name }}-->
                             <v-icon dark medium>more_vert</v-icon>
                         </v-btn>
-
+                        
                         <v-list>
+                  
+
                             <v-list-tile @click="$router.push({ name: 'profile.list' })">
                                 <v-list-tile-title>
                                     <v-icon> account_circle </v-icon>
@@ -209,13 +220,6 @@
 
 
                      </v-menu>
-
-            
-          
-   
-
-
-
        
             </v-toolbar>
 
@@ -276,16 +280,46 @@
     <!-- Scripts -->
 
     <script src="{{ env('APP_URL') . '/js/lang.js' }}"></script>
-    <script src="{{ asset(mix('js/manifest.js')) }}"></script>
-    <script src="{{ asset(mix('js/vendor.js')) }}"></script>
+    <script src="{{ asset('js/manifest.js') }}"></script>
+    <script src="{{ asset('js/vendor.js') }}"></script>
 
     @if($user->is_employee)
-        <script src="{{ asset(mix('js/admin.js')) }}"></script>
+        <script src="{{ asset('js/admin.js') }}"></script>
     @elseif($user->is_client)
-        <script src="{{ asset(mix('js/client.js')) }}"></script>
+        <script src="{{ asset('js/client.js') }}"></script>
     @endif
+    <script type="text/javascript">
+const isEmpty = str => !str.trim().length;
+ function change(lang){
+        ///lang/ar
+        localStorage.setItem("currenpathaftercjange",localStorage.getItem("currenpath"));
+        localStorage.setItem("currentLange",lang);
+        localStorage.removeItem("currenpath");
+        window.location.href = "lang/"+lang; //causes the browser to refresh and load the requested url
+
+
+       
+
+          //  alert(lang)
+        }
+</script>
+   
 </body>
 <style type="text/css">
+
+div[aria-required=true].v-input .v-label::after {
+    content: " *";
+    color: red;
+  }
+  .v-label  > .required.sign {
+    color: rgb(248, 14, 14);
+    font-weight: bold;
+    margin-left: .25em;
+}
+div[aria-required=true].v-autocomplete .v-label::after {
+  content: " *";
+  color: red;
+}
     /* quill editor toolbar */
    #inspire {
     font-family: 'Tajawal', sans-serif;

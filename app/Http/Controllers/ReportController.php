@@ -26,7 +26,7 @@ class ReportController extends Controller
 
         $project_note = Report::
                            // ->where('notable_type', 'App\Project')
-                            with('project')
+                            with('project','reportCreator')
                             ->orderBy($sort_by, $orderby)
                             ->paginate($rowsPerPage);
 
@@ -50,6 +50,7 @@ class ReportController extends Controller
                         'description'=>$description,
                         'project_id' => $project_id,
                         'type'=>$report_type,
+                        'created_by'=>Auth::id(),
                         //'type' => 'employee',
                     ]);
             DB::commit();

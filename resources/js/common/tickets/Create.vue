@@ -2,11 +2,12 @@
     <v-container row justify-center>
         <AddRequestType ref="RequestTypeAdd"></AddRequestType>
         <v-card>
-            <v-divider></v-divider>
-            <v-card-text>
-                <v-container grid-list-md>
-                    <v-layout row wrap>
-                        <v-flex xs12 sm6 md6>
+            <v-form ref="form" v-model="valid" lazy-validation>
+                <v-divider></v-divider>
+                <v-card-text>
+                    <v-container grid-list-md>
+                        <v-layout row wrap>
+                            <!-- <v-flex xs12 sm6 md6>
                             <v-text-field
                                 v-model="title"
                                 :label="trans('messages.title')"
@@ -16,8 +17,8 @@
                                 :error-messages="errors.collect('title')"
                                 required
                             ></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm6 md6>
+                        </v-flex> -->
+                            <!-- <v-flex xs12 sm6 md6>
                             <v-autocomplete
                                 item-text="value"
                                 item-value="key"
@@ -30,8 +31,8 @@
                                 :error-messages="errors.collect('request_type')"
                                 required
                             ></v-autocomplete>
-                        </v-flex>
-                        <!-- <v-flex xs1 sm1 md1>
+                        </v-flex> -->
+                            <!-- <v-flex xs1 sm1 md1>
                                 <v-btn
                                     @click="createRequestType"
                                     small
@@ -42,39 +43,49 @@
                                     <v-icon>add</v-icon>
                                 </v-btn>
                             </v-flex> -->
-                    </v-layout>
-                    <v-layout row>
-                        <v-flex xs12 sm4 md4>
-                            <v-autocomplete
-                                item-text="name"
-                                item-value="id"
-                                :items="projects"
-                                v-model="project_id"
-                                :label="trans('data.project_name')"
-                                v-validate="'required'"
-                                data-vv-name="project_name"
-                                :data-vv-as="trans('data.project_name')"
-                                :error-messages="errors.collect('project_name')"
-                                required
-                            ></v-autocomplete>
-                        </v-flex>
-                        <!-- v-if="$hasRole('employee')" -->
-                        <v-flex xs12 sm4 md4>
-                            <v-autocomplete
-                                item-text="name"
-                                item-value="id"
-                                :items="customers"
-                                v-model="customer_id"
-                                :label="trans('messages.customer')"
-                                v-validate="'required'"
-                                data-vv-name="customer"
-                                :data-vv-as="trans('messages.customer')"
-                                :error-messages="errors.collect('customer')"
-                                required
-                            ></v-autocomplete>
-                        </v-flex>
-                        <!-- v-if="$hasRole('employee')" -->
-                        <v-flex xs12 sm4 md4>
+
+                            <v-flex xs12 sm6 md6>
+                                <v-autocomplete
+                                    item-text="name"
+                                    item-value="id"
+                                    :items="projects"
+                                    v-model="project_id"
+                                    :label="trans('data.project_name')"
+                                    :rules="[
+                                        (v) =>
+                                            !!v ||
+                                            trans('messages.required', {
+                                                name: trans('data.project_name'),
+                                            }),
+                                    ]"
+                                    @change="(event) => updateEmployee(event, k)"
+                                    required
+                                ></v-autocomplete>
+                            </v-flex>
+                            <v-flex xs12 sm6 md6>
+                                <v-autocomplete
+                                    item-text="name"
+                                    item-value="id"
+                                    :items="customers"
+                                    :readonly="true"
+                                    v-model="customer_id"
+                                    :label="trans('messages.customer')"
+                                    :rules="[
+                                        (v) =>
+                                            !!v ||
+                                            trans('messages.required', {
+                                                name: trans('messages.customer'),
+                                            }),
+                                    ]"
+                                    required
+                                ></v-autocomplete>
+                            </v-flex>
+                        </v-layout>
+                        <v-layout row>
+                            <!-- v-if="$hasRole('employee')" -->
+
+                            <!-- v-if="$hasRole('employee')" -->
+                            <!-- <v-flex xs12 sm4 md4>
                             <v-autocomplete
                                 item-text="value"
                                 item-value="key"
@@ -82,8 +93,8 @@
                                 v-model="priority"
                                 :label="trans('messages.priority')"
                             ></v-autocomplete>
-                        </v-flex>
-                        <!--    <v-flex xs1 sm1 md1>
+                        </v-flex> -->
+                            <!--    <v-flex xs1 sm1 md1>
                                 <v-btn
                                     @click="$router.push({name: 'add-project'})"
                                     small
@@ -94,39 +105,83 @@
                                     <v-icon>add</v-icon>
                                 </v-btn>
                             </v-flex>-->
-                    </v-layout>
-                    <v-layout row>
+                            <v-flex xs12 sm6 md6>
+                                <v-autocomplete
+                                    item-text="name"
+                                    item-value="id"
+                                    :items="engennering_offices"
+                                    v-model="office_id"
+                                    :label="trans('data.enginnering_office_name')"
+                                    :rules="[
+                                        (v) =>
+                                            !!v ||
+                                            trans('messages.required', {
+                                                name: trans('data.enginnering_office_name'),
+                                            }),
+                                    ]"
+                                    required
+                                ></v-autocomplete>
+                            </v-flex>
+
+                            <v-flex xs12 sm6 md6>
+                                <v-datetime-picker
+                                    :label="trans('data.visit_datetime')"
+                                    :datetime="dead_line_date"
+                                    :okText="trans('data.ok')"
+                                    :clearText="trans('data.clear')"
+                                    v-model="dead_line_date"
+                                >
+                                </v-datetime-picker>
+                            </v-flex>
+                        </v-layout>
+                        <v-layout row>
+                            <v-flex xs12 sm12 md12>
+                                <v-autocomplete
+                                    item-text="value"
+                                    item-value="key"
+                                    :items="enginnering_types"
+                                    v-model="enginnering_type"
+                                    :label="trans('data.enginnering_type')"
+                                    multiple
+                                    data-vv-name="enginnering_type"
+                                    :data-vv-as="trans('data.enginnering_type')"
+                                    :error-messages="errors.collect('enginnering_type')"
+                                    required
+                                >
+                                    <!-- <Popover
+                                    slot="append"
+                                    :helptext="trans('messages.project_member_tooltip')"
+                                >
+                                </Popover> -->
+                                </v-autocomplete>
+                            </v-flex>
+                        </v-layout>
+                        <v-layout row>
+                            <v-flex xs12 sm12 md12>
+                                <v-text-field
+                                    v-model="note"
+                                    :label="trans('data.note')"
+                                    :readonly="isEdit"
+                                ></v-text-field>
+                            </v-flex>
+                        </v-layout>
+                        <!-- <v-layout row>
                         <v-flex xs12 sm12 md12>
                             <v-textarea
                                 rows="4"
                                 v-model="description"
-                                :label="trans('messages.description')"
+                                :label="trans('data.description')"
                                 v-validate="'required'"
                                 data-vv-name="description"
-                                :data-vv-as="trans('messages.description')"
+                                :data-vv-as="trans('data.description')"
                                 :error-messages="errors.collect('description')"
                                 required
                             ></v-textarea>
                         </v-flex>
-                    </v-layout>
+                    </v-layout> -->
 
-                    <v-layout row>
-                        <v-flex xs6 sm6 md6>
-                            <v-autocomplete
-                                item-text="name"
-                                item-value="id"
-                                :items="engennering_offices"
-                                v-model="office_id"
-                                :label="trans('data.enginnering_office_name')"
-                                v-validate="'required'"
-                                data-vv-name="enginnering_office_name"
-                                :data-vv-as="trans('data.enginnering_office_name')"
-                                :error-messages="errors.collect('enginnering_office_name')"
-                                required
-                            ></v-autocomplete>
-                        </v-flex>
-                    </v-layout>
-                    <!--    <v-layout row>
+                        <v-layout row> </v-layout>
+                        <!--    <v-layout row>
                             <v-flex xs12 sm6 md6 v-if="$hasRole('employee')">
                                 <v-autocomplete
                                     item-text="value"
@@ -143,8 +198,8 @@
                             </v-flex>
               
                         </v-layout>-->
-                    <v-layout row wrap>
-                        <!--    <v-flex xs12 sm6 md6 v-if="$hasRole('employee')">
+                        <v-layout row wrap>
+                            <!--    <v-flex xs12 sm6 md6 v-if="$hasRole('employee')">
                                 <v-autocomplete
                                     item-text="name"
                                     item-value="id"
@@ -153,50 +208,56 @@
                                     :label="trans('messages.assigned_to')"
                                 ></v-autocomplete>
                             </v-flex>-->
-                    </v-layout>
-                </v-container>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-layout justify-center>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn style="color: #06706d" @click="reset">
-                        {{ trans('data.reset') }}
-                    </v-btn>
-                    <v-btn
-                        style="background-color: #06706d; color: white"
-                        color="darken-1"
-                        @click="store(1)"
-                        :loading="loading"
-                        :disabled="loading"
-                    >
-                        {{ trans('messages.save') }}
-                    </v-btn>
-                    <v-btn style="color: #06706d" @click="$router.go(-1)">
-                        {{ trans('messages.back') }}
-                    </v-btn>
-                    <v-btn
-                        style="background-color: #06706d; color: white"
-                        color="darken-1"
-                        @click="store(0)"
-                        :loading="loading"
-                        :disabled="loading"
-                    >
-                        {{ trans('messages.draft') }}
-                    </v-btn>
-                </v-card-actions>
-            </v-layout>
+                        </v-layout>
+                    </v-container>
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-layout justify-center>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="error" class="mr-4" @click="reset">
+                            {{ trans('data.reset') }}
+                        </v-btn>
+                        <v-btn :disabled="!valid" color="success" class="mr-4" @click="store(1)">
+                            {{ trans('data.send') }}
+                        </v-btn>
+                        <v-btn style="color: #06706d" @click="$router.go(-1)">
+                            {{ trans('data.back') }}
+                        </v-btn>
+                        <v-btn :disabled="!valid" color="success" class="mr-4" @click="store(0)">
+                            {{ trans('data.draft') }}
+                        </v-btn>
+                    </v-card-actions>
+                </v-layout>
+            </v-form>
         </v-card>
     </v-container>
 </template>
 <script>
 import AddRequestType from './AddRequestType';
+
 export default {
     components: {
         AddRequestType,
     },
     data() {
         return {
+            valid: true,
+            nullDatetime: null,
+            datetime: new Date(),
+            datetimeString: '2019-01-01 12:00',
+            formattedDatetime: '09/01/2019 12:00',
+            enginnering_types: [],
+            textFieldProps: {
+                appendIcon: 'event',
+            },
+            dateProps: {
+                headerColor: 'red',
+            },
+            timeProps: {
+                useSeconds: false,
+                ampmInTitle: false,
+            },
             type: '',
             project_id: '',
             projects: [],
@@ -216,7 +277,24 @@ export default {
             request_type: '',
             engennering_offices: [],
             office_id: '',
+            dead_line_date: null,
+            enginnering_type: '',
+            note: '',
         };
+    },
+    computed: {
+        computedDateFormattedMomentjs() {
+            const self = this;
+            return null; //self.dead_line_date
+            // ? moment(self.location.instrument_date).format('dddd, MMMM Do YYYY')
+            // : '';
+        },
+        computedDateFormattedDatefns() {
+            const self = this;
+            return self.dead_line_date;
+            // ? format(parseISO(self.location.instrument_date), 'EEEE, MMMM do yyyy')
+            //  : '';
+        },
     },
     created() {
         const self = this;
@@ -227,8 +305,9 @@ export default {
         self.getRequestTypes();
         self.getCustomerProject();
         self.getCustomers();
-        self.getpriority();
+        //self.getpriority();
         self.getOffices();
+        self.getEnginneringTypes();
     },
     beforeDestroy() {
         const self = this;
@@ -245,7 +324,8 @@ export default {
         getCustomers() {
             const self = this;
             axios
-                .get('/all-customers')
+                 .get('all-customers-admin')
+                
                 .then(function (response) {
                     self.customers = response.data;
                 })
@@ -264,6 +344,17 @@ export default {
                     console.log(error);
                 });
         },
+        getEnginneringTypes() {
+            const self = this;
+            axios
+                .get('/get-enginnering-types')
+                .then(function (response) {
+                    self.enginnering_types = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         reset() {
             const self = this;
             self.title = '';
@@ -273,6 +364,7 @@ export default {
             self.status = '';
             self.priority = '';
             self.customer_id = '';
+            self.office_id = '';
             // self.request_types=[];
         },
 
@@ -322,36 +414,49 @@ export default {
                 request_type: self.request_type,
                 project_id: self.project_id,
                 description: self.description,
-                status: 'new',
+                //  status: 'new',
                 priority: self.priority,
                 customer_id: self.customer_id,
                 office_id: self.office_id,
+                dead_line_date: self.dead_line_date,
+                note: self.note, //
+                enginnering_type: self.enginnering_type,
             };
             console.log(data);
-            self.$validator.validateAll().then((result) => {
-                if (result == true) {
-                    self.loading = true;
-                    axios
-                        .post('/visit-request', data)
-                        .then(function (response) {
-                            self.loading = false;
-                            self.$store.commit('showSnackbar', {
-                                message: response.data.msg,
-                                color: response.data.success,
-                            });
-
-                            if (response.data.success === true) {
-                                //   self.dialog = false;
-                                self.$eventBus.$emit('updateTicketsTable');
-                                self.goBack();
-                            }
-                        })
-                        .catch(function (error) {
-                            console.log(error);
+            if (this.$refs.form.validate()) {
+                self.loading = true;
+                axios
+                    .post('request', data)
+                    .then(function (response) {
+                        self.loading = false;
+                        self.$store.commit('showSnackbar', {
+                            message: response.data.msg,
+                            color: response.data.success,
                         });
-                }
-            });
+
+                        if (response.data.success === true) {
+                            //   self.dialog = false;
+                            self.$eventBus.$emit('updateTicketsTable');
+                            self.goBack();
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+
             //self.reset();
+        },
+        updateEmployee(value, key) {
+            const self = this;
+            axios
+                .get('get-customer-project/' + value)
+                .then(function (response) {
+                    self.customer_id = response.data.id;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
     },
 };

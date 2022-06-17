@@ -35,42 +35,67 @@ class ProjectTaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $project_id = request()->get('project_id', false);
 
-        if (!empty($project_id) && (!request()->user()->can('project.'.$project_id.'.task.view'))) {
-            abort(403, 'Unauthorized action.');
+        $rowsPerPage = ($request->get('rowsPerPage') > 0) ? $request->get('rowsPerPage') : 0;
+        $sort_by = $request->get('sort_by');
+        $descending = $request->get('descending');
+
+        if ($descending == 'false') {
+            $orderby = 'asc';
+        } elseif ($descending == 'true') {
+            $orderby = 'desc';
+        } elseif ($descending == '') {
+            $orderby = 'desc';
+            $sort_by = 'id';
         }
+        // if (!empty($project_id) && (!request()->user()->can('project.'.$project_id.'.task.view'))) {
+        //     abort(403, 'Unauthorized action.');
+        // }
 
         $view_style = request()->input('view_style');
 
         $user = request()->user();
-        $tasks_id = $this->CommonUtil->getAssignedTasksForEmployee($user->id);
+    
+        $project_ids=Project::getProjectsIdForCustomer();
+        
+      
+      //  $tasks_id = $this->CommonUtil->getAssignedTasksForEmployee($user->id);
+       /// $projects_id=$Project->
 
         $project_categories = [];
-        $tasks = ProjectTask::with('taskCreator', 'project', 'taskMembers', 'taskMembers.media', 'category', 'notes');
+        $tasks = ProjectTask::with('taskCreator', 'project', 'taskMembers', 'taskMembers.media', 'category', 'notes')->where('show_to_customer',1);
 
-        if (!empty($project_id)) {
-            $tasks = $tasks->where('project_id', $project_id);
-        }
-        if (empty($project_id) && !$user->hasRole('superadmin')) {
-            $tasks = $tasks->whereIn('id', $tasks_id);
-        }
 
-        if (!empty(request()->input('user_id'))) {
-            $user_id = request()->input('user_id');
-            $tasks->whereHas('taskMembers', function ($query) use ($user_id) {
-                $query->where('user_id', $user_id);
-            });
+        if (!empty(request()->input('project_id'))) {
+           
+            $tasks = $tasks->where('project_id', request()->input('project_id'));
         }
+        else{
+            $tasks = $tasks->whereIn('project_id', $project_ids);
+        }
+        
 
-        if (!empty(request()->input('assigned_to_me'))) {
-            $user_id = request()->user()->id;
-            $tasks->whereHas('taskMembers', function ($query) use ($user_id) {
-                $query->where('user_id', $user_id);
-            });
-        }
+       
+        // if (empty($project_id) && !$user->hasRole('superadmin')) {
+        //     $tasks = $tasks->whereIn('id', $tasks_id);
+        // }
+
+        // if (!empty(request()->input('user_id'))) {
+        //     $user_id = request()->input('user_id');
+        //     $tasks->whereHas('taskMembers', function ($query) use ($user_id) {
+        //         $query->where('user_id', $user_id);
+        //     });
+        // }
+
+        // if (!empty(request()->input('assigned_to_me'))) {
+        //     $user_id = request()->user()->id;
+        //     $tasks->whereHas('taskMembers', function ($query) use ($user_id) {
+        //         $query->where('user_id', $user_id);
+        //     });
+        // }
 
         if (!empty(request()->input('status'))) {
             if ('completed' == request()->input('status')) {
@@ -82,33 +107,18 @@ class ProjectTaskController extends Controller
                 $tasks->where('is_completed', 0);
             }
         }
+      
 
-        if ($user->hasRole('contact')) {
-            $tasks->where('show_to_customer', 1);
-        }
+      
         
-        if ($view_style == 'grid') {
-            $tasks = $tasks
-                ->get();
-
-            $tasks = $tasks->groupBy('category_id')->toArray();
-
-            if (!empty($project_id)) {
-                $project_categories = Category::where('project_id', $project_id)->get();
-            } else {
-                //If superadmin show all categories
-                //else show categories of projects where user is a member
-                if ($user->hasRole('superadmin')) {
-                    $project_categories = Category::all();
-                } else {
-                    $assigned_project_ids = $this->CommonUtil->getAssignedProjectForEmployee($user->id);
-                    $project_categories = Category::whereIn('project_id', $assigned_project_ids)->get();
-                }
-            }
-        } else {
-            $tasks = $tasks->latest()
-                    ->simplePaginate(10);
-        }
+        // if ($user->hasRole('contact')) {
+        //     $tasks->where('show_to_customer', 1);
+        // }
+        
+        
+            $tasks = $tasks->orderBy($sort_by, $orderby)
+            ->paginate($rowsPerPage);
+                    
 
         $output = [
             'tasks' => $tasks,
@@ -127,9 +137,9 @@ class ProjectTaskController extends Controller
     {
         $project_id = request()->get('project_id', false);
 
-        if (!empty($project_id) && (!request()->user()->can('project.'.$project_id.'.task.create'))) {
-            abort(403, 'Unauthorized action.');
-        }
+        // if (!empty($project_id) && (!request()->user()->can('project.'.$project_id.'.task.create'))) {
+        //     abort(403, 'Unauthorized action.');
+        // }
 
         if (!empty($project_id)) {
             $project = Project::with('members')->find($project_id);
@@ -164,9 +174,9 @@ class ProjectTaskController extends Controller
     {
         $project_id = request()->get('project_id');
 
-        if (!request()->user()->can('project.'.$project_id.'.task.create')) {
-            abort(403, 'Unauthorized action.');
-        }
+        // if (!request()->user()->can('project.'.$project_id.'.task.create')) {
+        //     abort(403, 'Unauthorized action.');
+        // }
 
         try {
             DB::beginTransaction();
@@ -236,9 +246,9 @@ class ProjectTaskController extends Controller
     {
         $project_id = request()->get('project_id');
 
-        if (!request()->user()->can('project.'.$project_id.'.task.view')) {
-            abort(403, 'Unauthorized action.');
-        }
+        // if (!request()->user()->can('project.'.$project_id.'.task.view')) {
+        //     abort(403, 'Unauthorized action.');
+        // }
 
         $task = ProjectTask::where('project_id', $project_id)
                             ->with('taskCreator', 'project', 'taskMembers')
@@ -258,9 +268,9 @@ class ProjectTaskController extends Controller
     {
         $project_id = request()->get('project_id');
 
-        if (!request()->user()->can('project.'.$project_id.'.task.edit')) {
-            abort(403, 'Unauthorized action.');
-        }
+        // if (!request()->user()->can('project.'.$project_id.'.task.edit')) {
+        //     abort(403, 'Unauthorized action.');
+        // }
 
         $task = ProjectTask::find($id);
         $task_members = ProjectTaskMember::where('project_task_id', $id)
@@ -293,9 +303,9 @@ class ProjectTaskController extends Controller
     {
         $project_id = request()->get('project_id');
 
-        if (!request()->user()->can('project.'.$project_id.'.task.edit')) {
-            abort(403, 'Unauthorized action.');
-        }
+        // if (!request()->user()->can('project.'.$project_id.'.task.edit')) {
+        //     abort(403, 'Unauthorized action.');
+        // }
 
         try {
             DB::beginTransaction();
@@ -344,9 +354,9 @@ class ProjectTaskController extends Controller
     {
         $project_id = request()->get('project_id');
 
-        if (!request()->user()->can('project.'.$project_id.'.task.edit')) {
-            abort(403, 'Unauthorized action.');
-        }
+        // if (!request()->user()->can('project.'.$project_id.'.task.edit')) {
+        //     abort(403, 'Unauthorized action.');
+        // }
 
         try {
             $input = request()->only('description');
@@ -377,9 +387,9 @@ class ProjectTaskController extends Controller
     {
         $project_id = request()->get('project_id');
 
-        if (!request()->user()->can('project.'.$project_id.'.task.delete')) {
-            abort(403, 'Unauthorized action.');
-        }
+        // if (!request()->user()->can('project.'.$project_id.'.task.delete')) {
+        //     abort(403, 'Unauthorized action.');
+        // }
 
         try {
             $project_task = ProjectTask::find($id);
@@ -408,9 +418,9 @@ class ProjectTaskController extends Controller
     {
         $project_id = request()->get('project_id');
 
-        if (!request()->user()->can('project.'.$project_id.'.task.edit')) {
-            abort(403, 'Unauthorized action.');
-        }
+        // if (!request()->user()->can('project.'.$project_id.'.task.edit')) {
+        //     abort(403, 'Unauthorized action.');
+        // }
 
         try {
             $task_id = request()->get('taskId');
