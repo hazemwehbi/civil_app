@@ -20,10 +20,10 @@
                                                                          <v-icon>print</v-icon>
                                                                     {{ trans('data.create_a_report')}}
                                                                     </v-btn></div>
-                <div class="element"><div class="title">{{trans('data.name')}}</div><div class="content">{{ item?item.name:'' }} </div></div>
-                <div class="element"><div class="title">{{trans('data.description')}}</div><div class="content">{{ item?item.description:'' }}</div></div>
-                <div class="element"><div class="title">{{trans('data.type')}}</div><div class="content">{{ item?item.type:''}}</div></div>
-                <div class="element"><div class="title">{{trans('data.created_by')}}</div><div class="content">{{ item && item.reportCreator?item.report.reportCreator.name:'' }}</div></div>
+                <div class="element"><div class="col-title">{{trans('data.name')}}</div><div class="content">{{ item?item.name:'' }} </div></div>
+                <div class="element"><div class="col-title">{{trans('data.description')}}</div><div class="content">{{ item?item.description:'' }}</div></div>
+                <div class="element"><div class="col-title">{{trans('data.type')}}</div><div class="content">{{ item?item.type:''}}</div></div>
+                <div class="element"><div class="col-title">{{trans('data.created_by')}}</div><div class="content">{{ item && item.reportCreator?item.report.reportCreator.name:'' }}</div></div>
            </v-card>
       </v-card>
     </v-flex>
@@ -115,8 +115,8 @@ export default {
     align-items: center;
 
 }
-.title{
-     background: rgb(207 205 242 / 44%);
+.col-title{
+    background: rgb(207 205 242 / 44%);
     height: 100%;
     padding: 0.5rem;
     font-size:12px;

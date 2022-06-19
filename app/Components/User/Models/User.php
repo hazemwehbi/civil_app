@@ -39,7 +39,10 @@ class User extends Authenticatable implements HasMedia
     protected static $logUnguarded = true;
     protected static $logOnlyDirty = true;
     protected $appends = ['avatar_url'];
-    const USER_ROLE_ADMIN_USER = 'admin';
+
+    const USER_ROLE_ADMIN_USER = 'superadmin';
+    const USER_ROLE_EMPLOYEE_ENGINEER_USER = 'Engineering Office';
+    const USER_ROLE_ESTATE_OWNER_USER = 'Estate Owner';
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -257,6 +260,14 @@ class User extends Authenticatable implements HasMedia
     public function isAdmin() : bool
     {
         return $this->hasRole(self::USER_ROLE_ADMIN_USER);
+    }
+    public function isEmployeeEngineer() : bool
+    {
+        return $this->hasRole(self::USER_ROLE_ADMIN_USER);
+    }
+    public function isEstateOwner() : bool
+    {
+        return $this->hasRole(self::USER_ROLE_ESTATE_OWNER_USER);
     }
     public static function getRolesForEmployee()
     {

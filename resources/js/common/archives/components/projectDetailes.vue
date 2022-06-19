@@ -20,12 +20,12 @@
                                                                          <v-icon>print</v-icon>
                                                                     {{ trans('data.create_a_report')}}
                                                                     </v-btn></div>
-                <div class="element"><div class="title">{{trans('data.name')}}</div><div class="content">{{ item.name }} </div></div>
-                <div class="element"><div class="title">{{trans('data.owner_name')}}</div><div class="content">{{ item.creator.name }}</div></div>
-                <div class="element"><div class="title">{{trans('data.searchBy.location')}}</div><div class="content">{{ item.location.province_municipality +'-'+ item.location.municipality +'-'+ item.location.municipality +'-'+ item.location.piece_number}}</div></div>
-                <div class="element"><div class="title">{{trans('data.start_date')}}</div><div class="content">{{ item.start_date }}</div></div>
-                <div class="element"><div class="title">{{trans('data.endDate')}}</div><div class="content">{{ item.end_date }}</div></div>
-                <div class="element"><div class="title">{{trans('data.searchBy.status')}}</div><div class="content" style="padding-bottom: 0;">
+                <div class="element"><div class="col-title">{{trans('data.name')}}</div><div class="content">{{ item.name }} </div></div>
+                <div class="element"><div class="col-title">{{trans('data.owner_name')}}</div><div class="content">{{ item.creator.name }}</div></div>
+                <div class="element"><div class="col-title">{{trans('data.searchBy.location')}}</div><div class="content">{{ item.location.province_municipality +'-'+ item.location.municipality +'-'+ item.location.municipality +'-'+ item.location.piece_number}}</div></div>
+                <div class="element"><div class="col-title">{{trans('data.start_date')}}</div><div class="content">{{ item.start_date }}</div></div>
+                <div class="element"><div class="col-title">{{trans('data.endDate')}}</div><div class="content">{{ item.end_date }}</div></div>
+                <div class="element"><div class="col-title">{{trans('data.searchBy.status')}}</div><div class="content" style="padding-bottom: 0;">
                       <v-progress-linear class="ma-0"
                                                         striped
                                                         :value="getprogress(item.status)"
@@ -123,7 +123,7 @@ export default {
     align-items: center;
 
 }
-.title{
+.col-title{
      background: rgb(207 205 242 / 44%);
     height: 100%;
     padding: 0.5rem;

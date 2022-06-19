@@ -1,5 +1,4 @@
 <template>
-  <v-app>
     <div>
    <!-- <v-navigation-drawer
       v-model="drawer" 
@@ -76,18 +75,17 @@
      <v-tabs-items v-model="tab">
       <v-tab-item
       >
-  <v-card flat class="mx-5 elevation-2 px-5 pt-1 my-2" style="min-width:70%;flex:4">
+  <v-card flat class="mx-5 elevation-2 px-5 pt-1 pb-3 my-2" style="min-width:70%;flex:4">
   <ProjectFilters  :projects="true" :reports="false"/>
   </v-card>
   </v-tab-item>
       <v-tab-item>
-  <v-card flat class="mx-5 elevation-2 px-5 pt-1 my-2" style="min-width:70%;flex:4">
+  <v-card flat class="mx-5 elevation-2 px-5 pt-1 pb-3 my-2" style="min-width:70%;flex:4">
    <ProjectFilters :reports="true" :projects="false" />
   </v-card>
   </v-tab-item>
   </v-tabs-items>
     </div>
-</v-app>
 </template>
 <script>
 import ProjectFilters from './components/ProjectsFilters.vue'

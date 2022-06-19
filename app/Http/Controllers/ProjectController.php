@@ -142,21 +142,32 @@ class ProjectController extends Controller
     
  public function filterDataResults(Request $request)
     {
-        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report')
-       ->where(function($q){
-            $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) {
-            $qu->where('user_id',Auth::user()->id);
-        }); 
-        });
+        $childrens=Auth::user()->childrenIds(Auth::user()->id);
+        array_push($childrens,Auth::user()->id);
+        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report');
+         if(Auth::user()->isEmployeeEngineer()) {
+            $projects = $projects->where(function($q) use ($childrens) {
+                $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) use ($childrens) {
+                $qu->WhereIn('user_id', $childrens);
+            }); 
+            });
+        }
+        else if(Auth::user()->isEstateOwner()){
+            $projects = $projects->where(function($q) use ($childrens) {
+                $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) use ($childrens) {
+                $qu->WhereIn('user_id', $childrens);
+            }); 
+            });
+        }
         $reports = []; 
         $startDate = $request->input('startDate');
         $endDate = $request->input('endDate');
             if(!empty($startDate))
           {
-        $projects= $projects->whereDate('created_at','>=', Carbon::parse($startDate));
+        $projects= $projects->whereDate('start_date', Carbon::parse($startDate));
         }
         if(!empty($endDate))
-        $projects= $projects->whereDate('created_at','<=', Carbon::parse($endDate));  
+        $projects= $projects->whereDate('end_date',Carbon::parse($endDate));  
        if(!empty($request->input('type'))){
             $search= $request->input('search');
             $tableChild= $request->input('type');
