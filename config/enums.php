@@ -15,7 +15,7 @@ return [
     // ]
     'user_types' => [
         'ESTATE_OWNER' => "Estate Owner",
-        'ENGINEERING_OFFICE' => "Engineering Office",
+        'ENGINEERING_OFFICE_MANAGER' => "Engineering Office Manager",
         'SUPPORT_SERVICES_OFFICE' => "Support Service Office",
         
         'CONTRACTING_COMPANY' => "Contracting  Company",

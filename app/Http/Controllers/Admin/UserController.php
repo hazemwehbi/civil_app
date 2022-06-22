@@ -119,6 +119,7 @@ class UserController extends AdminController
      */
     public function store(Request $request)
     {
+       
         if (!request()->user()->can('employee.create')) {
             abort(403, 'Unauthorized action.');
         }
@@ -152,6 +153,7 @@ class UserController extends AdminController
             if(isset($request->enginnering_type))
                $input['enginnering_type']=json_encode($request->enginnering_type);
             /** @var User $user */
+            
             $user = $this->userRepository->create($input);
 
             //assign role to employee
@@ -160,14 +162,25 @@ class UserController extends AdminController
                 foreach($role_ids as $role_id){
                     $role = Role::findOrFail($role_id);
                     if(!Auth::user()->hasRole('superadmin') && $role->is_primary  && !$user->hasRole($role->name)){
+                        
                                 return $this->respondWithError(__('data.not_permiision_to_assign_primary_role'));
                     }
                     else{
-                        $user->roles()->attach($role);
+                      $user->assignRole($role);
                     }
                 }
             }
-
+            if(count($role_ids)==1){
+                $role = Role::findOrFail($role_ids[0]);
+                $user->user_type_log = $role->type;
+                $user->save();
+            //    dd($role->type,$user->user_type_log);
+            }
+            if(count($role_ids)==1 && $role_ids[0]==7){
+                $user->user_type_log = 'ENGINEERING_OFFICE_MANAGER';
+                $user->save();
+            }
+            
             // $role_id = $request->input('role');
             // if (!empty($role_id)) {
             //     $role = Role::findOrFail($role_id);
@@ -448,14 +461,13 @@ class UserController extends AdminController
     }
     public function checkUserType(Request $request){
         $x= $this->userRepository->getTypeOfUser($request->get('email'), $request->get('user_type'));
-        return $this->respond( $x);
+        return $this->respond($x);
         
     }
 
     public function getType(Request $request){
         $x= $this->userRepository->getType($request->get('email'), $request->get('password'));
-        return $this->respond( $x);
-        
+        return $this->respond($x);
     }
 
     public function getAllOfficeUsers()

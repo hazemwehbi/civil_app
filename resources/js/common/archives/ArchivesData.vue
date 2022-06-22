@@ -77,14 +77,23 @@
       >
   <v-card flat class="mx-5 elevation-2 px-5 pt-1 pb-3 my-2" style="min-width:70%;flex:4">
   <ProjectFilters  :projects="true" :reports="false"/>
+  <v-btn class="mx-auto" style="color: #06706d" @click="$router.go(-1)">
+                        {{ trans('messages.back') }}
+                    </v-btn>
   </v-card>
   </v-tab-item>
       <v-tab-item>
   <v-card flat class="mx-5 elevation-2 px-5 pt-1 pb-3 my-2" style="min-width:70%;flex:4">
    <ProjectFilters :reports="true" :projects="false" />
+   <v-btn class="mx-auto" style="color: #06706d" @click="$router.go(-1)">
+                        {{ trans('messages.back') }}
+                    </v-btn>
   </v-card>
+
   </v-tab-item>
+     
   </v-tabs-items>
+   
     </div>
 </template>
 <script>

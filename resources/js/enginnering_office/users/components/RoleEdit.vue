@@ -791,6 +791,7 @@
                         >
                             <h4>{{ trans('data.specialty') }}</h4>
                         </v-flex>
+                          
                         <v-flex
                             xs12
                             sm3
@@ -815,7 +816,9 @@
                                 :label="trans('data.view_specialty')"
                                 value="specialty.view"
                             >
-                            </v-checkbox>
+                            </v-checkbox>  
+                        
+                           
                             <!-- <v-checkbox
                                 v-if="$can('specialty.edit')"
                                 v-model="permissions"

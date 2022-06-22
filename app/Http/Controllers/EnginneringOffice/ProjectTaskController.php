@@ -58,7 +58,7 @@ class ProjectTaskController extends Controller
         if (!empty($project_id)) {
             $tasks = $tasks->where('project_id', $project_id);
         }
-        if (empty($project_id) && !$user->hasRole('Engineering Office')) {
+        if (empty($project_id) && !$user->hasRole('Engineering Office Manager')) {
             $tasks = $tasks->whereIn('id', $tasks_id);
         }
 
@@ -94,7 +94,7 @@ class ProjectTaskController extends Controller
         if ($view_style == 'grid') {
             $tasks = $tasks
                 ->get();
-                if ( !$user->hasRole('Engineering Office')) {
+                if ( !$user->hasRole('Engineering Office Manager')) {
                     $user = request()->user();
                     foreach($tasks as $item){
                         $project_task_member=ProjectTaskMember::where('user_id',$user->id)->where('project_task_id',$item->id)->first();
@@ -108,7 +108,7 @@ class ProjectTaskController extends Controller
             } else {
                 //If superadmin show all categories
                 //else show categories of projects where user is a member
-                if ($user->hasRole('Engineering Office')) {
+                if ($user->hasRole('Engineering Office Manager')) {
                     $project_categories = Category::all();
                 } else {
                     $assigned_project_ids = $this->CommonUtil->getAssignedProjectForEmployee($user->id);
@@ -459,7 +459,7 @@ class ProjectTaskController extends Controller
                 $is_completed = 0;
             }
             $user = request()->user();
-            if ( !$user->hasRole('Engineering Office')) {
+            if ( !$user->hasRole('Engineering Office Manager')) {
                 $project_task_member=ProjectTaskMember::where('user_id',$user->id)->where('project_task_id',$task_id)->first();
                 $project_task_member->is_done=$is_completed;
                 $project_task_member->save();

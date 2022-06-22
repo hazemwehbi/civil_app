@@ -136,9 +136,9 @@ class PermissionsTableSeeder extends Seeder
                 ]);
                 $StaticRole->syncPermissions($deafult_permissions);
             }
-            else if($type=='ENGINEERING_OFFICE'){
+            else if($type=='ENGINEERING_OFFICE_MANAGER'){
                 $StaticRole = Role::create([
-                    'name' => 'Engineering Office',
+                    'name' => 'Engineering Office Manager',
                     'type' =>$type,
                     'is_primary'=>1,
                 ]);

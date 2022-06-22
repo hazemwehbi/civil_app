@@ -41,7 +41,7 @@ class User extends Authenticatable implements HasMedia
     protected $appends = ['avatar_url'];
 
     const USER_ROLE_ADMIN_USER = 'superadmin';
-    const USER_ROLE_EMPLOYEE_ENGINEER_USER = 'Engineering Office';
+    const USER_ROLE_EMPLOYEE_ENGINEER_USER = 'Engineering Office Manager';
     const USER_ROLE_ESTATE_OWNER_USER = 'Estate Owner';
     /**
      * The attributes that should be hidden for arrays.
@@ -312,11 +312,12 @@ class User extends Authenticatable implements HasMedia
             $roles = Role:: where(function ($query) {
                 $roles_ids = Auth::user()->roles->pluck('id');
                 $query->where('is_primary',0);
-                $query->whereIn('id', $roles_ids);
-                $query->orWhere('created_by',Auth::id());
+                $query->whereIn('created_by', $roles_ids);
+              //  $query->orWhere('created_by',Auth::id());
             })->select('id', 'name')
                           ->get()
                             ->toArray();
+          //  dd($roles);                
            // $roles =$user->roles->where('is_primary',0)->get()
              //                ->toArray();
             
@@ -379,8 +380,8 @@ class User extends Authenticatable implements HasMedia
                 ['value' => 'ESTATE_OWNER',
                  'text' => __('Estate Owner'),
                 ],
-                ['value' => 'ENGINEERING_OFFICE',
-                 'text' => __('Engineering Office'),
+                ['value' => 'ENGINEERING_OFFICE_MANAGER',
+                 'text' => __('Engineering Office Manager'),
                 ],
                 ['value' => 'SUPPORT_SERVICES_OFFICE',
                  'text' => __('Support Service Office'),
@@ -539,7 +540,7 @@ class User extends Authenticatable implements HasMedia
       {
          $role = User::whereHas(
             'roles', function($q){
-                $q->where('type', 'ENGINEERING_OFFICE');//''
+                $q->where('type', 'ENGINEERING_OFFICE_MANAGER');//''
             },
             
         )->where('id',Auth::id())->first();
@@ -549,7 +550,7 @@ class User extends Authenticatable implements HasMedia
       {
          $users = User::whereHas(
             'roles', function($q){
-                $q->where('type', 'ENGINEERING_OFFICE');
+                $q->where('type', 'ENGINEERING_OFFICE_MANAGER');
             }
         )->select('id', 'name')
         ->orderBy('name')
@@ -563,7 +564,7 @@ class User extends Authenticatable implements HasMedia
       {
         $users = User::whereHas(
             'roles', function($q){
-                $q->where('type', 'ENGINEERING_OFFICE');
+                $q->where('type', 'ENGINEERING_OFFICE_MANAGER');
                 $q->where('is_primary',1);
             }
         )

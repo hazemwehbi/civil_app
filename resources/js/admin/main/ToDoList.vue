@@ -95,7 +95,7 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md4>
+                            <v-flex xs12 sm12 md4 v-if="$can('archive')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"
@@ -574,10 +574,15 @@ export default {
         };
     },
     created() {},
+    mounted(){
+            this.$forceUpdate();
+        console.log(this)
+    },
     methods: {
         askforpermission() {
             const self = this;
             this.$refs.permissionref.create();
+
         },
     },
 };

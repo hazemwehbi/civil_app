@@ -268,7 +268,7 @@ export default {
               if (self.filters.type) {
                 params['type'] = self.filters.type;
             }
-            if (self.filters.type) {
+            if (self.filters.columnTable) {
                 params['columnTable'] = self.filters.columnTable;
             }
                   if (self.filters.startDate) {

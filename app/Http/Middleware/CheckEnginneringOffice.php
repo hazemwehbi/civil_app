@@ -17,7 +17,7 @@ class CheckEnginneringOffice
     public function handle($request, Closure $next)
     {
         $user = Auth::user();
-        if ($user->user_type_log !='ENGINEERING_OFFICE') {
+        if ($user->user_type_log !='ENGINEERING_OFFICE_MANAGER') {
             abort(404);
         }
 

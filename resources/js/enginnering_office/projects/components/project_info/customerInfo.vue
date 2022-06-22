@@ -393,7 +393,7 @@ export default {
         getCustomers() {
             const self = this;
 
-            if (self.getCurrentUser().user_type_log == 'ENGINEERING_OFFICE') {
+            if (self.getCurrentUser().user_type_log == 'ENGINEERING_OFFICE_MANAGER') {
                 const self = this;
                 axios
                     .get('/enginner_office/customers')

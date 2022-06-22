@@ -452,6 +452,7 @@
                             >
                             </v-checkbox>
                         </v-flex>
+
                     </v-layout>
                     <v-divider  v-if="
                                 $can('leaves.edit') ||
@@ -759,7 +760,14 @@
                                 value="sales.invoices"
                             >
                             </v-checkbox>
+                              <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.archive')"
+                                value="archive"
+                            >
+                            </v-checkbox>
                         </v-flex>
+                        
                     </v-layout>
                 </v-container>
             </v-card-text>

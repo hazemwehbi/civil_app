@@ -60,7 +60,7 @@ import CustomersShow from './customers/components/Show'
 import CustomersList from './customers/components/List'
 import Customers from './customers/Customers'
 import EstateOwnerTicketsList from '../estate_owner/tickets/List'
-import EolesEdit from './users/components/RoleEdit'
+import RoleEdit from './users/components/RoleEdit'
 import RolesCreate from './users/components/RoleCreate'
 import add_project from '../common/projects/components/AddProject'
 import finished_projects from '../common/projects/components/FinishedProjects'
@@ -126,7 +126,7 @@ const router = new Router({
     routes: [
         {
             path: '/',
-            redirect: APP.USER_TYPE_LOG == 'ESTATE_OWNER' ? '/es' : APP.USER_TYPE_LOG == 'ENGINEERING_OFFICE' ? '/en' : '/dashboard',
+            redirect: APP.USER_TYPE_LOG == 'ESTATE_OWNER' ? '/es' : APP.USER_TYPE_LOG == 'ENGINEERING_OFFICE_MANAGER' ? '/en' : '/dashboard',
         },
         {
             path: '/to-do"',
@@ -445,7 +445,7 @@ const router = new Router({
                 {
                     path: '/roles/edit/:id',
                     name: 'roles.edit',
-                    component: EolesEdit,
+                    component: RoleEdit,
                     props: route => ({ propRoleId: route.params.id }),
                 },
                 {
@@ -849,7 +849,7 @@ router.beforeEach((to, from, next) => {
                 next('/')
             // return ;
         }
-        else if (APP.USER_TYPE_LOG == 'ENGINEERING_OFFICE') {
+        else if (APP.USER_TYPE_LOG == 'ENGINEERING_OFFICE_MANAGER') {
             if (from.path != '/es/to-do-list')
                 next('/en/to-do-list')
             else

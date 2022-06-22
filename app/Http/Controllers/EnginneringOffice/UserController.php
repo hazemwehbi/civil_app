@@ -157,7 +157,7 @@ class UserController extends  Controller
             $input['parent_id']=Auth::id(); 
             $input['isActive']=1; 
             $input['is_emp']=1; 
-            $input['user_type_log']='ENGINEERING_OFFICE';
+            $input['user_type_log']='ENGINEERING_OFFICE_MANAGER';
    
 
                        /** @var User $user */

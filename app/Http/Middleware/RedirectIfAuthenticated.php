@@ -27,7 +27,7 @@ class RedirectIfAuthenticated
             elseif(Auth::user()->user_type_log=='ESTATE_OWNER') {
                 return redirect('/estate_owner');
             }
-            elseif(Auth::user()->user_type_log=='ENGINEERING_OFFICE') {
+            elseif(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
                 return redirect('/enginner_office');
             }
         }

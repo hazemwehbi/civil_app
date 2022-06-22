@@ -55,13 +55,14 @@ class ProjectController extends Controller
     {
         $user = $request->user();
 
+
         $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report');
         $customer_id=$user->id;
         $reports = []; 
         $childrens=$user->childrenIds($user->id);
         array_push($childrens,$user->id);
         
-        if(Auth::user()->user_type_log=='ENGINEERING_OFFICE') {
+        if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
             $projects = $projects->whereHas('members', function ($q) use ($customer_id,$childrens) {
               //  $q->where('user_id', $customer_id);
                 $q->WhereIn('user_id', $childrens);
@@ -145,14 +146,14 @@ class ProjectController extends Controller
         $childrens=Auth::user()->childrenIds(Auth::user()->id);
         array_push($childrens,Auth::user()->id);
         $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report');
-         if(Auth::user()->isEmployeeEngineer()) {
+        if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
             $projects = $projects->where(function($q) use ($childrens) {
                 $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) use ($childrens) {
                 $qu->WhereIn('user_id', $childrens);
             }); 
             });
         }
-        else if(Auth::user()->isEstateOwner()){
+        else if(Auth::user()->user_type_log=='ESTATE_OWNER'){
             $projects = $projects->where(function($q) use ($childrens) {
                 $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) use ($childrens) {
                 $qu->WhereIn('user_id', $childrens);
@@ -178,6 +179,8 @@ class ProjectController extends Controller
             $municipality= $request->input('municipality');
             $plan_id= $request->input('plan_id');
             $piece_number= $request->input('piece_number');
+            if(empty($columnTable) && !empty($search))
+            $projects= $projects->where('id', $search);
             if(!empty($columnTable) && !empty($search))
             $projects= $projects->whereHas('creator', function ($q) use ($search,$columnTable) {
                 $q->where($columnTable,'like', '%'.$search.'%');

@@ -2,7 +2,7 @@
 export default {
     methods: {
         $can(permissionName) {
-            console.log(APP.USER_PERMISSIONS);
+           console.log(APP.USER_PERMISSIONS);
             return _.get(APP.USER_PERMISSIONS, permissionName, false);
             // return _.get(
             //     APP.USER_PERMISSIONS,

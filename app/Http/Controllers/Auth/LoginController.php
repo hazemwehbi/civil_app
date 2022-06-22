@@ -63,16 +63,14 @@ class LoginController extends Controller
             else{
                 $user = User::where('id_card_number', $request->input('email_id_card'))->first();
             }
-
+           
             if(isset($user)){
                 if (Hash::check($request->password, $user->password)) {
                     $user->last_login=\Carbon\Carbon::now();
                     
                     if(isset($request->user_type))
                         $user->user_type_log=$request->user_type;
-                
-                    
-                    
+         
                     $user->save();
                 
                     return    Auth::login($user);
@@ -92,6 +90,7 @@ class LoginController extends Controller
     protected function redirectTo()
     {
         $user = Auth::user();
+        
         if ($user->is_employee) {
             //employee
             return '/admin';

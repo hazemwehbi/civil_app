@@ -343,7 +343,6 @@ $(document).ready(function(){
                         data:{email: email,password:password},
                         success:function(result){
                         if (result.success){
-                        
                             if(result.roles.length > 1){
                                 $("#user_type_log").show(); 
                                 $("#email_pass").hide(); 
@@ -374,7 +373,8 @@ $(document).ready(function(){
                                 url:"{{ route('login') }}",
                                 data:{email_id_card: email,password:password},
                                 success:function(result){
-                                    window.location.href= "/";
+                                    
+                                  window.location.href= "/";
                                     
                             
                             }});
