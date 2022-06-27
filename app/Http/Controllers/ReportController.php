@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Report;
+use App\ReportType;
+
 class ReportController extends Controller
 {
     //
@@ -51,6 +53,7 @@ class ReportController extends Controller
                         'project_id' => $project_id,
                         'type'=>$report_type,
                         'created_by'=>Auth::id(),
+                        'office_id'=>Auth::id(),
                         //'type' => 'employee',
                     ]);
             DB::commit();
@@ -139,7 +142,8 @@ class ReportController extends Controller
 
     public function getReportTypes(Request $request)
     {
-        $types = [
+        $types = ReportType::all();
+        /*[
             [
                 'key' => 'kick_of_project',
                 'value' => __('data.kick_of_project')
@@ -153,7 +157,7 @@ class ReportController extends Controller
             //     'value' => __('data.project_customer')
             // ],
   
-        ];
+        ];*/
         return  $types;
 
     }

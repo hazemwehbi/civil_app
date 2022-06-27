@@ -20,5 +20,4 @@ class Report extends Model
     {
         return $this->belongsTo('App\Components\User\Models\User', 'created_by');
     }
-    
 }

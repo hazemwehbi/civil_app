@@ -190,6 +190,7 @@ Route::middleware(['auth'])
         //reRoute::get('get-request-types','RequestTypeController@getRequestsTypes');port 
         Route::get('get-report-types','ReportController@getReportTypes');
         Route::resource('reports', 'ReportController');
+        Route::resource('reportTypes', 'ReportTypesController');
         
         
         Route::get('get-Customer-name/{id}','Admin\CustomerController@getCustomerName');
