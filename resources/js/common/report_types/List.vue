@@ -140,7 +140,7 @@ export default {
             }
 
             axios
-                .get('/admin/report', {
+                .get('/reportTypes', {
                     params: params,
                 })
                 .then(function(response) {
