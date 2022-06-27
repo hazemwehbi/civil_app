@@ -93,6 +93,10 @@ export default {
      externalDialog:{
         type: Boolean,
         default: false
+     },
+     type: {
+         type: Object,
+        default: null
      }
     },
     data() {

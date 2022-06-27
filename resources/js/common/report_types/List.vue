@@ -15,27 +15,17 @@
                 :total-items="total_items"
                 :loading="loading"
                 :items="items"
+                
+    :expanded.sync="expanded"
+    show-expand
                 class="elevation-3"
             >
                 <template slot="items" slot-scope="props">
+                    <tr>
                     <td>
                         <v-menu>
                             <v-btn icon slot="activator"> <v-icon>more_vert</v-icon> </v-btn>
                             <v-list>
-                                <v-list-tile
-                                    v-if="$can('customer.view')"
-                                    @click="
-                                        $router.push({
-                                            name: 'customers.show',
-                                            params: { id: props.item.id },
-                                        })
-                                    "
-                                >
-                                    <v-list-tile-title>
-                                        <v-icon small class="mr-2"> visibility </v-icon>
-                                        {{ trans('messages.view') }}
-                                    </v-list-tile-title>
-                                </v-list-tile>
 
                                 <v-list-tile
                                     v-if="$can('customer.edit')"
@@ -59,20 +49,42 @@
                             </v-list>
                         </v-menu>
                     </td>
-                    <td>{{ props.item.company }}</td>
-                    <td>{{ props.item.tax_number }}</td>
-                    <td>{{ props.item.mobile }}</td>
-                    <td>{{ props.item.website }}</td>
+                    <td>{{ props.item.type_name }}</td>
+                    <td @click="props.expanded = !props.expanded">
+                        <v-icon small >chevron_down</v-icon>
+                        </td>
+                    </tr>
                 </template>
+                  <template v-slot:expand="props">
+                         <td :colspan="headers.length">
+        <div v-for="(data,index) in props.item.type_list_ar" :key="data">
+       {{(index+1)+'-' +  data }}
+       </div>
+      </td>
+      <td :colspan="headers.length">
+        <div v-for="data in props.item.type_list_en" :key="data">
+       {{ data }}
+       </div>
+      </td>
+    
+    </template>
             </v-data-table>
+             <EditReportType :report_type="report_type" :externalDialog="externalDialog" @close="externalDialog = event" @store="externalDialog = event" />
         </v-card>
+        
 </template>
 
 <script>
+import EditReportType from '../report_types/Edit.vue'
 export default {
+    components:{
+        EditReportType
+    },
     data() {
         const self = this;
         return {
+            externalDialog: false,
+            report_type: {},
             total_items: 0,
             loading: true,
             pagination: { totalItems: 0 },
@@ -89,7 +101,8 @@ export default {
                     align: 'left',
                     sortable: true,
                 },
-                {
+                { text: '', value: 'data-table-expand' }
+              /*  {
                     text: self.trans('data.type_list_en'),
                     value: 'type_list_en',
                     align: 'left',
@@ -100,10 +113,11 @@ export default {
                     value: 'type_list_ar',
                     align: 'left',
                     sortable: true,
-                },
+                },*/
             ],
             items: [],
             search: '',
+            expanded: false,
         };
     },
     watch: {
@@ -145,7 +159,7 @@ export default {
                 })
                 .then(function(response) {
                     self.total_items = response.data.total;
-                    self.items = response.data.data;
+                    self.items = response.data;
                     self.loading = false;
                 })
                 .catch(function(error) {
@@ -158,8 +172,18 @@ export default {
             self.$refs.customerAdd.create(templateType);
         },
         edit(id) {
-            const self = this;
-            self.$refs.customerEdit.edit(id);
+           const self = this;
+            axios
+                .get('/reportTypes/' + id +'/edit' )
+                .then(function(response) {
+                    console.log(response.data);
+                    self.report_type = response.data;
+                   
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+                 this.externalDialog = true
         },
         deleteCustomer(item) {
             const self = this;

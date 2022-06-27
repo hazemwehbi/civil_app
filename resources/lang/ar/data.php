@@ -17,7 +17,7 @@ return [
     'equal'=>'مطابق',
     'not equal'=>'غير مطابق',
     'notes' =>'ملاحظات و توصيات',
-'all_report_types'=>'جمبع أنواع التقارير',
+'all_report_types'=>' أنواع التقارير',
     'Rating scores' => 'درجات التقييم',
     'Acceptable' => 'مقبول',
     'Accepted comments' =>'مقبول بملاحظات',

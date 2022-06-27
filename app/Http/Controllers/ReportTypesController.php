@@ -14,7 +14,9 @@ class ReportTypesController extends Controller
      */
     public function index()
     {
-        //
+       
+        $types= ReportType::all();
+        return $this->respond($types); 
     }
 
     /**
@@ -24,7 +26,6 @@ class ReportTypesController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -52,7 +53,7 @@ class ReportTypesController extends Controller
      */
     public function show($id)
     {
-        //
+   
     }
 
     /**
@@ -63,7 +64,8 @@ class ReportTypesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $type= ReportType::find($id);
+        return $this->respond($type); 
     }
 
     /**
