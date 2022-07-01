@@ -1,12 +1,11 @@
 <template>
   <div>
-            <v-card-title style="width: 100%;display: flex;justify-content: space-between;">
+            <v-card-title>
+                <div>
                     <div class="headline">
-                        {{ trans('data.all_report_types') }}
+                        {{ trans('data.reports') }}
                     </div>
-                         <v-btn style="color: #06706d" @click="externalDialogAdd = true">
-                {{ trans('data.reportTypeAdd') }}
-            </v-btn>
+                </div>
             </v-card-title>
             <v-divider></v-divider>
             <!-- Data table -->
@@ -16,9 +15,6 @@
                 :total-items="total_items"
                 :loading="loading"
                 :items="items"
-                
-    :expanded.sync="expanded"
-    show-expand
                 class="elevation-3"
             >
                 <template slot="items" slot-scope="props">
@@ -27,7 +23,7 @@
                             <v-btn icon slot="activator"> <v-icon>more_vert</v-icon> </v-btn>
                             <v-list>
 
-                                <!--<v-list-tile
+                               <!-- <v-list-tile
                                     v-if="$can('customer.edit')"
                                     @click="edit(props.item.id)"
                                 >
@@ -35,11 +31,11 @@
                                         <v-icon small class="mr-2"> edit </v-icon>
                                         {{ trans('messages.edit') }}
                                     </v-list-tile-title>
-                                </v-list-tile>-->
+                                </v-list-tile> -->
 
                                 <v-list-tile
                                     v-if="$can('customer.delete')"
-                                    @click="deleteCustomer(props.item)"
+                                    @click="deleteReport(props.item)"
                                 >
                                     <v-list-tile-title>
                                         <v-icon small class="mr-2"> delete_forever </v-icon>
@@ -49,26 +45,12 @@
                             </v-list>
                         </v-menu>
                     </td>
-                    <td align="center">{{ props.item.type_name }}</td>
-                    <td @click="props.expanded = !props.expanded" align="center">
-                        <v-icon>arrow_drop_down</v-icon>
-                        </td>
+                    <td align="center">{{ props.item.report_creator.name }}</td>
+                     <td align="center"></td>
+                    <td align="center">{{ props.item.project.name }}</td>
                 </template>
-                  <template v-slot:expand="props">
-                         <td :colspan="headers.length">
-        <div v-for="(data,index) in props.item.type_list_ar" :key="data">
-       {{(index+1)+'-' +  data }}
-       </div>
-      </td>
-      <td :colspan="headers.length">
-        <div v-for="data in props.item.type_list_en" :key="data">
-       {{ data }}
-       </div>
-      </td>
-    
-    </template>
+        
             </v-data-table>
-             <AddReportType :externalDialog="externalDialogAdd" @close="externalDialog = event" @store="externalDialog = event" />
              <EditReportType :report_type="report_type" :externalDialog="externalDialog" @close="externalDialog = event" @store="externalDialog = event" />
         </div>
         
@@ -76,17 +58,14 @@
 
 <script>
 import EditReportType from '../report_types/Edit.vue'
-import AddReportType from '../report_types/Add.vue'
 export default {
     components:{
-        AddReportType,
         EditReportType
     },
     data() {
         const self = this;
         return {
             externalDialog: false,
-            externalDialogAdd:  false,
             report_type: {},
             total_items: 0,
             loading: true,
@@ -99,24 +78,24 @@ export default {
                     sortable: false,
                 },
                 {
-                    text: self.trans('data.type_name'),
-                    value: 'type_name',
+                    text: self.trans('data.name'),
+                    value: 'name',
                     align: 'center',
                     sortable: true,
                 },
-                { text: '', value: 'data-table-expand' }
-              /*  {
-                    text: self.trans('data.type_list_en'),
-                    value: 'type_list_en',
-                    align: 'left',
+                  {
+                    text: self.trans('data.contractor'),
+                    value: 'reportCreator.name',
+                    align: 'center',
                     sortable: true,
                 },
-                {
-                    text: self.trans('data.type_list_ar'),
-                    value: 'type_list_ar',
-                    align: 'left',
+                     {
+                    text: self.trans('data.project'),
+                    value: 'project.name',
+                    align: 'center',
                     sortable: true,
-                },*/
+                },
+             
             ],
             items: [],
             search: '',
@@ -132,6 +111,7 @@ export default {
     },
     mounted() {
         const self = this;
+        console.log(self.items)
         self.$eventBus.$on('updateCustomerTable', data => {
             self.getDataFromApi();
         });
@@ -157,13 +137,14 @@ export default {
             }
 
             axios
-                .get('/reportTypes', {
+                .get('/reports', {
                     params: params,
                 })
                 .then(function(response) {
                     self.total_items = response.data.total;
-                    self.items = response.data;
+                    self.items = response.data.data;
                     self.loading = false;
+                    console.log(self.items)
                 })
                 .catch(function(error) {
                     console.log(error);
@@ -173,11 +154,12 @@ export default {
             const self = this;
             var templateType = { template: 'customer' };
             self.$refs.customerAdd.create(templateType);
+            
         },
         edit(id) {
            const self = this;
             axios
-                .get('/reportTypes/' + id +'/edit' )
+                .get('/reports/' + id +'/edit' )
                 .then(function(response) {
                     console.log(response.data);
                     self.report_type = response.data;
@@ -188,7 +170,7 @@ export default {
                 });
                  this.externalDialog = true
         },
-        deleteCustomer(item) {
+        deleteReport(item) {
             const self = this;
             self.$store.commit('showDialog', {
                 type: 'confirm',
@@ -197,7 +179,7 @@ export default {
                 message: self.trans('messages.you_cant_restore_it'),
                 okCb: () => {
                     axios
-                        .delete('/reportTypes/' + item.id )
+                        .delete('/reports/' + item.id )
                         .then(function(response) {
                             self.$store.commit('showSnackbar', {
                                 message: response.data.msg,

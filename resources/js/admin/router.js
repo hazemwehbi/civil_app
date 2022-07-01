@@ -498,6 +498,7 @@ const router = new Router({
             path: '/add_report',
             name: 'add_report',
             component: add_report,
+            props: route => ({ project: route.params.project }),
         },
         {
             path: '/edit_report',

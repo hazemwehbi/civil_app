@@ -18,12 +18,13 @@
             </v-btn>
                             <v-autocomplete
                                 id="input_report_type"
+                                class="mx-2"
                                 item-text="type_name"
                                 :items="report_types"
                                 v-model="report_type"
                                 :label="trans('data.report_type')"
                                 v-validate="'required'"
-                                @change="(event) => enableReport(event)"
+                                @change="enableReport"
                                 data-vv-name="report_type"
                                 :data-vv-as="trans('data.report_type')"
                                 :error-messages="errors.collect('report_type')"
@@ -32,10 +33,8 @@
                             ></v-autocomplete>
         </v-card-actions>
         <v-spacer></v-spacer>
-        <v-card id="printMe" onafterprint="myFunction()">
+        <v-card onafterprint="myFunction()">
             <v-divider></v-divider>
-            <v-card-text>
-                <v-container grid-list-md>
                   <!--  <v-layout row wrap>
                         <v-flex xs12 sm6 md6>
                             <b-card-group deck>
@@ -687,9 +686,7 @@
                             </v-layout>
                         </v-container>
                     </v-container>-->
-                    <ReportForm :reportType="report_type" />
-                </v-container>
-            </v-card-text>
+                    <ReportForm :reportType="report_type" :project_id="$route.params.project" />
         </v-card>
         <AddReportType :externalDialog="externalDialog" @close="externalDialog = event" @store="externalDialog = event" />
     </v-container>
@@ -706,8 +703,7 @@ export default {
         return {
             type: 'testt',
             externalDialog: false,
-            project: {},
-            project_id: '',
+            project: null,
             description: '',
             name: '',
             report_types: [],
@@ -721,29 +717,13 @@ export default {
         const self = this;
         self.reset();
         self.getReportTypes();
-        self.create_time = self.currentDateTime();
-       // console.log(self.$route.params.project);
-       // self.project = self.$route.params.project;
-       // self.project_id = self.$route.params.project.id;
-      //  self.getProject(self.project_id);
-
     },
     beforeDestroy() {
         const self = this;
     },
     mounted: function () {},
     methods: {
-        getProject(project_id) {
-            const self = this;
-            axios
-                .get('/get-project/'+project_id)
-                .then(function (response) {
-                    self.project  = response.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
+    
         getFields(input, field) {
             var output = [];
 
@@ -775,52 +755,13 @@ export default {
             // self.request_types=[];
         },
 
-        currentDateTime() {
-            const current = new Date();
-            const date =
-                current.getFullYear() + '-' + (current.getMonth() + 1) + '-' + current.getDate();
-            const time =
-                current.getHours() + ':' + current.getMinutes() + ':' + current.getSeconds();
-            const dateTime = date + ' ' + time;
-            return dateTime;
-        },
-        store() {
-            const self = this;
-
-            let data = {
-                name: self.name,
-                description: self.description,
-                project_id: self.project_id,
-                type: self.report_type,
-            };
-            self.$validator.validateAll().then((result) => {
-                if (result == true) {
-                    self.loading = true;
-                    axios
-                        .post('/reports', data)
-                        .then(function (response) {
-                            self.loading = false;
-                            self.$store.commit('showSnackbar', {
-                                message: response.data.msg,
-                                color: response.data.success,
-                            });
-                            if (response.data.success === true) {
-                                // self.goBack();
-                            }
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                }
-            });
-            //self.reset();
-        },
-        print() {
+      
+         print() {
             const self = this;
             self.$validator.validateAll().then((result) => {
                 if (result == true) {
                     // Pass the element id here
-                    document.getElementById('input_name').setAttribute('value', this.name);
+                   // document.getElementById('input_name').setAttribute('value', this.name);
                     document
                         .getElementById('input_report_type')
                         .setAttribute('value', 'Kick Of Project');
@@ -869,11 +810,13 @@ export default {
                 }
             });
         },
+      
 
         enableReport(value) {
             const self = this;
             self.enable_report = true;
             console.log(this.report_type)
+           // self.$forceUpdate()
         },
     },
 };

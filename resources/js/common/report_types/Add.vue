@@ -1,6 +1,6 @@
 <template>
     <v-layout row justify-center>
-        <v-dialog v-model="dialog" width="500" persistent>
+        <v-dialog v-model="dialog" width="700" persistent>
             <v-card>
                 <v-card-title>
                     <v-icon medium>category</v-icon>
@@ -75,7 +75,7 @@
                     </v-btn>
                       <v-btn color="secondary" style="color:#fff;background-color:cyan;"  flat @click="list++;">
                         {{ trans('messages.list_add') }}+
-                    </v-btn>list
+                    </v-btn>
                       <v-btn  style="color:#fff;background-color:darkred;"  flat @click="list>0?list--:list=0">
                         {{ trans('messages.list_remove') }}-
                     </v-btn>

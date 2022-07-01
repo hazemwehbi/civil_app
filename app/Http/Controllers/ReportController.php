@@ -5,18 +5,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Report;
 use App\ReportType;
+use Auth;
 
 class ReportController extends Controller
 {
     //
 
     public function index()
-    {
+    { 
         $rowsPerPage = (request()->get('rowsPerPage') > 0) ? request()->get('rowsPerPage') : 0;
         $sort_by = request()->get('sort_by');
         $descending = request()->get('descending');
         $project_id = request()->get('project_id');
-
         if ($descending == 'false') {
             $orderby = 'asc';
         } elseif ($descending == 'true') {
@@ -25,13 +25,11 @@ class ReportController extends Controller
             $orderby = 'desc';
             $sort_by = 'id';
         }
-
-        $project_note = Report::
-                           // ->where('notable_type', 'App\Project')
-                            with('project','reportCreator')
-                            ->orderBy($sort_by, $orderby)
-                            ->paginate($rowsPerPage);
-
+        $reports =  Report::with('project','reportCreator')->orderBy($sort_by, $orderby);
+        if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
+            $reports = $reports->where('created_by', Auth::user()->id);
+        }
+        $project_note = $reports->paginate($rowsPerPage);
         return $this->respond($project_note);
     }
 
@@ -39,21 +37,21 @@ class ReportController extends Controller
 
     public function store(Request $request)
     {
-        try {
+        if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER' || Auth::user()->user_type_log=='SITE_MANAGENMENT')
+       { try {
             DB::beginTransaction();
 
-            $name = $request->input('name');
-            $description = $request->input('description');
+         //   $name = $request->input('name');
+         //   $description = $request->input('description');
             $project_id = $request->input('project_id');
+            $office_id = $request->input('office_id');
             $report_type = $request->input('type');
-           
+          // dd($request->all());
             Report::create([
-                        'name' => $name,
-                        'description'=>$description,
                         'project_id' => $project_id,
-                        'type'=>$report_type,
+                        'type_id'=>$report_type,
                         'created_by'=>Auth::id(),
-                        'office_id'=>Auth::id(),
+                        'office_id'=> $office_id,
                         //'type' => 'employee',
                     ]);
             DB::commit();
@@ -64,6 +62,7 @@ class ReportController extends Controller
             $output = $this->respondWentWrong($e);
         }
         return $output;
+        }
     }
 
 
@@ -143,21 +142,6 @@ class ReportController extends Controller
     public function getReportTypes(Request $request)
     {
         $types = ReportType::all();
-        /*[
-            [
-                'key' => 'kick_of_project',
-                'value' => __('data.kick_of_project')
-            ],
-            // [
-            //     'key' => 'project_location',
-            //     'value' => __('data.project_location')
-            // ],
-            // [
-            //     'key' => 'project_customer',
-            //     'value' => __('data.project_customer')
-            // ],
-  
-        ];*/
         return  $types;
 
     }

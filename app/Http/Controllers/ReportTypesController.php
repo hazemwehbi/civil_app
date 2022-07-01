@@ -43,6 +43,7 @@ class ReportTypesController extends Controller
         $type->type_list_en=$request->type_list_en;
         $type->form= $request->form_name;
         $type->save();
+        return $this->respondSuccess(__('messages.saved_successfully'));
     }
 
     /**
@@ -77,7 +78,13 @@ class ReportTypesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $type=ReportType::find($id);
+        $type->type_name=$request->type_name;
+        $type->type_list_ar=$request->type_list_ar;
+        $type->type_list_en=$request->type_list_en;
+        $type->form= $request->form_name;
+        $type->save();
+        return $this->respondSuccess(__('messages.saved_successfully'));
     }
 
     /**
@@ -88,6 +95,8 @@ class ReportTypesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $type=ReportType::find($id);
+        $type->delete();
+        return $this->respondSuccess(__('messages.saved_successfully'));
     }
 }

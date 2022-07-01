@@ -1,12 +1,12 @@
 
 <template id="panel-template">
   <v-layout row justify-center>
-        <v-dialog v-model="dialog" width="500" persistent>
+        <v-dialog v-model="dialog" width="700" persistent>
             <v-card>
                 <v-card-title>
                     <v-icon medium>category</v-icon>
                     <span class="headline">
-                        {{ trans('data.create_report_type') }}
+                        {{ trans('data.edit_report_type') }}
                     </span>
                     <v-spacer></v-spacer>
                     <v-btn flat @click="close" icon> <v-icon>clear</v-icon> </v-btn>
@@ -99,8 +99,13 @@ export default {
         };
     },
     computed:{
-      list(){
+      list:{
+      get(){
         return this.report_type.type_list_ar?this.report_type.type_list_ar.length:0
+       },
+       set(listNew){
+        return listNew
+       }
       }
     },
         watch:{
@@ -128,7 +133,7 @@ this.list = 1;
                 if (result == true) {
                     self.loading = true;
                     axios
-                    .put('reportTypes/' + self.report_type.id+'/update', data)
+                    .put('reportTypes/' + self.report_type.id, data)
                         .then(function (response) {
                             self.$store.commit('showSnackbar', {
                                 message: response.data.msg,
@@ -136,7 +141,7 @@ this.list = 1;
                             });
                             if (response.data.success === true) {
                              
-                                self.goBack();
+                                self.$forceUpdate();
                             }
                         })
                         .catch(function (error) {

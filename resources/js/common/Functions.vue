@@ -2,7 +2,7 @@
 export default {
     methods: {
         $can(permissionName) {
-           console.log(APP.USER_PERMISSIONS);
+         //  console.log(APP.USER_PERMISSIONS);
             return _.get(APP.USER_PERMISSIONS, permissionName, false);
             // return _.get(
             //     APP.USER_PERMISSIONS,
@@ -24,12 +24,12 @@ export default {
             return APP.CURRENT_USER.active !=null;
         },
         $hasRole(roleName) {
+            console.log(APP.USER_ROLES)
             return _.get(APP.USER_ROLES, roleName, false);
             //  return _.get(APP.USER_ROLES, 'superadmin', _.get(APP.USER_ROLES, roleName, false));
         },
         trans(string, params = []) {
             var str = _.get(window.i18n, string);
-
             _.forEach(params, function (value, key) {
                 str = _.replace(str, ':' + key, value);
             });

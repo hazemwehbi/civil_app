@@ -30,6 +30,7 @@ return [
     'type_list_en' => ' البند بالانكليزي',
     'type_list_ar' => ' البند بالعربي',
     'create_report_type' => 'انشاء نوع جديد',
+    'edit_report_type' => 'تعديل نوع التقرير',
     'reportTypeAdd' => 'اضافة نوع تقرير',
     'review_the_engineering_office_data'=>'مراجعة بيانات المكتب الهندسي',
     'notifications'=>'الاشعارات',

@@ -290,13 +290,14 @@
     @endif
     <script type="text/javascript">
 const isEmpty = str => !str.trim().length;
+var language;
  function change(lang){
         ///lang/ar
         localStorage.setItem("currenpathaftercjange",localStorage.getItem("currenpath"));
         localStorage.setItem("currentLange",lang);
         localStorage.removeItem("currenpath");
         window.location.href = "lang/"+lang; //causes the browser to refresh and load the requested url
-
+        language= lang;
 
        
 
