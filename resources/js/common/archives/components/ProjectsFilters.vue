@@ -95,7 +95,7 @@
    
       </v-layout>
    <project-detailes v-if="projects" :projectData="projectData" class="mt-5 mx-auto" style="max-width:80%" />
-   <report-detailes v-if="reports" :reportData="reportData" class="mt-5 mx-auto" style="max-width:80%" />                               
+   <report-detailes v-if="reports" :reportData="projectData" class="mt-5 mx-auto" style="max-width:80%" />                               
     
 </div>
 
@@ -294,10 +294,10 @@ export default {
                     params: params,
                 })
                 .then(function(response) {
-                    console.log(params,self.url,response.data.reports,response)
                     self.loading = false;
                     self.projectData = _.concat(self.projectData, response.data.projects.data);
-                    self.reportData = _.concat(self.reportData, response.data.reports);
+                    self.reportData = _.concat(self.reportData, response.reports);
+                    console.log(self.reportData,  self.projectData)
                     self.statuses = response.data.status;
                     self.url = _.get(response, 'data.projects.next_page_url', null);
                     self.getStatistics();

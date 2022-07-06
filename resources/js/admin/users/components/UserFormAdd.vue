@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-card>
-            <v-form ref="form" v-model="valid" lazy-validation>
+            <v-form ref="form" v-model="valid" lazy-validation enctype="multipart/form-data">
                 <v-card-title>
                     <v-icon medium>person</v-icon>
                     <span class="headline">
@@ -281,6 +281,7 @@
                                     item-text="name"
                                     item-value="id"
                                     :items="roles"
+                                    @change="selectRole()"
                                     v-model="form_fields.role_id"
                                     :label="trans('messages.role')"
                                     :rules="[
@@ -293,6 +294,32 @@
                                     required
                                 ></v-autocomplete>
                             </v-flex>
+                              <v-flex xs12 sm3 v-if="form_fields.role_id && form_fields.role_id.find(val => val == 2)">
+                                <v-text-field
+                                    v-model="office.title"
+                                    :label="trans('messages.title')"
+                                    :rules="[
+                                        (v) =>
+                                            (v && v.length > 0) ||
+                                            trans('messages.required', {
+                                                name: trans('messages.role'),
+                                            }),
+                                    ]"
+                                    required
+                                ></v-text-field>
+                            </v-flex>
+<v-flex xs12 sm3 class="text-xs-center text-sm-center text-md-center text-lg-center" v-if="form_fields.role_id && form_fields.role_id.find(val => val == 2)">
+            <!-- Here the image preview -->
+            <img :src="imageUrl" height="150" v-if="imageUrl"/>
+            <v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon="mdi-file-image"></v-text-field>
+            <input
+              type="file"
+              style="display: none"
+              ref="image"
+              accept="image/jpeg, image/jpg, image/png"
+              @change="onFilePicked"
+            >
+</v-flex>
                             <v-flex xs12 sm3 v-if="$hasRole('superadmin')">
                                 <v-switch
                                     :label="trans('messages.pre_Active_acount')"
@@ -351,6 +378,11 @@ export default {
             active: true,
             roles: [],
             send_email: false,
+            office:[],
+                imageUrl: '',
+    imageFile: null,
+    imageName: '',
+    user_id: null
         };
     },
     mounted() {
@@ -362,6 +394,31 @@ export default {
         ]);
     },
     methods: {
+        selectRole(){
+console.log(this.form_fields.role_id)
+        },
+         pickFile() {
+      this.$refs.image.click()
+    },
+    onFilePicked(e) {
+      const files = e.target.files
+      if(files[0] !== undefined) {
+        this.imageName = files[0].name
+        if (this.imageName.lastIndexOf('.') <= 0) {
+          return
+        }
+        const fr = new FileReader()
+        fr.readAsDataURL(files[0])
+        fr.addEventListener('load', () => {
+          this.imageUrl = fr.result
+          this.imageFile = files[0]
+        })
+      } else {
+        this.imageName = ''
+        this.imageFile = ''
+        this.imageUrl = ''
+      }
+    },
         save() {
             const self = this;
 
@@ -398,15 +455,30 @@ export default {
                 axios
                     .post('/admin/users', payload)
                     .then(function (response) {
+                         console.log(response.data.msg.original)
+                         self.user_id= response.data.id
+                        self.$store.commit('showSnackbar', {
+                            message: response.data.msg.original.msg,
+                            color: response.data.success,
+                        });
+                    if(self.office.title){
+                let data = new FormData();
+                data.append('file', self.imageFile);
+                data.append('title', self.office.title);
+                data.append('user_id', self.user_id);
+                axios.post('/admin/office_data', data)
+                 .then(function (response) {
                         self.$store.commit('showSnackbar', {
                             message: response.data.msg,
                             color: response.data.success,
                         });
-
-                        self.$store.commit('hideLoader');
+ self.$store.commit('hideLoader');
+                    })
+                    }
+                     self.$store.commit('hideLoader');
                      
-                        if (response.data.success === true) {
-                            // reset
+                        if (response.data.msg.original.success == true) {
+                            console.log(response.data.msg.original.success)
                                self.reset();
                         self.resetValidation();
                             self.$validator.reset();
@@ -415,19 +487,8 @@ export default {
                     })
                     .catch(function (error) {
                         self.$store.commit('hideLoader');
-
-                        if (error.response) {
-                            self.$store.commit('showSnackbar', {
-                                message: error.response.data.message,
-                                color: 'error',
-                                duration: 3000,
-                            });
-                        } else if (error.request) {
-                            console.log(error.request);
-                        } else {
-                            console.log('Error', error.message);
-                        }
                     });
+                
             } else {
                 self.$store.commit('showSnackbar', {
                     message: 'املئ الحقول الضرورية',

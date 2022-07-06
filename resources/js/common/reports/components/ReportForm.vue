@@ -4,36 +4,26 @@
                 <v-container grid-list-md>
 <div class="mx-5 px-1"  style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">
   <div class="d-flex justify-space-between header layout">
-    <div class="logo"></div>
-    <div class="title">{{ reportData.owner }}</div>
+    <div class="logo"><img style="max-width:150px" :src="localOffice && localOffice.office && localOffice.office.media[localOffice.office.media.length-1]?localOffice.office.media[localOffice.office.media.length-1].original_url:''" /></div>
+    <div class="title">{{ localOffice && localOffice.office?localOffice.office.title:'' }}</div>
   </div>
   <div class="type_data layout">
-    <div class="type_name">{{ reportType.type_name }}</div>
-    <div class="type_num">{{ reportType.id }}</div>
+    <div class="type_name">{{ localreportType.type_name }}</div>
+    <div class="type_num">{{ localreportType.id }}</div>
   </div>
  <v-layout row wrap>
       <v-flex xs12 sm12 md12 class="height-detect">
         <div class="label mx-2">{{trans('data.name')}} : {{ reportData.owner }}</div>
-         <!--<v-text-field
-            v-model="reportData.name"
-            required
-          ></v-text-field>-->
+      
     </v-flex>
        <v-flex xs12 sm12 md12 class="height-detect">
         <div class="label mx-2">{{trans('data.contractor')}} : </div>
 
-         <!--<v-text-field
-            v-model="reportData.contractor"
-            required
-          ></v-text-field>-->
+      
     </v-flex>
      <v-flex xs12 sm4 md4 class="height-detect">
         <div class="label mx-2">{{trans('messages.project')}} : {{ reportData.project }}</div>
-         <!--<v-text-field
-            v-model="reportData.project_id"
-           
-            required
-          ></v-text-field>-->
+
     </v-flex>
       <v-flex xs12 sm4 md4 class="merge_rows justify-center height-detect" style="border-end: 1px solid gray;border-start: 1px solid gray;">
         <div class="label mx-2">{{trans('data.work_to_check')}} :</div>
@@ -43,9 +33,7 @@
     </v-flex>
        <v-flex xs12 sm4 md4 class="height-detect">
         <div class="label mx-2">{{trans('data.day')}} : {{day}}</div>
-         <!--<v-text-field
-            v-model="reportData.day"
-          ></v-text-field>-->
+    
     </v-flex>
      <v-flex xs12 sm4 md4 class="height-detect merge_rows justify-center" style="border-end: 1px solid gray;border-start: 1px solid gray;">
       <v-text-field
@@ -60,14 +48,6 @@
     </v-flex>
     <v-flex xs12 sm4 md4 class="height-detect">
         <div class="label mx-2">{{trans('data.date')}} : {{create_time}}</div>
-            <!--  <flat-pickr
-                                                    v-model="reportData.date"
-                                                    v-validate="'required'"
-                                                    name="start_date"
-                                                    required
-                                                    :config="flatPickerDate()"
-                                                    :data-vv-as="trans('messages.start_date')"
-                                                ></flat-pickr>-->
     </v-flex>
     <v-flex xs12 sm4 md4 class="height-detect" style="border-end: 1px solid gray;border-start: 1px solid gray;"></v-flex>
     <v-flex xs12 sm4 md4 ></v-flex>
@@ -85,14 +65,14 @@
       <v-flex xs12 sm2 md2 style="border-end:1px solid gray;">{{trans('data.not equal')}}</v-flex>
       <v-flex xs12 sm2 md2 class="last-col">{{trans('data.notes')}}</v-flex>
       </v-layout>
-<v-layout class="list-items"  row wrap v-for="(type_list, index) in reportType.type_list_en" :key="index" v-if="language == 'en'">
+<v-layout class="list-items"  row wrap v-for="(type_list, index) in localreportType.type_list_en" :key="index" v-if="language == 'en'">
      <v-flex xs12 sm1 md1 style="border-end:1px solid gray; ">{{ index+1 }}</v-flex>
       <v-flex xs12 sm6 md6 style="border-end:1px solid gray;">{{ type_list }}</v-flex>
       <v-flex xs12 sm1 md1 style="border-end:1px solid gray;"></v-flex>
       <v-flex xs12 sm2 md2 style="border-end:1px solid gray;"></v-flex>
       <v-flex xs12 sm2 md2 class="last-col" style=""></v-flex>
 </v-layout>
-<v-layout class="list-items"  v-if="language == 'ar'" row wrap v-for="(type_list, index) in reportType.type_list_ar" :key="index+'x'">
+<v-layout class="list-items"  v-if="language == 'ar'" row wrap v-for="(type_list, index) in localreportType.type_list_ar" :key="index+'x'">
      <v-flex xs12 sm1 md1 style="border-end:1px solid gray; ">{{ index+1 }}</v-flex>
       <v-flex xs12 sm6 md6 style="border-end:1px solid gray;">{{ type_list }}</v-flex>
       <v-flex xs12 sm1 md1 style="border-end:1px solid gray;"></v-flex>
@@ -156,6 +136,7 @@
                 style="background-color: #06706d; color: white"
                 color="darken-1"
                 class="mt-3"
+                v-if="!edit"
                 @click="store"
                 :loading="loading"
                 :disabled="loading"
@@ -171,7 +152,9 @@ export default {
   props:{
     reportType: null,
     project_id: null,
-   
+    office: null,
+    report: null,
+    edit: false
   },
 data(){
   return {
@@ -180,16 +163,24 @@ data(){
      project: {},
      day: '',
      loading: false,
-     language: 'ar'
+     language: 'ar',
+     localreportType: null,
+     localOffice: null
   }
 },
 created(){
   const self = this;
   self.currentDateTime();
    self.getProject(5);
-  console.log(localStorage.getItem('currentLange'))
-   //if (isLocalStorage())
   self.language = localStorage.getItem('currentLange')
+},
+watch:{
+  reportType(){
+    this.localreportType = this.reportType
+  },
+   office(){
+    this.localOffice = this.office
+  }
 },
 methods:{
 
@@ -201,6 +192,10 @@ methods:{
                     self.project  = response.data;
                     self.reportData.owner= self.project.customer.name
                      self.reportData.project= self.project.name
+                     if(!self.reportType){
+                         self.localreportType =  self.project.report.filter(val => val.id === self.report.id )[0].type
+                         self.localOffice= self.report.office
+                     }
                      self.$forceUpdate();
                      
                 })
@@ -213,7 +208,7 @@ methods:{
             
             let data = {
                 project_id: self.project.id,
-                office_id:self.project.customer.id,
+                office_id:self.office?.id,
                 type: this.reportType.id,
             };
             self.$validator.validateAll().then((result) => {
@@ -260,9 +255,11 @@ this.$forceUpdate();
 }
 .title {
   padding: 20px;
+  text-align: center;
 }
 .header{
   border-bottom: 1px solid gray;
+      align-items: center;
 }
 .list-items{
   text-align: center;

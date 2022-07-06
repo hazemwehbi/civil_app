@@ -31,6 +31,34 @@
                                 return-object
                                 required
                             ></v-autocomplete>
+                                     <v-autocomplete
+                                id="input_office"
+                                v-if="$hasRole('superadmin')"
+                                class="mx-2"
+                                item-text="name"
+                                :items="offices"
+                                v-model="office"
+                                :label="trans('data.enginnering_office_name')"
+                                v-validate="'required'"
+                                data-vv-name="input_office"
+                                :data-vv-as="trans('data.enginnering_office_name')"
+                                return-object
+                                required
+                            ></v-autocomplete>
+                                  <v-autocomplete
+                                  v-if="!project"
+                                id="input_project"
+                                class="mx-2"
+                                item-text="name"
+                                :items="projects"
+                                v-model="project"
+                                :label="trans('data.projects')"
+                                v-validate="'required'"
+                                data-vv-name="input_project"
+                                :data-vv-as="trans('data.projects')"
+                                return-object
+                                required
+                            ></v-autocomplete>
         </v-card-actions>
         <v-spacer></v-spacer>
         <v-card onafterprint="myFunction()">
@@ -686,7 +714,7 @@
                             </v-layout>
                         </v-container>
                     </v-container>-->
-                    <ReportForm :reportType="report_type" :project_id="$route.params.project" />
+                    <ReportForm :reportType="report_type" :office="office" :project_id="project?project.id:null" />
         </v-card>
         <AddReportType :externalDialog="externalDialog" @close="externalDialog = event" @store="externalDialog = event" />
     </v-container>
@@ -706,11 +734,14 @@ export default {
             project: null,
             description: '',
             name: '',
+            offices: [],
+            office: null,
             report_types: [],
             report_type: '',
             create_time: '',
              loading:false,
             enable_report: false,
+            projects:[]
         };
     },
     created() {
@@ -730,12 +761,16 @@ export default {
             for (var i = 0; i < input.length; ++i) output.push(input[i][field]);
             return output.join('&&');
         },
+ 
         getReportTypes() {
             const self = this;
             axios
                 .get('/get-report-types')
                 .then(function (response) {
-                    self.report_types = response.data;
+                    self.report_types = response.data.types;
+                    self.offices = response.data.offices
+                    self.projects = response.data.projects
+                    console.log(response.data)
                 })
                 .catch(function (error) {
                     console.log(error);

@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Components\User\Models\User;
+use App\Project;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Report;
@@ -25,7 +28,7 @@ class ReportController extends Controller
             $orderby = 'desc';
             $sort_by = 'id';
         }
-        $reports =  Report::with('project','reportCreator')->orderBy($sort_by, $orderby);
+        $reports =  Report::with('project','reportCreator','office','office.office','office.office.media')->orderBy($sort_by, $orderby);
         if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
             $reports = $reports->where('created_by', Auth::user()->id);
         }
@@ -44,7 +47,10 @@ class ReportController extends Controller
          //   $name = $request->input('name');
          //   $description = $request->input('description');
             $project_id = $request->input('project_id');
+            if($request->input('office_id')!=null)
             $office_id = $request->input('office_id');
+            else
+            $office_id = Auth::id();
             $report_type = $request->input('type');
           // dd($request->all());
             Report::create([
@@ -142,7 +148,11 @@ class ReportController extends Controller
     public function getReportTypes(Request $request)
     {
         $types = ReportType::all();
-        return  $types;
+        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report','report.reportCreator','report.type')->get();
+        $offices= User::with('office','office.media')->where('user_type_log','ENGINEERING_OFFICE_MANAGER')->get();
+        $data = ['offices' => $offices, 'types' => $types, 'projects' => $projects ];
+
+        return $data;
 
     }
 

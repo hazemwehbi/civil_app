@@ -6,6 +6,16 @@
                         {{ trans('data.reports') }}
                     </div>
                 </div>
+                       <v-btn style="color: #06706d" 
+                       v-if="$can('report.create') && ($hasRole('Engineering Office Manager')|| $hasRole('superadmin'))"
+                                                                    :disabled="!checkActive()"
+                                                                    @click="
+                                                                        $router.push({
+                                                                            name: 'add_report',
+                                                                        })
+                                                                    ">
+                {{ trans('data.create_a_report') }}
+            </v-btn>
             </v-card-title>
             <v-divider></v-divider>
             <!-- Data table -->
@@ -32,7 +42,20 @@
                                         {{ trans('messages.edit') }}
                                     </v-list-tile-title>
                                 </v-list-tile> -->
-
+                                 <v-list-tile
+                                    v-if="$can('customer.edit')"
+                                   @click="$router.push({name: 'edit_report',
+                                                                            params: {
+                                                                                report: props.item,
+                                                                            },
+                                                                        })
+                                                                    "
+                                >
+                                    <v-list-tile-title>
+                                        <v-icon small class="mr-2"> show </v-icon>
+                                        {{ trans('data.reports_review') }}
+                                    </v-list-tile-title>
+                                </v-list-tile>
                                 <v-list-tile
                                     v-if="$can('customer.delete')"
                                     @click="deleteReport(props.item)"
@@ -111,7 +134,6 @@ export default {
     },
     mounted() {
         const self = this;
-        console.log(self.items)
         self.$eventBus.$on('updateCustomerTable', data => {
             self.getDataFromApi();
         });
@@ -144,7 +166,6 @@ export default {
                     self.total_items = response.data.total;
                     self.items = response.data.data;
                     self.loading = false;
-                    console.log(self.items)
                 })
                 .catch(function(error) {
                     console.log(error);

@@ -2,6 +2,7 @@
 
 namespace App\Components\User\Models;
 
+use App\OfficeDetaile;
 use App\System;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -296,6 +297,9 @@ class User extends Authenticatable implements HasMedia
         //  }
          $roles=Role::all();      
         return $roles;
+    }
+    public function office(){
+        return $this->hasOne(OfficeDetaile::class);
     }
     public static function getRolesForCreateEmployee()
     {

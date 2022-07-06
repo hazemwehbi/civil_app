@@ -20,10 +20,12 @@
                                                                          <v-icon>print</v-icon>
                                                                     {{ trans('data.create_a_report')}}
                                                                     </v-btn></div>
-                <div class="element"><div class="col-title">{{trans('data.name')}}</div><div class="content">{{ item?item.name:'' }} </div></div>
-                <div class="element"><div class="col-title">{{trans('data.description')}}</div><div class="content">{{ item?item.description:'' }}</div></div>
-                <div class="element"><div class="col-title">{{trans('data.type')}}</div><div class="content">{{ item?item.type:''}}</div></div>
-                <div class="element"><div class="col-title">{{trans('data.created_by')}}</div><div class="content">{{ item && item.reportCreator?item.report.reportCreator.name:'' }}</div></div>
+                <div class="element"><div class="col-title">{{trans('data.name')}}</div><div class="content">{{ item.customer.name }} </div></div>
+                <div class="element"><div class="col-title">{{trans('data.description')}}</div><div class="content">{{ item.note }}</div></div>
+                <span v-for="rep in item.report" :key="rep.id">
+                <div class="element"><div class="col-title">{{trans('data.type')}}</div><div class="content" >{{ rep.type.type_name }}</div></div>
+                <div class="element"><div class="col-title">{{trans('data.created_by')}}</div><div class="content">{{ rep.report_creator.name }}</div></div>
+                </span>
            </v-card>
       </v-card>
     </v-flex>
@@ -43,7 +45,7 @@ export default {
         selected: [2],
       }
     },
-
+     
     methods: {
    getprogress(status) {
             if (status == 'not_started') {

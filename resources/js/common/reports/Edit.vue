@@ -1,3 +1,817 @@
+<template id="panel-template">
+    <v-container justify-center>
+        <v-card-actions justify-left>
+            <v-btn style="color: #06706d" @click="$router.go(-1)">
+                {{ trans('messages.back') }}
+            </v-btn>
+             <v-btn style="color: #06706d" @click="externalDialog = true">
+                {{ trans('data.reports_review') }}
+            </v-btn>
+            <v-btn
+                style="background-color: #06706d; color: white"
+                color="darken-1"
+                @click="print"
+                :loading="loading"
+                :disabled="loading"
+            >
+                {{ trans('data.print') }}
+            </v-btn>
+        </v-card-actions>
+        <v-spacer></v-spacer>
+        <v-card onafterprint="myFunction()">
+            <v-divider></v-divider>
+                  <!--  <v-layout row wrap>
+                        <v-flex xs12 sm6 md6>
+                            <b-card-group deck>
+                                <b-card
+                                    :header="trans('data.name_report')"
+                                    header-tag="header1"
+                                    title=""
+                                >
+                                    <v-text-field
+                                        id="input_name"
+                                        v-model="name"
+                                        v-validate="'required'"
+                                        data-vv-name="name"
+                                        :data-vv-as="trans('messages.name')"
+                                        :error-messages="errors.collect('name')"
+                                        required
+                                    >
+                                    </v-text-field>
+                                </b-card>
+                            </b-card-group>
+                        </v-flex>
+
+                        <v-flex xs12 sm6 md6>
+                            <b-card-group deck>
+                                <b-card
+                                    :header="trans('data.create_time')"
+                                    header-tag="header1"
+                                    title=""
+                                >
+                                    <b-card-text>{{ create_time }}</b-card-text>
+                                </b-card>
+                            </b-card-group>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row wrap>
+                        <v-flex xs12 sm12 md12>
+                            <b-card-group deck>
+                                <b-card
+                                    :header="trans('data.decription_report')"
+                                    header-tag="header1"
+                                    title=""
+                                >
+                                    <quill-editor v-model="description"> </quill-editor>
+                                </b-card>
+                            </b-card-group>
+                        </v-flex>
+                    </v-layout>
+
+                    <v-layout row>
+                        <v-flex xs12 sm12 md12>
+                            <v-autocomplete
+                                id="input_report_type"
+                                item-text="value"
+                                item-value="key"
+                                :items="report_types"
+                                v-model="report_type"
+                                :label="trans('data.report_type')"
+                                v-validate="'required'"
+                                @change="(event) => enableReport(event)"
+                                data-vv-name="report_type"
+                                :data-vv-as="trans('data.report_type')"
+                                :error-messages="errors.collect('report_type')"
+                                required
+                            ></v-autocomplete>
+                        </v-flex>
+                    </v-layout>
+                    <v-container v-if="enable_report">
+                        <v-container>
+                            <h1>{{ trans('data.customer_info') }}</h1>
+                            <v-layout>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.owner_name')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{ project.customer.name }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.id_card_number')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.customer.id_card_number
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('messages.email')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{ project.customer.email }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('messages.mobile')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{ project.customer.mobile }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+
+                        <v-container>
+                            <h1>{{ trans('data.agency_info') }}</h1>
+                            <v-layout>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.trade_name')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.agency != null
+                                                    ? project.agency.trade_name
+                                                    : ''
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.record_number')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.agency != null
+                                                    ? project.agency.record_number
+                                                    : ''
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('messages.email')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.agency != null ? project.agency.email : ''
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('messages.mobile')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.agency != null ? project.agency.mobile : ''
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+
+                        <v-container>
+                            <h1>{{ trans('data.location_info') }}</h1>
+                            <v-layout>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.province_municipality')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.province_municipality
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.municipality')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.municipality
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.plan_numer')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.plan_id
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.plan_numer')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.plan_id
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.land_number')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.piece_number
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.size_number')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.size_number
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.instrument_number')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.instrument_number
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.instrument_date')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.instrument_date
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.northern_border')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.northern_border
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.eastern_border')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.eastern_border
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.western_border')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.western_border
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.southern_border')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.southern_border
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.northern_border')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.northern_border
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.eastern_border')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.eastern_border
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.western_border')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.western_border
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.southern_border')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.southern_border
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('messages.status')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                trans('messages.' + project.location.status)
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.lon')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{ project.location.lon }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.lat')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{ project.location.lat }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.southern_border')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.location.southern_border
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+
+                        <v-container>
+                            <h1>{{ trans('data.project_info') }}</h1>
+                            <v-layout>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('messages.name')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{ project.name }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('messages.status')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>
+                                                {{
+                                                    trans('messages.' + project.status)
+                                                }}</b-card-text
+                                            >
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('messages.start_date')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{ project.start_date }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('messages.members')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                getFields(project.members, 'name')
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('messages.end_date')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{ project.end_date }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.authorization_request_number')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.authorization_request_number
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.license_number')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{ project.license_number }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.plot_number')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{ project.plot_number }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.cadastral_decision_number')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                project.cadastral_decision_number
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.buiding_type')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{
+                                                trans('data.' + project.buiding_type)
+                                            }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.unit_number')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{ project.unit_number }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.build_rate')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{ project.build_rate }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.billing_type')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text
+                                                >{{ trans('messages.' + project.billing_type) }}
+                                            </b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.role_number')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>{{ project.role_number }}</b-card-text>
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                                <v-flex xs12 sm3 md3>
+                                    <b-card-group deck>
+                                        <b-card
+                                            :header="trans('data.using')"
+                                            header-tag="header1"
+                                            title=""
+                                        >
+                                            <b-card-text>
+                                                {{ trans('data.' + project.using) }}</b-card-text
+                                            >
+                                        </b-card>
+                                    </b-card-group>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-container>-->
+                    <ReportForm :reportType="report_type" :edit="true" :report="report" :office="office" :project_id="$route.params.project" />
+        </v-card>
+        <AddReportType :externalDialog="externalDialog" @close="externalDialog = event" @store="externalDialog = event" />
+    </v-container>
+</template>
+<script>
+import AddReportType from '../report_types/Add.vue'
+import ReportForm from './components/ReportForm.vue'
+export default {
+    components:{
+     AddReportType,
+     ReportForm
+    },
+    data() {
+        return {
+            type: 'testt',
+            externalDialog: false,
+            project: null,
+            description: '',
+            name: '',
+            offices: [],
+            office: null,
+            report_types: [],
+            report_type: '',
+            create_time: '',
+             loading:false,
+            enable_report: false,
+            report: null
+        };
+    },
+    created() {
+        const self = this;
+        self.reset();
+        self.getReportTypes();
+        self.report = self.$route.params.report
+    },
+    beforeDestroy() {
+        const self = this;
+    },
+    mounted: function () {},
+    methods: {
+    
+        getFields(input, field) {
+            var output = [];
+
+            for (var i = 0; i < input.length; ++i) output.push(input[i][field]);
+            return output.join('&&');
+        },
+        getReportTypes() {
+            const self = this;
+            axios
+                .get('/get-report-types')
+                .then(function (response) {
+                    self.report_types = response.data.types;
+                    self.offices = response.data.offices
+                    console.log(response.data)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+
+        reset() {
+            const self = this;
+            self.title = '';
+            self.request_type = '';
+            self.project_id = '';
+            self.description = '';
+            self.status = '';
+            self.priority = '';
+            self.customer_id = '';
+           
+            // self.request_types=[];
+        },
+
+      
+         print() {
+            const self = this;
+            self.$validator.validateAll().then((result) => {
+                if (result == true) {
+                    // Pass the element id here
+                   // document.getElementById('input_name').setAttribute('value', this.name);
+                    document
+                        .getElementById('input_report_type')
+                        .setAttribute('value', 'Kick Of Project');
+
+                    //alert(this.report_type)
+                    // Get HTML to print from element
+                    const prtHtml = document.getElementById('printMe').innerHTML;
+
+                    // Get all stylesheets HTML
+                    let stylesHtml = '';
+                    for (const node of [
+                        ...document.querySelectorAll('link[rel="stylesheet"], style'),
+                    ]) {
+                        stylesHtml += node.outerHTML;
+                    }
+                    stylesHtml +=
+                        '<style type="text/css">.v-icon {\n  display: none;\n}}\n</style>';
+                    //
+
+                    // Open the print window
+                    const WinPrint = window.open(
+                        '',
+                        '',
+                        'left=0,top=0,width=1020,height=900,toolbar=0,scrollbars=0,status=0'
+                    );
+
+                    WinPrint.document.write(`<!DOCTYPE html>
+                    <html>
+                    <head>
+                        ${stylesHtml}
+                        
+                    </head>
+                    <body>
+                        ${prtHtml}
+                    </body>
+                    </html>`);
+
+                    //  await this.$htmlToPaper('printMe');
+                    WinPrint.document.close();
+
+                    WinPrint.focus();
+
+                    WinPrint.print();
+                    WinPrint.close();
+                    this.store();
+                }
+            });
+        },
+      
+
+        enableReport(value) {
+            const self = this;
+            self.enable_report = true;
+            console.log(this.report_type)
+           // self.$forceUpdate()
+        },
+    },
+};
+</script>
 
 <style scoped>
 .card {
@@ -162,841 +976,3 @@
     }
 }
 </style>
-<template id="panel-template">
-    <v-container  justify-center>
-                
-                     <v-card-actions justify-left>
-                 
-                    <v-btn style="color: #06706d" @click="$router.go(-1)">
-                        {{ trans('messages.back') }}
-                    </v-btn>
-                    <v-btn
-                        style="background-color: #06706d; color: white"
-                        color="darken-1"
-                        @click="update"
-                        :loading="loading"
-                        :disabled="loading"
-                        v-show="!isEdit"
-                    >
-                        {{ trans('data.update') }}
-                    </v-btn>
-                </v-card-actions>
-               <v-spacer></v-spacer>
-        <v-card id="printMe" onafterprint="myFunction()">
-            <v-divider></v-divider>
-            <v-card-text >
-                <v-container grid-list-md >
-                    <v-layout row wrap>
-                        <v-flex xs12 sm6 md6>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.name_report')"
-                                    header-tag="header1"
-                                    title=""
-                                > 
-                                    <v-text-field
-                                         id="input_name"
-                                        v-model="report.name"
-                                        v-validate="'required'"
-                                        data-vv-name="name"
-                                        :data-vv-as="trans('messages.name')"
-                                         :readonly="isEdit"
-                                        :error-messages="errors.collect('name')"
-                                        required
-                                    >
-                                    </v-text-field>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-
-                        <v-flex xs12 sm6 md6>
-                            <b-card-group deck >
-                                <b-card
-                                    :header="trans('data.create_time') "
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text  >{{ report.created_at }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                        <v-flex xs12 sm12 md12>
-                              <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.decription_report') "
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <quill-editor   :readonly="isEdit" v-model="report.description"> </quill-editor>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                    </v-layout>
-                    
-
-                    <v-layout row>
-                        <v-flex xs12 sm12 md12>
-                            <v-autocomplete
-                                id="input_report_type"
-                                 :readonly="isEdit"
-                                item-text="value"
-                                item-value="key"
-                                :items="report_types"
-                                v-model="report.type"
-                                :label="trans('data.report_type')"
-                                v-validate="'required'"
-                                @change="(event) => enableReport(event)"
-                                data-vv-name="report_type"
-                                :data-vv-as="trans('data.report_type')"
-                                :error-messages="errors.collect('report_type')"
-                                required
-                               
-                            ></v-autocomplete>
-                        </v-flex>
-                    </v-layout>
-                <v-container v-if="enable_report">
-                 <v-container >
-                 <h1> {{ trans('data.customer_info') }}</h1>
-                  <v-layout  >
-                                         <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.owner_name')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.customer.name }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.id_card_number')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.customer.id_card_number }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('messages.email')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.customer.email }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                           <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('messages.mobile')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.customer.mobile }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        </v-layout >
-                        </v-container >
-
-
-                         <v-container >
-                 <h1> {{ trans('data.agency_info') }}</h1>
-                          <v-layout >
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.trade_name')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{project.agency!= null ?  project.agency.trade_name : '' }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.record_number')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{project.agency!= null ?  project.agency.record_number : '' }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('messages.email')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.agency!= null ? project.agency.email : '' }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                           <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('messages.mobile')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{project.agency!= null ? project.agency.mobile : '' }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                    </v-layout >
-                 </v-container>
-
-
-
-                 
-                
-                <v-container >
-                 <h1> {{ trans('data.location_info') }}</h1>
-                          <v-layout >
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.province_municipality')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.province_municipality }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.municipality')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.municipality }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.plan_numer')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.plan_id }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                           <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.plan_numer')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.plan_id}}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                    </v-layout>
-
-                     <v-layout >
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.land_number')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.piece_number }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.size_number')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.size_number }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.instrument_number')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.instrument_number }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                           <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.instrument_date')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.instrument_date}}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                    </v-layout>
-
-
-
-                     <v-layout >
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.northern_border')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.northern_border}}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.eastern_border')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{project.location.eastern_border}}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.western_border')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{project.location.western_border}}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                           <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.southern_border')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.southern_border}}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                    </v-layout>
-
-
-
-                     <v-layout >
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.northern_border')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.northern_border }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.eastern_border')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.eastern_border }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.western_border')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.western_border }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                           <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.southern_border')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.southern_border}}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                    </v-layout>
-
-
-
-
-                     <v-layout >
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('messages.status')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ trans('messages.'+project.location.status) }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.lon')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.lon }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.lat')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.lat }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                           <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.southern_border')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.location.southern_border}}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                    </v-layout>
-
-                </v-container>
-
-
-
-
-                <v-container >
-                 <h1>    {{ trans('data.project_info') }}</h1>
-                      <v-layout >
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('messages.name')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.name }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('messages.status')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                               
-                                    <b-card-text> {{ trans('messages.'+project.status) }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('messages.start_date')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.start_date }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                           <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('messages.members')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{getFields(project.members,'name') }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                    </v-layout>
-
-
-                      
-                      <v-layout >
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('messages.end_date')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.end_date }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.authorization_request_number')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.authorization_request_number }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.license_number')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.license_number }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                           <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.plot_number')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.plot_number}}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                    </v-layout>
-
-
-                      
-                      <v-layout >
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.cadastral_decision_number')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.cadastral_decision_number}}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.buiding_type')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                
-                                    <b-card-text>{{ trans('data.'+project.buiding_type) }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.unit_number')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.unit_number }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                           <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.build_rate')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.build_rate}}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                    </v-layout>
-
-
-                     
-                      <v-layout >
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.billing_type')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ trans('messages.'+project.billing_type) }} </b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.role_number')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                                    <b-card-text>{{ project.role_number }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <b-card-group deck>
-                                <b-card
-                                    :header="trans('data.using')"
-                                    header-tag="header1"
-                                    title=""
-                                >
-                               
-                                    <b-card-text> {{ trans('data.'+project.using) }}</b-card-text>
-                                </b-card>
-                            </b-card-group>
-                             </v-flex>
-                    </v-layout>
-                     </v-container>
-
-
-               </v-container>
-               </v-container>
-            </v-card-text>
-        </v-card>
-    </v-container>
-</template>
-<script>
-
-export default {
-
-    data() {
-        return {
-            type: 'testt',
-            project: {},
-            report:{},
-            project_id: '',
-            description: '',
-            name:'',
-            report_types: [],
-            report_type: '',
-            create_time:'',
-            enable_report:true,
-            isEdit:false,
-        };
-    },
-    created() {
-        const self = this;
-        self.reset();
-        self.getReportTypes();
-        self.create_time=self.currentDateTime();
-             
-      //  self.project = self.$route.params.project;
-        self.report = self.$route.params.report;
-        console.log(self.report);
-        console.log(self.report);
-        self.get_project_info(self.report.project_id);
-      //  self.project_id =self.$route.params.project.id;
-    },
-    beforeDestroy() {
-        const self = this;
-    },
-    mounted: function() {
-        if (this.$route.params.isEdit==true) {
-            this.isEdit=false;
-            
-        }
-        else if(this.$route.params.isEdit==false){
-            this.isEdit=true;
-   
-        }
-    },
-    methods: {
-
-         getFields(input, field) {
-            var output = [];
-            
-            for (var i=0; i < input.length ; ++i)
-                output.push(input[i][field]);
-            return output.join("&&");
-        },
-        getReportTypes() {
-            const self = this;
-            axios
-                .get('/get-report-types')
-                .then(function (response) {
-                    self.report_types = response.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
-   
-     
-        get_project_info(project_id){
-            const self = this;
-            self.project_id = project_id;
-            self.$validator.reset();
-            axios
-                .get('get-project_info/' + project_id )
-                .then(function(response) {
-                    console.log(response);
-                    self.project = response.data;
-                   
-                })
-                .catch(function(error) {
-                    console.log(error);
-                });
-        },
-        reset() {
-            const self = this;
-            self.title = '';
-            self.request_type = '';
-            self.project_id = '';
-            self.description = '';
-            self.status = '';
-            self.priority = '';
-            self.customer_id = '';
-            // self.request_types=[];
-        },
-
-       
-        currentDateTime() {
-                const current = new Date();
-                const date = current.getFullYear()+'-'+(current.getMonth()+1)+'-'+current.getDate();
-                const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
-                const dateTime = date +' '+ time;
-                return dateTime;
-       },
-        update() {
-            const self = this;
-           
-            let data = {
-                name:self.report.name,
-                description: self.report.description,
-                project_id:self.report.project_id,
-                type:self.report.type,
-              //  id:self.report.id
-            };
-            self.$validator.validateAll().then((result) => {
-                if (result == true) {
-                    self.loading = true;
-                    axios
-                    .put('/reports/' + self.report.id, data)
-                        .then(function (response) {
-                           // self.loading = false;
-                            self.$store.commit('showSnackbar', {
-                                message: response.data.msg,
-                                color: response.data.success,
-                            });
-                            if (response.data.success === true) {
-                             
-                                self.goBack();
-                            }
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        });
-                }
-            });
-            //self.reset();
-
-          
-        },
-        print () {
-             const self = this;
-             self.$validator.validateAll().then((result) => {
-             if (result == true) {
-                // Pass the element id here
-                document.getElementById("input_name").setAttribute('value',this.name);
-                document.getElementById("input_report_type").setAttribute('value',"Kick Of Project");
-                
-                //alert(this.report_type)
-                    // Get HTML to print from element
-                const prtHtml = document.getElementById('printMe').innerHTML;
-
-                // Get all stylesheets HTML
-                let stylesHtml = '';
-                for (const node of [...document.querySelectorAll('link[rel="stylesheet"], style')]) {
-                stylesHtml += node.outerHTML;
-                }
-                stylesHtml += "<style type=\"text/css\">.v-icon {\n  display: none;\n}}\n</style>";
-                //
-
-                    // Open the print window
-                    const WinPrint = window.open('', '', 'left=0,top=0,width=1020,height=900,toolbar=0,scrollbars=0,status=0');
-  
-                    WinPrint.document.write(`<!DOCTYPE html>
-                    <html>
-                    <head>
-                        ${stylesHtml}
-                        
-                    </head>
-                    <body>
-                        ${prtHtml}
-                    </body>
-                    </html>`);
-            
-                        //  await this.$htmlToPaper('printMe');
-                    WinPrint.document.close();
-                   
-                    WinPrint.focus();
-                       
-                    WinPrint.print();
-                    WinPrint.close();
-                   this.store();
-
-             }
-             });
-         
-        },
-
-        enableReport(value){
-            const self=this;
-            self.enable_report=true;
-        }
-          
-    },
-};
-</script>

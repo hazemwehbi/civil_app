@@ -56,7 +56,7 @@ class ProjectController extends Controller
         $user = $request->user();
 
 
-        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report');
+        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report','report.reportCreator','report.type');
         $customer_id=$user->id;
         $reports = []; 
         $childrens=$user->childrenIds($user->id);
@@ -145,7 +145,7 @@ class ProjectController extends Controller
     {
         $childrens=Auth::user()->childrenIds(Auth::user()->id);
         array_push($childrens,Auth::user()->id);
-        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report');
+        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report','report.reportCreator','report.type');
         if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
             $projects = $projects->where(function($q) use ($childrens) {
                 $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) use ($childrens) {
@@ -213,8 +213,8 @@ class ProjectController extends Controller
                     
         foreach ($result as $key => $val) {
             $result[$key] = $val->append('is_favorited');
-             if($val->reports !=null)
-            array_push($reports, $val->reports);
+             if($val->report !=null)
+            array_push($reports, $val->report);
         }
         $status = Project::getStatusForProject();
 
@@ -1341,7 +1341,7 @@ class ProjectController extends Controller
    }
 
    public function  getProject ($id){
-    $project=Project::with('customer',  'members', 'location','agency')->find($id);
+    $project=Project::with('customer',  'members', 'location','agency','report', 'report.type')->find($id);
     return $project;
    }
 

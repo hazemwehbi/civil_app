@@ -13,6 +13,8 @@ use App\Notifications\AskPermissionNotification;
 use Notification;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Responses\Response;
+use App\OfficeDetaile;
+
 class UserController extends AdminController
 {
     /**
@@ -211,9 +213,19 @@ class UserController extends AdminController
             $output = $this->respondWentWrong($e);
         }
 
-        return $output;
+        return ['msg'=>$output,'id'=> $user->id];
     }
+public function storeOfficeData(Request $request){
+    $officeData= new OfficeDetaile();
+    $officeData->title= $request->title;
+    $officeData->user_id= $request->user_id;
+$officeData->save();
 
+$officeData->addMedia($request->file)->toMediaCollection('logo');
+$output = $this->respondSuccess(__('messages.saved_successfully'));
+return $output;
+
+}
     /**
      * Display the specified resource.
      *

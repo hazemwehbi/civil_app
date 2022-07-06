@@ -12,6 +12,10 @@ class Report extends Model
     {
         return $this->belongsTo('App\Project');
     }
+    public function type()
+    {
+        return $this->belongsTo('App\ReportType');
+    }
 
    /**
      * Return the creator of task.
@@ -19,5 +23,9 @@ class Report extends Model
     public function reportCreator()
     {
         return $this->belongsTo('App\Components\User\Models\User', 'created_by');
+    }
+    public function office()
+    {
+        return $this->belongsTo('App\Components\User\Models\User', 'office_id');
     }
 }
