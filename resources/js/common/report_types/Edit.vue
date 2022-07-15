@@ -18,12 +18,24 @@
                          
                               <v-flex xs12 sm12 md12>
                                 <v-text-field
-                                    v-model="report_type.type_name"
-                                    :label="trans('data.type_name')"
+                                    v-model="report_type.type_name_ar"
+                                    :label="trans('data.type_name_ar')"
                                     v-validate="'required'"
-                                    data-vv-name="type_name"
-                                    :data-vv-as="trans('data.type_name')"
-                                    :error-messages="errors.collect('type_name')"
+                                    data-vv-name="type_name_ar"
+                                    :data-vv-as="trans('data.type_name_ar')"
+                                    :error-messages="errors.collect('type_name_ar')"
+                                    required
+                                >
+                                </v-text-field>
+                            </v-flex>
+                             <v-flex xs12 sm12 md12>
+                                <v-text-field
+                                    v-model="report_type.type_name_en"
+                                    :label="trans('data.type_name_en')"
+                                    v-validate="'required'"
+                                    data-vv-name="type_name_en"
+                                    :data-vv-as="trans('data.type_name_en')"
+                                    :error-messages="errors.collect('type_name_en')"
                                     required
                                 >
                                 </v-text-field>

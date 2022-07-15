@@ -74,21 +74,6 @@ class ProjectController extends Controller
                 $q->WhereIn('user_id', $childrens);
             });
         }
-        // if (!$user->hasRole('superadmin')) {
-        //     //If employee then get projects assigned or lead.
-        //     // if ($user->is_employee) {
-        //     //     $project_ids = $this->CommonUtil->getAssignedProjectForEmployee($user->id);
-        //     //     $projects->orWhere('projects.lead_id', $user->id)
-        //     //         ->orWhereIn('projects.id', $project_ids);
-        //     // }
-           
-        //     //If customer, then get project for that customer.
-        //     //if ($user->is_client) {
-              
-               
-           
-        //    // }
-        // }
  
         $projects = $projects->withCount(['tasks',
                         'tasks as completed_task' => function ($query) {
@@ -115,9 +100,6 @@ class ProjectController extends Controller
             });
         }
       
-    //    if (!empty($request->input('customer_id'))) {
-      //      $projects->where('customer_id', $request->input('customer_id'));
-       // }
         if (!empty($request->input('user_id'))) {
             $user_id = $request->input('user_id');
             $projects->whereHas('members', function ($q) use ($user_id) {
@@ -248,8 +230,7 @@ class ProjectController extends Controller
             $query->where('parent_id',Auth::id());
             $query->orWhere('id', Auth::id());
         })->get();
-       
-      //  $billingTypes = Project::getBillingTypes();
+
         $projectTypes = Project::getProjectTypes();
         $status = Project::getStatusForProject();
         $categories = Category::forDropdown('projects');
@@ -272,7 +253,22 @@ class ProjectController extends Controller
         return Response::respondSuccess($project);
     }
 
-
+    public function getProjectsOffice(Request $request)
+    {
+        if(isset($request->office_id)){
+            $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report','report.reportCreator','report.type')
+            ->orWhereHas('members', function ($qu) use ($request) {
+                $qu->Where('user_id', $request->office_id);
+            })
+            ->get()
+            ->toArray();
+        }else{
+            $projects = Project::select('id', 'name')
+                        ->get()
+                        ->toArray();
+        }
+        return $projects;
+    }
     public function getLocationInfo()
     {
         $data = [
@@ -319,7 +315,7 @@ class ProjectController extends Controller
             );
 
             $project_data['created_by'] = $request->user()->id;
-            $project_data['created_by'] = $request->user()->id;
+           
             $project = Project::create($project_data);
 
             //Add members
@@ -335,24 +331,13 @@ class ProjectController extends Controller
             $category = $request->input('category_id');
             $project->categories()->sync($category);
 
-            // $roles = $this->CommonUtil->createRoleAndPermissionsForProject($project->id);
-
-            //Assign project member role
-            // $users = User::find($project_members);
-            // foreach ($users as $user) {
-            //     $user->assignRole($roles['member']);
-            // }
-            //Assign lead role
-          //  $project_lead = User::find($project_data['lead_id']);
-         //   $project_lead->assignRole($roles['lead']);
+       
 
             //Assign roles to customer contacts
             if (!empty($project_data['customer_id'])) {
                 $contacts = User::find($project_data['customer_id'])
                                 ->contacts;
-             ///   foreach ($contacts as $contact) {
-              ///      $contact->assignRole($roles['customer']);
-              //  }
+        
             }
 
             DB::commit();
@@ -1073,13 +1058,6 @@ class ProjectController extends Controller
 
         return $output;
     }
-    
-    // public function getProjectInfo(Request $request)
-    // {
-    //     $project=Project::find($request->project_id);
-        
-    //     return $project;
-    // }
 
 
     public function getProjectData(Request $request)

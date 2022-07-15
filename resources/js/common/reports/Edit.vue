@@ -4,9 +4,9 @@
             <v-btn style="color: #06706d" @click="$router.go(-1)">
                 {{ trans('messages.back') }}
             </v-btn>
-             <v-btn style="color: #06706d" @click="externalDialog = true">
+            <!-- <v-btn style="color: #06706d" @click="externalDialog = true">
                 {{ trans('data.reports_review') }}
-            </v-btn>
+            </v-btn>-->
             <v-btn
                 style="background-color: #06706d; color: white"
                 color="darken-1"
@@ -671,7 +671,7 @@
                             </v-layout>
                         </v-container>
                     </v-container>-->
-                    <ReportForm :reportType="report_type" :edit="true" :report="report" :office="office" :project_id="$route.params.project" />
+                    <ReportForm :reportType="report_type" :edit="true" :report="report" :office="office" />
         </v-card>
         <AddReportType :externalDialog="externalDialog" @close="externalDialog = event" @store="externalDialog = event" />
     </v-container>

@@ -38,7 +38,8 @@ class ReportTypesController extends Controller
     {
        // dd($request->all());
         $type= new ReportType();
-        $type->type_name=$request->type_name;
+        $type->type_name_ar=$request->type_name_ar;
+        $type->type_name_en=$request->type_name_en;
         $type->type_list_ar=$request->type_list_ar;
         $type->type_list_en=$request->type_list_en;
         $type->form= $request->form_name;
@@ -79,7 +80,8 @@ class ReportTypesController extends Controller
     public function update(Request $request, $id)
     {
         $type=ReportType::find($id);
-        $type->type_name=$request->type_name;
+        $type->type_name_ar=$request->type_name_ar;
+        $type->type_name_en=$request->type_name_en;
         $type->type_list_ar=$request->type_list_ar;
         $type->type_list_en=$request->type_list_en;
         $type->form= $request->form_name;

@@ -49,7 +49,8 @@
                             </v-list>
                         </v-menu>
                     </td>
-                    <td align="center">{{ props.item.type_name }}</td>
+                    <td align="center">{{ props.item.type_name_ar }}</td>
+                    <td align="center">{{ props.item.type_name_en }}</td>
                     <td @click="props.expanded = !props.expanded" align="center">
                         <v-icon>arrow_drop_down</v-icon>
                         </td>
@@ -99,8 +100,14 @@ export default {
                     sortable: false,
                 },
                 {
-                    text: self.trans('data.type_name'),
-                    value: 'type_name',
+                    text: self.trans('data.type_name_ar'),
+                    value: 'type_name_ar',
+                    align: 'center',
+                    sortable: true,
+                },
+                    {
+                    text: self.trans('data.type_name_en'),
+                    value: 'type_name_en',
                     align: 'center',
                     sortable: true,
                 },

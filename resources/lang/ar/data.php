@@ -26,7 +26,8 @@ return [
     'search'=>'بحث',
     'Details'=>'التفاصيل',
     'form_name' => 'اسم الفورم',
-    'type_name' => 'اسم النوع',
+    'type_name_en' => 'اسم التقرير بالانكليزي',
+    'type_name_ar' => 'اسم التقرير بالعربي',
     'type_list_en' => ' البند بالانكليزي',
     'type_list_ar' => ' البند بالعربي',
     'create_report_type' => 'انشاء نوع جديد',
@@ -124,7 +125,8 @@ return [
     'users'=>'المستخدمون',
     'create_a_visit_request'=>'إنشاء طلب زيارة',
     'create_a_report'=>'إنشاء تقرير',
-    'reports_review'=>'استعراض التقاريير',
+    'reports_review'=>'عرض التقارير',
+    'report_review'=>'عرض التقرير',
     'attachments'=>'المرفقات',
     'schedule'=>'جدول المواعيد',
     'Classification_accredited_offices'=>'المكاتب المعتمدة بالتصنيف',
@@ -247,6 +249,7 @@ return [
       //report 
       'project_name_and_address'=> 'اسم وعنوان المشروع',
       'owner_name'=>' اسم المالك ',
+      'owner'=>'المالك',
       'land_number'=>' رقم قطعة  الارض ',
       'plan_numer'=>' رقم المخطط ',
 

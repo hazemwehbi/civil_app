@@ -24,7 +24,6 @@ export default {
             return APP.CURRENT_USER.active !=null;
         },
         $hasRole(roleName) {
-            console.log(APP.USER_ROLES)
             return _.get(APP.USER_ROLES, roleName, false);
             //  return _.get(APP.USER_ROLES, 'superadmin', _.get(APP.USER_ROLES, roleName, false));
         },

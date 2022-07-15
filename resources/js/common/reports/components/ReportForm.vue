@@ -4,25 +4,29 @@
                 <v-container grid-list-md>
 <div class="mx-5 px-1"  style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">
   <div class="d-flex justify-space-between header layout">
-    <div class="logo"><img style="max-width:150px" :src="localOffice && localOffice.office && localOffice.office.media[localOffice.office.media.length-1]?localOffice.office.media[localOffice.office.media.length-1].original_url:''" /></div>
     <div class="title">{{ localOffice && localOffice.office?localOffice.office.title:'' }}</div>
+    <div class="logo"><img style="max-width:150px" :src="localOffice && localOffice.office && localOffice.office.media[localOffice.office.media.length-1]?localOffice.office.media[localOffice.office.media.length-1].full_url.replace('upload','public/upload'):''" /></div>
   </div>
   <div class="type_data layout">
-    <div class="type_name">{{ localreportType.type_name }}</div>
+    <div class="type_name">{{ language == 'ar'?localreportType.type_name_ar:localreportType.type_name_en }}</div>
     <div class="type_num">{{ localreportType.id }}</div>
   </div>
  <v-layout row wrap>
       <v-flex xs12 sm12 md12 class="height-detect">
-        <div class="label mx-2">{{trans('data.name')}} : {{ reportData.owner }}</div>
+        <div class="label mx-2">{{trans('data.owner')}} : {{ reportData.owner }}</div>
       
     </v-flex>
        <v-flex xs12 sm12 md12 class="height-detect">
-        <div class="label mx-2">{{trans('data.contractor')}} : </div>
+        <div class="label mx-2">{{trans('data.contractor')}} :
+          <span v-for="contractor in contractors" :key="contractor.id">
+                        {{ contractor.name }} 
+           </span>
+           </div>
 
       
     </v-flex>
      <v-flex xs12 sm4 md4 class="height-detect">
-        <div class="label mx-2">{{trans('messages.project')}} : {{ reportData.project }}</div>
+        <div class="label mx-2" v-if="reportData.project">{{trans('messages.project')}} : {{ reportData.project.name }}</div>
 
     </v-flex>
       <v-flex xs12 sm4 md4 class="merge_rows justify-center height-detect" style="border-end: 1px solid gray;border-start: 1px solid gray;">
@@ -151,28 +155,33 @@ import { isThisISOWeek } from 'date-fns';
 export default {
   props:{
     reportType: null,
-    project_id: null,
+    project: null,
     office: null,
     report: null,
-    edit: false
+    edit: false,
   },
 data(){
   return {
     reportData: {},
     create_time: null,
-     project: {},
      day: '',
      loading: false,
      language: 'ar',
      localreportType: null,
-     localOffice: null
+     localOffice: null,
+     contractors: []
   }
 },
 created(){
   const self = this;
   self.currentDateTime();
-   self.getProject(5);
+   self.contractors = self.project?.members.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')
+   
+   self.getReportData();
   self.language = localStorage.getItem('currentLange')
+  self.localreportType = self.reportType
+  self.localOffice = self.office
+
 },
 watch:{
   reportType(){
@@ -180,28 +189,28 @@ watch:{
   },
    office(){
     this.localOffice = this.office
+  },
+    project(){
+this.getReportData();
+ this.contractors = this.project?.members.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')
+ console.log(this.contractors)
   }
 },
 methods:{
-
-      getProject(project_id) {
+      getReportData() {
          const self = this;
-            axios
-                .get('/get-project/'+ project_id)
-                .then(function (response) {
-                    self.project  = response.data;
-                    self.reportData.owner= self.project.customer.name
-                     self.reportData.project= self.project.name
-                     if(!self.reportType){
-                         self.localreportType =  self.project.report.filter(val => val.id === self.report.id )[0].type
+                     if(self.edit){
+                         self.localreportType =  self.report.type
                          self.localOffice= self.report.office
+                         self.localContractor = self.report.contractor
+                        self.reportData.project= self.report.project
+                        self.reportData.owner= self.report.project.customer.name
                      }
-                     self.$forceUpdate();
-                     
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+                     else if(self.project){
+                     self.reportData.owner= self.project.customer.name
+                     self.reportData.project= self.project
+                     }
+                     self.$forceUpdate();  
         },
            store() {
             const self = this;
@@ -210,6 +219,7 @@ methods:{
                 project_id: self.project.id,
                 office_id:self.office?.id,
                 type: this.reportType.id,
+                contractor_id: self.contractor?.id
             };
             self.$validator.validateAll().then((result) => {
                 if (result == true) {
@@ -223,7 +233,7 @@ methods:{
                                 color: response.data.success,
                             });
                             if (response.data.success === true) {
-                                // self.goBack();
+                                 self.goBack();
                             }
                         })
                         .catch(function (error) {
@@ -266,14 +276,17 @@ this.$forceUpdate();
 }
 .type_data{
       display: flex;
-   
+   justify-content: center;
     border-bottom: 1px solid gray;
     background: #ededed;
     padding: 10px;
 }
-.type_num,.type_name{
-  width: 50%;
-    text-align: end;
+.type_num{
+  
+}
+.type_name{
+  width: 100%;
+    text-align: center;
 }
 .footer-item{
       display: flex;

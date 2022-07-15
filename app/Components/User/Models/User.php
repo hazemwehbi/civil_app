@@ -215,8 +215,14 @@ class User extends Authenticatable implements HasMedia
         }
         return $users;
     }
-
-
+    public function projects()
+    {
+        return $this->belongsToMany('App\Project', 'project_members', 'user_id', 'project_id');
+    }
+    public function projectCreator()
+    {
+        return $this->belongsTo('App\Project', 'created_by');
+    }
     public static function getUsersMemberForDropDown($append_all = false)
     {
         $user=Auth::user();

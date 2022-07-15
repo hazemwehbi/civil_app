@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Report;
 use App\ReportType;
 use Auth;
+use Exception;
 
 class ReportController extends Controller
 {
@@ -28,7 +29,7 @@ class ReportController extends Controller
             $orderby = 'desc';
             $sort_by = 'id';
         }
-        $reports =  Report::with('project','reportCreator','office','office.office','office.office.media')->orderBy($sort_by, $orderby);
+        $reports =  Report::with('project','reportCreator','project.members','type','project.customer','office','office.office','office.office.media')->orderBy($sort_by, $orderby);
         if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
             $reports = $reports->where('created_by', Auth::user()->id);
         }
@@ -58,7 +59,6 @@ class ReportController extends Controller
                         'type_id'=>$report_type,
                         'created_by'=>Auth::id(),
                         'office_id'=> $office_id,
-                        //'type' => 'employee',
                     ]);
             DB::commit();
             $output = $this->respondSuccess(__('messages.printed_saved_successfully'));
@@ -143,11 +143,29 @@ class ReportController extends Controller
         return $output;
     }
 
+    public function getOffices(Request $request){
+        $offices= User::with('office','office.media')->where('user_type_log','ENGINEERING_OFFICE_MANAGER')
+        ->WhereHas('projects', function ($q) use ($request) {
+                 $q->Where('projects.id', $request->project_id);
+             })
+        ->orWhereHas('projectCreator', function ($q) use ($request) {
+                $q->Where('projects.id', $request->project_id);
+            })
+       ->get();
+        $data = ['offices' => $offices];
 
-
+        return $data;
+    }
     public function getReportTypes(Request $request)
     {
-        $types = ReportType::all();
+        $types = collect(ReportType::all());
+        $types = $types->map(function ($item) {
+            if(app()->getLocale() == 'ar')
+             $item->type_name = $item->type_name_ar;
+            else
+             $item->type_name = $item->type_name_en;
+             return $item;
+        });
         $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report','report.reportCreator','report.type')->get();
         $offices= User::with('office','office.media')->where('user_type_log','ENGINEERING_OFFICE_MANAGER')->get();
         $data = ['offices' => $offices, 'types' => $types, 'projects' => $projects ];

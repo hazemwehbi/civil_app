@@ -281,7 +281,6 @@
                                     item-text="name"
                                     item-value="id"
                                     :items="roles"
-                                    @change="selectRole()"
                                     v-model="form_fields.role_id"
                                     :label="trans('messages.role')"
                                     :rules="[
@@ -372,6 +371,7 @@ export default {
             birth_date: null,
             gender_types: [],
             email: '',
+            passwordConfirm: null,
             id_card_number: '',
             password: '',
             swordConfirm: '',
@@ -394,9 +394,6 @@ export default {
         ]);
     },
     methods: {
-        selectRole(){
-console.log(this.form_fields.role_id)
-        },
          pickFile() {
       this.$refs.image.click()
     },

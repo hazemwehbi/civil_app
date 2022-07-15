@@ -9,7 +9,7 @@ class ReportType extends Model
 {
     use HasFactory;
 
-    protected $fillable=['form','type_name'];
+    protected $fillable=['form','type_name_en','type_name_ar'];
     protected $casts = [
         'type_list_ar' => 'array',
         'type_list_en' =>'array'

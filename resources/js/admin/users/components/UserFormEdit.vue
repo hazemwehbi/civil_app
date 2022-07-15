@@ -296,6 +296,33 @@
                                     required
                                 ></v-autocomplete>
                             </v-flex>
+                                                     <v-flex xs12 sm3 v-if="form_fields.role_ids && form_fields.role_ids.find(val => val == 2)">
+                                <v-text-field
+                                    v-model="office.title"
+                                    :label="trans('messages.title')"
+                                    :rules="[
+                                        (v) =>
+                                            (v && v.length > 0) ||
+                                            trans('messages.required', {
+                                                name: trans('messages.role'),
+                                            }),
+                                    ]"
+                                    required
+                                ></v-text-field>
+                            </v-flex>
+<v-flex xs12 sm3 class="text-xs-center text-sm-center text-md-center text-lg-center" v-if="form_fields.role_ids && form_fields.role_ids.find(val => val == 2)">
+            <!-- Here the image preview -->
+            <img :src="imageUrl" height="150" v-if="imageUrl"/>
+            <v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon="mdi-file-image"></v-text-field>
+            <input
+              type="file"
+              style="display: none"
+              ref="image"
+              :src="office.image"
+              accept="image/jpeg, image/jpg, image/png"
+              @change="onFilePicked"
+            >
+</v-flex>
                             <v-flex xs12 sm3 v-if="$hasRole('superadmin')">
                                 <v-switch
                                     :label="trans('messages.pre_Active_acount')"
@@ -350,23 +377,50 @@ export default {
             form_fields: [],
             birth_date: null,
             gender_types: [],
+            passwordConfirm: null,
             email: '',
             password: '',
             active: '',
             roles: [],
             id_card_number: '',
             send_email: false,
+                office:[],
+                imageUrl: '',
+    imageFile: null,
+    imageName: '',
         };
     },
     mounted() {
         const self = this;
-        self.checkCurrentUserType();
+      //  self.checkCurrentUserType();
         // this.loadUser(() => {});
     },
     created() {
         this.loadUser(() => {});
     },
     methods: {
+           pickFile() {
+      this.$refs.image.click()
+    },
+    onFilePicked(e) {
+      const files = e.target.files
+      if(files[0] !== undefined) {
+        this.imageName = files[0].name
+        if (this.imageName.lastIndexOf('.') <= 0) {
+          return
+        }
+        const fr = new FileReader()
+        fr.readAsDataURL(files[0])
+        fr.addEventListener('load', () => {
+          this.imageUrl = fr.result
+          this.imageFile = files[0]
+        })
+      } else {
+        this.imageName = ''
+        this.imageFile = ''
+        this.imageUrl = ''
+      }
+    },
         save() {
             const self = this;
             if (this.$refs.form.validate()) {
@@ -412,6 +466,20 @@ export default {
                         if (response.data.success === true) {
                             self.goBack();
                         }
+                                  if(self.office.title){
+                let data = new FormData();
+                data.append('file', self.imageFile);
+                data.append('title', self.office.title);
+                data.append('user_id', self.propUserId);
+                axios.post('/admin/office_data', data)
+                 .then(function (response) {
+                        self.$store.commit('showSnackbar', {
+                            message: response.data.msg,
+                            color: response.data.success,
+                        });
+ self.$store.commit('hideLoader');
+                    })
+                    }
                     })
                     .catch(function (error) {
                         self.$store.commit('hideLoader');
@@ -450,7 +518,11 @@ export default {
                 self.active = User.active !== null;
                 self.roles = response.data.roles;
                 self.form_fields.role_ids = response.data.role_ids;
-
+                if(response.data.user.office) {
+                self.office.title = response.data.user.office.title
+                self.imageUrl= response.data.user.office.media[response.data.user.office.media.length-1].full_url.replace('upload','public/upload')
+                console.log(self.imageUrl,response.data.user.office.media)
+                }
                 //  alert(JSON.parse(User.enginnering_type));
                 //   self.is_edit_role = response.data.is_edit_role;
             });

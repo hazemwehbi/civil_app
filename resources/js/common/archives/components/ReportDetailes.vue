@@ -2,7 +2,7 @@
   <v-layout row>
     <v-flex xs12 sm12>
       <v-card class="pa-2 container-list">
-           <v-card :key="index" v-for="(item, index) in reportData" flat>
+           <v-card :key="index" v-for="(item, index) in reportData.filter(val => val.report.length>0)" flat>
                <div class="btn-bar">
                     <v-btn outline color="indigo" @click="view(item.id)"
                                                                     v-if="$can('project.list')">
@@ -21,11 +21,11 @@
                                                                     {{ trans('data.create_a_report')}}
                                                                     </v-btn></div>
                 <div class="element"><div class="col-title">{{trans('data.name')}}</div><div class="content">{{ item.customer.name }} </div></div>
-                <div class="element"><div class="col-title">{{trans('data.description')}}</div><div class="content">{{ item.note }}</div></div>
-                <span v-for="rep in item.report" :key="rep.id">
+                <!--<div class="element"><div class="col-title">{{trans('data.description')}}</div><div class="content">{{ item.note }}</div></div>-->
+                <v-card v-for="rep in item.report" :key="rep.id" flat class="pa-10">
                 <div class="element"><div class="col-title">{{trans('data.type')}}</div><div class="content" >{{ rep.type.type_name }}</div></div>
                 <div class="element"><div class="col-title">{{trans('data.created_by')}}</div><div class="content">{{ rep.report_creator.name }}</div></div>
-                </span>
+                </v-card>
            </v-card>
       </v-card>
     </v-flex>

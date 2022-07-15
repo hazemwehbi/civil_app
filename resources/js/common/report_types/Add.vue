@@ -17,12 +17,24 @@
                          
                               <v-flex xs12 sm12 md12>
                                 <v-text-field
-                                    v-model="type_name"
-                                    :label="trans('data.type_name')"
+                                    v-model="type_name_ar"
+                                    :label="trans('data.type_name_ar')"
                                     v-validate="'required'"
-                                    data-vv-name="type_name"
-                                    :data-vv-as="trans('data.type_name')"
-                                    :error-messages="errors.collect('type_name')"
+                                    data-vv-name="type_name_ar"
+                                    :data-vv-as="trans('data.type_name_ar')"
+                                    :error-messages="errors.collect('type_name_ar')"
+                                    required
+                                >
+                                </v-text-field>
+                            </v-flex>
+                              <v-flex xs12 sm12 md12>
+                                <v-text-field
+                                    v-model="type_name_en"
+                                    :label="trans('data.type_name_en')"
+                                    v-validate="'required'"
+                                    data-vv-name="type_name_en"
+                                    :data-vv-as="trans('data.type_name_en')"
+                                    :error-messages="errors.collect('type_name_en')"
                                     required
                                 >
                                 </v-text-field>
@@ -102,7 +114,8 @@ export default {
     data() {
         return {
             dialog: false,
-            type_name: null,
+            type_name_ar: null,
+            type_name_en: null,
             type_list_ar: [],
             type_list_en: [],
             form_name: null,
@@ -118,7 +131,8 @@ export default {
     methods: {
         create() {
             const self = this;
-            self.type_name = null;
+            self.type_name_ar = null;
+            self.type_name_en = null;
             self.type_list_ar = [];
             self.type_list_en = [];
             self.form_name = null;
@@ -135,7 +149,8 @@ this.list = 1;
         store() {
             const self = this;
             let data = {
-                type_name: self.type_name,
+                type_name_ar: self.type_name_ar,
+                type_name_en: self.type_name_en,
                 type_list_ar: self.type_list_ar,
                 type_list_en: self.type_list_en,
                 form_name: self.form_name,

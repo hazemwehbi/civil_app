@@ -49,6 +49,7 @@ Route::prefix('admin')->
         Route::get('users-all', 'UserController@getAllEmployee');
         Route::get('users/{id}/name', 'UserController@getEmployee');
         Route::post('office_data','UserController@storeOfficeData');
+        
         Route::resource('users', 'UserController');
 
         Route::get('customers/{id}/customer-name', 'CustomerController@getCustomer');
@@ -189,6 +190,8 @@ Route::middleware(['auth'])
         
         //reRoute::get('get-request-types','RequestTypeController@getRequestsTypes');port 
         Route::get('get-report-types','ReportController@getReportTypes');
+        Route::get('getOffices','ReportController@getOffices');
+        Route::get('getProjectsOffice','ProjectController@getProjectsOffice');
         Route::resource('reports', 'ReportController');
         Route::resource('reportTypes', 'ReportTypesController');
         

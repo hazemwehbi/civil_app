@@ -19,7 +19,7 @@
      <v-tabs-items v-model="tab">
       <v-tab-item
       >
-  <v-card flat class="mx-5 elevation-2 px-5 pt-1 pb-3 my-2" style="min-width:70%;flex:4">
+  <v-card flat class="mx-5 elevation-2 px-5 pt-1 pb-3 my-2 report" style="min-width:70%;flex:4">
   <Report  />
   <v-btn class="mx-auto" style="color: #06706d" @click="$router.go(-1)">
                         {{ trans('messages.back') }}
@@ -54,6 +54,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.report{
+    display: flex;
+    flex-direction: column;
+}
 </style>

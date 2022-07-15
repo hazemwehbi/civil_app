@@ -216,11 +216,14 @@ class UserController extends AdminController
         return ['msg'=>$output,'id'=> $user->id];
     }
 public function storeOfficeData(Request $request){
+    $officeData = OfficeDetaile::where('user_id',$request->user_id)->first();
+    if(!isset($officeData))
     $officeData= new OfficeDetaile();
+
     $officeData->title= $request->title;
     $officeData->user_id= $request->user_id;
 $officeData->save();
-
+if($request->hasFile('file'))
 $officeData->addMedia($request->file)->toMediaCollection('logo');
 $output = $this->respondSuccess(__('messages.saved_successfully'));
 return $output;
@@ -256,8 +259,9 @@ return $output;
         }
 
         try {
-            $user = User::find($id);
-
+            $user = User::with('office','office.media')->find($id);
+          //  $office = $user->office;
+          //  $mediaOffice=$office->media;
             $role_id = $user->roles->first()->id;
             $gender_types = User::getGenders();
             
@@ -265,6 +269,8 @@ return $output;
 
             $data = ['user' => $user,
                     'gender_types' => $gender_types,
+                 //   'office'=> $office,
+                  //  'mediaOffice' => $mediaOffice,
                     'roles' => $roles,
                     'role_ids' => $user->roles->pluck('id'),
                     // 'is_edit_role'=>User::canEditRole(),

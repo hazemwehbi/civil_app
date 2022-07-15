@@ -53,7 +53,7 @@
                                 >
                                     <v-list-tile-title>
                                         <v-icon small class="mr-2"> show </v-icon>
-                                        {{ trans('data.reports_review') }}
+                                        {{ trans('data.report_review') }}
                                     </v-list-tile-title>
                                 </v-list-tile>
                                 <v-list-tile
@@ -69,7 +69,12 @@
                         </v-menu>
                     </td>
                     <td align="center">{{ props.item.report_creator.name }}</td>
-                     <td align="center"></td>
+                    <td align="center">{{props.item.office.name}}</td>
+                     <td align="center">
+                        <span v-for="contractor in props.item.project.members.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')" :key="contractor.id">
+                        {{ contractor.name }}
+                        </span>
+                        </td>
                     <td align="center">{{ props.item.project.name }}</td>
                 </template>
         
@@ -107,8 +112,14 @@ export default {
                     sortable: true,
                 },
                   {
+                    text: self.trans('data.enginnering_office_name'),
+                    value: 'office.name',
+                    align: 'center',
+                    sortable: true,
+                },
+                  {
                     text: self.trans('data.contractor'),
-                    value: 'reportCreator.name',
+                    value: 'contractor.name',
                     align: 'center',
                     sortable: true,
                 },
@@ -232,6 +243,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>
