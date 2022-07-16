@@ -45,10 +45,7 @@
           ></v-text-field>
     </v-flex>
      <v-flex xs12 sm4 md4 class="merge_rows justify-center height-detect">
-         (<v-text-field
-            v-model="reportData.delivery_request_num"
-            style="max-width:25px"
-          ></v-text-field>)
+         (<v-text-field style="max-width:25px;margin-left: 5px!important;margin-right: 5px!important;"></v-text-field>)
     </v-flex>
     <v-flex xs12 sm4 md4 class="height-detect">
         <div class="label mx-2">{{trans('data.date')}} : {{create_time}}</div>
@@ -72,16 +69,28 @@
 <v-layout class="list-items"  row wrap v-for="(type_list, index) in localreportType.type_list_en" :key="index" v-if="language == 'en'">
      <v-flex xs12 sm1 md1 style="border-end:1px solid gray; ">{{ index+1 }}</v-flex>
       <v-flex xs12 sm6 md6 style="border-end:1px solid gray;">{{ type_list }}</v-flex>
-      <v-flex xs12 sm1 md1 style="border-end:1px solid gray;"></v-flex>
-      <v-flex xs12 sm2 md2 style="border-end:1px solid gray;"></v-flex>
-      <v-flex xs12 sm2 md2 class="last-col" style=""></v-flex>
+      <v-flex xs12 sm1 md1 style="border-end:1px solid gray;">
+        <v-text-field style="max-height: 2.5rem;"></v-text-field> 
+      </v-flex>
+      <v-flex xs12 sm2 md2 style="border-end:1px solid gray;">
+        <v-text-field style="max-height: 2.5rem;"></v-text-field> 
+      </v-flex>
+      <v-flex xs12 sm2 md2 class="last-col" style="">
+        <v-text-field style="max-height: 2.5rem;"></v-text-field> 
+      </v-flex>
 </v-layout>
 <v-layout class="list-items"  v-if="language == 'ar'" row wrap v-for="(type_list, index) in localreportType.type_list_ar" :key="index+'x'">
      <v-flex xs12 sm1 md1 style="border-end:1px solid gray; ">{{ index+1 }}</v-flex>
       <v-flex xs12 sm6 md6 style="border-end:1px solid gray;">{{ type_list }}</v-flex>
-      <v-flex xs12 sm1 md1 style="border-end:1px solid gray;"></v-flex>
-      <v-flex xs12 sm2 md2 style="border-end:1px solid gray;"></v-flex>
-      <v-flex xs12 sm2 md2 class="last-col" style=""></v-flex>
+      <v-flex xs12 sm1 md1 style="border-end:1px solid gray;">
+        <v-text-field style="max-height: 2.5rem;"></v-text-field> 
+      </v-flex>
+      <v-flex xs12 sm2 md2 style="border-end:1px solid gray;">
+        <v-text-field style="max-height: 2.5rem;"></v-text-field> 
+      </v-flex>
+      <v-flex xs12 sm2 md2 class="last-col" style="">
+        <v-text-field style="max-height: 2.5rem;"></v-text-field> 
+      </v-flex>
 </v-layout>
      
     
@@ -91,45 +100,30 @@
         {{trans('data.Rating scores')}}:
         </div>
         <div class="px-2 footer-item">
-          1 {{trans('data.Acceptable')}} (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-           <!-- <v-text-field
-            v-model="customer"
-            style="max-width:15px;max-height: 2.5rem;"
-            :rules="nameRules"
-            
-            required
-          ></v-text-field>-->
+          1 {{trans('data.Acceptable')}} (
+           <v-text-field style="max-width:15px;max-height: 2.5rem;margin: 5px!important;"></v-text-field>
           )
         </div>
             <div class="px-2 footer-item">
-          2 {{trans('data.Accepted comments')}} (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <!--  <v-text-field
-            v-model="customer"
-            style="max-width:15px;max-height: 2.5rem;"
-          ></v-text-field>-->
+          2 {{trans('data.Accepted comments')}} (
+            <v-text-field style="max-width:15px;max-height: 2.5rem;margin: 5px!important;"></v-text-field>
           )
         </div>
             <div class="px-2 footer-item">
-          3 {{trans('data.unacceptable')}} (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-               <!-- <v-text-field
-            v-model="customer"
-            style="max-width:15px;max-height: 2.5rem;"
-            
-          ></v-text-field>-->
-          )
+          3 {{trans('data.unacceptable')}} (
+                <v-text-field style="max-width:15px;max-height: 2.5rem;margin: 5px!important;"></v-text-field>
+         )
         </div>
         </div>
       <div class="px-2" style="border-bottom:1px solid gray;width:50%">
         <div class="footer-item mt-2">{{trans('data.Supervising engineer')}}:
-         <!-- <v-text-field
-            v-model="customer"
+         <v-text-field
             style="max-height: 2.5rem;"
-          ></v-text-field>--></div>
+          ></v-text-field></div>
          <div class="footer-item mt-2">{{trans('data.signature')}}:
-            <!-- <v-text-field
-            v-model="customer"
+             <v-text-field
             style="max-height: 2.5rem;"
-          ></v-text-field>-->
+          ></v-text-field>
          </div>
         </div>
      </v-layout>
@@ -175,12 +169,8 @@ data(){
 created(){
   const self = this;
   self.currentDateTime();
-   self.contractors = self.project?.members.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')
-   
    self.getReportData();
   self.language = localStorage.getItem('currentLange')
-  self.localreportType = self.reportType
-  self.localOffice = self.office
 
 },
 watch:{
@@ -192,8 +182,7 @@ watch:{
   },
     project(){
 this.getReportData();
- this.contractors = this.project?.members.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')
- console.log(this.contractors)
+ this.contractors = this.project?.members?.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')
   }
 },
 methods:{
@@ -202,13 +191,16 @@ methods:{
                      if(self.edit){
                          self.localreportType =  self.report.type
                          self.localOffice= self.report.office
-                         self.localContractor = self.report.contractor
                         self.reportData.project= self.report.project
+                        self.contractors = self.report.project?.members?.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')
                         self.reportData.owner= self.report.project.customer.name
                      }
-                     else if(self.project){
-                     self.reportData.owner= self.project.customer.name
+                     else{
+                        self.localreportType = self.reportType
+                      self.localOffice = self.office
+                     self.reportData.owner= self.project?.customer?.name
                      self.reportData.project= self.project
+                     self.contractors = self.project?.members?.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')
                      }
                      self.$forceUpdate();  
         },

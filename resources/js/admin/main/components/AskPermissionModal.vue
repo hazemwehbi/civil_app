@@ -1,12 +1,10 @@
 <template>
-    <div>
-        <v-row justify="center">
+    <div justify="center">
             <v-dialog v-model="dialog" persistent max-width="500px">
                 <v-card>
                     <v-card-text>
                         <v-form ref="form" v-model="valid" lazy-validation>
-                            <v-container>
-                                <v-row>
+                            <v-layout row wrap>
                                     <v-flex xs12 sm12 md12>
                                         <v-autocomplete
                                             item-text="name"
@@ -44,11 +42,9 @@
                                         <v-text-field
                                             v-model="note"
                                             :label="trans('data.note')"
-                                            :readonly="isEdit"
                                         ></v-text-field>
                                     </v-flex>
-                                </v-row>
-                            </v-container>
+                            </v-layout>
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
@@ -69,18 +65,9 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-        </v-row>
     </div>
 </template>
-<style scoped>
-.style_rtl {
-    padding-left: 5px;
-}
 
-.style_ltr {
-    padding-right: 5px;
-}
-</style>
 <script>
 export default {
     name: 'permission',
@@ -227,3 +214,12 @@ export default {
     },
 };
 </script>
+<style scoped>
+.style_rtl {
+    padding-left: 5px;
+}
+
+.style_ltr {
+    padding-right: 5px;
+}
+</style>

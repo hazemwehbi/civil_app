@@ -129,7 +129,7 @@ Vue.mixin({
             if (i !== null) {
                 const l = i.previousSibling;
 
-                if (l.querySelector('.required.sign') === null) {
+                if (l?.querySelector('.required.sign') === null) {
                     const r = document.createElement('span');
 
                     // l.classList.add('required');

@@ -184,6 +184,7 @@ const router = new Router({
                     component: UserFormEdit,
                     props: route => ({ propUserId: route.params.id }),
                 },
+              
                 {
                     path: 'employees/:id/show',
                     name: 'users_estate.view',
@@ -494,8 +495,14 @@ const router = new Router({
             name: 'reports_list',
             component: reportsList,
         },
-        {
+       /* {
             path: '/add_report',
+            name: 'add_report',
+            component: add_report,
+            props: route => ({ project: route.params.project }),
+        },*/
+        {
+            path: '/add_report/:id?',
             name: 'add_report',
             component: add_report,
             props: route => ({ project: route.params.project }),

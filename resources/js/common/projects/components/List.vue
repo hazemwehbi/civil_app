@@ -113,13 +113,10 @@
                                                                  v-if="$can('report.create') && ($hasRole('Engineering Office Manager')|| $hasRole('superadmin'))"
                                                                     :disabled="!checkActive()"
                                                                     @click="
-                                                                        $router.push({
-                                                                            name: 'add_report',
-                                                                            params: {
-                                                                                project: props.item.id,
-                                                                            },
-                                                                        })
-                                                                    "
+                                                                      $router.push({
+                name: 'add_report',
+                params: { id: props.item.id },
+            });"
                                                                 >
                                                                     <v-list-tile-title>
                                                                         {{
@@ -403,16 +400,13 @@ export default {
             if (self.filters.user_id) {
                 params['user_id'] = self.filters.user_id;
             }
-            console.log(self.filters.status);
             axios
                 .get(self.url, {
                     params: params,
                 })
                 .then(function (response) {
                     self.loading = false;
-                    console.log(response);
                     self.projectData = _.concat(self.projectData, response.data.projects.data);
-                    console.log(self.projectData);
                     self.statuses = response.data.status;
                     self.url = _.get(response, 'data.projects.next_page_url', null);
                     self.getStatistics();

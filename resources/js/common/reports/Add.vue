@@ -24,7 +24,6 @@
                                 v-model="report_type"
                                 :label="trans('data.report_type')"
                                 v-validate="'required'"
-                                @change="enableReport"
                                 data-vv-name="report_type"
                                 :data-vv-as="trans('data.report_type')"
                                 :error-messages="errors.collect('report_type')"
@@ -82,7 +81,6 @@ export default {
             type: 'testt',
             externalDialog: false,
             project: null,
-            description: '',
             name: '',
             offices: [],
             office: null,
@@ -90,19 +88,14 @@ export default {
             report_type: '',
             create_time: '',
              loading:false,
-            enable_report: false,
             projects:[],
         };
     },
     created() {
         const self = this;
-        self.reset();
         self.getReportTypes();
+        self.getProject(self.$route.params.id)
     },
-    beforeDestroy() {
-        const self = this;
-    },
-    mounted: function () {},
     methods: {
       getProject(project_id) {
          const self = this;
@@ -148,21 +141,6 @@ export default {
                     console.log(error);
                 });
         },
-
-        reset() {
-            const self = this;
-            self.title = '';
-            self.request_type = '';
-            self.project_id = '';
-            self.description = '';
-            self.status = '';
-            self.priority = '';
-            self.customer_id = '';
-           
-            // self.request_types=[];
-        },
-
-      
          print() {
             const self = this;
             self.$validator.validateAll().then((result) => {
@@ -216,14 +194,6 @@ export default {
                     this.store();
                 }
             });
-        },
-      
-
-        enableReport(value) {
-            const self = this;
-            self.enable_report = true;
-            console.log(this.report_type)
-           // self.$forceUpdate()
         },
     },
 };
