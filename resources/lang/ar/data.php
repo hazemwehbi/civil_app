@@ -241,9 +241,10 @@ return [
     'delete_role' => 'مسح دور',
     'view_role' => 'عرض دور ',
     'is_primary'=>'دور رئيسي',
+    'required' => 'الحقل مطلوب',
     'enginnering_office_name'=>'اسم المكتب الهندسي',
-
-
+     'yes' => 'نعم',
+     'no' => 'لا',
 
     //report 
       //report 

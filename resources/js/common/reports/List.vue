@@ -43,21 +43,15 @@
                                     </v-list-tile-title>
                                 </v-list-tile> -->
                                  <v-list-tile
-                                    v-if="$can('customer.edit')"
-                                   @click="$router.push({name: 'edit_report',
-                                                                            params: {
-                                                                                report: props.item,
-                                                                            },
-                                                                        })
-                                                                    "
-                                >
+                                    v-if="$hasRole('Engineering Office Manager')|| $hasRole('superadmin')"
+                                   @click="openReport(props.item)">
                                     <v-list-tile-title>
                                         <v-icon small class="mr-2"> show </v-icon>
                                         {{ trans('data.report_review') }}
                                     </v-list-tile-title>
                                 </v-list-tile>
                                 <v-list-tile
-                                    v-if="$can('customer.delete')"
+                                    v-if="$hasRole('Engineering Office Manager')|| $hasRole('superadmin')"
                                     @click="deleteReport(props.item)"
                                 >
                                     <v-list-tile-title>
@@ -106,8 +100,8 @@ export default {
                     sortable: false,
                 },
                 {
-                    text: self.trans('data.name'),
-                    value: 'name',
+                    text: self.trans('data.owner'),
+                    value: 'created_at',
                     align: 'center',
                     sortable: true,
                 },
@@ -154,6 +148,11 @@ export default {
         self.$eventBus.$off('updateCustomerTable');
     },
     methods: {
+        openReport(report){
+            console.log(report.media)
+            if(report.media.length>0)
+        window.open(report.media[report.media.length-1].full_url.replace('upload','public/upload'), '_blank')
+        },
         getDataFromApi() {
             this.loading = true;
 

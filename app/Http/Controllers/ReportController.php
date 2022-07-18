@@ -10,7 +10,7 @@ use App\Report;
 use App\ReportType;
 use Auth;
 use Exception;
-
+use Illuminate\Http\File;
 class ReportController extends Controller
 {
     //
@@ -29,7 +29,7 @@ class ReportController extends Controller
             $orderby = 'desc';
             $sort_by = 'id';
         }
-        $reports =  Report::with('project','reportCreator','project.members','type','project.customer','office','office.office','office.office.media')->orderBy($sort_by, $orderby);
+        $reports =  Report::with('project','reportCreator','media','project.members','type','project.customer','office','office.office','office.office.media')->orderBy($sort_by, $orderby);
         if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
             $reports = $reports->where('created_by', Auth::user()->id);
         }
@@ -44,22 +44,24 @@ class ReportController extends Controller
         if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER' || Auth::user()->user_type_log=='SITE_MANAGENMENT')
        { try {
             DB::beginTransaction();
-
-         //   $name = $request->input('name');
-         //   $description = $request->input('description');
             $project_id = $request->input('project_id');
-            if($request->input('office_id')!=null)
-            $office_id = $request->input('office_id');
-            else
+            if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') 
             $office_id = Auth::id();
+            else
+            $office_id = $request->input('office_id');
             $report_type = $request->input('type');
-          // dd($request->all());
-            Report::create([
+           
+            $report = Report::create([
                         'project_id' => $project_id,
                         'type_id'=>$report_type,
                         'created_by'=>Auth::id(),
                         'office_id'=> $office_id,
                     ]);
+                   // if($request->hasFile('pdfFile'))
+                     
+                  //   $reportFile = file_put_contents('report'.time().'.pdf', $request->pdfFile);
+                     
+               $report->addMedia($request->pdfFile)->usingFileName('report'.time().'.pdf')->toMediaCollection('report');
             DB::commit();
             $output = $this->respondSuccess(__('messages.printed_saved_successfully'));
             
@@ -166,7 +168,16 @@ class ReportController extends Controller
              $item->type_name = $item->type_name_en;
              return $item;
         });
-        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report','report.reportCreator','report.type')->get();
+        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report','report.reportCreator','report.type');
+        if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
+            $projects = $projects->where(function($q) {
+                $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) {
+                $qu->Where('user_id', Auth::user()->id);
+            }); 
+            })->get();
+        }
+        else
+        $projects = $projects->get();
         $offices= User::with('office','office.media')->where('user_type_log','ENGINEERING_OFFICE_MANAGER')->get();
         $data = ['offices' => $offices, 'types' => $types, 'projects' => $projects ];
 

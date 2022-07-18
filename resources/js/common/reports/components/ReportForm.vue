@@ -1,8 +1,7 @@
 <template>
 <div>
-    <v-card-text id="printMe">
-                <v-container grid-list-md>
-<div class="mx-5 px-1"  style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">
+                <v-container grid-list-md  id="printMe" ref="pdfHtml">
+<div class="mx-4 mt-5 px-1"  style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">
   <div class="d-flex justify-space-between header layout">
     <div class="title">{{ localOffice && localOffice.office?localOffice.office.title:'' }}</div>
     <div class="logo"><img style="max-width:150px" :src="localOffice && localOffice.office && localOffice.office.media[localOffice.office.media.length-1]?localOffice.office.media[localOffice.office.media.length-1].full_url.replace('upload','public/upload'):''" /></div>
@@ -42,10 +41,12 @@
      <v-flex xs12 sm4 md4 class="height-detect merge_rows justify-center" style="border-end: 1px solid gray;border-start: 1px solid gray;">
       <v-text-field
             v-model="reportData.work_to_check"
+           :rules="rulesText1"
+           class="text-input"
           ></v-text-field>
     </v-flex>
      <v-flex xs12 sm4 md4 class="merge_rows justify-center height-detect">
-         (<v-text-field style="max-width:25px;margin-left: 5px!important;margin-right: 5px!important;"></v-text-field>)
+         (<v-text-field class="text-input" :rules="rulesText2" style="max-width:35px;margin-left: 5px!important;margin-right: 5px!important;"></v-text-field>)
     </v-flex>
     <v-flex xs12 sm4 md4 class="height-detect">
         <div class="label mx-2">{{trans('data.date')}} : {{create_time}}</div>
@@ -53,10 +54,10 @@
     <v-flex xs12 sm4 md4 class="height-detect" style="border-end: 1px solid gray;border-start: 1px solid gray;"></v-flex>
     <v-flex xs12 sm4 md4 ></v-flex>
      <v-flex xs12 sm8 md8 class="height-detect" style="border-end: 1px solid gray;">
-        <div class="label mx-2">{{trans('data.contractor_actor')}} :</div>
+        <div class="label mx-2 d-flex">{{trans('data.contractor_actor')}} :  <v-text-field class="text-input" :rules="rulesText1" style="max-height: 2.5rem;"></v-text-field> </div>
     </v-flex>
     <v-flex xs12 sm4 md4 class="height-detect">
-        <div class="label">{{trans('data.signature')}} :</div>
+        <div class="label d-flex">{{trans('data.signature')}} : <v-text-field class="text-input" :rules="rulesText1" style="max-height: 2.5rem;"></v-text-field> </div>
     </v-flex>
   </v-layout>
   <v-layout row wrap>
@@ -70,26 +71,38 @@
      <v-flex xs12 sm1 md1 style="border-end:1px solid gray; ">{{ index+1 }}</v-flex>
       <v-flex xs12 sm6 md6 style="border-end:1px solid gray;">{{ type_list }}</v-flex>
       <v-flex xs12 sm1 md1 style="border-end:1px solid gray;">
-        <v-text-field style="max-height: 2.5rem;"></v-text-field> 
+           <v-select
+          :items="options"
+          
+        ></v-select>
       </v-flex>
       <v-flex xs12 sm2 md2 style="border-end:1px solid gray;">
-        <v-text-field style="max-height: 2.5rem;"></v-text-field> 
+           <v-select
+          :items="options"
+          
+        ></v-select>
       </v-flex>
-      <v-flex xs12 sm2 md2 class="last-col" style="">
-        <v-text-field style="max-height: 2.5rem;"></v-text-field> 
+      <v-flex xs12 sm2 md2 class="last-col">
+        <v-textarea counter="6"></v-textarea>
       </v-flex>
 </v-layout>
 <v-layout class="list-items"  v-if="language == 'ar'" row wrap v-for="(type_list, index) in localreportType.type_list_ar" :key="index+'x'">
      <v-flex xs12 sm1 md1 style="border-end:1px solid gray; ">{{ index+1 }}</v-flex>
       <v-flex xs12 sm6 md6 style="border-end:1px solid gray;">{{ type_list }}</v-flex>
       <v-flex xs12 sm1 md1 style="border-end:1px solid gray;">
-        <v-text-field style="max-height: 2.5rem;"></v-text-field> 
+            <v-select
+          :items="options"
+          
+        ></v-select>
       </v-flex>
       <v-flex xs12 sm2 md2 style="border-end:1px solid gray;">
-        <v-text-field style="max-height: 2.5rem;"></v-text-field> 
+            <v-select
+          :items="options"
+          
+        ></v-select>
       </v-flex>
-      <v-flex xs12 sm2 md2 class="last-col" style="">
-        <v-text-field style="max-height: 2.5rem;"></v-text-field> 
+      <v-flex xs12 sm2 md2 class="last-col">
+        <v-textarea counter="6"></v-textarea>
       </v-flex>
 </v-layout>
      
@@ -101,17 +114,17 @@
         </div>
         <div class="px-2 footer-item">
           1 {{trans('data.Acceptable')}} (
-           <v-text-field style="max-width:15px;max-height: 2.5rem;margin: 5px!important;"></v-text-field>
+                 <v-select style="max-width:30px;max-height: 2.5rem;margin: 5px!important;" :items="options"></v-select>
           )
         </div>
             <div class="px-2 footer-item">
           2 {{trans('data.Accepted comments')}} (
-            <v-text-field style="max-width:15px;max-height: 2.5rem;margin: 5px!important;"></v-text-field>
+            <v-select style="max-width:30px;max-height: 2.5rem;margin: 5px!important;" :items="options"></v-select>
           )
         </div>
             <div class="px-2 footer-item">
           3 {{trans('data.unacceptable')}} (
-                <v-text-field style="max-width:15px;max-height: 2.5rem;margin: 5px!important;"></v-text-field>
+              <v-select style="max-width:30px;max-height: 2.5rem;margin: 5px!important;" :items="options"></v-select>
          )
         </div>
         </div>
@@ -119,23 +132,26 @@
         <div class="footer-item mt-2">{{trans('data.Supervising engineer')}}:
          <v-text-field
             style="max-height: 2.5rem;"
+            class="text-input"
+            :rules="rulesText1"
           ></v-text-field></div>
          <div class="footer-item mt-2">{{trans('data.signature')}}:
              <v-text-field
             style="max-height: 2.5rem;"
+            class="text-input"
+              :rules="rulesText1"
           ></v-text-field>
          </div>
         </div>
      </v-layout>
 </div>
                 </v-container>
-    </v-card-text>
         <v-btn
                 style="background-color: #06706d; color: white"
                 color="darken-1"
                 class="mt-3"
                 v-if="!edit"
-                @click="store"
+                @click="printPdf"
                 :loading="loading"
                 :disabled="loading"
             >
@@ -145,8 +161,12 @@
 </template>
 
 <script>
-import { isThisISOWeek } from 'date-fns';
+import jsPDF from 'jspdf';
+import html2canvas from "html2canvas"
 export default {
+  components:{
+jsPDF
+  },
   props:{
     reportType: null,
     project: null,
@@ -163,7 +183,15 @@ data(){
      language: 'ar',
      localreportType: null,
      localOffice: null,
-     contractors: []
+     contractors: [],
+     pdfBlob: null,
+     options:[this.trans('data.yes'),this.trans('data.no')],
+      rulesText1: [
+           v => v &&v.length <= 12 || 'Max 12 characters',
+      ],
+        rulesText2: [
+           v => v &&v.length <= 5 || 'Max 5 characters',
+      ],
   }
 },
 created(){
@@ -186,6 +214,23 @@ this.getReportData();
   }
 },
 methods:{
+
+    printPdf() {
+    //  const doc = new jsPDF("p", "pt", "a4", true, { compress: true });
+      const Html = this.$refs.pdfHtml;
+      html2canvas(Html,{
+        scale: 0.99999999
+      })
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF("","", "a4", true, { compress: true });
+        
+        pdf.addImage(imgData, 'PNG', 0, 0);
+        this.pdfBlob = pdf.output('blob');
+         this.store()
+        window.open(pdf.output("bloburl"), "_blank")
+  });
+    },
       getReportData() {
          const self = this;
                      if(self.edit){
@@ -206,20 +251,19 @@ methods:{
         },
            store() {
             const self = this;
-            
-            let data = {
-                project_id: self.project.id,
-                office_id:self.office?.id,
-                type: this.reportType.id,
-                contractor_id: self.contractor?.id
-            };
+            let formData = new FormData();
+            formData.append('pdfFile', self.pdfBlob);
+            formData.append('project_id', self.project.id);
+            formData.append('office_id', self.office?.id);
+            formData.append('type', self.reportType.id);
             self.$validator.validateAll().then((result) => {
                 if (result == true) {
                     self.loading = true;
                     axios
-                        .post('/reports', data)
+                        .post('/reports', formData)
                         .then(function (response) {
                             self.loading = false;
+                            console.log(response.data.msg);
                             self.$store.commit('showSnackbar', {
                                 message: response.data.msg,
                                 color: response.data.success,
@@ -233,7 +277,7 @@ methods:{
                         });
                 }
             });
-            //self.reset();
+           
         },
     currentDateTime() {
             const current = new Date();
@@ -255,9 +299,12 @@ this.$forceUpdate();
 .sm1, .md1,.sm6,.md6,.sm2 ,.md2{
   justify-content: center;
 }
+.logo{
+  text-align: end;
+}
 .title {
   padding: 20px;
-  text-align: center;
+  text-align: start;
 }
 .header{
   border-bottom: 1px solid gray;
@@ -273,8 +320,8 @@ this.$forceUpdate();
     background: #ededed;
     padding: 10px;
 }
-.type_num{
-  
+.v-text-field input {
+  text-align: center!important;
 }
 .type_name{
   width: 100%;
@@ -302,8 +349,14 @@ this.$forceUpdate();
 ::v-deep .theme--light.v-text-field>.v-input__control>.v-input__slot:before{
   border:none!important
 }
-.v-text-field{
+.text-input{
   margin:-0.3rem 15px 15px 0!important;
   padding: 0;
 }
+  .v-text-field >>> input {
+      text-align: center!important;
+    }
+  .v-select >>> .v-input__icon {
+      display: none!important;
+    }
 </style>

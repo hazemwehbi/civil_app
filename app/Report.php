@@ -3,9 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Activitylog\LogOptions;
 
-class Report extends Model
+class Report extends Model implements HasMedia
 {
+    use LogsActivity , InteractsWithMedia;
    protected $guarded = ['id'];
 
     public function project()
@@ -16,7 +21,10 @@ class Report extends Model
     {
         return $this->belongsTo('App\ReportType');
     }
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults();
+    }
    /**
      * Return the creator of task.
      */

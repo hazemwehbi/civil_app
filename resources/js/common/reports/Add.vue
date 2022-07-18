@@ -1,5 +1,7 @@
 <template id="panel-template">
+
     <v-container justify-center>
+        <v-form>
         <v-card-actions justify-left>
             <v-btn style="color: #06706d" @click="$router.go(-1)">
                 {{ trans('messages.back') }}
@@ -7,7 +9,7 @@
              <v-btn style="color: #06706d" @click="externalDialog = true">
                 {{ trans('data.reportTypeAdd') }}
             </v-btn>
-            <v-btn
+           <!-- <v-btn
                 style="background-color: #06706d; color: white"
                 color="darken-1"
                 @click="print"
@@ -15,17 +17,18 @@
                 :disabled="loading"
             >
                 {{ trans('data.print') }}
-            </v-btn>
+            </v-btn>-->
                             <v-autocomplete
                                 id="input_report_type"
                                 class="mx-2"
                                 item-text="type_name"
                                 :items="report_types"
                                 v-model="report_type"
+                                :rules="requiredRules"
                                 :label="trans('data.report_type')"
                                 v-validate="'required'"
-                                data-vv-name="report_type"
-                                :data-vv-as="trans('data.report_type')"
+                                 data-vv-name="report_type"
+                                :data-vv-as="trans('data.required')"
                                 :error-messages="errors.collect('report_type')"
                                 return-object
                                 required
@@ -37,11 +40,13 @@
                                 item-text="name"
                                 :items="offices"
                                 v-model="office"
+                                :rules="requiredRules"
                                 @change="getProjectsOffice"
                                 :label="trans('data.enginnering_office_name')"
                                 v-validate="'required'"
-                                data-vv-name="input_office"
-                                :data-vv-as="trans('data.enginnering_office_name')"
+                                data-vv-name="office"
+                                :data-vv-as="trans('data.required')"
+                                :error-messages="errors.collect('office')"
                                 return-object
                                 required
                             ></v-autocomplete>
@@ -51,26 +56,30 @@
                                 item-text="name"
                                 :items="projects"
                                 v-model="project"
+                                :rules="requiredRules"
                                 :label="trans('data.projects')"
                                 v-validate="'required'"
-                                data-vv-name="input_project"
-                                :data-vv-as="trans('data.projects')"
+                                data-vv-name="project"
+                                :data-vv-as="trans('data.required')"
+                                :error-messages="errors.collect('project')"
                                 return-object
                                 required
                             ></v-autocomplete>
                                  
         </v-card-actions>
         <v-spacer></v-spacer>
-        <v-card onafterprint="myFunction()">
+        <v-card onafterprint="myFunction()" class="mx-auto" style="width:70%">
             <v-divider></v-divider>
                     <ReportForm :reportType="report_type" :office="office"  :project="project" />
         </v-card>
+        </v-form>
         <AddReportType :externalDialog="externalDialog" @close="externalDialog = event" @store="externalDialog = event" />
     </v-container>
 </template>
 <script>
 import AddReportType from '../report_types/Add.vue'
 import ReportForm from './components/ReportForm.vue'
+
 export default {
     components:{
      AddReportType,
@@ -89,6 +98,9 @@ export default {
             create_time: '',
              loading:false,
             projects:[],
+                requiredRules: [
+       // v => !!v || trans('data.required'),
+      ],
         };
     },
     created() {
@@ -143,7 +155,7 @@ export default {
         },
          print() {
             const self = this;
-            self.$validator.validateAll().then((result) => {
+         /*   self.$validator.validateAll().then((result) => {
                 if (result == true) {
                     // Pass the element id here
                    // document.getElementById('input_name').setAttribute('value', this.name);
@@ -193,7 +205,7 @@ export default {
                     WinPrint.close();
                     this.store();
                 }
-            });
+            });*/
         },
     },
 };
