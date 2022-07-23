@@ -44,7 +44,13 @@
                                 </v-list-tile> -->
                                  <v-list-tile
                                     v-if="$hasRole('Engineering Office Manager')|| $hasRole('superadmin')"
-                                   @click="openReport(props.item)">
+                                   @click="$router.push({name: 'edit_report', 
+                                   params:{
+                                    id :props.item.id,
+                                    url: props.item.media[props.item.media.length-1].full_url.replace('upload','public/upload')
+                                   // id :props.item.media[props.item.media.length-1].original_url
+                                   }
+                                                                        })">
                                     <v-list-tile-title>
                                         <v-icon small class="mr-2"> show </v-icon>
                                         {{ trans('data.report_review') }}
@@ -149,7 +155,6 @@ export default {
     },
     methods: {
         openReport(report){
-            console.log(report.media)
             if(report.media.length>0)
         window.open(report.media[report.media.length-1].full_url.replace('upload','public/upload'), '_blank')
         },

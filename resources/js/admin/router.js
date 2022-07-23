@@ -508,9 +508,10 @@ const router = new Router({
             props: route => ({ project: route.params.project }),
         },
         {
-            path: '/edit_report',
+            path: '/edit_report/:id',
             name: 'edit_report',
             component: edit_report,
+            props: route => ({ report: route.params.report }),
         },
 
         {

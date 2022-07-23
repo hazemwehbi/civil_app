@@ -8,7 +8,7 @@
                     {{ trans('data.Engineering_offices_system') }}
                 </h1>
             </v-flex>
-            <v-card pt-3 :class="testtt">
+            <v-card pt-3>
                 <v-card-text>
                     <v-container grid-list-lg>
                         <v-layout wrap>

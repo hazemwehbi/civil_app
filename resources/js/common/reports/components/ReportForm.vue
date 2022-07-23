@@ -1,16 +1,17 @@
 <template>
 <div>
+  <div>
                 <v-container grid-list-md  id="printMe" ref="pdfHtml">
-<div class="mx-4 mt-5 px-1"  style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">
-  <div class="d-flex justify-space-between header layout">
+<div class="mt-5"  style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">
+  <div class="d-flex justify-space-between header">
     <div class="title">{{ localOffice && localOffice.office?localOffice.office.title:'' }}</div>
     <div class="logo"><img style="max-width:150px" :src="localOffice && localOffice.office && localOffice.office.media[localOffice.office.media.length-1]?localOffice.office.media[localOffice.office.media.length-1].full_url.replace('upload','public/upload'):''" /></div>
   </div>
-  <div class="type_data layout">
+  <div class="type_data">
     <div class="type_name">{{ language == 'ar'?localreportType.type_name_ar:localreportType.type_name_en }}</div>
     <div class="type_num">{{ localreportType.id }}</div>
   </div>
- <v-layout row wrap>
+ <v-layout row wrap class="px-1">
       <v-flex xs12 sm12 md12 class="height-detect">
         <div class="label mx-2">{{trans('data.owner')}} : {{ reportData.owner }}</div>
       
@@ -46,85 +47,139 @@
           ></v-text-field>
     </v-flex>
      <v-flex xs12 sm4 md4 class="merge_rows justify-center height-detect">
-         (<v-text-field class="text-input" :rules="rulesText2" style="max-width:35px;margin-left: 5px!important;margin-right: 5px!important;"></v-text-field>)
+         (<v-text-field class="text-input" :rules="rulesNumber" style="max-width:35px;margin-left: 5px!important;margin-right: 5px!important;"></v-text-field>)
     </v-flex>
     <v-flex xs12 sm4 md4 class="height-detect">
         <div class="label mx-2">{{trans('data.date')}} : {{create_time}}</div>
     </v-flex>
     <v-flex xs12 sm4 md4 class="height-detect" style="border-end: 1px solid gray;border-start: 1px solid gray;"></v-flex>
     <v-flex xs12 sm4 md4 ></v-flex>
-     <v-flex xs12 sm8 md8 class="height-detect" style="border-end: 1px solid gray;">
+     <v-flex xs12 sm8 md8 class="height-detect" style="border-end: 1px solid gray; border-bottom:none">
         <div class="label mx-2 d-flex">{{trans('data.contractor_actor')}} :  <v-text-field class="text-input" :rules="rulesText1" style="max-height: 2.5rem;"></v-text-field> </div>
     </v-flex>
-    <v-flex xs12 sm4 md4 class="height-detect">
+    <v-flex xs12 sm4 md4 class="height-detect" style="border-bottom:none">
         <div class="label d-flex">{{trans('data.signature')}} : <v-text-field class="text-input" :rules="rulesText1" style="max-height: 2.5rem;"></v-text-field> </div>
     </v-flex>
   </v-layout>
-  <v-layout row wrap>
+
+<table>
+
+    <tr>
+      <th width="5%" style="border-end:1px solid gray;" class="py-2">{{trans('data.serial')}}</th>
+      <th width="40%" style="border-end:0.5px solid gray;" class="py-2">{{trans('data.list review')}}</th>
+      <th width="12%" style="border-end:1px solid gray;" class="py-2">{{trans('data.equal')}}</th>
+      <th width="13%" style="border-end:1px solid gray;" class="py-2">{{trans('data.not equal')}}</th>
+      <th width="30%" class="last-col">{{trans('data.notes')}}</th>
+    </tr>
+  
+<tr  v-if="language == 'ar'" row wrap v-for="(type_list, index) in localreportType.type_list_ar" :key="index+'x'">
+   <td style="border-end:1px solid gray; " class="py-2"> {{ index+1 }}</td>
+    <td style="border-end:0.5px solid gray; " class="py-2"> {{ type_list }}</td>
+    <td style="border-end:1px solid gray;" class="py-2"> 
+                    <v-switch
+              color="success"
+              class="my-auto mx-2"
+              hide-details
+            ></v-switch>
+      </td>
+  <td style="border-end:1px solid gray; " class="py-2"> 
+               <v-switch
+              color="success"
+              hide-details
+              class="my-auto mx-2"
+            ></v-switch>
+      </td>
+   <td :rowspan="localreportType.type_list_ar.length" >  
+        <v-textarea v-if="index==0" :rows="localreportType.type_list_ar.length" cols="8" class="mx-1"></v-textarea>
+      </td>
+  </tr>
+<tr  v-if="language == 'en'" row wrap v-for="(type_list, index) in localreportType.type_list_en" :key="index+'x'">
+   <td style="border-end:1px solid gray; " class="py-2"> {{ index+1 }}</td>
+    <td style="border-end:0.5px solid gray; " class="py-2"> {{ type_list }}</td>
+    <td style="border-end:1px solid gray;" class="py-2"> 
+                    <v-switch
+              color="success"
+              class="my-auto mx-2"
+              hide-details
+            ></v-switch>
+      </td>
+  <td style="border-end:1px solid gray; " class="py-2"> 
+               <v-switch
+              color="success"
+              hide-details
+              class="my-auto mx-2"
+            ></v-switch>
+      </td>
+   <td :rowspan="localreportType.type_list_ar.length">  
+        <v-textarea v-if="index==0" :rows="localreportType.type_list_ar.length" cols="8" class="mx-1"></v-textarea>
+      </td>
+  </tr>
+</table>
+  <!--<v-layout row wrap>
       <v-flex xs12 sm1 md1 style="border-end:1px solid gray;">{{trans('data.serial')}}</v-flex>
       <v-flex xs12 sm6 md6 style="border-end:1px solid gray;">{{trans('data.list review')}}</v-flex>
       <v-flex xs12 sm1 md1 style="border-end:1px solid gray;">{{trans('data.equal')}}</v-flex>
-      <v-flex xs12 sm2 md2 style="border-end:1px solid gray;">{{trans('data.not equal')}}</v-flex>
-      <v-flex xs12 sm2 md2 class="last-col">{{trans('data.notes')}}</v-flex>
-      </v-layout>
-<v-layout class="list-items"  row wrap v-for="(type_list, index) in localreportType.type_list_en" :key="index" v-if="language == 'en'">
+      <v-flex xs12 sm1 md1 style="border-end:1px solid gray;">{{trans('data.not equal')}}</v-flex>
+      <v-flex xs12 sm3 md3 class="last-col">{{trans('data.notes')}}</v-flex>
+      </v-layout>-->
+<!--<v-layout class="list-items"  row wrap v-for="(type_list, index) in localreportType.type_list_en" :key="index" v-if="language == 'en'">
      <v-flex xs12 sm1 md1 style="border-end:1px solid gray; ">{{ index+1 }}</v-flex>
       <v-flex xs12 sm6 md6 style="border-end:1px solid gray;">{{ type_list }}</v-flex>
       <v-flex xs12 sm1 md1 style="border-end:1px solid gray;">
-           <v-select
-          :items="options"
-          
-        ></v-select>
+          <v-switch
+              color="success"
+              hide-details
+            ></v-switch>
       </v-flex>
-      <v-flex xs12 sm2 md2 style="border-end:1px solid gray;">
-           <v-select
-          :items="options"
-          
-        ></v-select>
+      <v-flex xs12 sm1 md1 style="border-end:1px solid gray;">
+                    <v-switch
+              color="success"
+              hide-details
+            ></v-switch>
       </v-flex>
-      <v-flex xs12 sm2 md2 class="last-col">
-        <v-textarea counter="6"></v-textarea>
+      <v-flex xs12 sm3 md3>
+        <v-textarea rows="2" cols="8"></v-textarea>
       </v-flex>
-</v-layout>
-<v-layout class="list-items"  v-if="language == 'ar'" row wrap v-for="(type_list, index) in localreportType.type_list_ar" :key="index+'x'">
+</v-layout>-->
+<!--<v-layout class="list-items"  v-if="language == 'ar'" row wrap v-for="(type_list, index) in localreportType.type_list_ar" :key="index+'x'">
      <v-flex xs12 sm1 md1 style="border-end:1px solid gray; ">{{ index+1 }}</v-flex>
       <v-flex xs12 sm6 md6 style="border-end:1px solid gray;">{{ type_list }}</v-flex>
       <v-flex xs12 sm1 md1 style="border-end:1px solid gray;">
-            <v-select
-          :items="options"
-          
-        ></v-select>
+                    <v-switch
+              color="success"
+              hide-details
+            ></v-switch>
       </v-flex>
-      <v-flex xs12 sm2 md2 style="border-end:1px solid gray;">
-            <v-select
-          :items="options"
-          
-        ></v-select>
+      <v-flex xs12 sm1 md1 style="border-end:1px solid gray;">
+               <v-switch
+              color="success"
+              hide-details
+            ></v-switch>
       </v-flex>
-      <v-flex xs12 sm2 md2 class="last-col">
-        <v-textarea counter="6"></v-textarea>
+      <v-flex xs12 sm3 md3 rowspan="3">
+        <v-textarea rows="2" cols="8"></v-textarea>
       </v-flex>
-</v-layout>
+</v-layout>-->
      
     
-     <v-layout row wrap>
+     <v-layout row wrap class="px-1">
       <div style="border-end:1px solid gray;border-bottom:1px solid gray;width:50%">
         <div class="px-2 py-1" style="border-bottom:1px solid gray;background:#ededed">
         {{trans('data.Rating scores')}}:
         </div>
         <div class="px-2 footer-item">
           1 {{trans('data.Acceptable')}} (
-                 <v-select style="max-width:30px;max-height: 2.5rem;margin: 5px!important;" :items="options"></v-select>
+                 <v-text-field class="text-input" :rules="rulesText2" style="max-height: 2.5rem;max-width: 4rem;margin:0"></v-text-field>
           )
         </div>
             <div class="px-2 footer-item">
           2 {{trans('data.Accepted comments')}} (
-            <v-select style="max-width:30px;max-height: 2.5rem;margin: 5px!important;" :items="options"></v-select>
+            <v-text-field class="text-input" :rules="rulesText2" style="max-height: 2.5rem;max-width: 4rem;margin:0"></v-text-field>
           )
         </div>
             <div class="px-2 footer-item">
           3 {{trans('data.unacceptable')}} (
-              <v-select style="max-width:30px;max-height: 2.5rem;margin: 5px!important;" :items="options"></v-select>
+             <v-text-field class="text-input" :rules="rulesText2" style="max-height: 2.5rem;max-width: 4rem;margin:0"></v-text-field>
          )
         </div>
         </div>
@@ -158,11 +213,15 @@
                 {{ trans('data.save') }}
             </v-btn>
 </div>
+	
+</div>
 </template>
 
 <script>
 import jsPDF from 'jspdf';
 import html2canvas from "html2canvas"
+
+
 export default {
   components:{
 jsPDF
@@ -183,22 +242,28 @@ data(){
      language: 'ar',
      localreportType: null,
      localOffice: null,
+currentPage: 0,
+			pageCount: 0,
      contractors: [],
      pdfBlob: null,
      options:[this.trans('data.yes'),this.trans('data.no')],
       rulesText1: [
-           v => v &&v.length <= 12 || 'Max 12 characters',
+           v => v.length <= 12 || 'Max 12 characters',
       ],
         rulesText2: [
-           v => v &&v.length <= 5 || 'Max 5 characters',
+           v => v.length <= 5 || 'Max 5 characters',
       ],
+      rulesNumber:[
+        v => v.length <= 5 || 'Max 5 characters',
+        v => Number.isInteger(Number(v)) || 'The value must be an integer number',
+      ]
   }
 },
 created(){
   const self = this;
   self.currentDateTime();
-   self.getReportData();
-  self.language = localStorage.getItem('currentLange')
+  self.getReportData();
+  self.language = localStorage.getItem('currentLange')?localStorage.getItem('currentLange'):'ar'
 
 },
 watch:{
@@ -228,7 +293,7 @@ methods:{
         pdf.addImage(imgData, 'PNG', 0, 0);
         this.pdfBlob = pdf.output('blob');
          this.store()
-        window.open(pdf.output("bloburl"), "_blank")
+      //  window.open(pdf.output("bloburl"), "_blank")
   });
     },
       getReportData() {
@@ -320,9 +385,6 @@ this.$forceUpdate();
     background: #ededed;
     padding: 10px;
 }
-.v-text-field input {
-  text-align: center!important;
-}
 .type_name{
   width: 100%;
     text-align: center;
@@ -336,6 +398,14 @@ this.$forceUpdate();
   display: flex;
   border-bottom: 1px solid gray;
 }
+
+table, th, td {
+  text-align: center;
+  border-top: 0.5px solid gray;
+  border-bottom: 0.5px solid gray;
+  border-collapse: collapse;
+  min-width: 100%;
+}
 .height-detect{
   height: 2rem;
 }
@@ -346,17 +416,17 @@ this.$forceUpdate();
   max-width: fit-content;
   white-space: nowrap;
 }
-::v-deep .theme--light.v-text-field>.v-input__control>.v-input__slot:before{
-  border:none!important
-}
+/*::v-deep .theme--light.v-text-field>.v-input__control>.v-input__slot:before{
+  border:none!important 
+}*/
 .text-input{
-  margin:-0.3rem 15px 15px 0!important;
+  margin:-0.6rem 15px 0 15px;
   padding: 0;
 }
   .v-text-field >>> input {
       text-align: center!important;
     }
-  .v-select >>> .v-input__icon {
-      display: none!important;
-    }
+ /*  .v-select >>> .v-input__icon {
+     display: none!important; 
+    }*/
 </style>

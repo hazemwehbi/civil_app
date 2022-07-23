@@ -56,8 +56,6 @@ class DesignRequestController extends  Controller
                     ->paginate($rowsPerPage);
 
        return $this->respondSuccess($requests);
-        
-      
     }
 
     

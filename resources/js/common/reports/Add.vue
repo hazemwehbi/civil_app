@@ -68,9 +68,8 @@
                                  
         </v-card-actions>
         <v-spacer></v-spacer>
-        <v-card onafterprint="myFunction()" class="mx-auto" style="width:70%">
-            <v-divider></v-divider>
-                    <ReportForm :reportType="report_type" :office="office"  :project="project" />
+        <v-card class="mx-auto" style="max-width: 70%">
+                    <ReportForm  :reportType="report_type" :office="office" :project="project" />
         </v-card>
         </v-form>
         <AddReportType :externalDialog="externalDialog" @close="externalDialog = event" @store="externalDialog = event" />

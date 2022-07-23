@@ -291,6 +291,7 @@
     <script type="text/javascript">
 const isEmpty = str => !str.trim().length;
 var language;
+localStorage.setItem("currentLange","{{ app()->getLocale() }}");
  function change(lang){
         ///lang/ar
         localStorage.setItem("currenpathaftercjange",localStorage.getItem("currenpath"));

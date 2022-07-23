@@ -81,7 +81,7 @@ class ReportController extends Controller
     //    die();
         try {
            // $project_id = request()->get('project_id');
-            $report = Report::findOrFail($id);
+            $report = Report::with('project','reportCreator','media','project.members','type','project.customer','office','office.office','office.office.media')->findOrFail($id);
                               //  ->
 //where('notable_id', $project_id)
             $output = $this->respond($report);

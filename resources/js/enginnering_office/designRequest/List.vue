@@ -155,6 +155,7 @@ export default {
         const self = this;
         return {
             dialog: false,
+            loading: false,
             headers: [
                 {
                     text: self.trans('messages.action'),

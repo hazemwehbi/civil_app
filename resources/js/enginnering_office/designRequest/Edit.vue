@@ -76,7 +76,6 @@
                                     <v-text-field
                                         v-model="design.note"
                                         :label="trans('data.note')"
-                                        :readonly="isEdit"
                                     ></v-text-field>
                                 </v-flex>
                             </v-layout>

@@ -52,8 +52,8 @@
                          <div v-if="employees.length > 0">
                         <h3>{{ trans('data.employees') }}</h3>
                         <v-layout
-                            v-for="enginner in employees"
-                            :key="enginner != undefined ? enginner.id : 0"
+                            v-for="(enginner,index) in employees"
+                            :key="index+'jj'"
                         >
                             <v-flex xs12 md12>
                                 <v-card light>
@@ -134,6 +134,9 @@ export default {
     },
 
     methods: {
+        update(){
+
+        },
         close() {
             const self = this;
             self.loading = false;
