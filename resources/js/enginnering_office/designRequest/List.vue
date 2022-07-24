@@ -95,8 +95,8 @@
                         </div>
                     </td>
                     <td>
-                        <div align="center">
-                            {{ props.item.office.name }}
+                       <div align="center">
+                            <span v-for="(office,index) in props.item.offices" :key="office.id"> {{ office.name }}<span v-if="index != props.item.offices.length-1">, </span> </span>
                         </div>
                     </td>
                     <td>

@@ -147,10 +147,10 @@ class ProjectController extends Controller
         $endDate = $request->input('endDate');
             if(!empty($startDate))
           {
-        $projects= $projects->whereDate('start_date', Carbon::parse($startDate));
+        $projects= $projects->whereDate('start_date','>=', Carbon::parse($startDate));
         }
         if(!empty($endDate))
-        $projects= $projects->whereDate('end_date',Carbon::parse($endDate));  
+        $projects= $projects->whereDate('end_date','<=',Carbon::parse($endDate));  
        if(!empty($request->input('type'))){
             $search= $request->input('search');
             $tableChild= $request->input('type');

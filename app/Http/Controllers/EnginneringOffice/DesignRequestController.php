@@ -54,7 +54,10 @@ class DesignRequestController extends  Controller
         }
 
            $id =$user->id;
-        $requests = DesignRequest::with('stages','customer','project','office','designEnginners')->WhereIn('status',['sent','rejected','accepted','in_progress','completed'])->where('office_id', $user->id)->orWhereHas('designEnginners', function ($q) use ($id) {
+        $requests = DesignRequest::with('stages','customer','project','offices','designEnginners')->WhereIn('status',['sent','rejected','accepted','in_progress','completed'])->
+        whereHas('offices',function($q) use ($user){
+           $q->where('office_id', $user->id);
+        })->orWhereHas('designEnginners', function ($q) use ($id) {
               $q->where('enginner_id', $id);
               $q->where('is_active', 1);
           });

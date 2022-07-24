@@ -65,6 +65,11 @@ class User extends Authenticatable implements HasMedia
      *
      * @param $password
      */
+    
+    public function designRequests()
+    {
+        return $this->belongsToMany('Models\DesignRequest','design_request_office');
+    }
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = bcrypt($password);

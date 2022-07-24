@@ -22,9 +22,9 @@ class DesignRequest extends Model
         return $this->belongsTo('App\Components\User\Models\User','customer_id');
     }
 
-    public function office()
+    public function offices()
     {
-        return $this->belongsTo('App\Components\User\Models\User','office_id');
+        return $this->belongsToMany('App\Components\User\Models\User','design_request_office','design_request_id','office_id');
     }
 
     public function project()

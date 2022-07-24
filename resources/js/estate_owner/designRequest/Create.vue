@@ -48,6 +48,7 @@
                                                     name: trans('messages.customer'),
                                                 }),
                                         ]"
+                                        
                                         required
                                     ></v-autocomplete>
                                 </v-flex>
@@ -67,6 +68,7 @@
                                                     name: trans('data.enginnering_office_name'),
                                                 }),
                                         ]"
+                                        multiple
                                         required
                                     ></v-autocomplete>
                                 </v-flex>

@@ -56,8 +56,8 @@ class DesignRequestController extends  Controller
 
         $childrens=$user->childrenIds($user->id);
         array_push($childrens,$user->id);
-        $requests = DesignRequest::with('stages','customer','project','office','designEnginners')->whereIn('customer_id', $childrens);
-       
+        
+        $requests = DesignRequest::with('stages','customer','offices','project','designEnginners')->whereIn('customer_id', $childrens);
 
         $requests = $requests->orderBy($sort_by, $orderby)
                     ->paginate($rowsPerPage);
@@ -97,11 +97,12 @@ class DesignRequestController extends  Controller
             $input['created_at']=Carbon::now();
             $input['created_by'] = Auth::id();
             $input['status']= $request->sent==0 ? 'new' : 'sent';
-            $request = DesignRequest::create($input);
-          
 
+            $request = DesignRequest::create($input);
+            $request->offices()->attach($input['office_id']);
+           
             if($request->sent== 1){
-                 $this->_saveAskDesignRequestOfferNotifications([$request->office_id], Auth::id());
+                 $this->_saveAskDesignRequestOfferNotifications($input['office_id'], Auth::id());
                  
             }
 
@@ -196,6 +197,7 @@ class DesignRequestController extends  Controller
 
             $request = DesignRequest::find($id);
             if($request!=  null){
+                $request->authors()->detach($request->offices);
                 $request->delete();
                 return  $this->respondSuccess(__('messages.deleted_successfully'));
             }
@@ -309,12 +311,12 @@ class DesignRequestController extends  Controller
 
 
     
-    protected function _saveAskDesignRequestOfferNotifications($member, $estate_id)
+    protected function _saveAskDesignRequestOfferNotifications($members, $estate_id)
     {
-       // foreach ($members as $member){
+        foreach ($members as $member){
             $notifiable_users = User::find($member);
             Notification::send($notifiable_users, new AskDesignRequestOffer($estate_id));
-        //}
+        }
     }
 
     protected function _saveProjectCreatedNotifications($members, $project_id)
