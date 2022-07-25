@@ -48,7 +48,6 @@ Route::prefix('admin')->
         Route::get('user-statistics', 'UserController@getStatistics');
         Route::get('users-all', 'UserController@getAllEmployee');
         Route::get('users/{id}/name', 'UserController@getEmployee');
-        Route::post('office_data','UserController@storeOfficeData');
         
         Route::resource('users', 'UserController');
 

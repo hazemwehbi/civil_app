@@ -309,9 +309,6 @@ class User extends Authenticatable implements HasMedia
          $roles=Role::all();      
         return $roles;
     }
-    public function office(){
-        return $this->hasOne(OfficeDetaile::class);
-    }
     public static function getRolesForCreateEmployee()
     {
         // $roles = Role::where('type', 'employee')

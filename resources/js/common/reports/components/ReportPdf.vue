@@ -1,7 +1,6 @@
 <template>
-<div>
-  <div>
-                <v-container grid-list-md  id="printMe">
+<div ref="pdfHtml">
+  <v-container grid-list-md  id="printMe">
 <div class="mt-5"  style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">
   <div class="d-flex justify-space-between header">
     <div class="title">{{ reportData.office?reportData.office.title:'' }}</div>
@@ -40,10 +39,10 @@
     
     </v-flex>
      <v-flex xs12 sm4 md4 class="height-detect merge_rows justify-center" style="border-end: 1px solid gray;border-start: 1px solid gray;">
-   {{ language == 'ar'?reportData.type.type_name_ar:reportData.type.type_name_en }}
+      {{ language == 'ar'?reportData.type.type_name_ar:reportData.type.type_name_en }}
     </v-flex>
      <v-flex xs12 sm4 md4 class="merge_rows justify-center height-detect">
-         ({{ reportData.id }})
+          ({{ reportData.id }})
     </v-flex>
     <v-flex xs12 sm4 md4 class="height-detect">
         <div class="label mx-2">{{trans('data.date')}} : {{reportData.create_time}}</div>
@@ -51,10 +50,10 @@
     <v-flex xs12 sm4 md4 class="height-detect" style="border-end: 1px solid gray;border-start: 1px solid gray;"></v-flex>
     <v-flex xs12 sm4 md4 ></v-flex>
      <v-flex xs12 sm8 md8 class="height-detect" style="border-end: 1px solid gray; border-bottom:none">
-        <div class="label mx-2 d-flex">{{trans('data.contractor_actor')}} :  <v-text-field v-model="reportData.contractor_actor" class="text-input" :rules="rulesText1" style="max-height: 2.5rem;"></v-text-field> </div>
+        <div class="label mx-2 d-flex">{{trans('data.contractor_actor')}} : {{reportData.contractor_actor}} </div>
     </v-flex>
     <v-flex xs12 sm4 md4 class="height-detect" style="border-bottom:none">
-        <div class="label d-flex">{{trans('data.signature')}} : <v-text-field  class="text-input" v-model="reportData.signature" :rules="rulesText1" style="max-height: 2.5rem;"></v-text-field> </div>
+        <div class="label d-flex">{{trans('data.signature')}} : {{reportData.signature}} </div>
     </v-flex>
   </v-layout>
 
@@ -63,7 +62,8 @@
     <tr>
       <th width="5%" style="border-end:1px solid gray;" class="py-2">{{trans('data.serial')}}</th>
       <th width="40%" style="border-end:0.5px solid gray;" class="py-2">{{trans('data.list review')}}</th>
-      <th width="14%" style="border-end:1px solid gray;" class="py-2">{{trans('data.equal')}}</th>
+      <th width="12%" style="border-end:1px solid gray;" class="py-2">{{trans('data.equal')}}</th>
+      <th width="13%" style="border-end:1px solid gray;" class="py-2">{{trans('data.not equal')}}</th>
       <th width="40%" class="last-col">{{trans('data.notes')}}</th>
     </tr>
   
@@ -71,193 +71,133 @@
    <td style="border-end:1px solid gray; " class="py-2"> {{ index+1 }}</td>
     <td style="border-end:0.5px solid gray; " class="py-2"> {{ type_list }}</td>
     <td style="border-end:1px solid gray;" class="py-2"> 
-                    <v-switch
-              color="success"
-              class="my-auto mx-2"
-              hide-details
-               v-model="reportData.equal[index]"
-            ></v-switch>
+            <v-icon v-if="reportData.equal[index]">check</v-icon>
       </td>
-   <td :rowspan="reportData.type.type_list_ar.length" >  
-        <v-textarea v-if="index==0"  v-model="reportData.notes" :rows="reportData.type.type_list_ar.length" cols="8" class="mx-1"></v-textarea>
+    <td style="border-end:1px solid gray; " class="py-2"> 
+           <v-icon v-if="!reportData.equal[index]">check</v-icon>
+      </td>
+     <td :rowspan="reportData.type.type_list_ar.length">  
+        <span v-if="index==0">{{reportData.notes}}</span>
       </td>
   </tr>
 <tr  v-if="language == 'en'" row wrap v-for="(type_list, index) in reportData.type.type_list_en" :key="index+'x'">
    <td style="border-end:1px solid gray; " class="py-2"> {{ index+1 }}</td>
     <td style="border-end:0.5px solid gray; " class="py-2"> {{ type_list }}</td>
     <td style="border-end:1px solid gray;" class="py-2"> 
-                    <v-switch
-              color="success"
-              class="my-auto mx-2"
-               v-model="reportData.equal[index]"
-              hide-details
-            ></v-switch>
+          <v-icon v-if="reportData.equal[index]">check</v-icon>
+      </td>
+  <td style="border-end:1px solid gray; " class="py-2"> 
+         <v-icon v-if="!reportData.equal[index]">check</v-icon>
       </td>
    <td :rowspan="reportData.type.type_list_ar.length">  
-        <v-textarea v-model="reportData.notes"  v-if="index==0" :rows="reportData.type.type_list_ar.length" cols="8" class="mx-1"></v-textarea>
+        <div v-if="index === 2"> {{reportData.notes}} </div>
       </td>
   </tr>
 </table>
-     
-    
+ 
      <v-layout row wrap class="px-1">
       <div style="border-end:1px solid gray;border-bottom:1px solid gray;width:50%">
         <div class="px-2 py-1" style="border-bottom:1px solid gray;background:#ededed">
         {{trans('data.Rating scores')}}:
         </div>
-         <v-radio-group
-              v-model="reportData.rating"
-              column
-            >
         <div class="px-2 footer-item">
           1 {{trans('data.Acceptable')}} (
-                    <v-radio
-                color="primary"
-                value="Acceptable"
-              ></v-radio>
+                 <v-icon v-if="reportData.rating==='Acceptable'">check</v-icon>
           )
         </div>
             <div class="px-2 footer-item">
           2 {{trans('data.Accepted comments')}} (
-             <v-radio
-                color="primary"
-                value="withComments"
-              ></v-radio>
+          <v-icon v-if="reportData.rating==='withComments'">check</v-icon>
           )
         </div>
             <div class="px-2 footer-item">
           3 {{trans('data.unacceptable')}} (
-                 <v-radio
-                color="primary"
-                value="unacceptable"
-              ></v-radio>
+             <v-icon v-if="reportData.rating==='unacceptable'">check</v-icon>
          )
         </div>
-        </v-radio-group>
         </div>
-               
       <div class="px-2" style="border-bottom:1px solid gray;width:50%">
         <div class="footer-item mt-2">{{trans('data.Supervising engineer')}}:
-        {{ reportData.office?reportData.office.name:'' }}
-        </div>
+            {{ reportData.office?reportData.office.name:'' }}
+      </div>
          <div class="footer-item mt-2">{{trans('data.signature')}}:
-             <v-text-field
-            style="max-height: 2.5rem;"
-             v-model="reportData.supervisor_signature" 
-            class="text-input"
-              :rules="rulesText1"
-          ></v-text-field>
+         {{reportData.supervisor_signature}}
          </div>
         </div>
      </v-layout>
 </div>
-                </v-container>
-        <v-btn
-                style="background-color: #06706d; color: white"
-                color="darken-1"
-                class="mt-3"
-                v-if="!edit"
-                @click="printReport"
-                :loading="loading"
-                :disabled="loading"
-            >
-                {{ trans('data.save') }}
-            </v-btn>
-</div>
-	<ReportPdf style="z-index:-15;position:fixed" :reportData="reportData" :language="language" ref="pdf" />
+ </v-container>
+	
 </div>
 </template>
 
 <script>
-
-import ReportPdf from "./ReportPdf.vue"
+import jsPDF from 'jspdf';
+import html2canvas from "html2canvas"
 
 export default {
-  components:{
-ReportPdf
+      components:{
+jsPDF
   },
   props:{
-    reportType: null,
-    project: null,
-    office: null,
-    report: null,
-    edit: false,
-    report_id: null
+    reportData: null,
+    language: null,
+    savingReport: false
   },
-data(){
-  return {
-    reportData: {equal:[]},
-     loading: false,
-     language: 'ar',
-     savingReport: true,
-     options:[this.trans('data.yes'),this.trans('data.no')],
-      rulesText1: [
-           v => v && v.length <= 12 || 'Max 12 characters',
-      ],
-        rulesText2: [
-           v => v && v.length <= 5 || 'Max 5 characters',
-      ],
-      rulesNumber:[
-        v => v && v.length <= 5 || 'Max 5 characters',
-        v => Number.isInteger(Number(v)) || 'The value must be an integer number',
-      ]
-  }
-},
-created(){
-  const self = this;
-  self.currentDateTime();
-  self.getReportData();
-  self.language = localStorage.getItem('currentLange')?localStorage.getItem('currentLange'):'ar'
-
-},
-watch:{
-  reportType(){
-    this.reportData.type = this.reportType
+  data(){
+     return{
+        pdfBlob: null,
+     }
   },
-   office(){
-    this.reportData.office = this.office
-  },
-    project(){
-this.getReportData();
- this.reportData.contractors = this.project?.members?.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')
-  }
-},
-methods:{
-  printReport(){
-    this.savingReport = false;
-    this.$refs.pdf.printPdf();
-  },
-      getReportData() {
-         const self = this;
-                     if(self.edit){
-                         self.reportData =  self.report
-                        self.reportData.contractors = self.report.project?.members?.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')
-                        self.reportData.owner= self.report.project.customer.name
-                     }
-                     else{
-                        self.reportData.type = self.reportType
-                      self.reportData.office = self.office
-                      self.reportData.id = self.report_id
-                     self.reportData.owner= self.project?.customer?.name
-                     self.reportData.project= self.project
-                     self.reportData.contractors = self.project?.members?.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')
-                     }
-                     self.$forceUpdate();  
+  methods:{
+        printPdf() {
+    //  const doc = new jsPDF("p", "pt", "a4", true, { compress: true });
+      const Html = this.$refs.pdfHtml;
+      html2canvas(Html,{
+        scale: 0.99999999
+      })
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF("","", "a4", true, { compress: true });
+        if(!this.savingReport)
+        pdf.addImage(imgData, 'PNG', 0, 0);
+        this.pdfBlob = pdf.output('blob');
+         this.store()
+        window.open(pdf.output("bloburl"), "_blank")
+  });
+    },
+            store() {
+            const self = this;
+            console.log(self.reportData)
+            let formData = new FormData();
+            formData.append('pdfFile', self.pdfBlob);
+            formData.append('project_id', self.reportData.project.id);
+            formData.append('office_id', self.reportData.office?.id);
+            formData.append('type', self.reportData.type.id);
+            self.$validator.validateAll().then((result) => {
+                if (result == true) {
+                    self.loading = true;
+                    axios
+                        .post('/reports', formData)
+                        .then(function (response) {
+                            self.loading = false;
+                            console.log(response.data.msg);
+                            self.$store.commit('showSnackbar', {
+                                message: response.data.msg,
+                                color: response.data.success,
+                            });
+                            if (response.data.success === true) {
+                                 self.goBack();
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+            });
+           
         },
-   
-    currentDateTime() {
-            const current = new Date();
-            const date =
-                current.getFullYear() + '/' + (current.getMonth() + 1) + '/' + current.getDate();
-            const time =
-                current.getHours() + ':' + current.getMinutes() + ':' + current.getSeconds();
-            const dateTime = date //+ ' ' + time;
-            this.reportData.create_time = dateTime;
-            var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-this.reportData.day = days[current.getDay()];
-this.$forceUpdate();
-        },
-}
+  }
 }
 </script>
 
@@ -317,9 +257,6 @@ table, th, td {
   max-width: fit-content;
   white-space: nowrap;
 }
-/*::v-deep .theme--light.v-text-field>.v-input__control>.v-input__slot:before{
-  border:none!important 
-}*/
 .text-input{
   margin:-0.6rem 15px 0 15px;
   padding: 0;
@@ -327,7 +264,4 @@ table, th, td {
   .v-text-field >>> input {
       text-align: center!important;
     }
- /*  .v-select >>> .v-input__icon {
-     display: none!important; 
-    }*/
 </style>

@@ -202,6 +202,7 @@ export default {
     data() {
         const self = this;
         return {
+            loading: false,
             headers: [
                 {
                     text: self.trans('messages.action'),

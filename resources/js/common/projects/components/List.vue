@@ -314,6 +314,12 @@ export default {
                 //     align: 'left',
                 //     sortable: true,
                 // },
+                 {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'center',
+                    sortable: true,
+                },
                 {
                     text: self.trans('messages.name'),
                     value: 'name',

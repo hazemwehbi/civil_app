@@ -10,7 +10,7 @@
             <v-divider></v-divider>
             <v-card-text>
                 <v-container grid-list-md>
-                    <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-form ref="form" v-model="valid" lazy-validation enctype="multipart/form-data">
                         <v-layout row wrap>
                             <v-flex xs12 sm6>
                                 <v-text-field
@@ -298,7 +298,7 @@
                             </v-flex>
                                                      <v-flex xs12 sm3 v-if="form_fields.role_ids && form_fields.role_ids.find(val => val == 2)">
                                 <v-text-field
-                                    v-model="office.title"
+                                    v-model="title"
                                     :label="trans('messages.title')"
                                     :rules="[
                                         (v) =>
@@ -382,6 +382,7 @@ export default {
             password: '',
             active: '',
             roles: [],
+            title: null,
             id_card_number: '',
             send_email: false,
                 office:[],
@@ -392,8 +393,6 @@ export default {
     },
     mounted() {
         const self = this;
-      //  self.checkCurrentUserType();
-        // this.loadUser(() => {});
     },
     created() {
         this.loadUser(() => {});
@@ -423,6 +422,7 @@ export default {
     },
         save() {
             const self = this;
+    
             if (this.$refs.form.validate()) {
                 let payload = {
                     name: self.name,
@@ -450,11 +450,18 @@ export default {
                     branch_location: self.form_fields.branch_location,
                     tax_payer_id: self.form_fields.tax_payer_id,
                     id_card_number: self.id_card_number,
+                    title: self.title
                 };
+                         let data = new FormData();
+                data.append('file', self.imageFile);
+/*Object.keys(payload).forEach(function(key) {
+    if(payload[key])
+  data.append(key, payload[key]);
+})*/
 
                 self.$store.commit('showLoader');
                 axios
-                    .put('/admin/users/' + self.propUserId, payload)
+                    .put('/admin/users/' + self.propUserId, {payload, data})
                     .then(function (response) {
                         self.$store.commit('showSnackbar', {
                             message: response.data.msg,
@@ -466,20 +473,6 @@ export default {
                         if (response.data.success === true) {
                             self.goBack();
                         }
-                                  if(self.office.title){
-                let data = new FormData();
-                data.append('file', self.imageFile);
-                data.append('title', self.office.title);
-                data.append('user_id', self.propUserId);
-                axios.post('/admin/office_data', data)
-                 .then(function (response) {
-                        self.$store.commit('showSnackbar', {
-                            message: response.data.msg,
-                            color: response.data.success,
-                        });
- self.$store.commit('hideLoader');
-                    })
-                    }
                     })
                     .catch(function (error) {
                         self.$store.commit('hideLoader');
@@ -518,13 +511,8 @@ export default {
                 self.active = User.active !== null;
                 self.roles = response.data.roles;
                 self.form_fields.role_ids = response.data.role_ids;
-                if(response.data.user.office) {
-                self.office.title = response.data.user.office.title
-                self.imageUrl= response.data.user.office.media[response.data.user.office.media.length-1].full_url.replace('upload','public/upload')
-                console.log(self.imageUrl,response.data.user.office.media)
-                }
-                //  alert(JSON.parse(User.enginnering_type));
-                //   self.is_edit_role = response.data.is_edit_role;
+                self.title = response.data.user.title
+                self.imageUrl= response.data.user.media[response.data.user.media.length-1].full_url.replace('upload','public/upload')
             });
         },
 

@@ -18,13 +18,27 @@
             >
                 {{ trans('data.print') }}
             </v-btn>-->
+              <v-autocomplete
+                                id="input_report_type"
+                                class="mx-2"
+                                item-text="stage"
+                                :items="stages"
+                                v-model="stage"
+                                :label="trans('data.stage')"
+                                v-validate="'required'"
+                                 data-vv-name="stage"
+                                :data-vv-as="trans('data.required')"
+                                :error-messages="errors.collect('stage')"
+                                return-object
+                                required
+                            ></v-autocomplete>
                             <v-autocomplete
                                 id="input_report_type"
+                                v-if="stage && stage.id==1"
                                 class="mx-2"
                                 item-text="type_name"
                                 :items="report_types"
                                 v-model="report_type"
-                                :rules="requiredRules"
                                 :label="trans('data.report_type')"
                                 v-validate="'required'"
                                  data-vv-name="report_type"
@@ -35,12 +49,11 @@
                             ></v-autocomplete>
                                      <v-autocomplete
                                 id="input_office"
-                                v-if="$hasRole('superadmin')"
+                                v-if="$hasRole('superadmin') && report_type"
                                 class="mx-2"
                                 item-text="name"
                                 :items="offices"
                                 v-model="office"
-                                :rules="requiredRules"
                                 @change="getProjectsOffice"
                                 :label="trans('data.enginnering_office_name')"
                                 v-validate="'required'"
@@ -54,9 +67,9 @@
                                 id="input_project"
                                 class="mx-2"
                                 item-text="name"
+                                v-if="$hasRole('superadmin') && office || report_type"
                                 :items="projects"
                                 v-model="project"
-                                :rules="requiredRules"
                                 :label="trans('data.projects')"
                                 v-validate="'required'"
                                 data-vv-name="project"
@@ -69,7 +82,7 @@
         </v-card-actions>
         <v-spacer></v-spacer>
         <v-card class="mx-auto" style="max-width: 70%">
-                    <ReportForm  :reportType="report_type" :office="office" :project="project" />
+                    <ReportForm  :reportType="report_type" :office="office" :project="project" :report_id="report_id"/>
         </v-card>
         </v-form>
         <AddReportType :externalDialog="externalDialog" @close="externalDialog = event" @store="externalDialog = event" />
@@ -94,12 +107,12 @@ export default {
             office: null,
             report_types: [],
             report_type: '',
+            report_id: null,
             create_time: '',
-             loading:false,
+            loading:false,
             projects:[],
-                requiredRules: [
-       // v => !!v || trans('data.required'),
-      ],
+            stages: [{id: 1, stage: 'Stage One'}],
+            stage: null
         };
     },
     created() {
@@ -147,6 +160,7 @@ export default {
                     self.report_types = response.data.types;
                     self.offices = response.data.offices
                     self.projects = response.data.projects
+                    self.report_id = response.data.report_id
                 })
                 .catch(function (error) {
                     console.log(error);

@@ -121,7 +121,6 @@ class UserController extends AdminController
      */
     public function store(Request $request)
     {
-       
         if (!request()->user()->can('employee.create')) {
             abort(403, 'Unauthorized action.');
         }
@@ -147,7 +146,7 @@ class UserController extends AdminController
         try {
             DB::beginTransaction();
 
-            $input = $request->only('name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number');
+            $input = $request->only('name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number','title');
             $input['parent_id']=Auth::id(); 
 
             $input['isActive']=1; 
@@ -157,9 +156,11 @@ class UserController extends AdminController
             /** @var User $user */
             
             $user = $this->userRepository->create($input);
-
+            if($request->hasFile('file'))
+            $user->addMedia($request->file)->toMediaCollection('logo');
             //assign role to employee
             $role_ids = $request->input('role');
+            $role_ids = explode(',' ,$role_ids);
             if (!empty($role_ids)) {
                 foreach($role_ids as $role_id){
                     $role = Role::findOrFail($role_id);
@@ -215,20 +216,7 @@ class UserController extends AdminController
 
         return ['msg'=>$output,'id'=> $user->id];
     }
-public function storeOfficeData(Request $request){
-    $officeData = OfficeDetaile::where('user_id',$request->user_id)->first();
-    if(!isset($officeData))
-    $officeData= new OfficeDetaile();
 
-    $officeData->title= $request->title;
-    $officeData->user_id= $request->user_id;
-$officeData->save();
-if($request->hasFile('file'))
-$officeData->addMedia($request->file)->toMediaCollection('logo');
-$output = $this->respondSuccess(__('messages.saved_successfully'));
-return $output;
-
-}
     /**
      * Display the specified resource.
      *
@@ -259,9 +247,8 @@ return $output;
         }
 
         try {
-            $user = User::with('office','office.media')->find($id);
-          //  $office = $user->office;
-          //  $mediaOffice=$office->media;
+            $user = User::find($id);
+
             $role_id = $user->roles->first()->id;
             $gender_types = User::getGenders();
             
@@ -295,7 +282,7 @@ return $output;
         //    abort(403, 'Unauthorized action.');
         //}
         //$user=User::findOrFail($id);
-        $validate = validator($request->all(), [
+        $validate = validator($request->payload, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
         ],
@@ -315,7 +302,8 @@ return $output;
         try {
             DB::beginTransaction();
 
-            $payload = $request->only(
+            $payload = $request->payload;
+            /*only(
                 'name',
                 'mobile',
                 'alternate_num',
@@ -339,9 +327,8 @@ return $output;
                 'branch_location',
                 'tax_payer_id',
                 'id_card_number',
-
-            );
-
+                 'title'
+            );*/
             // if password field is present but has empty value or null value
             // we will remove it to avoid updating password with unexpected value
             if (!Helpers::hasValue($payload['password'])) {
@@ -351,6 +338,7 @@ return $output;
             if(isset($request->enginnering_type))
                $payload['enginnering_type']=json_encode($request->enginnering_type);
             $updated =$this->userRepository->update($id,$payload);
+
             if (!$updated) {
                 return $this->respondWithError(__('messages.failed_to_update'));
             }
@@ -358,8 +346,11 @@ return $output;
           
             /** @var User $user */
             $user = $this->userRepository->find($id);
-      
+            if($request->hasFile('file'))
+            $user->addMedia($request->data['file'])->toMediaCollection('logo');
+            //assign role to employee
             $role_ids = $request->input('role');
+            $role_ids = explode(',' ,$role_ids);
             if (!empty($role_id)) {
                 foreach($role_ids as $role_id){
                     $role = Role::findOrFail($role_id);

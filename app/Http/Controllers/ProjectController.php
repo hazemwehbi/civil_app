@@ -256,7 +256,7 @@ class ProjectController extends Controller
     public function getProjectsOffice(Request $request)
     {
         if(isset($request->office_id)){
-            $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report','report.reportCreator','report.type')
+            $projects = Project::with('customer', 'categories', 'members', 'members.media','location','creator','report','report.reportCreator','report.type')
             ->orWhereHas('members', function ($qu) use ($request) {
                 $qu->Where('user_id', $request->office_id);
             })

@@ -29,9 +29,14 @@ class ReportController extends Controller
             $orderby = 'desc';
             $sort_by = 'id';
         }
-        $reports =  Report::with('project','reportCreator','media','project.members','type','project.customer','office','office.office','office.office.media')->orderBy($sort_by, $orderby);
+        $reports =  Report::with('project','reportCreator','media','project.members','type','project.customer','office')->orderBy($sort_by, $orderby);
         if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
             $reports = $reports->where('created_by', Auth::user()->id);
+           /* ->orWereHas('projects',function($q){
+                $q->whereHas('members', function($query){
+                    $query->where('user_id',Auth::id());
+                });
+            });*/
         }
         $project_note = $reports->paginate($rowsPerPage);
         return $this->respond($project_note);
@@ -168,7 +173,7 @@ class ReportController extends Controller
              $item->type_name = $item->type_name_en;
              return $item;
         });
-        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report','report.reportCreator','report.type');
+        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','creator','report','report.reportCreator','report.type');
         if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
             $projects = $projects->where(function($q) {
                 $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) {
@@ -178,8 +183,9 @@ class ReportController extends Controller
         }
         else
         $projects = $projects->get();
-        $offices= User::with('office','office.media')->where('user_type_log','ENGINEERING_OFFICE_MANAGER')->get();
-        $data = ['offices' => $offices, 'types' => $types, 'projects' => $projects ];
+        $offices= User::where('user_type_log','ENGINEERING_OFFICE_MANAGER')->get();
+        $report_id=Report::latest()->first()->id+1;
+        $data = ['offices' => $offices, 'types' => $types, 'projects' => $projects,'report_id'=>$report_id ];
 
         return $data;
 

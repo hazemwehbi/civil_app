@@ -295,7 +295,7 @@
                             </v-flex>
                               <v-flex xs12 sm3 v-if="form_fields.role_id && form_fields.role_id.find(val => val == 2)">
                                 <v-text-field
-                                    v-model="office.title"
+                                    v-model="form_fields.title"
                                     :label="trans('messages.title')"
                                     :rules="[
                                         (v) =>
@@ -378,7 +378,6 @@ export default {
             active: true,
             roles: [],
             send_email: false,
-            office:[],
                 imageUrl: '',
     imageFile: null,
     imageName: '',
@@ -418,7 +417,8 @@ export default {
     },
         save() {
             const self = this;
-
+ let data = new FormData();
+                data.append('file', self.imageFile);
             if (this.$refs.form.validate()) {
                 let payload = {
                     name: self.name,
@@ -446,32 +446,23 @@ export default {
                     branch_location: self.form_fields.branch_location,
                     tax_payer_id: self.form_fields.tax_payer_id,
                     id_card_number: self.id_card_number,
+                    title: self.form_fields.title,
                 };
-
+Object.keys(payload).forEach(function(key) {
+    if(payload[key])
+  data.append(key, payload[key]);
+})
+console.log(data,payload)
                 self.$store.commit('showLoader');
                 axios
-                    .post('/admin/users', payload)
+                    .post('/admin/users', data)
                     .then(function (response) {
-                         console.log(response.data.msg.original)
                          self.user_id= response.data.id
                         self.$store.commit('showSnackbar', {
                             message: response.data.msg.original.msg,
                             color: response.data.success,
                         });
-                    if(self.office.title){
-                let data = new FormData();
-                data.append('file', self.imageFile);
-                data.append('title', self.office.title);
-                data.append('user_id', self.user_id);
-                axios.post('/admin/office_data', data)
-                 .then(function (response) {
-                        self.$store.commit('showSnackbar', {
-                            message: response.data.msg,
-                            color: response.data.success,
-                        });
- self.$store.commit('hideLoader');
-                    })
-                    }
+    
                      self.$store.commit('hideLoader');
                      
                         if (response.data.msg.original.success == true) {
