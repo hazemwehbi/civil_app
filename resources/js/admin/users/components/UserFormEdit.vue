@@ -452,6 +452,7 @@ export default {
                     this.imageUrl = fr.result;
                     this.imageFile = files[0];
                 });
+                console.log(this.imageUrl)
             } else {
                 this.imageName = '';
                 this.imageFile = '';
@@ -490,6 +491,7 @@ export default {
                     tax_payer_id: self.form_fields.tax_payer_id,
                     id_card_number: self.id_card_number,
                     title: self.title,
+                    file: self.imageUrl
                 };
                 let data = new FormData();
                 data.append('file', self.imageFile);

@@ -359,9 +359,10 @@ class UserController extends AdminController
           
             /** @var User $user */
             $user = $this->userRepository->find($id);
-            if($request->hasFile('file')){
+           // dd($request->all());
+            if($request->has('file')){
                 $user->clearMediaCollection('logo');
-            $user->addMedia($request->data['file'])->toMediaCollection('logo');
+            $user->addMediaFromBase64($request->file)->toMediaCollection('logo');
             }
             if($payload['signature']){
                
