@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Components\User\Models\User;
+use App\Http\Resources\UserResource;
 use App\Project;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -183,7 +184,7 @@ class ReportController extends Controller
         }
         else
         $projects = $projects->get();
-        $offices= User::where('user_type_log','ENGINEERING_OFFICE_MANAGER')->get();
+        $offices= UserResource::collection(User::where('user_type_log','ENGINEERING_OFFICE_MANAGER')->get());
         $report_id=Report::latest()->first()->id+1;
         $data = ['offices' => $offices, 'types' => $types, 'projects' => $projects,'report_id'=>$report_id ];
 

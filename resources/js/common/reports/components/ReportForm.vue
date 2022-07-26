@@ -5,7 +5,7 @@
 <div class="mt-5"  style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">
   <div class="d-flex justify-space-between header">
     <div class="title">{{ reportData.office?reportData.office.title:'' }}</div>
-    <div class="logo"><img style="max-width:150px" :src="reportData.office && reportData.office.media[reportData.office.media.length-1]?reportData.office.media[reportData.office.media.length-1].full_url.replace('upload','public/upload'):''" /></div>
+    <div class="logo"><img style="max-width:150px" :src="reportData.office?reportData.office.logo:''" /></div>
   </div>
   <div class="type_data">
     <div class="type_name">{{ language == 'ar'?reportData.type.type_name_ar:reportData.type.type_name_en }}</div>
@@ -141,12 +141,7 @@
         {{ reportData.office?reportData.office.name:'' }}
         </div>
          <div class="footer-item mt-2">{{trans('data.signature')}}:
-             <v-text-field
-            style="max-height: 2.5rem;"
-             v-model="reportData.supervisor_signature" 
-            class="text-input"
-              :rules="rulesText1"
-          ></v-text-field>
+          <img :src="reportData.office?reportData.office.signature:''" >
          </div>
         </div>
      </v-layout>
