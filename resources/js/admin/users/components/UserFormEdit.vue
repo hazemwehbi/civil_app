@@ -1,6 +1,7 @@
 <template>
     <div>
         <v-card>
+             <SignaturePad ref="signature" @save="signature = $event"/>
             <v-card-title>
                 <v-icon medium>person</v-icon>
                 <span class="headline">
@@ -10,14 +11,19 @@
             <v-divider></v-divider>
             <v-card-text>
                 <v-container grid-list-md>
-                    <v-form ref="form" v-model="valid" lazy-validation enctype="multipart/form-data">
+                    <v-form
+                        ref="form"
+                        v-model="valid"
+                        lazy-validation
+                        enctype="multipart/form-data"
+                    >
                         <v-layout row wrap>
                             <v-flex xs12 sm6>
                                 <v-text-field
                                     :label="trans('messages.name')"
                                     v-model="name"
                                     :rules="[
-                                        (v) =>
+                                        v =>
                                             !!v ||
                                             trans('messages.required', {
                                                 name: trans('messages.name'),
@@ -33,12 +39,12 @@
                                     v-model="email"
                                     v-validate="'required|email'"
                                     :rules="[
-                                        (v) =>
+                                        v =>
                                             !!v ||
                                             trans('messages.required', {
                                                 name: trans('messages.email'),
                                             }),
-                                        (v) => /.+@.+\..+/.test(v) || trans('messages.email_valid'),
+                                        v => /.+@.+\..+/.test(v) || trans('messages.email_valid'),
                                     ]"
                                     :data-vv-as="trans('messages.email')"
                                     :error-messages="errors.collect('email')"
@@ -49,7 +55,7 @@
                                 <v-text-field
                                     v-model="id_card_number"
                                     :rules="[
-                                        (v) =>
+                                        v =>
                                             !!v ||
                                             trans('messages.required', {
                                                 name: trans('data.id_card_number'),
@@ -68,7 +74,7 @@
                                     autocomplete="new-password"
                                     v-model="password"
                                     :rules="[
-                                        (v) => (v) =>
+                                        v => v =>
                                             (v && v.length >= 6) ||
                                             trans('messages.string_length', {
                                                 name: trans('messages.password'),
@@ -76,7 +82,6 @@
                                             }),
                                         ,
                                     ]"
-                              
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6>
@@ -86,11 +91,10 @@
                                     autocomplete="off"
                                     v-model="passwordConfirm"
                                     :rules="[
-                                        (v) =>
+                                        v =>
                                             !(v != password && password.length > 0) ||
                                             trans('messages.password_not_match'),
                                     ]"
-                                  
                                 ></v-text-field>
                             </v-flex>
 
@@ -286,7 +290,7 @@
                                     :items="roles"
                                     v-model="form_fields.role_ids"
                                     :rules="[
-                                        (v) =>
+                                        v =>
                                             !!v ||
                                             trans('messages.required', {
                                                 name: trans('messages.role'),
@@ -296,12 +300,19 @@
                                     required
                                 ></v-autocomplete>
                             </v-flex>
-                                                     <v-flex xs12 sm3 v-if="form_fields.role_ids && form_fields.role_ids.find(val => val == 2)">
+                            <v-flex
+                                xs12
+                                sm3
+                                v-if="
+                                    form_fields.role_ids &&
+                                        form_fields.role_ids.find(val => val == 2)
+                                "
+                            >
                                 <v-text-field
                                     v-model="title"
                                     :label="trans('messages.title')"
                                     :rules="[
-                                        (v) =>
+                                        v =>
                                             (v && v.length > 0) ||
                                             trans('messages.required', {
                                                 name: trans('messages.role'),
@@ -310,19 +321,40 @@
                                     required
                                 ></v-text-field>
                             </v-flex>
-<v-flex xs12 sm3 class="text-xs-center text-sm-center text-md-center text-lg-center" v-if="form_fields.role_ids && form_fields.role_ids.find(val => val == 2)">
-            <!-- Here the image preview -->
-            <img :src="imageUrl" height="150" v-if="imageUrl"/>
-            <v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon="mdi-file-image"></v-text-field>
-            <input
-              type="file"
-              style="display: none"
-              ref="image"
-              :src="office.image"
-              accept="image/jpeg, image/jpg, image/png"
-              @change="onFilePicked"
-            >
-</v-flex>
+                            <v-flex
+                                xs12
+                                sm3
+                                class="text-xs-center text-sm-center text-md-center text-lg-center"
+                                v-if="
+                                    form_fields.role_ids &&
+                                        form_fields.role_ids.find(val => val == 2)
+                                "
+                            >
+                                <!-- Here the image preview -->
+                                <img :src="imageUrl" height="150" v-if="imageUrl" />
+                                <v-text-field
+                                    label="Select Image"
+                                    @click="pickFile"
+                                    v-model="imageName"
+                                    prepend-icon="mdi-file-image"
+                                ></v-text-field>
+                                <input
+                                    type="file"
+                                    style="display: none"
+                                    ref="image"
+                                    :src="office.image"
+                                    accept="image/jpeg, image/jpg, image/png"
+                                    @change="onFilePicked"
+                                />
+                            </v-flex>
+                            <v-flex
+                                xs12
+                                sm3
+                                class="text-xs-center text-sm-center text-md-center text-lg-center"
+                            >
+                                <!-- Here the image preview -->
+                                <img :src="signature" height="150" />
+                            </v-flex>
                             <v-flex xs12 sm3 v-if="$hasRole('superadmin')">
                                 <v-switch
                                     :label="trans('messages.pre_Active_acount')"
@@ -347,7 +379,9 @@
                     <v-btn @click="save()" color="primary" dark>
                         {{ trans('messages.update') }}
                     </v-btn>
-
+                     <v-btn color="secondary" class="mr-4" @click="$refs.signature.dialog = true">
+                            {{ trans('data.addSignature') }}
+                        </v-btn>
                     <v-btn style="color: #06706d" @click="$router.go(-1)">
                         {{ trans('data.cancel') }}
                     </v-btn>
@@ -359,9 +393,11 @@
 
 <script>
 import Popover from '../../popover/Popover';
+import SignaturePad from './SignaturePad'
 export default {
     components: {
         Popover,
+        SignaturePad
     },
     props: {
         propUserId: {
@@ -385,10 +421,11 @@ export default {
             title: null,
             id_card_number: '',
             send_email: false,
-                office:[],
-                imageUrl: '',
-    imageFile: null,
-    imageName: '',
+            office: [],
+            imageUrl: '',
+            imageFile: null,
+            imageName: '',
+            signature: null,
         };
     },
     mounted() {
@@ -398,33 +435,34 @@ export default {
         this.loadUser(() => {});
     },
     methods: {
-           pickFile() {
-      this.$refs.image.click()
-    },
-    onFilePicked(e) {
-      const files = e.target.files
-      if(files[0] !== undefined) {
-        this.imageName = files[0].name
-        if (this.imageName.lastIndexOf('.') <= 0) {
-          return
-        }
-        const fr = new FileReader()
-        fr.readAsDataURL(files[0])
-        fr.addEventListener('load', () => {
-          this.imageUrl = fr.result
-          this.imageFile = files[0]
-        })
-      } else {
-        this.imageName = ''
-        this.imageFile = ''
-        this.imageUrl = ''
-      }
-    },
+        pickFile() {
+            this.$refs.image.click();
+        },
+        onFilePicked(e) {
+            const files = e.target.files;
+            if (files[0] !== undefined) {
+                this.imageName = files[0].name;
+                if (this.imageName.lastIndexOf('.') <= 0) {
+                    return;
+                }
+                const fr = new FileReader();
+                fr.readAsDataURL(files[0]);
+                fr.addEventListener('load', () => {
+                    this.imageUrl = fr.result;
+                    this.imageFile = files[0];
+                });
+            } else {
+                this.imageName = '';
+                this.imageFile = '';
+                this.imageUrl = '';
+            }
+        },
         save() {
             const self = this;
-    
+
             if (this.$refs.form.validate()) {
                 let payload = {
+                    signature: self.signature,
                     name: self.name,
                     mobile: self.form_fields.mobile,
                     alternate_num: self.form_fields.alternate_num,
@@ -450,19 +488,19 @@ export default {
                     branch_location: self.form_fields.branch_location,
                     tax_payer_id: self.form_fields.tax_payer_id,
                     id_card_number: self.id_card_number,
-                    title: self.title
+                    title: self.title,
                 };
-                         let data = new FormData();
+                let data = new FormData();
                 data.append('file', self.imageFile);
-/*Object.keys(payload).forEach(function(key) {
+                /*Object.keys(payload).forEach(function(key) {
     if(payload[key])
   data.append(key, payload[key]);
 })*/
 
                 self.$store.commit('showLoader');
                 axios
-                    .put('/admin/users/' + self.propUserId, {payload, data})
-                    .then(function (response) {
+                    .put('/admin/users/' + self.propUserId, { payload, data })
+                    .then(function(response) {
                         self.$store.commit('showSnackbar', {
                             message: response.data.msg,
                             color: response.data.success,
@@ -474,7 +512,7 @@ export default {
                             self.goBack();
                         }
                     })
-                    .catch(function (error) {
+                    .catch(function(error) {
                         self.$store.commit('hideLoader');
 
                         if (error.response) {
@@ -500,7 +538,8 @@ export default {
         loadUser(cb) {
             const self = this;
             //  alert(self.propUserId)
-            axios.get('/admin/users/' + self.propUserId + '/edit').then(function (response) {
+            axios.get('/admin/users/' + self.propUserId + '/edit').then(function(response) {
+                console.log(response.data)
                 let User = response.data.user;
                 self.form_fields = User;
                 self.gender_types = response.data.gender_types;
@@ -511,8 +550,12 @@ export default {
                 self.active = User.active !== null;
                 self.roles = response.data.roles;
                 self.form_fields.role_ids = response.data.role_ids;
-                self.title = response.data.user.title
-                self.imageUrl= response.data.user.media[response.data.user.media.length-1].full_url.replace('upload','public/upload')
+                self.title = response.data.user.title;
+                self.signature = response.data.user.signature;
+                self.imageUrl = response.data.user.logo
+               /* self.imageUrl = response.data.user.media[
+                    response.data.user.media.length - 1
+                ].full_url//.replace('upload', 'public/upload');*/
             });
         },
 

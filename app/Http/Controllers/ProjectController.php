@@ -56,7 +56,7 @@ class ProjectController extends Controller
         $user = $request->user();
 
 
-        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report','report.reportCreator','report.type');
+        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','creator','report','report.reportCreator','report.type');
         $customer_id=$user->id;
         $reports = []; 
         $childrens=$user->childrenIds($user->id);
@@ -1319,7 +1319,7 @@ class ProjectController extends Controller
    }
 
    public function  getProject ($id){
-    $project=Project::with('customer',  'members', 'location','agency','report', 'report.type')->find($id);
+    $project=Project::with('customer', 'members', 'location','report', 'report.type')->find($id);
     return $project;
    }
 

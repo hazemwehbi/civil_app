@@ -126,6 +126,7 @@ return [
     'owner'=>'Owner',
     'yes' => 'Yes',
     'no' => 'No',
+    'addSignature' => 'Add Signature',
     'required' => 'Field Required',
     'review_owner_data'=>'Review owner data',
     'identification_number'=>'Identification Number',

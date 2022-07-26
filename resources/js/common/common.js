@@ -87,6 +87,9 @@ Vue.filter('formatMoney', function(value, symbol = null) {
 import Vue from 'vue';
 import VueFlatPickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
+import VueSignaturePad from 'vue-signature-pad';
+
+Vue.use(VueSignaturePad);
 Vue.use(VueFlatPickr);
 
 flatpickr.setDefaults({

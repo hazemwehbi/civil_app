@@ -18,6 +18,7 @@ export default {
             return APP.USER_TYPE_LOG;
         },
         getCurrentUser() {
+            console.log(APP.CURRENT_USER)
             return APP.CURRENT_USER;
         },
         checkActive() {

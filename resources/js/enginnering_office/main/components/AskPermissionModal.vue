@@ -1,12 +1,11 @@
 <template>
-    <div>
-        <v-row justify="center">
+    <div justify="center">
             <v-dialog v-model="dialog" persistent max-width="500px">
                 <v-card>
                     <v-card-text>
                         <v-form ref="form" v-model="valid" lazy-validation>
                             <v-container>
-                                <v-row>
+                                <div>
                                     <v-flex xs12 sm12 md12>
                                         <v-autocomplete
                                             item-text="name"
@@ -44,10 +43,9 @@
                                         <v-text-field
                                             v-model="note"
                                             :label="trans('data.note')"
-                                            :readonly="isEdit"
                                         ></v-text-field>
                                     </v-flex>
-                                </v-row>
+                                </div>
                             </v-container>
                         </v-form>
                     </v-card-text>
@@ -69,7 +67,6 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-        </v-row>
     </div>
 </template>
 <style scoped>

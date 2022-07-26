@@ -1,6 +1,6 @@
 <template>
-    <div>
         <v-card>
+            <SignaturePad ref="signature" @save="signatureData = $event"/>
             <v-form ref="form" v-model="valid" lazy-validation enctype="multipart/form-data">
                 <v-card-title>
                     <v-icon medium>person</v-icon>
@@ -293,6 +293,7 @@
                                     required
                                 ></v-autocomplete>
                             </v-flex>
+
                               <v-flex xs12 sm3 v-if="form_fields.role_id && form_fields.role_id.find(val => val == 2)">
                                 <v-text-field
                                     v-model="form_fields.title"
@@ -342,6 +343,9 @@
                         <v-btn color="error" class="mr-4" @click="reset">
                             {{ trans('data.reset') }}
                         </v-btn>
+                        <v-btn color="secondary" class="mr-4" @click="$refs.signature.dialog = true">
+                            {{ trans('data.addSignature') }}
+                        </v-btn>
                         <v-btn @click="save()" :disabled="!valid" color="success" class="mr-4">
                             {{ trans('messages.save') }}
                         </v-btn>
@@ -351,15 +355,18 @@
                     </v-card-actions>
                 </v-layout>
             </v-form>
+            
         </v-card>
-    </div>
+        
 </template>
 
 <script>
 import Popover from '../../popover/Popover';
+import SignaturePad from './SignaturePad'
 export default {
     components: {
         Popover,
+        SignaturePad
     },
     data() {
         const self = this;
@@ -381,7 +388,8 @@ export default {
                 imageUrl: '',
     imageFile: null,
     imageName: '',
-    user_id: null
+    user_id: null,
+    signatureData: null
         };
     },
     mounted() {
@@ -417,10 +425,12 @@ export default {
     },
         save() {
             const self = this;
+            console.log(self.signatureData)
  let data = new FormData();
                 data.append('file', self.imageFile);
             if (this.$refs.form.validate()) {
                 let payload = {
+                    signature: self.signatureData,
                     name: self.name,
                     email: self.email,
                     mobile: self.form_fields.mobile,

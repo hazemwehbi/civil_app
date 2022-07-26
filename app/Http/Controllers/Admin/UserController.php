@@ -14,6 +14,7 @@ use Notification;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Responses\Response;
 use App\OfficeDetaile;
+use Illuminate\Support\Facades\File;
 
 class UserController extends AdminController
 {
@@ -119,6 +120,14 @@ class UserController extends AdminController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    private function getBase64Content($data)
+{
+    list($type, $data) = explode(';', $data);
+    list(, $data) = explode(',', $data);
+    $data = base64_decode($data);
+
+    return $data;
+}
     public function store(Request $request)
     {
         if (!request()->user()->can('employee.create')) {
@@ -158,6 +167,10 @@ class UserController extends AdminController
             $user = $this->userRepository->create($input);
             if($request->hasFile('file'))
             $user->addMedia($request->file)->toMediaCollection('logo');
+            if($request->signature){
+                $user->addMediaFromBase64($request->signature)->usingFileName('signature'.time().'.png')->toMediaCollection('signature');
+            }
+            
             //assign role to employee
             $role_ids = $request->input('role');
             $role_ids = explode(',' ,$role_ids);
@@ -248,7 +261,8 @@ class UserController extends AdminController
 
         try {
             $user = User::find($id);
-
+            $user->signature = $user->getFirstMedia('signature')?$user->getFirstMedia('signature')->original_url:'';
+            $user->logo = $user->getFirstMedia('logo')?$user->getFirstMedia('logo')->original_url:'';
             $role_id = $user->roles->first()->id;
             $gender_types = User::getGenders();
             
@@ -256,8 +270,6 @@ class UserController extends AdminController
 
             $data = ['user' => $user,
                     'gender_types' => $gender_types,
-                 //   'office'=> $office,
-                  //  'mediaOffice' => $mediaOffice,
                     'roles' => $roles,
                     'role_ids' => $user->roles->pluck('id'),
                     // 'is_edit_role'=>User::canEditRole(),
@@ -346,8 +358,14 @@ class UserController extends AdminController
           
             /** @var User $user */
             $user = $this->userRepository->find($id);
-            if($request->hasFile('file'))
+            if($request->hasFile('file')){
+                $user->clearMediaCollection('logo');
             $user->addMedia($request->data['file'])->toMediaCollection('logo');
+            }
+            if($request->signature){
+                $user->clearMediaCollection('signature');
+                $user->addMediaFromBase64($request->signature)->usingFileName('signature'.time().'.png')->toMediaCollection('signature');
+            }
             //assign role to employee
             $role_ids = $request->input('role');
             $role_ids = explode(',' ,$role_ids);

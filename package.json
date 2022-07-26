@@ -50,6 +50,7 @@
     "vue-pdf": "^4.3.0",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.1",
+    "vue-signature-pad": "2.0.0",
     "vue-spinner": "^1.0.2",
     "vue-tel-input-vuetify": "^1.4.1",
     "vue2-google-maps": "^0.10.7",

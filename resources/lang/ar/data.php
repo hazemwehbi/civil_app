@@ -458,7 +458,7 @@ return [
 
 
         'office'=>'المكتب الهندسي',
-
+        'addSignature' => 'إضافة توقيع',
 
         'create_design'=>'انشاء طلب تصميم',
         'edit_design'=>'تعديل التصميم',

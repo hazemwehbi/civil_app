@@ -9,15 +9,6 @@
              <v-btn style="color: #06706d" @click="externalDialog = true">
                 {{ trans('data.reportTypeAdd') }}
             </v-btn>
-           <!-- <v-btn
-                style="background-color: #06706d; color: white"
-                color="darken-1"
-                @click="print"
-                :loading="loading"
-                :disabled="loading"
-            >
-                {{ trans('data.print') }}
-            </v-btn>-->
               <v-autocomplete
                                 id="input_report_type"
                                 class="mx-2"
@@ -67,7 +58,7 @@
                                 id="input_project"
                                 class="mx-2"
                                 item-text="name"
-                                v-if="$hasRole('superadmin') && office || report_type"
+                                v-if="($hasRole('superadmin') && office || report_type) && !$route.params.id"
                                 :items="projects"
                                 v-model="project"
                                 :label="trans('data.projects')"
@@ -119,6 +110,7 @@ export default {
         const self = this;
         self.getReportTypes();
         self.getProject(self.$route.params.id)
+        
     },
     methods: {
       getProject(project_id) {
@@ -129,6 +121,7 @@ export default {
                     self.project  = response.data;
                     self.reportData.owner= self.project.customer.name
                      self.reportData.project= self.project.name
+                     
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -161,6 +154,7 @@ export default {
                     self.offices = response.data.offices
                     self.projects = response.data.projects
                     self.report_id = response.data.report_id
+                    
                 })
                 .catch(function (error) {
                     console.log(error);

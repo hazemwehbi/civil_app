@@ -208,13 +208,14 @@ created(){
   self.currentDateTime();
   self.getReportData();
   self.language = localStorage.getItem('currentLange')?localStorage.getItem('currentLange'):'ar'
-
 },
 watch:{
   reportType(){
+    this.getReportData();
     this.reportData.type = this.reportType
   },
    office(){
+    this.getReportData();
     this.reportData.office = this.office
   },
     project(){
@@ -229,19 +230,16 @@ methods:{
   },
       getReportData() {
          const self = this;
-                     if(self.edit){
-                         self.reportData =  self.report
-                        self.reportData.contractors = self.report.project?.members?.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')
-                        self.reportData.owner= self.report.project.customer.name
-                     }
-                     else{
+         if(self.$hasRole('Engineering Office Manager'))
+            self.reportData.office = self.getCurrentUser()
+            else
+            self.reportData.office = self.office
                         self.reportData.type = self.reportType
-                      self.reportData.office = self.office
                       self.reportData.id = self.report_id
                      self.reportData.owner= self.project?.customer?.name
                      self.reportData.project= self.project
                      self.reportData.contractors = self.project?.members?.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')
-                     }
+                     
                      self.$forceUpdate();  
         },
    
