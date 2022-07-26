@@ -294,7 +294,7 @@ class UserController extends AdminController
         //    abort(403, 'Unauthorized action.');
         //}
         //$user=User::findOrFail($id);
-        $validate = validator($request->payload, [
+        $validate = validator($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
         ],
@@ -314,8 +314,9 @@ class UserController extends AdminController
         try {
             DB::beginTransaction();
 
-            $payload = $request->payload;
-            /*only(
+            $payload = $request->
+            only(
+                'signature',
                 'name',
                 'mobile',
                 'alternate_num',
@@ -340,7 +341,7 @@ class UserController extends AdminController
                 'tax_payer_id',
                 'id_card_number',
                  'title'
-            );*/
+            );
             // if password field is present but has empty value or null value
             // we will remove it to avoid updating password with unexpected value
             if (!Helpers::hasValue($payload['password'])) {
@@ -362,14 +363,15 @@ class UserController extends AdminController
                 $user->clearMediaCollection('logo');
             $user->addMedia($request->data['file'])->toMediaCollection('logo');
             }
-            if($request->signature){
+            if($payload['signature']){
+               
                 $user->clearMediaCollection('signature');
-                $user->addMediaFromBase64($request->signature)->usingFileName('signature'.time().'.png')->toMediaCollection('signature');
+                $user->addMediaFromBase64($payload['signature'])->usingFileName('signature'.time().'.png')->toMediaCollection('signature');
             }
             //assign role to employee
             $role_ids = $request->input('role');
-            $role_ids = explode(',' ,$role_ids);
-            if (!empty($role_id)) {
+           // $role_ids = explode(',' ,$role_ids);
+            if (!empty($role_ids)) {
                 foreach($role_ids as $role_id){
                     $role = Role::findOrFail($role_id);
                     if(!Auth::user()->hasRole('superadmin') && $role->is_primary  && !$user->hasRole($role->name)){

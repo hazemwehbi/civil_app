@@ -287,6 +287,7 @@
                                     :chips="true"
                                     item-text="name"
                                     item-value="id"
+                                     @change="changeRole"
                                     :items="roles"
                                     v-model="form_fields.role_ids"
                                     :rules="[
@@ -303,10 +304,7 @@
                             <v-flex
                                 xs12
                                 sm3
-                                v-if="
-                                    form_fields.role_ids &&
-                                        form_fields.role_ids.find(val => val == 2)
-                                "
+                                v-if="form_fields.role_ids && form_fields.role_ids.find(val => val === 2) === 2"
                             >
                                 <v-text-field
                                     v-model="title"
@@ -325,8 +323,7 @@
                                 xs12
                                 sm3
                                 class="text-xs-center text-sm-center text-md-center text-lg-center"
-                                v-if="
-                                    form_fields.role_ids &&
+                                v-if="form_fields.role_ids && 
                                         form_fields.role_ids.find(val => val == 2)
                                 "
                             >
@@ -353,7 +350,7 @@
                                 class="text-xs-center text-sm-center text-md-center text-lg-center"
                             >
                                 <!-- Here the image preview -->
-                                <img :src="signature" height="150" />
+                                <img :src="signature?signature:signatureUrl" height="150" />
                             </v-flex>
                             <v-flex xs12 sm3 v-if="$hasRole('superadmin')">
                                 <v-switch
@@ -426,6 +423,7 @@ export default {
             imageFile: null,
             imageName: '',
             signature: null,
+            signatureUrl: null
         };
     },
     mounted() {
@@ -435,6 +433,9 @@ export default {
         this.loadUser(() => {});
     },
     methods: {
+          changeRole(){
+          this.$forceUpdate()
+        },
         pickFile() {
             this.$refs.image.click();
         },
@@ -496,10 +497,9 @@ export default {
     if(payload[key])
   data.append(key, payload[key]);
 })*/
-
                 self.$store.commit('showLoader');
                 axios
-                    .put('/admin/users/' + self.propUserId, { payload, data })
+                    .put('/admin/users/' + self.propUserId, payload )
                     .then(function(response) {
                         self.$store.commit('showSnackbar', {
                             message: response.data.msg,
@@ -537,9 +537,7 @@ export default {
         },
         loadUser(cb) {
             const self = this;
-            //  alert(self.propUserId)
             axios.get('/admin/users/' + self.propUserId + '/edit').then(function(response) {
-                console.log(response.data)
                 let User = response.data.user;
                 self.form_fields = User;
                 self.gender_types = response.data.gender_types;
@@ -551,7 +549,7 @@ export default {
                 self.roles = response.data.roles;
                 self.form_fields.role_ids = response.data.role_ids;
                 self.title = response.data.user.title;
-                self.signature = response.data.user.signature;
+                self.signatureUrl = response.data.user.signature;
                 self.imageUrl = response.data.user.logo
                /* self.imageUrl = response.data.user.media[
                     response.data.user.media.length - 1

@@ -401,6 +401,7 @@ export default {
         ]);
     },
     methods: {
+      
          pickFile() {
       this.$refs.image.click()
     },
