@@ -9,7 +9,7 @@ jobs:
       uses: actions/checkout@v2
       
     - name: 📂 Sync files
-      uses: hazemwehbi/civil_app@new
+      uses: hazemwehbi/civil_app@master
       with:
         server: ftp.max4anime.com
         username: civil@civil.hazemwhbi.com
