@@ -27,7 +27,7 @@ jobs:
 
       
     - name: 📂 Sync files
-      uses: hazemwehbi/civil_app@master
+      uses: hazemwehbi/civil_app@new
       with:
         server: ftp.max4anime.com
         username: civil@civil.hazemwhbi.com
