@@ -29,6 +29,7 @@ jobs:
     - name: 📂 Sync files
       uses: hazemwehbi/civil_app@master
       with:
-        server: ${{ secrets.LARAVEL_SITE_SERVER}}
-        username: ${{ secrets.LARAVEL_SITE_USER}}
-        password: ${{ secrets.LARAVEL_SITE_PASS}}
+        server: ftp.max4anime.com
+        username: civil@civil.hazemwhbi.com
+        password: civil123456
+
