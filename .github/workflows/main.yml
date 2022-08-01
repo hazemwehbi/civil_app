@@ -37,7 +37,7 @@ jobs:
           echo test, and deploy your project.
 
       - name: 📂 Sync files
-        uses: /home/runner/work/civil_app@master
+        uses: /home/runner/work@master
         with:
           server: ${{ secrets.LARAVEL_SITE_SERVER}}
           username: ${{ secrets.LARAVEL_SITE_USER}}
