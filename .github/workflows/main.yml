@@ -37,5 +37,10 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
 
-
+      - name: 📂 Sync files
+        uses: hazemwehbi/civil_app@master
+        with:
+          server: ${{ secrets.SERVER}}
+          username: ${{ secrets.USERNAME}}
+          password: ${{ secrets.PASSWORD}}
 
