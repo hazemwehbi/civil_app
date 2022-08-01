@@ -360,7 +360,7 @@ class UserController extends AdminController
             /** @var User $user */
             $user = $this->userRepository->find($id);
            // dd($request->all());
-            if($request->has('file')){
+            if($request->file){
                 $user->clearMediaCollection('logo');
             $user->addMediaFromBase64($request->file)->toMediaCollection('logo');
             }

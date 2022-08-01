@@ -93,6 +93,7 @@
                         </v-menu>
                           </div>
                     </td>
+                    <td > <div align="center"> {{ props.item.id }}</div> </td>
                   <td > <div align="center"> {{ props.item.name }}</div> </td>
                   <td> <div align="center">{{ props.item.email }}</div></td>
                   <td>
@@ -133,6 +134,12 @@ projectID:{
                 {
                     text: self.trans('messages.action'),
                     value: false,
+                    align: 'center',
+                    sortable: false,
+                },
+                  {
+                    text: self.trans('data.id'),
+                    value: 'id',
                     align: 'center',
                     sortable: false,
                 },

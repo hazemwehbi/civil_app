@@ -1,12 +1,11 @@
 <template>
-<div ref="pdfHtml">
-  <v-container grid-list-md  id="printMe">
-<div class="mt-5"  style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">
+  <v-container grid-list-md  id="printMe" ref="pdfHtml">
+<div class="mt-2" v-if="reportData" style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">
   <div class="d-flex justify-space-between header">
     <div class="title">{{ reportData.office?reportData.office.title:'' }}</div>
-    <div class="logo"><img style="max-width:150px" :src="reportData.office?reportData.office.logo:''" /></div>
+    <div class="logo mx-2"><img style="max-width:150px;max-height:110px" :src="reportData.office?reportData.office.logo:''" /></div>
   </div>
-  <div class="type_data">
+  <div class="type_data py-2" style="font-size:22px">
     <div class="type_name">{{ language == 'ar'?reportData.type.type_name_ar:reportData.type.type_name_en }}</div>
     <div class="type_num">{{ reportData.type.id }}</div>
   </div>
@@ -60,20 +59,20 @@
 <table>
 
     <tr>
-      <th width="5%" style="border-end:1px solid gray;" class="py-2">{{trans('data.serial')}}</th>
-      <th width="40%" style="border-end:0.5px solid gray;" class="py-2">{{trans('data.list review')}}</th>
-      <th width="12%" style="border-end:1px solid gray;" class="py-2">{{trans('data.equal')}}</th>
-      <th width="13%" style="border-end:1px solid gray;" class="py-2">{{trans('data.not equal')}}</th>
+      <th width="5%" style="border-end:1px solid gray;" class="py-3">{{trans('data.serial')}}</th>
+      <th width="40%" style="border-end:0.5px solid gray;" class="py-3">{{trans('data.list review')}}</th>
+      <th width="12%" style="border-end:1px solid gray;" class="py-3">{{trans('data.equal')}}</th>
+      <th width="13%" style="border-end:1px solid gray;" class="py-3">{{trans('data.not equal')}}</th>
       <th width="40%" class="last-col">{{trans('data.notes')}}</th>
     </tr>
   
 <tr  v-if="language == 'ar'" row wrap v-for="(type_list, index) in reportData.type.type_list_ar" :key="index+'x'">
-   <td style="border-end:1px solid gray; " class="py-2"> {{ index+1 }}</td>
-    <td style="border-end:0.5px solid gray; " class="py-2"> {{ type_list }}</td>
-    <td style="border-end:1px solid gray;" class="py-2"> 
+   <td style="border-end:1px solid gray; " class="py-3"> {{ index+1 }}</td>
+    <td style="border-end:0.5px solid gray; " class="py-3"> {{ type_list }}</td>
+    <td style="border-end:1px solid gray;" class="py-3"> 
             <v-icon v-if="reportData.equal[index]">check</v-icon>
       </td>
-    <td style="border-end:1px solid gray; " class="py-2"> 
+    <td style="border-end:1px solid gray; " class="py-3"> 
            <v-icon v-if="!reportData.equal[index]">check</v-icon>
       </td>
      <td :rowspan="reportData.type.type_list_ar.length">  
@@ -81,12 +80,12 @@
       </td>
   </tr>
 <tr  v-if="language == 'en'" row wrap v-for="(type_list, index) in reportData.type.type_list_en" :key="index+'x'">
-   <td style="border-end:1px solid gray; " class="py-2"> {{ index+1 }}</td>
-    <td style="border-end:0.5px solid gray; " class="py-2"> {{ type_list }}</td>
-    <td style="border-end:1px solid gray;" class="py-2"> 
+   <td style="border-end:1px solid gray; " class="py-3"> {{ index+1 }}</td>
+    <td style="border-end:0.5px solid gray; " class="py-3"> {{ type_list }}</td>
+    <td style="border-end:1px solid gray;" class="py-3"> 
           <v-icon v-if="reportData.equal[index]">check</v-icon>
       </td>
-  <td style="border-end:1px solid gray; " class="py-2"> 
+  <td style="border-end:1px solid gray; " class="py-3"> 
          <v-icon v-if="!reportData.equal[index]">check</v-icon>
       </td>
    <td :rowspan="reportData.type.type_list_ar.length">  
@@ -95,40 +94,38 @@
   </tr>
 </table>
  
-     <v-layout row wrap class="px-1">
+     <v-layout row wrap class="px-1" style="font-size:22px">
       <div style="border-end:1px solid gray;border-bottom:1px solid gray;width:50%">
-        <div class="px-2 py-1" style="border-bottom:1px solid gray;background:#ededed">
+        <div class="px-2 py-3" style="border-bottom:1px solid gray;background:#ededed">
         {{trans('data.Rating scores')}}:
         </div>
-        <div class="px-2 footer-item">
+        <div class="px-2 footer-item mt-2">
           1 {{trans('data.Acceptable')}} (
                  <v-icon v-if="reportData.rating==='Acceptable'">check</v-icon>
           )
         </div>
-            <div class="px-2 footer-item">
+            <div class="px-2 footer-item mt-2">
           2 {{trans('data.Accepted comments')}} (
           <v-icon v-if="reportData.rating==='withComments'">check</v-icon>
           )
         </div>
-            <div class="px-2 footer-item">
+            <div class="px-2 footer-item mt-2">
           3 {{trans('data.unacceptable')}} (
              <v-icon v-if="reportData.rating==='unacceptable'">check</v-icon>
          )
         </div>
         </div>
       <div class="px-2" style="border-bottom:1px solid gray;width:50%">
-        <div class="footer-item mt-2">{{trans('data.Supervising engineer')}}:
+        <div class="footer-item mt-5">{{trans('data.Supervising engineer')}}:
             {{ reportData.office?reportData.office.name:'' }}
       </div>
          <div class="footer-item mt-2">{{trans('data.signature')}}:
-          <img :src="reportData.office?reportData.office.signature:''" >
+          <img class="signature"  :src="reportData.office?reportData.office.signature:''" >
          </div>
         </div>
      </v-layout>
 </div>
  </v-container>
-	
-</div>
 </template>
 
 <script>
@@ -141,8 +138,7 @@ jsPDF
   },
   props:{
     reportData: null,
-    language: null,
-    savingReport: false
+    language: null
   },
   data(){
      return{
@@ -150,25 +146,33 @@ jsPDF
      }
   },
   methods:{
+        renderComponent(){
+ if(this.reportData){
+          this.$forceUpdate()
+ }
+        },
         printPdf() {
     //  const doc = new jsPDF("p", "pt", "a4", true, { compress: true });
       const Html = this.$refs.pdfHtml;
+      
+          const pdf = new jsPDF("", "", "a4", true, { compress: true });
       html2canvas(Html,{
-        scale: 0.99999999
+        scale: 0.66,
+        height: 3000
       })
       .then((canvas) => {
+        if(this.reportData){
+          this.$forceUpdate()
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF("","", "a4", true, { compress: true });
-        if(!this.savingReport)
-        pdf.addImage(imgData, 'PNG', 0, 0);
-        this.pdfBlob = pdf.output('blob');
-         this.store()
-        window.open(pdf.output("bloburl"), "_blank")
+        pdf.addImage(imgData, 'PNG',2,2)
+        this.pdfBlob = pdf.output('blob');//205,285 mm
+        this.store()
+     //   window.open(pdf.output("bloburl"), "_blank")
+        }
   });
     },
             store() {
             const self = this;
-            console.log(self.reportData)
             let formData = new FormData();
             formData.append('pdfFile', self.pdfBlob);
             formData.append('project_id', self.reportData.project.id);
@@ -181,13 +185,13 @@ jsPDF
                         .post('/reports', formData)
                         .then(function (response) {
                             self.loading = false;
-                            console.log(response.data.msg);
+                            
                             self.$store.commit('showSnackbar', {
                                 message: response.data.msg,
                                 color: response.data.success,
                             });
                             if (response.data.success === true) {
-                                 self.goBack();
+                               self.goBack();
                             }
                         })
                         .catch(function (error) {
@@ -211,10 +215,13 @@ jsPDF
 .title {
   padding: 20px;
   text-align: start;
+  font-size:28px;
 }
 .header{
   border-bottom: 1px solid gray;
       align-items: center;
+      padding-top:10px;
+      padding-bottom: 10px;
 }
 .list-items{
   text-align: center;
@@ -232,7 +239,7 @@ jsPDF
 }
 .footer-item{
       display: flex;
-    max-height: 2.5rem;
+    max-height: 5rem;
     align-items: center;
 }
 .flex{
@@ -246,9 +253,16 @@ table, th, td {
   border-bottom: 0.5px solid gray;
   border-collapse: collapse;
   min-width: 100%;
+  font-size:20px;
+}
+.signature{
+  max-width: 250px;
+    max-height: 100px;
+    margin-top: 4rem;
 }
 .height-detect{
-  height: 2rem;
+  height: 4rem;
+  font-size: 20px;
 }
 .merge_rows{
   border-bottom:none!important;

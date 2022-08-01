@@ -43,6 +43,11 @@
 
                                                         </div>
                                                     </td>
+                                                     <td>
+                                                        <div align="center">
+                                                            {{ props.item.id }}
+                                                        </div>
+                                                    </td>
                                                     <td>
                                                         <div align="center">
                                                             {{ props.item.name }}
@@ -144,6 +149,12 @@ export default {
                     value: false,
                     align: 'centre',
                     sortable: false,
+                },
+                  {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'centre',
+                    sortable: true,
                 },
                 {
                     text: self.trans('messages.name'),

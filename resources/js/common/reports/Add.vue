@@ -31,6 +31,7 @@
                                 :items="report_types"
                                 v-model="report_type"
                                 :label="trans('data.report_type')"
+                                
                                 v-validate="'required'"
                                  data-vv-name="report_type"
                                 :data-vv-as="trans('data.required')"
@@ -72,9 +73,13 @@
                                  
         </v-card-actions>
         <v-spacer></v-spacer>
-        <v-card class="mx-auto" style="max-width: 70%">
-                    <ReportForm  :reportType="report_type" :office="office" :project="project" :report_id="report_id"/>
+        <v-card class="mx-auto report">
+                    <ReportForm  :reportType="report_type" :office="office" :project="project"   :language="language" :report_id="report_id" @getReportData="getReportData" @printPdf="printPdf"/>
+                   
         </v-card>
+        <div class="mx-auto report">
+             <ReportPdf style="z-index:-15;position:fixed;" :reportData="reportData" :language="language" ref="pdf" />
+            </div>
         </v-form>
         <AddReportType :externalDialog="externalDialog" @close="externalDialog = event" @store="externalDialog = event" />
     </v-container>
@@ -82,16 +87,19 @@
 <script>
 import AddReportType from '../report_types/Add.vue'
 import ReportForm from './components/ReportForm.vue'
+import ReportPdf from "./components/ReportPdf.vue"
 
 export default {
     components:{
      AddReportType,
-     ReportForm
+     ReportForm,
+     ReportPdf
     },
     data() {
         return {
             type: 'testt',
             externalDialog: false,
+            reportData: null,
             project: null,
             name: '',
             offices: [],
@@ -103,16 +111,27 @@ export default {
             loading:false,
             projects:[],
             stages: [{id: 1, stage: 'Stage One'}],
-            stage: null
+            stage: null,
+            language: null
         };
     },
     created() {
         const self = this;
         self.getReportTypes();
         self.getProject(self.$route.params.id)
-        
+        self.language = localStorage.getItem('currentLange')?localStorage.getItem('currentLange'):'ar'
     },
     methods: {
+        printPdf(event){
+       this.reportData = event
+        console.log(this.reportData)
+         this.$refs.pdf.renderComponent();
+        this.$refs.pdf.printPdf();
+        },
+        getReportData(event){
+            this.reportData = event
+            this.$refs.pdf?.renderComponent();
+        },
       getProject(project_id) {
          const self = this;
             axios
@@ -160,65 +179,20 @@ export default {
                     console.log(error);
                 });
         },
-         print() {
-            const self = this;
-         /*   self.$validator.validateAll().then((result) => {
-                if (result == true) {
-                    // Pass the element id here
-                   // document.getElementById('input_name').setAttribute('value', this.name);
-                    document
-                        .getElementById('input_report_type')
-                        .setAttribute('value', 'Kick Of Project');
 
-                    //alert(this.report_type)
-                    // Get HTML to print from element
-                    const prtHtml = document.getElementById('printMe').innerHTML;
-
-                    // Get all stylesheets HTML
-                    let stylesHtml = '';
-                    for (const node of [
-                        ...document.querySelectorAll('link[rel="stylesheet"], style'),
-                    ]) {
-                        stylesHtml += node.outerHTML;
-                    }
-                    stylesHtml +=
-                        '<style type="text/css">.v-icon {\n  display: none;\n}}\n</style>';
-                    //
-
-                    // Open the print window
-                    const WinPrint = window.open(
-                        '',
-                        '',
-                        'left=0,top=0,width=1020,height=900,toolbar=0,scrollbars=0,status=0'
-                    );
-
-                    WinPrint.document.write(`<!DOCTYPE html>
-                    <html>
-                    <head>
-                        ${stylesHtml}
-                        
-                    </head>
-                    <body>
-                        ${prtHtml}
-                    </body>
-                    </html>`);
-
-                    //  await this.$htmlToPaper('printMe');
-                    WinPrint.document.close();
-
-                    WinPrint.focus();
-
-                    WinPrint.print();
-                    WinPrint.close();
-                    this.store();
-                }
-            });*/
-        },
     },
 };
 </script>
 
 <style scoped>
+@media screen and (max-width: 600px) {
+    .report{
+max-width: 100%
+    }
+}
+   .report{
+max-width: 65%
+    }
 .card {
     position: relative;
     display: flex;

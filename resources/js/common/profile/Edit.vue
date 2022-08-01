@@ -1,6 +1,6 @@
 <template>
-    <div>
         <v-card>
+             <SignaturePad ref="signature" @save="signature = $event"/>
             <v-form ref="form" v-model="valid" lazy-validation>
                 <v-card-title>
                     <v-icon medium>person</v-icon>
@@ -80,16 +80,16 @@
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6>
-                                <v-text-field
+                                       <v-text-field
                                     :label="trans('messages.confirm_password')"
                                     type="password"
-                                    v-model="passwordConfirm"
+                                    autocomplete="off"
+                                    v-model="passwordConfirm?passwordConfirm:password"
                                     :rules="[
-                                        (v) =>
+                                        v =>
                                             !(v != password && password.length > 0) ||
                                             trans('messages.password_not_match'),
                                     ]"
-                                    required
                                 ></v-text-field>
                             </v-flex>
                             <!-- communication details -->
@@ -273,6 +273,14 @@
                                 >
                                 </v-textarea>
                             </v-flex>
+                              <v-flex
+                                xs12
+                                sm3
+                                class="text-xs-center text-sm-center text-md-center text-lg-center"
+                            >
+                                <!-- Here the image preview -->
+                                <img :src="signature?signature:signatureUrl" height="150" />
+                            </v-flex>
                             <!-- <v-flex xs12 sm6>
                                 <v-autocomplete
                                     multiple
@@ -315,7 +323,9 @@
                         <v-btn @click="save()" color="primary" :disabled="!valid || !checkActive()">
                             {{ trans('messages.update') }}
                         </v-btn>
-
+          <v-btn color="secondary" class="mr-4" @click="$refs.signature.dialog = true">
+                            {{ trans('data.addSignature') }}
+                        </v-btn>
                         <v-btn style="color: #06706d" @click="$router.go(-1)">
                             {{ trans('data.cancel') }}
                         </v-btn>
@@ -323,11 +333,16 @@
                 </v-layout>
             </v-form>
         </v-card>
-    </div>
 </template>
 
 <script>
+import SignaturePad from '../../admin/users/components/SignaturePad'
+import Popover from '../../admin/popover/Popover';
 export default {
+    components:{
+SignaturePad,
+Popover
+    },
     data() {
         const self = this;
 
@@ -344,6 +359,9 @@ export default {
             id_card_number: '',
             send_email: false,
             is_edit_role: false,
+                  signature: null,
+            signatureUrl: null,
+            passwordConfirm: null
             //  enginnering_type: 'it_enginnering',
         };
     },
@@ -367,6 +385,7 @@ export default {
                     self.email = User.email;
                     self.id_card_number = User.id_card_number;
                     self.active = User.active !== null;
+                    self.signatureUrl = response.data.user.signature;
                     // self.roles = response.data.roles;
                     // self.form_fields.role_ids = response.data.role_ids;
                     self.checkRolePrimary(self.propUserId);
@@ -412,10 +431,14 @@ export default {
                 },
             });
         },
+           reset() {
+            this.$refs.form.reset();
+        },
               save() {
             const self = this;
             if (this.$refs.form.validate()) {
                 let payload = {
+                    signature: self.signature,
                     name: self.name,
                     mobile: self.form_fields.mobile,
                     alternate_num: self.form_fields.alternate_num,

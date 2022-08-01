@@ -127,7 +127,7 @@ class ProjectController extends Controller
     {
         $childrens=Auth::user()->childrenIds(Auth::user()->id);
         array_push($childrens,Auth::user()->id);
-        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency','creator','report','report.reportCreator','report.type');
+        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','creator','report','report.media','report.reportCreator','report.type');
         if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
             $projects = $projects->where(function($q) use ($childrens) {
                 $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) use ($childrens) {

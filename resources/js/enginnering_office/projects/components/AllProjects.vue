@@ -161,6 +161,7 @@
                                                         </v-btn> 
                                                     </div>  
                                                 </td>
+                                                  <td>{{ props.item.id }}</td>
                                                 <td>{{ props.item.name }}</td>
                                                 <td> {{ props.item.customer.company }}</td>
                                                 <td>
@@ -213,6 +214,12 @@ export default {
                     sortable: false,
                 },
                 {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'left',
+                    sortable: true,
+                },
+                  {
                     text: self.trans('messages.name'),
                     value: 'name',
                     align: 'left',

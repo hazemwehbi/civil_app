@@ -157,8 +157,8 @@ export default {
                     sortable: true,
                 },
                 {
-                    text: self.trans('messages.id'),
-                    value: false,
+                    text: self.trans('data.id'),
+                    value: 'id',
                     align: 'center',
                     sortable: false,
                 },

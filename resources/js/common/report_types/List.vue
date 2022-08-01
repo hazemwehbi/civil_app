@@ -49,6 +49,7 @@
                             </v-list>
                         </v-menu>
                     </td>
+                    <td align="center">{{ props.item.id }}</td>
                     <td align="center">{{ props.item.type_name_ar }}</td>
                     <td align="center">{{ props.item.type_name_en }}</td>
                     <td @click="props.expanded = !props.expanded" align="center">
@@ -98,6 +99,12 @@ export default {
                     value: false,
                     align: 'center',
                     sortable: false,
+                },
+                {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'center',
+                    sortable: true,
                 },
                 {
                     text: self.trans('data.type_name_ar'),

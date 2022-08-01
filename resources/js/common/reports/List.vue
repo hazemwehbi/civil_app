@@ -7,7 +7,7 @@
                     </div>
                 </div>
                        <v-btn style="color: #06706d" 
-                       v-if="$can('report.create') && ($hasRole('Engineering Office Manager')|| $hasRole('superadmin'))"
+                       v-if="$can('report.create')"
                                                                     :disabled="!checkActive()"
                                                                     @click="
                                                                         $router.push({
@@ -46,9 +46,9 @@
                                     v-if="$hasRole('Engineering Office Manager')|| $hasRole('superadmin')"
                                    @click="$router.push({name: 'edit_report', 
                                    params:{
-                                    id :props.item.id,
-                                    url: props.item.media[props.item.media.length-1].full_url.replace('upload','public/upload')
-                                   // id :props.item.media[props.item.media.length-1].original_url
+                                    //id :props.item.id,
+                                    id: props.item.media[props.item.media.length-1].full_url.replace('upload','public/upload')
+
                                    }
                                                                         })">
                                     <v-list-tile-title>
@@ -68,7 +68,8 @@
                             </v-list>
                         </v-menu>
                     </td>
-                    <td align="center">{{ props.item.report_creator.name }}</td>
+                    <td align="center">{{props.item.id}}</td>
+                    <td align="center">{{ props.item.project.customer.name }}</td>
                     <td align="center">{{props.item.office.name}}</td>
                      <td align="center">
                         <span v-for="contractor in props.item.project.members.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')" :key="contractor.id">
@@ -104,6 +105,12 @@ export default {
                     value: false,
                     align: 'center',
                     sortable: false,
+                },
+                 {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'center',
+                    sortable: true,
                 },
                 {
                     text: self.trans('data.owner'),

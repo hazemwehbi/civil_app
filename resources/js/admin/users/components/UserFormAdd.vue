@@ -426,9 +426,8 @@ export default {
     },
         save() {
             const self = this;
-            console.log(self.signatureData)
- let data = new FormData();
-                data.append('file', self.imageFile);
+             //  let data = new FormData();
+            //    data.append('file', self.imageFile);
             if (this.$refs.form.validate()) {
                 let payload = {
                     signature: self.signatureData,

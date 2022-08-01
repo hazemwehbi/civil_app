@@ -3,13 +3,20 @@
     <v-flex xs12 sm12>
       <v-card class="pa-2 container-list">
            <v-card :key="index" v-for="(item, index) in reportData.filter(val => val.report.length>0)" flat>
-               <div class="btn-bar">
-                    <v-btn outline color="indigo" @click="view(item.id)"
+                <div v-for="rep in item.report" :key="rep.id" flat class="pa-10">
+                     <div class="btn-bar">
+                    <v-btn outline color="indigo"
+                                     @click="$router.push({name: 'edit_report', 
+                                   params:{
+                                    id :rep.id,
+                                    url: rep.media[rep.media.length-1].full_url.replace('upload','public/upload')
+                                   }
+                                                                        })"
                                                                     v-if="$can('project.list')">
                                                                      <v-icon>list</v-icon>
                                                                     {{ trans('data.view') }}
                                                                     </v-btn>
-                                                                      <v-btn outline color="teal"
+                                                                     <!-- <v-btn outline color="teal"
                                                                       v-if="$can('report.create')"
                                                                     :disabled="!checkActive()"
                                                                     @click="
@@ -19,13 +26,11 @@
                                                                         })">
                                                                          <v-icon>print</v-icon>
                                                                     {{ trans('data.create_a_report')}}
-                                                                    </v-btn></div>
-                <div class="element"><div class="col-title">{{trans('data.name')}}</div><div class="content">{{ item.customer.name }} </div></div>
-                <!--<div class="element"><div class="col-title">{{trans('data.description')}}</div><div class="content">{{ item.note }}</div></div>-->
-                <v-card v-for="rep in item.report" :key="rep.id" flat class="pa-10">
-                <div class="element"><div class="col-title">{{trans('data.type')}}</div><div class="content" >{{ rep.type.type_name }}</div></div>
+                                                                    </v-btn>--></div>
+                <div class="element"><div class="col-title">{{trans('data.owner')}}</div><div class="content">{{ item.customer.name }} </div></div>
+                <div class="element"><div class="col-title">{{trans('data.type')}}</div><div class="content" >{{ language == 'ar'?rep.type.type_name_ar:rep.type.type_name_en }}</div></div>
                 <div class="element"><div class="col-title">{{trans('data.created_by')}}</div><div class="content">{{ rep.report_creator.name }}</div></div>
-                </v-card>
+                </div>
            </v-card>
       </v-card>
     </v-flex>
@@ -43,9 +48,12 @@ export default {
     data () {
       return {
         selected: [2],
+        language: ''
       }
     },
-     
+     created(){
+        this.language = localStorage.getItem('currentLange')?localStorage.getItem('currentLange'):'ar'
+     },
     methods: {
    getprogress(status) {
             if (status == 'not_started') {

@@ -36,7 +36,8 @@
              window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
 
             @php
-                $user = Auth::user();
+                $user =  Auth::user();
+               $current_user=  new App\Http\Resources\UserResource($user);
             @endphp
 
             APP.USER_PERMISSIONS = {!! json_encode($user->getUserPermissions($user), true) !!};
@@ -44,7 +45,7 @@
             APP.DATE_FORMAT = {!! json_encode($user->appDateFormat()) !!};
             APP.TIME_FORMAT = {!! json_encode($user->appTimeFormat()) !!};
             APP.USER_TYPE_LOG = {!! json_encode($user->user_type_log) !!};
-            APP.CURRENT_USER = {!! json_encode($user) !!};
+            APP.CURRENT_USER = {!! json_encode($current_user) !!};
             
         @else
              window.Permissions = [];

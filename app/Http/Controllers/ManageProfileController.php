@@ -27,7 +27,7 @@ class ManageProfileController extends Controller
         try {
             $user_id = request()->user()->id;
             $user = User::with('media','specialty')->findOrFail($user_id);
-
+            $user->signature = $user->getFirstMedia('signature')?$user->getFirstMedia('signature')->original_url:'';
             $output = $this->respond($user);
         } catch (Exception $e) {
             $output = $this->respondWentWrong($e);
@@ -82,7 +82,7 @@ class ManageProfileController extends Controller
 
         try {
             $user = User::find($id);
-
+            $user->signature = $user->getFirstMedia('signature')?$user->getFirstMedia('signature')->original_url:'';
             $role_id = $user->roles->first()->id;
             $gender_types = User::getGenders();
             
@@ -141,6 +141,7 @@ class ManageProfileController extends Controller
             DB::beginTransaction();
 
             $payload = $request->only(
+                'signature',
                 'name',
                 'mobile',
                 'alternate_num',
@@ -183,7 +184,11 @@ class ManageProfileController extends Controller
           
             /** @var User $user */
             $user = $this->userRepository->find($id);
-      
+            if($payload['signature']){
+               
+                $user->clearMediaCollection('signature');
+                $user->addMediaFromBase64($payload['signature'])->usingFileName('signature'.time().'.png')->toMediaCollection('signature');
+            }
             // $role_ids = $request->input('role');
             // if (!empty($role_id)) {
             //     foreach($role_ids as $role_id){

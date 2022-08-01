@@ -1,6 +1,6 @@
 <template>
-    <div>
         <v-card>
+            <SignaturePad ref="signature" @save="signatureData = $event"/>
             <v-form ref="form" v-model="valid" lazy-validation>
                 <v-card-title>
                     <v-icon medium>person</v-icon>
@@ -370,6 +370,9 @@
                         >
                             {{ trans('messages.save') }}
                         </v-btn>
+                          <v-btn color="secondary" class="mr-4" @click="$refs.signature.dialog = true">
+                            {{ trans('data.addSignature') }}
+                        </v-btn>
                         <v-btn style="color: #06706d" @click="$router.go(-1)">
                             {{ trans('messages.back') }}
                         </v-btn>
@@ -377,14 +380,15 @@
                 </v-layout>
             </v-form>
         </v-card>
-    </div>
 </template>
 
 <script>
 import Popover from '../../../admin/popover/Popover';
+import SignaturePad from '../../../admin/users/components/SignaturePad'
 export default {
     components: {
         Popover,
+        SignaturePad
     },
     data() {
         const self = this;
@@ -405,6 +409,7 @@ export default {
             roles: [],
             send_email: false,
             enginnering_type: '',
+            signatureData: null
         };
     },
     mounted() {
@@ -433,6 +438,7 @@ export default {
 
             if (this.$refs.form.validate()) {
                 let payload = {
+                    signature: self.signatureData,
                     name: self.name,
                     email: self.email,
                     mobile: self.form_fields.mobile,

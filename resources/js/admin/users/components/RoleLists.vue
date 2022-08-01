@@ -82,6 +82,9 @@
                             </v-menu>
                         </div>
                     </td>
+                      <td>
+                        <div align="center">{{ props.item.id }}</div>
+                    </td>
                     <td>
                         <div align="center">{{ props.item.name }}</div>
                     </td>
@@ -120,6 +123,12 @@ export default {
                     value: false,
                     align: 'center',
                     sortable: false,
+                },
+                    {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'center',
+                    sortable: true,
                 },
                 {
                     text: self.trans('messages.name'),

@@ -76,6 +76,7 @@
                             </v-list>
                         </v-menu>
                     </td>
+                    <td>{{ props.item.id }}</td>
                     <td>{{ props.item.name }}</td>
                     <td>{{ props.item.email }}</td>
                 </template>
@@ -106,6 +107,12 @@ export default {
                     value: false,
                     align: 'left',
                     sortable: false,
+                },
+                  {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'left',
+                    sortable: true,
                 },
                 { text: self.trans('messages.name'), value: 'name', align: 'left', sortable: true },
                 {

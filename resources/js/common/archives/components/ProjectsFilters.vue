@@ -218,7 +218,7 @@ export default {
     },
     created() {
         const self = this;
-        self.url = 'projects';
+        self.url = '/project/dataFilters';
         self.getDataFromApi();
         self.getFilterData();
          self.getLocationInfo();

@@ -17,13 +17,19 @@
                 {{ trans('data.print') }}
             </v-btn>
         </v-card-actions>
-       
+   
             	<pdf
         ref="myPdfComponent"
         class="mx-auto"
-        style="width:70%"
+        style="width:60%"
 			:src="url"
-		></pdf>
+		>
+                <v-progress-circular
+      :size="50"
+      color="primary"
+      indeterminate
+    ></v-progress-circular>
+        </pdf>
            <!-- <v-divider></v-divider>
                 
                     <ReportForm :reportType="report_type" :edit="true" :report="report" :office="office" />
@@ -54,20 +60,9 @@ export default {
     created() {
         const self = this;
         self.getReport(self.$route.params.id);
-        self.url = self.$route.params.url
+        self.url = self.$route.params.id
     },
-    beforeDestroy() {
-        const self = this;
-    },
-    mounted: function () {},
     methods: {
-    
-        getFields(input, field) {
-            var output = [];
-
-            for (var i = 0; i < input.length; ++i) output.push(input[i][field]);
-            return output.join('&&');
-        },
         getReport(id) {
             const self = this;
             axios
@@ -75,7 +70,6 @@ export default {
                 .then(function (response) {
                     self.report = response.data;
                     self.pdf_url = self.report?.media[self.report?.media.length-1].full_url.replace('upload','public/upload')
-                    console.log(self.report,self.pdf_url)
                     self.$forceUpdate()
                 })
                 .catch(function (error) {

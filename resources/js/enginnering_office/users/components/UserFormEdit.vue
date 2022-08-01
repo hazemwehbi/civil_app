@@ -1,6 +1,7 @@
 <template>
-    <div>
         <v-card>
+
+            <SignaturePad ref="signature" @save="signature = $event"/>
            <v-form ref="form" v-model="valid" lazy-validation>
             <v-card-title>
                 <v-icon medium>person</v-icon>
@@ -337,6 +338,14 @@
                                     required
                                 ></v-autocomplete>
                             </v-flex>
+                             <v-flex
+                                xs12
+                                sm3
+                                class="text-xs-center text-sm-center text-md-center text-lg-center"
+                            >
+                                <!-- Here the image preview -->
+                                <img :src="signature?signature:signatureUrl" height="150" />
+                            </v-flex>
                             <!-- <v-flex xs12 sm3 v-if="$hasRole('superadmin')">
                                 <v-switch
                                     :label="trans('messages.pre_Active_acount')"
@@ -361,7 +370,9 @@
                     <v-btn @click="save()" color="primary" :disabled="!valid || !checkActive()" >
                         {{ trans('messages.update') }}
                     </v-btn>
-
+  <v-btn color="secondary" class="mr-4" @click="$refs.signature.dialog = true">
+                            {{ trans('data.addSignature') }}
+                        </v-btn>
                     <v-btn style="color: #06706d" @click="$router.go(-1)">
                         {{ trans('data.cancel') }}
                     </v-btn>
@@ -369,14 +380,16 @@
             </v-layout>
                </v-form>
         </v-card>
-    </div>
 </template>
 
 <script>
 import Popover from '../../../admin/popover/Popover';
+import SignaturePad from '../../../admin/users/components/SignaturePad'
+
 export default {
     components: {
         Popover,
+        SignaturePad
     },
     props: {
         propUserId: {
@@ -394,6 +407,7 @@ export default {
             gender_types: [],
             email: '',
             password: '',
+            passwordConfirm: '',
             active: '',
             roles: [],
             enginnering_types: [],
@@ -401,13 +415,14 @@ export default {
             send_email: false,
             is_edit_role: false,
             specialty_id: null,
-           
+           signature: null,
+            signatureUrl: null
         };
     },
     mounted() {
         const self = this;
         self.getEnginneringTypes();
-        self.checkCurrentUserType();
+       // self.checkCurrentUserType();
         // this.loadUser(() => {});
     },
     created() {
@@ -429,6 +444,7 @@ export default {
             const self = this;
             if (this.$refs.form.validate()) {
                 let payload = {
+                    signature: self.signature,
                     name: self.name,
                     mobile: self.form_fields.mobile,
                     alternate_num: self.form_fields.alternate_num,
@@ -513,8 +529,7 @@ export default {
                     self.form_fields.role_ids = response.data.role_ids;
                     self.checkRolePrimary(self.propUserId);
                     self.specialty_id = User.specialty_id;// JSON.parse(User.enginnering_type).toString();
-                    //  alert(JSON.parse(User.enginnering_type));
-                    //   self.is_edit_role = response.data.is_edit_role;
+                    self.signatureUrl = response.data.user.signature;
                 });
         },
         checkRolePrimary(id) {

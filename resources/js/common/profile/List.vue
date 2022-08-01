@@ -172,6 +172,18 @@
                                 </v-tooltip>
                             </v-flex>
                         </v-layout>
+                          <v-layout>
+                            <v-flex v-if="data.signature" xs12 sm6 md6>
+                                <v-tooltip top>
+                                    <template slot="activator">
+                                        <v-icon>signature</v-icon>
+                                         <img  :src="data.signature" height="150" />
+                                    </template>
+
+                                    <span>{{ trans('messages.id_card_number') }}</span>
+                                </v-tooltip>
+                            </v-flex>
+                        </v-layout>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn

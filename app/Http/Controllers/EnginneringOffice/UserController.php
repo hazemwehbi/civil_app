@@ -64,11 +64,6 @@ class UserController extends  Controller
 
                 //$query->orWhere('id', Auth::id());
             });
-         
-
-
-        
-
         if (!empty($request->get('name'))) {
             $term = $request->get('name');
             $users->where('name', 'like', "%$term%");
@@ -153,7 +148,7 @@ class UserController extends  Controller
         try {
             DB::beginTransaction();
 
-            $input = $request->only('name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password','active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number','specialty_id');
+            $input = $request->only('signature','name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password','active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number','specialty_id');
             $input['parent_id']=Auth::id(); 
             $input['isActive']=1; 
             $input['is_emp']=1; 
@@ -162,7 +157,11 @@ class UserController extends  Controller
 
                        /** @var User $user */
             $user = $this->userRepository->create($input);
-           
+            if($input['signature']){
+               
+                $user->clearMediaCollection('signature');
+                $user->addMediaFromBase64($input['signature'])->usingFileName('signature'.time().'.png')->toMediaCollection('signature');
+            }
             $role_ids = $request->input('role');
             if (!empty($role_ids)) {
                 foreach($role_ids as $role_id){
@@ -266,7 +265,7 @@ class UserController extends  Controller
 
         try {
             $user = User::find($id);
-
+            $user->signature = $user->getFirstMedia('signature')?$user->getFirstMedia('signature')->original_url:'';
             $role_id = $user->roles->first()->id;
             $gender_types = User::getGenders();
             
@@ -319,6 +318,7 @@ class UserController extends  Controller
             DB::beginTransaction();
 
             $payload = $request->only(
+                'signature',
                 'name',
                 'mobile',
                 'alternate_num',
@@ -362,6 +362,11 @@ class UserController extends  Controller
           
             /** @var User $user */
             $user = $this->userRepository->find($id);
+            if($payload['signature']){
+               
+                $user->clearMediaCollection('signature');
+                $user->addMediaFromBase64($payload['signature'])->usingFileName('signature'.time().'.png')->toMediaCollection('signature');
+            }
             $user->roles()->detach();
 
             $role_ids = $request->input('role');

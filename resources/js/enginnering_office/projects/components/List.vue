@@ -214,7 +214,11 @@
                                                         <!-- <td>{{ props.item.id }}</td> -->
                                                     </div>
                                                 </td>
-
+<td>
+                                                    <div align="center">
+                                                        {{ props.item.id }}
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <div align="center">
                                                         {{ props.item.name }}
@@ -311,12 +315,12 @@ export default {
                     align: 'center',
                     sortable: false,
                 },
-                // {
-                //     text: self.trans('messages.id'),
-                //     value: 'id',
-                //     align: 'left',
-                //     sortable: true,
-                // },
+                {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'center',
+                    sortable: true,
+                },
                 {
                     text: self.trans('messages.name'),
                     value: 'name',

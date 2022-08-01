@@ -32,12 +32,9 @@ class ReportController extends Controller
         }
         $reports =  Report::with('project','reportCreator','media','project.members','type','project.customer','office')->orderBy($sort_by, $orderby);
         if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
-            $reports = $reports->where('created_by', Auth::user()->id);
-           /* ->orWereHas('projects',function($q){
-                $q->whereHas('members', function($query){
-                    $query->where('user_id',Auth::id());
-                });
-            });*/
+            $reports = $reports->where('created_by', Auth::id())
+                       ->orWhere('office_id', Auth::id())
+                       ->orWhere('office_id', Auth::user()->parent_id);
         }
         $project_note = $reports->paginate($rowsPerPage);
         return $this->respond($project_note);
@@ -152,7 +149,7 @@ class ReportController extends Controller
     }
 
     public function getOffices(Request $request){
-        $offices= User::with('office','office.media')->where('user_type_log','ENGINEERING_OFFICE_MANAGER')
+        $offices= User::where('user_type_log','ENGINEERING_OFFICE_MANAGER')
         ->WhereHas('projects', function ($q) use ($request) {
                  $q->Where('projects.id', $request->project_id);
              })
@@ -185,7 +182,7 @@ class ReportController extends Controller
         else
         $projects = $projects->get();
         $offices= UserResource::collection(User::where('user_type_log','ENGINEERING_OFFICE_MANAGER')->get());
-        $report_id=Report::latest()->first()->id+1;
+        $report_id=Report::latest()->first()?Report::latest()->first()->id+1:1;
         $data = ['offices' => $offices, 'types' => $types, 'projects' => $projects,'report_id'=>$report_id ];
 
         return $data;

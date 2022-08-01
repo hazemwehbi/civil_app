@@ -328,7 +328,7 @@
                                 "
                             >
                                 <!-- Here the image preview -->
-                                <img :src="imageUrl" height="150" v-if="imageUrl" />
+                                <img :src="logo?logo:imageUrl" height="150" v-if="imageUrl || logo" />
                                 <v-text-field
                                     label="Select Image"
                                     @click="pickFile"
@@ -423,6 +423,7 @@ export default {
             imageFile: null,
             imageName: '',
             signature: null,
+            logo:null,
             signatureUrl: null
         };
     },
@@ -449,14 +450,13 @@ export default {
                 const fr = new FileReader();
                 fr.readAsDataURL(files[0]);
                 fr.addEventListener('load', () => {
-                    this.imageUrl = fr.result;
+                    this.logo = fr.result;
                     this.imageFile = files[0];
                 });
-                console.log(this.imageUrl)
             } else {
                 this.imageName = '';
                 this.imageFile = '';
-                this.imageUrl = '';
+                this.logo = '';
             }
         },
         save() {
@@ -491,7 +491,7 @@ export default {
                     tax_payer_id: self.form_fields.tax_payer_id,
                     id_card_number: self.id_card_number,
                     title: self.title,
-                    file: self.imageUrl
+                    file: self.logo
                 };
                 let data = new FormData();
                 data.append('file', self.imageFile);
@@ -553,9 +553,6 @@ export default {
                 self.title = response.data.user.title;
                 self.signatureUrl = response.data.user.signature;
                 self.imageUrl = response.data.user.logo
-               /* self.imageUrl = response.data.user.media[
-                    response.data.user.media.length - 1
-                ].full_url//.replace('upload', 'public/upload');*/
             });
         },
 

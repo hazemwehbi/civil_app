@@ -242,6 +242,7 @@
                             </v-list>
                         </v-menu>
                     </td>
+                    <td>{{ props.item.id }}</td>
                     <td>{{ props.item.invoice_number }}</td>
                     <td>{{ props.item.title }}</td>
                     <td>{{ props.item.customer }}</td>
@@ -290,6 +291,12 @@ export default {
                 {
                     text: self.trans('messages.invoice_number'),
                     value: 'invoice_number',
+                    align: 'left',
+                    sortable: true,
+                },
+                {
+                    text: self.trans('data.id'),
+                    value: 'id',
                     align: 'left',
                     sortable: true,
                 },

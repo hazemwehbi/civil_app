@@ -253,6 +253,7 @@
                             </v-list>
                         </v-menu>
                     </td>
+                    <td>{{ props.item.id }}</td>
                     <td>{{ props.item.invoice_date | formatDate }}</td>
                     <td>{{ props.item.invoice_number }}</td>
                     <td>{{ props.item.project }}</td>
@@ -296,6 +297,12 @@ export default {
                     value: false,
                     align: 'left',
                     sortable: false,
+                },
+                   {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'left',
+                    sortable: true,
                 },
                 {
                     text: self.trans('messages.date'),

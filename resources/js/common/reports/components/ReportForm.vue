@@ -1,11 +1,11 @@
 <template>
-<div>
+
   <div>
                 <v-container grid-list-md  id="printMe">
 <div class="mt-5"  style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">
   <div class="d-flex justify-space-between header">
     <div class="title">{{ reportData.office?reportData.office.title:'' }}</div>
-    <div class="logo"><img style="max-width:150px" :src="reportData.office?reportData.office.logo:''" /></div>
+    <div class="logo"><img style="max-width:150px;max-height:110px" :src="reportData.office?reportData.office.logo:''" /></div>
   </div>
   <div class="type_data">
     <div class="type_name">{{ language == 'ar'?reportData.type.type_name_ar:reportData.type.type_name_en }}</div>
@@ -79,7 +79,7 @@
             ></v-switch>
       </td>
    <td :rowspan="reportData.type.type_list_ar.length" >  
-        <v-textarea v-if="index==0"  v-model="reportData.notes" :rows="reportData.type.type_list_ar.length" cols="8" class="mx-1"></v-textarea>
+        <v-textarea v-if="index==0" @keypress="textAreaWrite" clearable v-model="reportData.notes" no-resize :rows="reportData.type.type_list_ar.length" cols="8" class="mx-1"></v-textarea>
       </td>
   </tr>
 <tr  v-if="language == 'en'" row wrap v-for="(type_list, index) in reportData.type.type_list_en" :key="index+'x'">
@@ -94,7 +94,7 @@
             ></v-switch>
       </td>
    <td :rowspan="reportData.type.type_list_ar.length">  
-        <v-textarea v-model="reportData.notes"  v-if="index==0" :rows="reportData.type.type_list_ar.length" cols="8" class="mx-1"></v-textarea>
+        <v-textarea  v-model="reportData.notes" @keypress="textAreaWrite" clearable no-resize  v-if="index==0" :rows="reportData.type.type_list_ar.length" cols="8" class="mx-1"></v-textarea>
       </td>
   </tr>
 </table>
@@ -141,7 +141,7 @@
         {{ reportData.office?reportData.office.name:'' }}
         </div>
          <div class="footer-item mt-2">{{trans('data.signature')}}:
-          <img :src="reportData.office?reportData.office.signature:''" >
+          <img class="signature" :src="reportData.office?reportData.office.signature:''" >
          </div>
         </div>
      </v-layout>
@@ -151,7 +151,6 @@
                 style="background-color: #06706d; color: white"
                 color="darken-1"
                 class="mt-3"
-                v-if="!edit"
                 @click="printReport"
                 :loading="loading"
                 :disabled="loading"
@@ -159,32 +158,25 @@
                 {{ trans('data.save') }}
             </v-btn>
 </div>
-	<ReportPdf style="z-index:-15;position:fixed" :reportData="reportData" :language="language" ref="pdf" />
-</div>
+	
 </template>
 
 <script>
-
-import ReportPdf from "./ReportPdf.vue"
-
 export default {
-  components:{
-ReportPdf
-  },
+
   props:{
     reportType: null,
     project: null,
     office: null,
     report: null,
-    edit: false,
-    report_id: null
+    report_id: null,
+     language: null,
   },
 data(){
   return {
     reportData: {equal:[]},
      loading: false,
-     language: 'ar',
-     savingReport: true,
+    
      options:[this.trans('data.yes'),this.trans('data.no')],
       rulesText1: [
            v => v && v.length <= 12 || 'Max 12 characters',
@@ -195,14 +187,19 @@ data(){
       rulesNumber:[
         v => v && v.length <= 5 || 'Max 5 characters',
         v => Number.isInteger(Number(v)) || 'The value must be an integer number',
-      ]
+      ],
   }
 },
+ computed: {
+    lineCount: function() {
+      // Return number of lines using regex if not empty
+      return this.reportData?.notes?.length ? this.reportData?.notes?.split(/\r\n|\r|\n/).length : 0;
+    }
+  },
 created(){
   const self = this;
   self.currentDateTime();
   self.getReportData();
-  self.language = localStorage.getItem('currentLange')?localStorage.getItem('currentLange'):'ar'
 },
 watch:{
   reportType(){
@@ -219,9 +216,16 @@ this.getReportData();
   }
 },
 methods:{
+  textAreaWrite(event){
+   if(event.which === 13)
+    this.lineCount == this.reportData.type.type_list_ar.length?event.preventDefault():''
+    else{
+    this.lineCount > this.reportData.type.type_list_ar.length?event.preventDefault():''
+    this.reportData?.notes?.length == this.reportData.type.type_list_ar.length * 25 ? event.preventDefault():''
+    }
+  },
   printReport(){
-    this.savingReport = false;
-    this.$refs.pdf.printPdf();
+    this.$emit('printPdf', this.reportData)
   },
       getReportData() {
          const self = this;
@@ -234,8 +238,8 @@ methods:{
                      self.reportData.owner= self.project?.customer?.name
                      self.reportData.project= self.project
                      self.reportData.contractors = self.project?.members?.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')
-                     
-                     self.$forceUpdate();  
+                    this.$emit('getReportData', this.reportData)
+                    self.$forceUpdate(); 
         },
    
     currentDateTime() {
@@ -257,6 +261,10 @@ this.$forceUpdate();
 <style scoped>
 .sm1, .md1,.sm6,.md6,.sm2 ,.md2{
   justify-content: center;
+}
+.v-textarea >>> textarea{
+  overflow: hidden!important;
+  resize: none;
 }
 .logo{
   text-align: end;
@@ -310,9 +318,11 @@ table, th, td {
   max-width: fit-content;
   white-space: nowrap;
 }
-/*::v-deep .theme--light.v-text-field>.v-input__control>.v-input__slot:before{
-  border:none!important 
-}*/
+.signature{
+  max-width: 250px;
+    max-height: 100px;
+    margin-top: 4rem;
+}
 .text-input{
   margin:-0.6rem 15px 0 15px;
   padding: 0;

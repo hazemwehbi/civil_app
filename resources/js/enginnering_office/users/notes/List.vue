@@ -71,6 +71,7 @@
                             </v-list>
                         </v-menu>
                     </td>
+                    <td>{{ props.item.id }}</td>
                     <td>{{ props.item.heading }}</td>
                     <td>{{ props.item.user.name }}</td>
                     <td>{{ props.item.created_at | formatDate }}</td>
@@ -104,6 +105,12 @@ export default {
                     value: false,
                     align: 'left',
                     sortable: false,
+                },
+                 {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'left',
+                    sortable: true,
                 },
                 {
                     text: self.trans('messages.heading'),
