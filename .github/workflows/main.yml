@@ -25,7 +25,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 2
+          server: ${{ secrets.SERVER}}
+          username: ${{ secrets.USERNAME}}
+          password: ${{ secrets.PASSWORD}}
           
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -38,10 +40,3 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
 
-
-      - name: 📂 Sync files
-        uses: hazemwehbi/civil_app@develop
-        with:
-          server: ${{ secrets.SERVER}}
-          username: ${{ secrets.USERNAME}}
-          password: ${{ secrets.PASSWORD}}
