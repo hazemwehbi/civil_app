@@ -9,12 +9,11 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: hazemwehbi/civil_app
-        path: .github/actions   
+        path: .github/wokflows
 
     - name: 📂 Sync files
       uses: hazemwehbi/civil_app@master
       with:
-        branch: master
         server: ${{ secrets.SERVER}}
         username: ${{ secrets.USERNAME}}
         password: ${{ secrets.PASSWORD}}
