@@ -6,10 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.3.2
 
     - name: 📂 Sync files
-      uses: hazemwehbi/civil_app/.github/actions/civil_app@master
+      uses: hazemwehbi/civil_app/actions@master
       with:
         server: ${{ secrets.SERVER}}
         username: ${{ secrets.USERNAME}}
