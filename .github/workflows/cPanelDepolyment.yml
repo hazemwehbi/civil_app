@@ -2,7 +2,7 @@ name: Publish Website to Web Hosting
 on:
   push:
     branches:
-      - main
+      - master
 jobs:
   civil_app: 
     name: civil_app
