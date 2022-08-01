@@ -10,8 +10,9 @@ jobs:
         
 
     - name: 📂 Sync files
-      uses: hazemwehbi/civil_app@new
+      uses: hazemwehbi/civil_app@master
       with:
+        branch: new
         server: ${{ secrets.SERVER}}
         username: ${{ secrets.USERNAME}}
         password: ${{ secrets.PASSWORD}}
