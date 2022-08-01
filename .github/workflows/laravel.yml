@@ -6,7 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
-      uses: actions/checkout@latest
+      uses: actions/checkout@v2
+    - name: My first step
+      uses: ./.github/actions/my-action
 
     - name: 📂 Sync files
       uses: hazemwehbi/civil_app@new
