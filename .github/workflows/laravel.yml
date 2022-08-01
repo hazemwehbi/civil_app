@@ -7,12 +7,9 @@ jobs:
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
-      with:
-        repository: hazemwehbi/civil_app
-        path: .github/wokflows
 
     - name: 📂 Sync files
-      uses: hazemwehbi/civil_app@master
+      uses: hazemwehbi/civil_app@v0
       with:
         server: ${{ secrets.SERVER}}
         username: ${{ secrets.USERNAME}}
