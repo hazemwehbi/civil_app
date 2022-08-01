@@ -38,9 +38,4 @@ jobs:
           echo test, and deploy your project.
 
 
-      - name: 📂 Sync files
-        uses: hazemwehbi/civil_app@main
-        with:
-          server: ${{ secrets.SERVER}}
-          username: ${{ secrets.USERNAME}}
-          password: ${{ secrets.PASSWORD}}
+
