@@ -40,7 +40,7 @@ jobs:
 
 
       - name: 📂 Sync files
-        uses: hazemwehbi/civil_app@main
+        uses: hazemwehbi/civil_app@develop
         with:
           server: ${{ secrets.SERVER}}
           username: ${{ secrets.USERNAME}}
