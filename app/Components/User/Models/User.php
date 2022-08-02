@@ -674,7 +674,10 @@ class User extends Authenticatable implements HasMedia
     {        
         return $this->hasMany('App\Components\User\Models\User','parent_id');
     }
-
+    public function parent()
+    {        
+        return $this->belongsTo('App\Components\User\Models\User','parent_id');
+    }
     public function childrenIds($parent_id){
       return   User::where('parent_id', $parent_id)
         ->pluck('id')

@@ -2,8 +2,7 @@
   <v-layout row>
     <v-flex xs12 sm12>
       <v-card class="pa-2 container-list">
-           <v-card :key="index" v-for="(item, index) in reportData.filter(val => val.report.length>0)" flat>
-                <div v-for="rep in item.report" :key="rep.id" flat class="pa-10">
+           <v-card :key="index" v-for="(item, index) in reportData" flat>
                      <div class="btn-bar">
                     <v-btn outline color="indigo"
                                      @click="$router.push({name: 'edit_report', 
@@ -16,21 +15,10 @@
                                                                      <v-icon>list</v-icon>
                                                                     {{ trans('data.view') }}
                                                                     </v-btn>
-                                                                     <!-- <v-btn outline color="teal"
-                                                                      v-if="$can('report.create')"
-                                                                    :disabled="!checkActive()"
-                                                                    @click="
-                                                                        $router.push({
-                                                                            name: 'add_report',
-                                                                            params: {project: item,},
-                                                                        })">
-                                                                         <v-icon>print</v-icon>
-                                                                    {{ trans('data.create_a_report')}}
-                                                                    </v-btn>--></div>
-                <div class="element"><div class="col-title">{{trans('data.owner')}}</div><div class="content">{{ item.customer.name }} </div></div>
-                <div class="element"><div class="col-title">{{trans('data.type')}}</div><div class="content" >{{ language == 'ar'?rep.type.type_name_ar:rep.type.type_name_en }}</div></div>
-                <div class="element"><div class="col-title">{{trans('data.created_by')}}</div><div class="content">{{ rep.report_creator.name }}</div></div>
-                </div>
+                                                                    </div>
+                <div class="element"><div class="col-title">{{trans('data.owner')}}</div><div class="content">{{ item.owner }} </div></div>
+                <div class="element"><div class="col-title">{{trans('data.type')}}</div><div class="content" >{{ language == 'ar'?item.type.type_name_ar:item.type.type_name_en }}</div></div>
+                <div class="element"><div class="col-title">{{trans('data.created_by')}}</div><div class="content">{{ item.report_creator.name }}</div></div>
            </v-card>
       </v-card>
     </v-flex>
@@ -55,36 +43,6 @@ export default {
         this.language = localStorage.getItem('currentLange')?localStorage.getItem('currentLange'):'ar'
      },
     methods: {
-   getprogress(status) {
-            if (status == 'not_started') {
-                return this.projectProgress(5, 1);
-            } else if (status == 'in_progress') {
-                return this.projectProgress(5, 2);
-            } else if (status == 'on_hold') {
-                return this.projectProgress(5, 3);
-            } else if (status == 'completed') {
-                return this.projectProgress(5, 5);
-            } else if (status == 'cancelled') {
-                return this.projectProgress(5, 0);
-            }
-        },
-          markAsFavorite(project) {
-            const self = this;
-            axios
-                .get('/projects/mark-favorite', {
-                    params: { id: project.id, favorite: project.is_favorited },
-                })
-                .then(function (response) {
-                    self.$store.commit('showSnackbar', {
-                        message: response.data.msg,
-                        color: response.data.success,
-                    });
-                    project.is_favorited = response.data.favorite;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
           view(id) {
     
                const self = this;
@@ -94,26 +52,6 @@ export default {
             });
 
             // self.$refs.projectEdit.edit(id);
-        },
-         getColor(status) {
-            if (status == 'not_started') {
-                return 'grey';
-            } else if (status == 'in_progress') {
-                return 'blue';
-            } else if (status == 'on_hold') {
-                return 'red';
-            } else if (status == 'completed') {
-                return 'green';
-            } else if (status == 'cancelled') {
-                return 'orange';
-            }
-        },
-                toggleFavorite(project) {
-            if (project.is_favorited) {
-                return 'yellow darken-2';
-            } else {
-                return 'grey lighten-1';
-            }
         },
     }
   }

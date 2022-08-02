@@ -493,12 +493,6 @@ export default {
                     title: self.title,
                     file: self.logo
                 };
-                let data = new FormData();
-                data.append('file', self.imageFile);
-                /*Object.keys(payload).forEach(function(key) {
-    if(payload[key])
-  data.append(key, payload[key]);
-})*/
                 self.$store.commit('showLoader');
                 axios
                     .put('/admin/users/' + self.propUserId, payload )

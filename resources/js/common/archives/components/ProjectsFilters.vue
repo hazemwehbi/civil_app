@@ -95,7 +95,7 @@
    
       </v-layout>
    <project-detailes v-if="projects" :projectData="projectData" class="mt-5 mx-auto" style="max-width:80%" />
-   <report-detailes v-if="reports" :reportData="projectData" class="mt-5 mx-auto" style="max-width:80%" />                               
+   <report-detailes v-if="reports" :reportData="reportData" class="mt-5 mx-auto" style="max-width:80%" />                               
     
 </div>
 
@@ -125,10 +125,10 @@ export default {
             projectID: null,
             locationSearch:false,
             projectData: [],
-            reportData: [],
             province_municipalities: [],
             municipalities: [],
             filterColumnsList: [],
+            reportData: [],
             tableRelation: false,
             province_municipality:false,
             municipality:false,
@@ -136,62 +136,16 @@ export default {
             piece_number: false,
             statuses: [],
             filterTypeList:[
-              /*  {id: 'categories', name: self.trans('data.searchBy.category')},*/
                 {id: 'creator', name: self.trans('data.searchBy.customer')},
-              /*  {id: 'members', name: self.trans('data.searchBy.member')},
-                 {id: 'lead', name: self.trans('data.searchBy.lead')},
-                {id: 'tasks', name: self.trans('data.searchBy.tasks')},*/
                 {id: 'location', name: self.trans('data.searchBy.location')},
-                {id: 'id', name: self.trans('data.searchBy.id')},
-              /*  {id: 'report', name: self.trans('data.searchBy.report')},
-                {id: 'visitRequests', name: self.trans('data.searchBy.visitRequest')},
-                {id: 'agency', name: self.trans('data.searchBy.Agency')},
-                {id: 'transactions', name: self.trans('data.searchBy.transactions')},
-                {id: 'project_type', name: self.trans('data.searchBy.project_type')},
-                {id: 'unit_number', name: self.trans('data.searchBy.unit_number')},
-                {id: 'role_number', name: self.trans('data.searchBy.role_number')},
-                {id: 'buiding_type', name: self.trans('data.searchBy.buiding_type')},
-                {id: 'build_rate', name: self.trans('data.searchBy.build_rate')},
-                {id: 'status', name: self.trans('data.searchBy.status')},
-                {id: 'estimated_cost', name: self.trans('data.searchBy.estimated_cost')},
-                {id: 'favorite', name: self.trans('data.searchBy.favorite')},
-                {id: 'estimated_hours', name: self.trans('data.searchBy.estimated_hours')},
-                {id: 'price_per_hours', name: self.trans('data.searchBy.price_per_hours')},
-                {id: 'total_rate', name: self.trans('data.searchBy.total_rate')},
-                {id: 'start_date', name: self.trans('data.start_date')},
-                {id: 'end_date', name: self.trans('data.end_date')},
-                {id: 'authorization_request_number', name: self.trans('data.searchBy.authorization_request_number')},*/
+                {id: 'id', name: self.trans('data.id')},
                 ],
             lists:{
-               categories:[{id:'name', name: self.trans('data.name')},
-               {id:'type', name: self.trans('data.type')}],
                creator:[{id:'name', name: self.trans('data.name')},
                {id:'email',name: self.trans('data.email_address')},
                {id:'mobile',name: self.trans('data.mobile')},
               {id:'id_card_number',name: self.trans('data.id_card_number')},
              ],
-               tasks:[{id:'subject',name: self.trans('data.subject')},
-               {id:'hourly_rate',name: self.trans('data.hourly_rate')},
-               {id:'start_date',name: self.trans('data.bank_name')},
-               {id:'due_date',name: self.trans('data.bank_name')},
-               {id:'priority',name: self.trans('data.bank_name')},
-               {id:'show_to_customer',name: self.trans('data.bank_name')},
-               {id:'is_completed',name: self.trans('data.bank_name')}],
-               visitRequests:[
-                    {id:'request_type',name: self.trans('data.request_type')},
-                    {id:'status',name: self.trans('data.searchBy.status')},
-                    {id:'office_status',name: self.trans('data.office_status')},
-                    {id:'sent',name: self.trans('data.sent')},
-                    {id:'dead_line_date',name: self.trans('data.dead_line_date')}],
-               agency:[
-                {id:'trade_name',name: self.trans('data.trade_name')},
-               {id:'record_number',name: self.trans('data.record_number')},
-               {id:'delegate_record',name: self.trans('data.delegate_record')},
-               {id:'agency_number',name: self.trans('data.agency_number')},
-               {id:'agent_name',name: self.trans('data.agent_name')},
-              {id:'agent_card_number',name: self.trans('data.agent_card_number')},
-              {id:'email',name: self.trans('data.email_address')},
-              {id:'mobile',name: self.trans('data.mobile')}],
                location:[{id:'province_municipality',name: self.trans('data.province_municipality')},
                {id:'municipality',name: self.trans('data.municipality')},
                {id:'category',name: self.trans('data.searchBy.category')},
@@ -199,21 +153,13 @@ export default {
                {id:'size_number',name: self.trans('data.size_number')},
                {id:'instrument_number',name: self.trans('data.instrument_number')},
                 {id:'status',name: self.trans('data.searchBy.status')}],
-               report:[{id:'name', name: self.trans('data.name')},
-               {id:'description', name: self.trans('data.description')},
-               {id:'type', name: self.trans('data.type')}],
-               transactions:[{id:'type', name: self.trans('data.type')},
-               {id:'status', name: self.trans('data.searchBy.status')},
-               {id:'title', name: self.trans('messages.title')},
-               {id:'discount_amount', name: self.trans('messages.discount_amount')},
-               {id:'total', name: self.trans('messages.total')},
-               {id:'payment_status', name: self.trans('messages.payment_status')}]
             },
             url: null,
             users: [{ id: 0, name: self.trans('messages.all') }],
             filters: [],
             statistics: [],
-            loading: false
+            loading: false,
+            searchBy: null
         };
     },
     created() {
@@ -225,16 +171,17 @@ export default {
         self.$eventBus.$on('updateProjectTable', data => {
             self.url = '/project/dataFilters';
             self.projectData = [];
-            self.reportData=[];
+             self.reportData = [];
             self.getDataFromApi();
         });
     },
     methods:{
         selectData(event){
+            this.searchBy = event
             this.locationSearch = false
-                this.province_municipality=false
-                this.municipality=false
-                this.plan_id=false
+            this.province_municipality=false
+            this.municipality=false
+            this.plan_id=false
             this.tableRelation = this.lists[event]
             this.filterColumnsList=this.lists[event]
             this.filters.columnTable = null
@@ -264,6 +211,9 @@ export default {
             var params = {};
             if (self.filters.searchInTable) {
                 params['search'] = self.filters.searchInTable;
+            }
+           if (self.reports) {
+                params['searchIn'] = 'reports';
             }
               if (self.filters.type) {
                 params['type'] = self.filters.type;
@@ -296,8 +246,13 @@ export default {
                 .then(function(response) {
                     self.loading = false;
                     self.projectData = _.concat(self.projectData, response.data.projects.data);
-                    self.reportData = _.concat(self.reportData, response.reports);
-                    console.log(self.reportData,  self.projectData)
+                    self.projectData.forEach(val => {
+                        val.report.map(x => x.owner = val.customer.name)
+                        self.reportData.push(...val.report)
+                    })
+                    if(self.searchBy=='id' && self.reports){
+                        self.reportData = self.reportData.filter(val => val.id == self.filters.searchInTable)
+                    }
                     self.statuses = response.data.status;
                     self.url = _.get(response, 'data.projects.next_page_url', null);
                     self.getStatistics();

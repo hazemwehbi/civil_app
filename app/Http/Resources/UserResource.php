@@ -19,11 +19,13 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'signature' => $this->getFirstMedia('signature')?$this->getFirstMedia('signature')->original_url:'',
             'logo' => $this->getFirstMedia('logo')?$this->getFirstMedia('logo')->original_url:'',
-             'title'=>$this->title,
+            'title'=>$this->title,
             'email' => $this->email,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'active' => $this->active
+            'active' => $this->active,
+            'parent_logo' => $this->parent&&$this->parent->getFirstMedia('logo')?$this->parent->getFirstMedia('logo')->original_url:'',
+            'parent_title'=>$this->parent?$this->parent->title:'',
         ];
     }
 }

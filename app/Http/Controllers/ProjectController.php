@@ -127,7 +127,7 @@ class ProjectController extends Controller
     {
         $childrens=Auth::user()->childrenIds(Auth::user()->id);
         array_push($childrens,Auth::user()->id);
-        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','creator','report','report.media','report.reportCreator','report.type');
+        $projects = Project::with('customer', 'location','creator','report','report.reportCreator','report.type');
         if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
             $projects = $projects->where(function($q) use ($childrens) {
                 $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) use ($childrens) {
@@ -153,6 +153,7 @@ class ProjectController extends Controller
         $projects= $projects->whereDate('end_date','<=',Carbon::parse($endDate));  
        if(!empty($request->input('type'))){
             $search= $request->input('search');
+            $searchIn= $request->input('searchIn');
             $tableChild= $request->input('type');
             $columnTable = $request->input('columnTable');
             $search= $request->input('search');
@@ -161,8 +162,14 @@ class ProjectController extends Controller
             $municipality= $request->input('municipality');
             $plan_id= $request->input('plan_id');
             $piece_number= $request->input('piece_number');
-            if(empty($columnTable) && !empty($search))
+            if(empty($columnTable) && !empty($search)){
+                if($searchIn === 'reports')
+                $projects= $projects->whereHas('report', function ($q) use ($search){
+                    $q->where('id', $search);
+                });
+                else
             $projects= $projects->where('id', $search);
+            }
             if(!empty($columnTable) && !empty($search))
             $projects= $projects->whereHas('creator', function ($q) use ($search,$columnTable) {
                 $q->where($columnTable,'like', '%'.$search.'%');
@@ -194,9 +201,10 @@ class ProjectController extends Controller
                     ->simplePaginate(10);
                     
         foreach ($result as $key => $val) {
-            $result[$key] = $val->append('is_favorited');
-             if($val->report !=null)
-            array_push($reports, $val->report);
+          //  $result[$key] = $val->append('is_favorited');
+         //    if($val->report !=null)
+        //     foreach($val->report as $report)
+         //    array_push($reports, $report);
         }
         $status = Project::getStatusForProject();
 

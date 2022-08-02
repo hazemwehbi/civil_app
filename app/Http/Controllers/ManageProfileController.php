@@ -28,6 +28,7 @@ class ManageProfileController extends Controller
             $user_id = request()->user()->id;
             $user = User::with('media','specialty')->findOrFail($user_id);
             $user->signature = $user->getFirstMedia('signature')?$user->getFirstMedia('signature')->original_url:'';
+            $user->logo = $user->getFirstMedia('logo')?$user->getFirstMedia('logo')->original_url:'';
             $output = $this->respond($user);
         } catch (Exception $e) {
             $output = $this->respondWentWrong($e);
@@ -83,6 +84,7 @@ class ManageProfileController extends Controller
         try {
             $user = User::find($id);
             $user->signature = $user->getFirstMedia('signature')?$user->getFirstMedia('signature')->original_url:'';
+            $user->logo = $user->getFirstMedia('logo')?$user->getFirstMedia('logo')->original_url:'';
             $role_id = $user->roles->first()->id;
             $gender_types = User::getGenders();
             
@@ -165,7 +167,7 @@ class ManageProfileController extends Controller
                 'branch_location',
                 'tax_payer_id',
                 'id_card_number',
-
+           'title'
             );
 
             // if password field is present but has empty value or null value
@@ -184,6 +186,10 @@ class ManageProfileController extends Controller
           
             /** @var User $user */
             $user = $this->userRepository->find($id);
+            if($request->file){
+                $user->clearMediaCollection('logo');
+            $user->addMediaFromBase64($request->file)->toMediaCollection('logo');
+            }
             if($payload['signature']){
                
                 $user->clearMediaCollection('signature');

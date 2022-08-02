@@ -140,8 +140,6 @@ class CommonController extends Controller
    public function checkRole($role_id) {
     return Role::find($role_id)->is_primary;
    }
-
-
    public function checkCurrentUserType($type){
            // $user=Auth::user();
            $role=  User::checkIfUSerHasType($type);

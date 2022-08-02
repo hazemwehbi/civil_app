@@ -273,6 +273,17 @@
                                 >
                                 </v-textarea>
                             </v-flex>
+                              <v-flex 
+                               v-if="$hasRole('Engineering Office Manager')"
+                              xs12 sm12 md12>
+                                <v-textarea
+                               
+                                    rows="3"
+                                    v-model="form_fields.title"
+                                    :label="trans('data.title')"
+                                >
+                                </v-textarea>
+                            </v-flex>
                               <v-flex
                                 xs12
                                 sm3
@@ -280,6 +291,28 @@
                             >
                                 <!-- Here the image preview -->
                                 <img :src="signature?signature:signatureUrl" height="150" />
+                            </v-flex>
+                             <v-flex
+                                v-if="$hasRole('Engineering Office Manager')"
+                                xs12
+                                sm3
+                                class="text-xs-center text-sm-center text-md-center text-lg-center"
+                            >
+                                <!-- Here the image preview -->
+                                <img :src="logo?logo:imageUrl" height="150" v-if="imageUrl || logo" />
+                                <v-text-field
+                                    label="Select Image"
+                                    @click="pickFile"
+                                    v-model="imageName"
+                                    prepend-icon="mdi-file-image"
+                                ></v-text-field>
+                                <input
+                                    type="file"
+                                    style="display: none"
+                                    ref="image"
+                                    accept="image/jpeg, image/jpg, image/png"
+                                    @change="onFilePicked"
+                                />
                             </v-flex>
                             <!-- <v-flex xs12 sm6>
                                 <v-autocomplete
@@ -355,14 +388,17 @@ Popover
             email: '',
             password: '',
             active: '',
-            // enginnering_types: [],
             id_card_number: '',
             send_email: false,
             is_edit_role: false,
                   signature: null,
             signatureUrl: null,
-            passwordConfirm: null
-            //  enginnering_type: 'it_enginnering',
+            passwordConfirm: null,
+              imageUrl: '',
+            imageFile: null,
+            imageName: '',
+            signature: null,
+            logo:null,
         };
     },
     created() {
@@ -371,6 +407,28 @@ Popover
         self.edit(self.userId);
     },
     methods: {
+          pickFile() {
+            this.$refs.image.click();
+        },
+        onFilePicked(e) {
+            const files = e.target.files;
+            if (files[0] !== undefined) {
+                this.imageName = files[0].name;
+                if (this.imageName.lastIndexOf('.') <= 0) {
+                    return;
+                }
+                const fr = new FileReader();
+                fr.readAsDataURL(files[0]);
+                fr.addEventListener('load', () => {
+                    this.logo = fr.result;
+                    this.imageFile = files[0];
+                });
+            } else {
+                this.imageName = '';
+                this.imageFile = '';
+                this.logo = '';
+            }
+        },
         edit(userId) {
             const self = this;
             self.$validator.reset();
@@ -386,6 +444,7 @@ Popover
                     self.id_card_number = User.id_card_number;
                     self.active = User.active !== null;
                     self.signatureUrl = response.data.user.signature;
+                       self.imageUrl = response.data.user.logo
                     // self.roles = response.data.roles;
                     // self.form_fields.role_ids = response.data.role_ids;
                     self.checkRolePrimary(self.propUserId);
@@ -439,6 +498,7 @@ Popover
             if (this.$refs.form.validate()) {
                 let payload = {
                     signature: self.signature,
+                    file: self.logo,
                     name: self.name,
                     mobile: self.form_fields.mobile,
                     alternate_num: self.form_fields.alternate_num,
@@ -460,6 +520,7 @@ Popover
                     account_holder_name: self.form_fields.account_holder_name,
                     account_no: self.form_fields.account_no,
                     bank_name: self.form_fields.bank_name,
+                    title: self.form_fields.title,
                     bank_identifier_code: self.form_fields.bank_identifier_code,
                     branch_location: self.form_fields.branch_location,
                     tax_payer_id: self.form_fields.tax_payer_id,

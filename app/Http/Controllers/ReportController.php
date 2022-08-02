@@ -48,8 +48,12 @@ class ReportController extends Controller
        { try {
             DB::beginTransaction();
             $project_id = $request->input('project_id');
-            if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') 
-            $office_id = Auth::id();
+            if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
+                if(Auth::user()->parent_id==null)
+               $office_id = Auth::id();
+               else
+               $office_id = Auth::user()->parent_id;
+            }
             else
             $office_id = $request->input('office_id');
             $report_type = $request->input('type');

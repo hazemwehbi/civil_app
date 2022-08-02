@@ -43,7 +43,7 @@
                                     </v-list-tile-title>
                                 </v-list-tile> -->
                                  <v-list-tile
-                                    v-if="$hasRole('Engineering Office Manager')|| $hasRole('superadmin')"
+                                    v-if="$can('report.view')"
                                    @click="$router.push({name: 'edit_report', 
                                    params:{
                                     //id :props.item.id,
@@ -57,7 +57,7 @@
                                     </v-list-tile-title>
                                 </v-list-tile>
                                 <v-list-tile
-                                    v-if="$hasRole('Engineering Office Manager')|| $hasRole('superadmin')"
+                                    v-if="$can('report.delete')"
                                     @click="deleteReport(props.item)"
                                 >
                                     <v-list-tile-title>

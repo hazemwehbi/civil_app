@@ -87,7 +87,7 @@
                             <v-flex xs12 sm6 md6>
                                 <v-tooltip top>
                                     <template slot="activator">
-                                        <v-icon>web</v-icon>
+                                        <v-icon>public</v-icon>
                                         {{ data.skype }}
                                     </template>
 
@@ -121,7 +121,7 @@
                             <v-flex xs12 sm6 md6>
                                 <v-tooltip top>
                                     <template slot="activator">
-                                        <v-icon>public</v-icon>
+                                        <v-icon>facebook</v-icon>
                                         {{ data.facebook }}
                                     </template>
 
@@ -172,7 +172,7 @@
                                 </v-tooltip>
                             </v-flex>
                         </v-layout>
-                          <v-layout>
+                          <v-layout row>
                             <v-flex v-if="data.signature" xs12 sm6 md6>
                                 <v-tooltip top>
                                     <template slot="activator">
@@ -183,7 +183,16 @@
                                     <span>{{ trans('messages.id_card_number') }}</span>
                                 </v-tooltip>
                             </v-flex>
+                                <v-flex v-if="data.logo" xs12 sm6 md6>
+                                <v-tooltip top>
+                                    <template slot="activator">
+                                        <v-icon></v-icon>
+                                         <img  :src="data.logo" height="150" />
+                                    </template>
+                                </v-tooltip>
+                            </v-flex>
                         </v-layout>
+                       
                     </v-card-text>
                     <v-card-actions>
                         <v-btn

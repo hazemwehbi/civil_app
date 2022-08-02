@@ -113,13 +113,10 @@
                                                                  v-if="$can('report.create')"
                                                                     :disabled="!checkActive()"
                                                                     @click="
-                                                                        $router.push({
-                                                                            name: 'add_report',
-                                                                            params: {
-                                                                                project: props.item,
-                                                                            },
-                                                                        })
-                                                                    "
+                                                                      $router.push({
+                name: 'add_report',
+                params: { id: props.item.id },
+            });"
                                                                 >
                                                                     <v-list-tile-title>
                                                                         {{

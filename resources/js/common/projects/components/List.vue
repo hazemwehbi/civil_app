@@ -110,7 +110,7 @@
                                                                 </v-list-tile>
 
                                                                 <v-list-tile
-                                                                 v-if="$can('report.create') && ($hasRole('Engineering Office Manager')|| $hasRole('superadmin'))"
+                                                                 v-if="$can('report.create')"
                                                                     :disabled="!checkActive()"
                                                                     @click="
                                                                       $router.push({
