@@ -24,7 +24,7 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
       - name: civil_app
-        uses: hazemwehbi/civil_app@new
+        uses: hazemwehbi/civil_app@develop
         with:
           server: ${{ secrets.SERVER}}
           username: ${{ secrets.USERNAME}}
