@@ -178,8 +178,11 @@ class ReportController extends Controller
         $projects = Project::with('customer', 'categories', 'members', 'members.media','location','creator','report','report.reportCreator','report.type');
         if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
             $projects = $projects->where(function($q) {
-                $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) {
-                $qu->Where('user_id', Auth::user()->id);
+                $q->where('created_by',Auth::user()->id)
+                ->orWhere('created_by',Auth::user()->parent_id)
+                ->orWhereHas('members', function ($qu) {
+                $qu->where('user_id', Auth::user()->id)
+                ->orWhere('user_id',Auth::user()->parent_id);
             }); 
             })->get();
         }

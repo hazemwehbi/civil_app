@@ -1,9 +1,11 @@
 <template>
   <v-container grid-list-md  id="printMe" ref="pdfHtml">
 <div class="mt-2" v-if="reportData" style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">
-  <div class="d-flex justify-space-between header">
-    <div class="title">{{ reportData.office?reportData.office.title:'' }}</div>
-    <div class="logo mx-2"><img style="max-width:150px;max-height:110px" :src="reportData.office?reportData.office.logo:''" /></div>
+ <div class="d-flex justify-space-between header">
+    <div v-if="$hasRole('Engineer')" class="title">{{ reportData.office?reportData.office.parent_title:'' }}</div>
+    <div v-if="$hasRole('Engineer')" class="logo"><img style="max-width:150px;max-height:110px" :src="reportData.office?reportData.office.parent_logo:''" /></div>
+    <div v-if="!$hasRole('Engineer')" class="title">{{ reportData.office?reportData.office.title:'' }}</div>
+    <div v-if="!$hasRole('Engineer')" class="logo"><img style="max-width:150px;max-height:110px" :src="reportData.office?reportData.office.logo:''" /></div>
   </div>
   <div class="type_data py-2" style="font-size:22px">
     <div class="type_name">{{ language == 'ar'?reportData.type.type_name_ar:reportData.type.type_name_en }}</div>
