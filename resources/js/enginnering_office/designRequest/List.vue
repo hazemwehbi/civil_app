@@ -272,10 +272,9 @@ export default {
                     let data = {
                         status: item.status,
                         id: item.id,
-                        office_id: item.office_id,
+                        office_id: self.getCurrentUser(),
                     };
                     self.$refs.acceptenginneringoffice.create(data);
-                    //  self.$refs.acceptenginneringoffice.fillData(data);
                 },
                 cancelCb: () => {
                     console.log('CANCEL');

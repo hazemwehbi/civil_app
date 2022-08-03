@@ -117,8 +117,6 @@
                     @endforeach
                 </v-list> -->
         <!--    </v-navigation-drawer>-->
-
-
             <v-toolbar style="background-color:#06706d;z-index: 100" app dark flat fixed dense height="100"
                 :clipped-left="true">
                 <!-- this Line to hide 3 lines in navbar
@@ -126,7 +124,6 @@
                 <v-toolbar-title class="hidden-sm-and-down">{{config('app.name')}}</v-toolbar-title>
                 -->
          
-           
                 <img src="{{asset('img/logo.png')}}"  alt="logo" width="100" style="border-radius:20px;" />
                 <v-layout >
                     <div style="font-size:16px;">

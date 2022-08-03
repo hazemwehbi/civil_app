@@ -111,17 +111,14 @@ class NotificationController extends Controller
         $user->notifications()
                 ->orderBy('created_at', 'desc')
                 ->simplePaginate()->markAsRead();
-         
+                
         foreach ($notifications as $notification) {
 
             if ('App\Notifications\AskDesignRequestOffer' == $notification->type) {
                 $notification['estate'] = User::
                             findOrFail($notification->data['estate_id']);
-        
-                                
+      
             }
-
-
             if ('App\Notifications\AcceptDesignRequestByEstateOwner' == $notification->type) {
                 $notification['estate'] = User::
                             findOrFail($notification->data['estate_id']);
@@ -129,6 +126,7 @@ class NotificationController extends Controller
                             findOrFail($notification->data['stage_id']);
                                 
             }
+           
             if ('App\Notifications\RejectDesignRequestByEstateOwner' == $notification->type) {
                 $notification['estate'] = User::
                             findOrFail($notification->data['estate_id']);
@@ -141,8 +139,8 @@ class NotificationController extends Controller
                             findOrFail($notification->data['office_id']);
                             $notification['stage'] = StageProject::
                                 findOrFail($notification->data['stage_id']);
-                                
             }
+
             if ('App\Notifications\ShowDesignRequestOffer' == $notification->type) {
                 $notification['enginner'] = User::
                             findOrFail($notification->data['enginner_id']);

@@ -70,8 +70,6 @@ class DesignRequestController extends  Controller
     
     public function store(Request $request)
     {
-
-
         $validate = validator($request->all(), [
                 'customer_id' => 'required',
                 'project_id' => 'required',
@@ -103,7 +101,6 @@ class DesignRequestController extends  Controller
            
             if($request->sent== 1){
                  $this->_saveAskDesignRequestOfferNotifications($input['office_id'], Auth::id());
-                 
             }
 
             DB::commit();

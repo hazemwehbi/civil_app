@@ -115,12 +115,11 @@ class DesignRequestController extends  Controller
                         'created_by' => Auth::id()
                     ]);
                      $data1=[
-                         'office_id'=>$design->office_id,
+                         'office_id'=>Auth::user()->id, //$design->office_id,
                           'stage_id'=>$item['stage_id']
                      ];
                     if($item['order']==1){
                         $this->_saveDesignRequestSendedToEmployeesNotifications($item['enginner_id'],$data1);
-
                     }
                   
                 }

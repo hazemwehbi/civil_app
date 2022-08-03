@@ -26,7 +26,6 @@ Route::post('getTypes', [ManageRolesController::class, 'getTypes'])->name('getTy
 Route::post('getType', [UserController::class, 'getType'])->name('getType.post');
 
 
-
 if (config('constants.enable_client_signup')) {
     Route::get('/client/register', 'Client\ClientRegisterController@index')
             ->name('client.register-form');

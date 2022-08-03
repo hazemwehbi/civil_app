@@ -10,7 +10,7 @@
                     <v-icon dark medium>notifications</v-icon>
                 </v-badge>
             </v-btn>
-
+            
             <v-list
                 three-line
                 dense
