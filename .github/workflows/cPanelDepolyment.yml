@@ -24,7 +24,7 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
       - name: civil_app
-        uses: https://github.com/hazemwehbi/civil_app@master
+        uses: /hazemwehbi/civil_app@master
         with:
           server: ${{ secrets.SERVER}}
           username: ${{ secrets.USERNAME}}
