@@ -70,7 +70,7 @@
                     </td>
                     <td align="center">{{props.item.id}}</td>
                     <td align="center">{{ props.item.project.customer.name }}</td>
-                    <td align="center">{{props.item.office.name}}</td>
+                    <td align="center">{{props.item.office.roles.find(val=>val.id === 7)?props.item.office.parent.name:props.item.office.name}}</td>
                      <td align="center">
                         <span v-for="contractor in props.item.project.members.filter(val => val.user_type_log === 'CONTRACTING_COMPANY')" :key="contractor.id">
                         {{ contractor.name }}

@@ -1,7 +1,7 @@
 
 <template id="panel-template">
     <v-container justify-center>
-        <v-form ref="form" v-model="valid" lazy-validation>
+        <v-form ref="form" v-model="valid" lazy-validation enctype="multipart/form-data">
             <v-card-actions justify-left>
                 <v-btn style="color: #06706d" @click="$router.go(-1)">
                     {{ trans('messages.back') }}
@@ -67,7 +67,7 @@
                                 </b-card-group>
                             </v-flex>
                         </v-layout>
-                        <v-layout row wrap>
+                        <!--<v-layout row wrap>
                             <v-flex xs12 sm12 md12>
                                 <b-card-group deck>
                                     <b-card
@@ -75,7 +75,7 @@
                                         header-tag="header1"
                                         title=""
                                     >
-                                        <vuetify-money
+                                        <!--<vuetify-money
                                             v-model="price"
                                             v-bind:label="label"
                                             v-bind:placeholder="placeholder"
@@ -94,7 +94,7 @@
                                                         name: trans('data.price'),
                                                     }),
                                             ]"
-                                        />
+                                        />-->
 
                                         <!-- <v-text-field
                                         id="input_name"
@@ -108,12 +108,22 @@
                                         :error-messages="errors.collect('name')"
                                         required
                                     >
-                                    </v-text-field> -->
+                                    </v-text-field> 
                                     </b-card>
                                 </b-card-group>
                             </v-flex>
-                        </v-layout>
-
+                        </v-layout>-->
+  <v-layout row wrap>
+                            <v-flex xs12 sm12 md12>
+           <input
+              type="file"
+              :label="trans('data.viewPrice')"
+              ref="pdf"
+              accept="*/pdf"
+              @change="onFilePicked"
+            />
+        </v-flex>
+        </v-layout>
                         <!-- <v-layout row>
                         <v-flex xs12 sm12 md12>
                             <v-autocomplete
@@ -741,6 +751,7 @@ export default {
             valid: true,
             type: 'testt',
             project_id: '',
+            price_pdf: null,
             enginner_id: '',
             design_enginner: {},
 
@@ -791,6 +802,9 @@ export default {
             // alert(4)
             //     this.$refs.form.reset();
         },
+            onFilePicked(e) {
+     this.price_pdf = e.target.files[0]
+    },
         resetValidation() {
             this.$refs.form.resetValidation();
         },
@@ -839,14 +853,18 @@ export default {
         send() {
             const self = this;
 
-            let data = {
+           /* let data = {
                 design_enginner_id: self.design_enginner.id,
-                price: self.price,
-            };
+               // price: self.price,
+                pdfPrice: self.price_pdf
+            };*/
+            let formData=new FormData()
+            formData.append('pdfPrice',self.price_pdf)
+            formData.append('design_enginner_id',self.design_enginner.id)
             if (this.$refs.form.validate()) {
                 self.loading = true;
                 axios
-                    .post('enginner_office/send-design-request-offer', data)
+                    .post('enginner_office/send-design-request-offer', formData)
                     .then(function (response) {
                         self.loading = false;
                         if (response.data.success === true) {

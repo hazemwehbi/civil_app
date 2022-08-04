@@ -10,8 +10,9 @@ return [
     'date' => 'التاريخ',
     'contractor_actor' => 'مندوب المقاول',
     'signature'=>'التوقيع',
-
-   
+'viewPrice' =>'عرض السعر',
+   'aproved' => 'قبول',
+   'reject' => 'رفض',
    'serial'=>'م',
     'list review'=>'بنود المراجعة',
     'equal'=>'مطابق',

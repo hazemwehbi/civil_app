@@ -462,7 +462,6 @@ Object.keys(payload).forEach(function(key) {
     if(payload[key])
   data.append(key, payload[key]);
 })
-console.log(data,payload)
                 self.$store.commit('showLoader');
                 axios
                     .post('/admin/users', data)

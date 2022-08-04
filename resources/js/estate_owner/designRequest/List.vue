@@ -4,7 +4,7 @@
         <Create ref="designAdd"></Create>
         <Edit ref="designEdit"></Edit>
         <view1 ref="designView"></view1>
-
+        <PricePdf ref="pdfPrice" />
         <!-- <v-tabs v-model="tabs" fixed-tabs height="47" class="elevation-3">
             <v-tab :href="'#tab-1'" @click="getStatistics">
                 <v-icon>bar_chart</v-icon>
@@ -122,6 +122,9 @@
                             <v-btn small fab dark color="success" @click="viewDesign(props.item)">
                                 <v-icon color="white">info</v-icon>
                             </v-btn>
+                              <v-btn small fab dark color="success" v-if="props.item.status == 'in_progress'" @click="viewDesignPrice(props.item)">
+                                <v-icon color="white" style="margin-top: -0.3rem;">$</v-icon>
+                            </v-btn>
                             <v-btn
                                 v-if="props.item.status == 'new'"
                                 :disabled="!checkActive()"
@@ -230,12 +233,13 @@ import Create from './Create';
 import Edit from './Edit';
 import view1 from './view1';
 import _ from 'lodash';
+import PricePdf from './PricePdf.vue'
 export default {
     components: {
         view1,
         Create,
         Edit,
-       // View,
+       PricePdf
     },
     data() {
         const self = this;
@@ -375,6 +379,10 @@ export default {
         viewDesign(item) {
             const self = this;
              self.$refs.designView.create(item);
+        },
+        viewDesignPrice(item){
+           const self = this;
+            self.$refs.pdfPrice.openDialog(item)
         },
         createdDate(date) {
             const current_datetime = new Date(date);

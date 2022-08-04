@@ -57,7 +57,7 @@ class DesignRequestController extends  Controller
         $childrens=$user->childrenIds($user->id);
         array_push($childrens,$user->id);
         
-        $requests = DesignRequest::with('stages','customer','offices','project','designEnginners')->whereIn('customer_id', $childrens);
+        $requests = DesignRequest::with('stages','customer','offices','project','designEnginners','designEnginners.media')->whereIn('customer_id', $childrens);
 
         $requests = $requests->orderBy($sort_by, $orderby)
                     ->paginate($rowsPerPage);

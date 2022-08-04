@@ -52,7 +52,6 @@ export default {
             type: 'testt',
              loading:false,
             enable_report: false,
-            report_url: null,
             pdf_url:null,
             url: null
         };

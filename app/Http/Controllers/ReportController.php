@@ -30,10 +30,12 @@ class ReportController extends Controller
             $orderby = 'desc';
             $sort_by = 'id';
         }
-        $reports =  Report::with('project','reportCreator','media','project.members','type','project.customer','office')->orderBy($sort_by, $orderby);
+        $ids=Auth::user()->childrenIds(Auth::id());
+        $reports =  Report::with('project','reportCreator','media','project.members','type','project.customer','office','office.roles','office.parent')->orderBy($sort_by, $orderby);
         if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
             $reports = $reports->where('created_by', Auth::id())
                        ->orWhere('office_id', Auth::id())
+                       ->orWhereIn('created_by',$ids)
                        ->orWhere('office_id', Auth::user()->parent_id);
         }
         $project_note = $reports->paginate($rowsPerPage);

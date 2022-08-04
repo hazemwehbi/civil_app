@@ -147,17 +147,20 @@ class DesignRequestController extends  Controller
 
     public function sendDesignRequestOffer(Request $request)
     {
-
+      //  dd($request->all());
         try {
-            
             $design_enginner = DesignEnginner::findOrFail($request->design_enginner_id);
             $design=DesignRequest::find($design_enginner->design_id);
             if($design_enginner!=  null){
                 DB::beginTransaction();
-                $design_enginner->price =$request->price;
+               // $design_enginner->price =$request->price;
                 $design_enginner->is_sent=1;
                 $design_enginner->update();
                 
+                if($request->pdfPrice){
+                    $design_enginner->clearMediaCollection('pdfPrice');
+                $design_enginner->addMedia($request->pdfPrice)->usingFileName('pdfPrice'.time().'.pdf')->toMediaCollection('pdfPrice');
+                }
                 $project =Project::find($design->project_id);
                 ///send notifiaction
                   $data=[
