@@ -147,7 +147,6 @@ class DesignRequestController extends  Controller
 
     public function sendDesignRequestOffer(Request $request)
     {
-      //  dd($request->all());
         try {
             $design_enginner = DesignEnginner::findOrFail($request->design_enginner_id);
             $design=DesignRequest::find($design_enginner->design_id);
@@ -158,7 +157,7 @@ class DesignRequestController extends  Controller
                 $design_enginner->update();
                 
                 if($request->pdfPrice){
-                    $design_enginner->clearMediaCollection('pdfPrice');
+                $design_enginner->clearMediaCollection('pdfPrice');
                 $design_enginner->addMedia($request->pdfPrice)->usingFileName('pdfPrice'.time().'.pdf')->toMediaCollection('pdfPrice');
                 }
                 $project =Project::find($design->project_id);
@@ -187,7 +186,7 @@ class DesignRequestController extends  Controller
                             $next_design->update();
 
                             $data1=[
-                                'office_id'=>$design->office_id,
+                                'office_id'=>Auth::user()->id,//$design->office_id,
                                 'stage_id'=>$next_design->stage_id
                             ];
                             $this->_saveDesignRequestSendedToEmployeesNotifications($next_design->enginner_id,$data1);

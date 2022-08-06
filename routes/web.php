@@ -282,7 +282,9 @@ Route::prefix('estate_owner')
             Route::get('users-all', 'UserController@getAllEmployee');
             Route::get('users/{id}/name', 'UserController@getEmployee');
             Route::get('customers', 'UserController@getCustomers');
-             
+            
+            Route::post('rejectDesignRequestOffer','DesignRequestController@rejectDesignRequestOffer');
+            Route::post('acceptDesignRequestOffer','DesignRequestController@acceptDesignRequestOffer');
             Route::resource('users', 'UserController');
 
             Route::resource('request-design', 'DesignRequestController');

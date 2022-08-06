@@ -85,7 +85,9 @@ class User extends Authenticatable implements HasMedia
             ->addMediaCollection('avatar')
             ->singleFile();
     }
-
+ public function engineers(){
+    return $this->hasMany('App/DesignEnginner', 'engineer_id');
+ }
     /**
      * logs last login date of the user.
      */

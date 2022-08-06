@@ -27,12 +27,12 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" flat @click="close">
+                    <v-btn color="green darken-1" flat @click="rejectOffer">
                         {{ trans('data.reject') }}
                     </v-btn>
                     <v-btn
                         color="success"
-                        @click="update"
+                        @click="agreeOffer"
                         :loading="loading"
                         :disabled="!valid || !checkActive()"
                     >
@@ -56,6 +56,7 @@ export default {
             dialog: false,
             loading: false,
             url: null,
+            item: null
         };
     },
     mounted() {
@@ -71,12 +72,59 @@ export default {
 
     methods: {
         openDialog(item){
-            console.log(item)
           this.dialog =true
+          this.item = item
           this.url = item.design_enginners[0].media[0].original_url
         },
-        update(){
+        agreeOffer(){
+            const self = this;
+            let data = {
+                design_id: self.item.id,
+                created_by: self.item.design_enginners[0].created_by
+            };
 
+                self.loading = true;
+                axios
+                    .post('estate_owner/acceptDesignRequestOffer', data)
+                    .then(function (response) {
+                        self.loading = false;
+                        if (response.data.success === true) {
+                            self.$store.commit('showSnackbar', {
+                                message: response.data.msg,
+                                color: response.data.success,
+                            });
+                           self.dialog =false
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            //self.reset();
+        },
+         rejectOffer(){
+            const self = this;
+            let data = {
+                design_id: self.item.id,
+                created_by: self.item.design_enginners[0].created_by
+            };
+
+                self.loading = true;
+                axios
+                    .post('estate_owner/rejectDesignRequestOffer', data)
+                    .then(function (response) {
+                        self.loading = false;
+                        if (response.data.success === true) {
+                            self.$store.commit('showSnackbar', {
+                                message: response.data.msg,
+                                color: response.data.success,
+                            });
+                           self.dialog =false
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            //self.reset();
         },
         close() {
             const self = this;

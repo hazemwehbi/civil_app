@@ -122,7 +122,7 @@
                             <v-btn small fab dark color="success" @click="viewDesign(props.item)">
                                 <v-icon color="white">info</v-icon>
                             </v-btn>
-                              <v-btn small fab dark color="success" v-if="props.item.status == 'in_progress'" @click="viewDesignPrice(props.item)">
+                              <v-btn small fab dark color="success" v-if="props.item.status =='in_progress'" @click="viewDesignPrice(props.item)">
                                 <v-icon color="white" style="margin-top: -0.3rem;">$</v-icon>
                             </v-btn>
                             <v-btn

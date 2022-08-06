@@ -67,7 +67,78 @@ class DesignRequestController extends  Controller
       
     }
 
-    
+    public function acceptDesignRequestOffer(Request $request)
+    {
+    //   dd($request->all());
+        try {
+            $design_enginners = DesignEnginner::where('created_by',$request->created_by)
+            ->where('design_id',$request->design_id)->get();
+            $design=DesignRequest::find($request->design_id);
+            if($design!=  null){
+                DB::beginTransaction();
+               // $design_enginner->price =$request->price;
+               $design->status='accepted';
+               $design->update();
+               foreach($design_enginners as $design_enginner) {
+                $design_enginner->is_agreed=1;
+                $design_enginner->is_active=1;
+                $design_enginner->update();
+
+                $data1=[
+                    'office_id'=>$design_enginner->created_by,
+                    'stage_id'=>$design_enginner->stage_id
+                  ];
+                  $this->_saveDesignRequestSendedToEmployeesNotifications($design_enginner->enginner_id,$data1);
+               }
+                DB::commit();
+                $message = Lang::get('site.success_update');
+                return $this->respondSuccess($message);
+            }
+            else{
+                $message = Lang::get('site.object_not_found');
+                return $this->respondWentWrong($message);
+            }
+
+        }
+         catch (Exception $e) {
+            $output = $this->respondWentWrong($e);
+            return $output ;
+        }
+    }
+    public function rejectDesignRequestOffer(Request $request)
+    {
+        try {
+            $design_enginners = DesignEnginner::where('created_by',$request->created_by)
+            ->where('design_id',$request->design_id)->get();
+            $design=DesignRequest::find($request->design_id);
+            if($design!=  null){
+                DB::beginTransaction();
+                $design->status='rejected';
+                $design->update();
+               foreach($design_enginners as $design_enginner) {
+                $design_enginner->is_rejected=1;
+                $design_enginner->update();
+                $data1=[
+                    'office_id'=>$design_enginner->created_by,
+                    'stage_id'=>$design_enginner->stage_id
+                  ];
+              //    $this->_saveDesignRequestSendedToEmployeesNotifications($design_enginner->enginner_id,$data1);
+               }
+                DB::commit();
+                $message = Lang::get('site.success_update');
+                return $this->respondSuccess($message);
+            }
+            else{
+                $message = Lang::get('site.object_not_found');
+                return $this->respondWentWrong($message);
+            }
+
+        }
+         catch (Exception $e) {
+            $output = $this->respondWentWrong($e);
+            return $output ;
+        }
+    }
     public function store(Request $request)
     {
         $validate = validator($request->all(), [
