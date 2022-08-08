@@ -264,7 +264,6 @@ export default {
                         self.start_date = response.data.msg.task.start_date;
                         self.due_date = response.data.msg.task.due_date;
                         self.priority = response.data.msg.priority;
-                        //    self.projectMembers = response.data.msg.project.members.filter(x=>x.is_employee==true);
                         self.categories = response.data.msg.categories;
                         self.dialog = true;
                     } else {

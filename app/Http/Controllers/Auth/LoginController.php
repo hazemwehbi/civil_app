@@ -87,7 +87,7 @@ class LoginController extends Controller
      *
      * @return string
      */
-    protected function redirectTo()
+  /*  protected function redirectTo()
     {
         $user = Auth::user();
         
@@ -98,7 +98,7 @@ class LoginController extends Controller
             //client
             return '/client';
         }
-    }
+    }*/
 
     protected function validateLogin(Request $request)
     {
@@ -154,11 +154,11 @@ class LoginController extends Controller
      }
 
    
-     public function show_all_prescription()
+   /*  public function show_all_prescription()
      {
          echo 'gdfffffffffffffffffffg';
          die();
          return view('auth.type');
-     }
+     }*/
   
 }

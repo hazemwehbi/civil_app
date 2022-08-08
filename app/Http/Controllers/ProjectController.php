@@ -753,7 +753,7 @@ class ProjectController extends Controller
 
         if ('task' == request()->get('type')) {
             $project_members = User::whereIn('id', $project_members)
-                                ->where('is_employee',1)
+                               // ->where('is_employee',1)
                                 ->select('id', 'name')
                                 ->get()
                                 ->toArray();
