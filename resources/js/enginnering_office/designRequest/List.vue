@@ -32,7 +32,8 @@
                 <template slot="items" slot-scope="props">
                     <td>
                         <div style="display: inline-flex; padding-left: 30%" align="center">
-                            <v-btn small fab dark color="success" @click="viewDesign(props.item)">
+                            <v-btn 
+                            small fab dark color="success" @click="viewDesign(props.item)">
                                 <v-icon color="white">info</v-icon>
                             </v-btn>
                             <div>
@@ -57,6 +58,8 @@
                                               (x) =>
                                                   x.is_active == 1 &&
                                                   x.is_sent==0 &&
+                                                  x.is_agreed == 0 &&
+                                                  x.is_rejected == 0 &&
                                                   x.enginner_id == getCurrentUser().id
                                           ).length > 0
                                         : false

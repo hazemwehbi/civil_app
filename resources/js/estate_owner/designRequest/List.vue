@@ -4,7 +4,7 @@
         <Create ref="designAdd"></Create>
         <Edit ref="designEdit"></Edit>
         <view1 ref="designView"></view1>
-        <PricePdf ref="pdfPrice" />
+        <PricePdf ref="pdfPrice" @refreshTable="refreshTable($event)" />
         <!-- <v-tabs v-model="tabs" fixed-tabs height="47" class="elevation-3">
             <v-tab :href="'#tab-1'" @click="getStatistics">
                 <v-icon>bar_chart</v-icon>
@@ -97,6 +97,7 @@
             <v-data-table
                 v-bind:headers="headers"
                 v-bind:pagination.sync="pagination"
+                ref="designData"
                 :items="items"
                 :total-items="totalItems"
                 class="elevation-3"
@@ -325,6 +326,9 @@ export default {
         }, 700),
     },
     methods: {
+        refreshTable(event){
+            this.loadDesigns();
+        },
         sendRequest(id) {
             const self = this;
             self.$store.commit('showDialog', {
@@ -445,6 +449,7 @@ export default {
                     self.items = response.data.msg.data;
                     self.totalItems = response.data.msg.total;
                     self.pagination.totalItems = response.data.msg.total;
+                    self.$forceUpdate()
                 } else {
                     self.$store.commit('showSnackbar', {
                         message: response.data.msg,

@@ -152,7 +152,8 @@ this.list = 1;
                                 color: response.data.success,
                             });
                             if (response.data.success === true) {
-                             
+                                 self.loading = false;
+                                self.dialog = false
                                 self.$forceUpdate();
                             }
                         })

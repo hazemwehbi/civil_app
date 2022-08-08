@@ -39,7 +39,7 @@ class DesignRequestController extends  Controller
 
     public function index(Request $request)
     {
-        $user=User::find(request()->user()->id);
+        $user=User::find(Auth::user()->id);
         $rowsPerPage = ($request->get('rowsPerPage') > 0) ? $request->get('rowsPerPage') : 0;
         $sort_by = $request->get('sort_by');
         $descending = $request->get('descending');
@@ -53,16 +53,13 @@ class DesignRequestController extends  Controller
             $sort_by = 'id';
         }
 
-           $id =$user->id;
-        $requests = DesignRequest::with('stages','customer','project','offices','designEnginners')->WhereIn('status',['sent','rejected','accepted','in_progress','completed'])->
-        whereHas('offices',function($q) use ($user){
-           $q->where('office_id', $user->id);
-        })->orWhereHas('designEnginners', function ($q) use ($id) {
-              $q->where('enginner_id', $id);
-              $q->where('is_active', 1);
-          });
-       
-
+        $requests = DesignRequest::with('stages','customer','project','offices','designEnginners')->WhereIn('status',['sent','rejected','accepted','in_progress','completed'])
+        ->whereHas('offices',function($q) use ($user){
+           $q->where('office_id', $user->id);//->orWhere('office_id', $user->parent_id);
+        })->orWhereHas('designEnginners', function ($q) use ($user) {
+              $q->where('enginner_id', $user->id)->where('is_active', 1);
+          });//->get();
+        ;
         $requests = $requests->orderBy($sort_by, $orderby)
                     ->paginate($rowsPerPage);
 
@@ -77,6 +74,7 @@ class DesignRequestController extends  Controller
     
     public function getStagesDesignRequest(Request $request)
     {
+        
         $stages =[];
         $stages_tmp=[];
        // $stages_tmp =[];
@@ -84,7 +82,7 @@ class DesignRequestController extends  Controller
             $stages=StageProject::where('type','design')->orderBy('order')->get();
             $stages_tmp=$stages;
             foreach($stages as $item ){
-                $item['employees']=User::getUsersOfficeForRequest($request->office_id);
+                $item['employees']=User::getUsersOfficeForRequest($request->office_id['id']);
               //  $item['stages']=$stages;
             }
         }
@@ -93,6 +91,7 @@ class DesignRequestController extends  Controller
              'stages'=>$stages_tmp
 
         ];
+      //  dd($request->office_id['id']);
         return $data;
     }
 

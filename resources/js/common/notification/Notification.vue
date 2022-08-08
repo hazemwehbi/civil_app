@@ -571,7 +571,8 @@
                         "
                         @click="
                             $router.push({
-                                name: 'show_design_request_price_estate_list',
+                             //   name: 'show_design_request_price_estate_list',
+                                name: 'design_request_estate_list',
                                 params: { id: notification.data['design_id'] },
                             })
                         "

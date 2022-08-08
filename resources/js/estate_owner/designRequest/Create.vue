@@ -29,7 +29,7 @@
                                                     name: trans('data.project_name'),
                                                 }),
                                         ]"
-                                        @change="(event) => updateEmployee(event, k)"
+                                        @change="(event) => updateEmployee(event)"
                                         required
                                     ></v-autocomplete>
                                 </v-flex>
@@ -204,7 +204,7 @@ export default {
         },
 
         //////get data/////
-        updateEmployee(value, key) {
+        updateEmployee(value) {
             const self = this;
             axios
                 .get('get-customer-project/' + value)

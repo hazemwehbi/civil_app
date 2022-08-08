@@ -115,11 +115,12 @@
                         </v-layout>-->
   <v-layout row wrap>
                             <v-flex xs12 sm12 md12>
+                                <div class="my-3">{{ trans('data.viewPrice') }}: </div>
            <input
               type="file"
               :label="trans('data.viewPrice')"
               ref="pdf"
-              accept="*/pdf"
+              accept=".pdf"
               @change="onFilePicked"
             />
         </v-flex>

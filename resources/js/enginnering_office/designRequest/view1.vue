@@ -96,15 +96,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="green darken-1" flat @click="close">
-                        {{ trans('data.cancel') }}
-                    </v-btn>
-                    <v-btn
-                        color="success"
-                        @click="update"
-                        :loading="loading"
-                        :disabled="!valid || !checkActive()"
-                    >
-                        {{ trans('messages.save') }}
+                        {{ trans('data.close') }}
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -136,9 +128,7 @@ export default {
     },
 
     methods: {
-        update(){
-
-        },
+    
         close() {
             const self = this;
             self.loading = false;

@@ -88,6 +88,7 @@ class DesignRequestController extends  Controller
                     'office_id'=>$design_enginner->created_by,
                     'stage_id'=>$design_enginner->stage_id
                   ];
+                  
                   $this->_saveDesignRequestSendedToEmployeesNotifications($design_enginner->enginner_id,$data1);
                }
                 DB::commit();
@@ -163,14 +164,21 @@ class DesignRequestController extends  Controller
             }
             DB::beginTransaction();
             $input = $request->all();
-            $input['created_at']=Carbon::now();
             $input['created_by'] = Auth::id();
             $input['status']= $request->sent==0 ? 'new' : 'sent';
 
-            $request = DesignRequest::create($input);
-            $request->offices()->attach($input['office_id']);
+            //$designRequest = DesignRequest::create($input);
+              $designRequest =new DesignRequest();
+            $designRequest->created_by=$input['created_by'];
+            $designRequest->status=$input['status'];
+            $designRequest->customer_id=$input['customer_id'];
+            $designRequest->project_id=$input['project_id'];
+            $designRequest->sent=$input['sent'];
+            $designRequest->note=$request->note;
+            $designRequest->save();
+            $designRequest->offices()->attach($input['office_id']);
            
-            if($request->sent== 1){
+            if($designRequest->sent== 1){
                  $this->_saveAskDesignRequestOfferNotifications($input['office_id'], Auth::id());
             }
 
@@ -423,7 +431,6 @@ class DesignRequestController extends  Controller
 
     protected function _saveDesignRequestSendedToEmployeesNotifications($member, $data)
     {
-        //foreach ($members as $member){
             $notifiable_users = User::find($member);
             Notification::send($notifiable_users, new DesignRequestSendedToEmployees($data));
      }

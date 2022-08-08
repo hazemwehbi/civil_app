@@ -74,7 +74,8 @@ export default {
         openDialog(item){
           this.dialog =true
           this.item = item
-          this.url = item.design_enginners[0].media[0].original_url
+          this.url = item.design_enginners[0].media[0].full_url.replace('upload','public/upload')
+          console.log(this.url)
         },
         agreeOffer(){
             const self = this;
@@ -94,6 +95,8 @@ export default {
                                 color: response.data.success,
                             });
                            self.dialog =false
+                           self.$emit('refreshTable',response)
+                           self.$forceUpdate()
                         }
                     })
                     .catch(function (error) {

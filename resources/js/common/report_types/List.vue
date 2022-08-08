@@ -27,18 +27,18 @@
                             <v-btn icon slot="activator"> <v-icon>more_vert</v-icon> </v-btn>
                             <v-list>
 
-                                <!--<v-list-tile
-                                    v-if="$can('customer.edit')"
+                                <v-list-tile
+                                    v-if="$can('report.edit')"
                                     @click="edit(props.item.id)"
                                 >
                                     <v-list-tile-title>
                                         <v-icon small class="mr-2"> edit </v-icon>
                                         {{ trans('messages.edit') }}
                                     </v-list-tile-title>
-                                </v-list-tile>-->
+                                </v-list-tile>
 
                                 <v-list-tile
-                                    v-if="$can('customer.delete')"
+                                    v-if="$can('report.delete')"
                                     @click="deleteCustomer(props.item)"
                                 >
                                     <v-list-tile-title>
@@ -195,7 +195,6 @@ export default {
                 .then(function(response) {
                     console.log(response.data);
                     self.report_type = response.data;
-                   
                 })
                 .catch(function(error) {
                     console.log(error);
