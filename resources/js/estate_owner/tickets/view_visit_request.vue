@@ -141,7 +141,7 @@ export default {
         //     required: true,
         // },
         propVisitRequest: {
-            required: true,
+          //  required: true,
         },
     },
     data() {

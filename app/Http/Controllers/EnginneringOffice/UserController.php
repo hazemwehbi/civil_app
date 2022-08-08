@@ -527,7 +527,6 @@ class UserController extends  Controller
        if (isset($request->office_id) &&  isset($request->specialty_id) ) {
              $employees = User::getUsersOfficeForSpecialty($request->office_id, $request->specialty_id);
        }
-      
         return $employees;
     }
     public function getAllEmployeeForRequest($id)

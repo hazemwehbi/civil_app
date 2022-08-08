@@ -1,13 +1,11 @@
 <template>
-    <div>
-        <v-row justify="center">
+    <div justify="center">
             <v-dialog v-model="dialog" persistent max-width="750px">
                 <v-card>
                     <v-card-text>
                         <v-form ref="form" v-model="valid" lazy-validation>
                             <v-container>
-                                <v-row>
-                                    <v-col cols="12" sm="6" style="direction=ltr">
+                                    <div cols="12" sm="6" style="direction=ltr">
                                         <v-datetime-picker
                                             :label="trans('data.visit_datetime')"
                                             :datetime="dead_line_date"
@@ -17,8 +15,7 @@
                                             v-model="dead_line_date"
                                         >
                                         </v-datetime-picker>
-                                    </v-col>
-                                </v-row>
+                                    </div>
                                 <v-layout row v-if="enginners.length > 0">
                                     <v-flex xs12 md12>
                                         <v-autocomplete
@@ -78,7 +75,7 @@
                                                         }),
                                                 ]"
                                                 :label="trans('data.enginner')"
-                                                @change="(event) => updatevalues(event, k)"
+                                                @change="(event) => updatevalues1(event, k)"
                                                 :error-messages="errors.collect('enginner')"
                                                 required
                                             ></v-autocomplete>
@@ -133,7 +130,6 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-        </v-row>
     </div>
 </template>
 <style scoped>
@@ -163,6 +159,7 @@ export default {
             inputs: [],
             is_show: false,
             enginnering_types: [],
+            valid: true
         };
     },
     mounted() {
@@ -204,8 +201,6 @@ export default {
         },
 
         add(k) {
-            var filtered = [];
-            // alert(JSON.stringify(this.arr))
             const myArrayFiltered = this.enginnering_types.filter((array) =>
                 this.arr.every((filter) => !(filter === array.key))
             );
@@ -225,13 +220,6 @@ export default {
             this.arr.splice(index, 1);
             this.inputs.splice(index, 1);
         },
-        updatevalues(value, key) {
-            //alert(k)
-            // this.arr[key]=value;
-            // const self = this;
-            //  self.arr.push(value);
-            // self.current_customer = value;
-        },
         updatevalues1(value, key) {
             const self = this;
             self.arr.push(value);
@@ -244,7 +232,7 @@ export default {
                 })
                 .then(function (response) {
                     self.inputs[key].users = response.data;
-                    //return ;
+                    console.log(self.inputs)
                 })
                 .catch(function (error) {
                     console.log(error);

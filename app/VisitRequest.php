@@ -28,6 +28,7 @@ class VisitRequest extends Model
     {
         return $this->hasMany('App\RequestEnginner','request_id');
     }
+    
        /**
      * The member that belong to the project.
      */

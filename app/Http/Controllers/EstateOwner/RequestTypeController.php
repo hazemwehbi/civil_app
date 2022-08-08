@@ -66,24 +66,20 @@ class RequestTypeController extends  Controller
     
     //        $projects = Project::with('customer', 'categories', 'members', 'members.media');
             
-
-             
               DB::beginTransaction();
             DB::table('visit_requests')->insert([
-                //'title'=>$request->title,
                 'customer_id'=>$customer_id,
                 'project_id'=>$request->project_id,
-                'request_type'=>'visit_request',//$request->request_type,
-                'description'=> 'test',//$request->description,
+                'request_type'=> $request->request_type,
+                'description'=> $request->description,
                 'status'=> $request->sent==0 ? 'new' : 'sent',
-                 'office_status'=>$request->sent== 1? 'recieved' : '',
+                'office_status'=>$request->sent== 1? 'recieved' : '',
                 'dead_line_date'=>$request->dead_line_date,
-               // 'priority'=>$priority,
                 'sent'=>$request->sent,
                 'office_id'=>$request->office_id,
                 'note'=>$request->note,
                 ///'enginnering_type'=>json_encode($request->enginnering_type),
-                'created_at'=>Carbon::now()
+                //'created_at'=>Carbon::now()
             ]);
 
             

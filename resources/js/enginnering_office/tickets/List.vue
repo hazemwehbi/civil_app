@@ -9,7 +9,6 @@
         <AcceptingEnginnerModal ref="acceptenginner" @next="getAllProjectRequest($event)" />
 
         <v-card class="mt-3">
-            <ticket-edit ref="ticketEdit"></ticket-edit>
             <v-card-title primary-title xs8 sm8>
                 <div>
                     <div class="headline">
@@ -600,9 +599,6 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
-        },
-        edit(ticket_id) {
-            this.$refs.ticketEdit.edit(ticket_id);
         },
         deleteTicket(ticket) {
             const self = this;

@@ -20,7 +20,7 @@
                                                 name: trans('data.project_name'),
                                             }),
                                     ]"
-                                    @change="(event) => updateEmployee(event, k)"
+                                    @change="(event) => updateEmployee(event)"
                                     required
                                 ></v-autocomplete>
                             </v-flex>
@@ -100,7 +100,6 @@
                                 <v-text-field
                                     v-model="note"
                                     :label="trans('data.note')"
-                                    :readonly="isEdit"
                                 ></v-text-field>
                             </v-flex>
                         </v-layout>
@@ -313,6 +312,7 @@ export default {
                 dead_line_date: self.dead_line_date,
                 note: self.note, //
                 enginnering_type: self.enginnering_type,
+                request_type: 'visit_request'
             };
             console.log(data);
             if (this.$refs.form.validate()) {
@@ -344,7 +344,7 @@ export default {
             }
             //self.reset();
         },
-        updateEmployee(value, key) {
+        updateEmployee(value) {
             const self = this;
             axios
                 .get('get-customer-project/' + value)

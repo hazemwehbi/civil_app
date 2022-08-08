@@ -1,14 +1,12 @@
 <template>
-    <div>
-        <v-row justify="center">
+    <div justify="center">
             <v-dialog v-model="dialog" persistent max-width="550px">
                 <v-card>
                     <v-card-title>{{ trans('data.enginnering_office') }}</v-card-title>
                     <v-card-text>
                         <v-form ref="form" v-model="valid" lazy-validation>
                             <v-container>
-                                <v-row>
-                                    <v-col cols="12" sm="6" style="direction=ltr">
+                                    <div cols="12" sm="6" style="direction=ltr">
                                         <v-datetime-picker
                                             :label="trans('data.visit_datetime')"
                                             :datetime="dead_line_date"
@@ -26,8 +24,7 @@
                                             required
                                         >
                                         </v-datetime-picker>
-                                    </v-col>
-                                </v-row>
+                                    </div>
                             </v-container>
                         </v-form>
                     </v-card-text>
@@ -49,7 +46,6 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-        </v-row>
     </div>
 </template>
 <style scoped>
@@ -75,6 +71,7 @@ export default {
             status: '',
             office_id: null,
             id: '',
+            valid: true
         };
     },
     mounted() {
