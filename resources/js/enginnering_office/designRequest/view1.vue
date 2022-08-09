@@ -33,11 +33,9 @@
                             <v-layout row>
                                 <v-flex xs12 sm12 md12>
                                     <v-text-field
-                                      v-for="office in design.offices"
-                                      :key="office.id"
-                                        v-model="office.name"
+                                        v-model="design.creator.name"
                                         :readonly="true"
-                                        :label="trans('data.enginnering_office_name')"
+                                        :label="trans('data.created_by')"
                                     ></v-text-field>
                                 </v-flex>
                             </v-layout>

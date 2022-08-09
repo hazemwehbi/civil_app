@@ -100,6 +100,7 @@
                 ref="designData"
                 :items="items"
                 :total-items="totalItems"
+                :expand="expand"
                 class="elevation-3"
             >
                 <template slot="headerCell" slot-scope="props">
@@ -118,13 +119,11 @@
                     <span v-else>{{ props.header.text }}</span>
                 </template>
                 <template slot="items" slot-scope="props">
+                     <tr @click="props.expanded = !props.expanded">
                     <td>
                         <div style="display: inline-flex; padding-left: 30%" align="center">
                             <v-btn small fab dark color="success" @click="viewDesign(props.item)">
                                 <v-icon color="white">info</v-icon>
-                            </v-btn>
-                              <v-btn small fab dark color="success" v-if="props.item.status =='in_progress'" @click="viewDesignPrice(props.item)">
-                                <v-icon color="white" style="margin-top: -0.3rem;">$</v-icon>
                             </v-btn>
                             <v-btn
                                 v-if="props.item.status == 'new'"
@@ -188,11 +187,6 @@
                     </td>
                     <td>
                         <div align="center">
-                            <span v-for="(office,index) in props.item.offices" :key="office.id"> {{ office.name }}<span v-if="index != props.item.offices.length-1">, </span> </span>
-                        </div>
-                    </td>
-                    <td>
-                        <div align="center">
                             <v-btn
                                 small
                                 fab
@@ -211,7 +205,30 @@
                             {{ props.item.created_at ? createdDate(props.item.created_at) : '-' }}
                         </div>
                     </td>
+                     </tr>
                 </template>
+                 <template v-slot:expand="props">
+          <v-card flat>
+            <v-card-text>
+                <div align="center" v-for="(office,index) in props.item.offices" :key="office.id">
+                    <table>
+                        <tr>
+                             <td><span>{{ office.name }}</span></td>
+                             <td> <v-chip
+                                :disabled="!checkActive()"
+                                :color="getColor(props.item.offices.find(val => val.pivot.office_id == office.id).pivot.office_status)"
+                                text-color="white"
+                            >
+                                 {{trans('data.office_status')+' '+ props.item.offices.find(val => val.pivot.office_id == office.id).pivot.office_status}}
+                            </v-chip></td>
+                             <td> <v-btn dark color="success" v-if="props.item.offices.find(val => val.pivot.office_id == office.id).pivot.office_status =='finished'" @click="viewDesignPrice(props.item)">
+                                {{trans('data.viewPrice')}}
+                            </v-btn></td></tr>
+                            </table>
+                        </div>
+            </v-card-text>
+          </v-card>
+        </template>
             </v-data-table>
         </v-card>
         <br />
@@ -245,6 +262,7 @@ export default {
     data() {
         const self = this;
         return {
+            expand: true,
             dialog: false,
             loading: false,
             headers: [
@@ -271,13 +289,6 @@ export default {
                     value: 'customer',
                     align: 'center',
                     sortable: true,
-                },
-                {
-                    text: self.trans('data.office'),
-                    value: 'offices.name',
-                    align: 'center',
-                    sortable: true,
-                    
                 },
                 {
                     text: self.trans('data.project_name'),
@@ -485,3 +496,8 @@ export default {
     },
 };
 </script>
+<style scoped>
+td{
+    width: 30%;
+}
+</style>

@@ -25,6 +25,7 @@ class UserResource extends JsonResource
             'updated_at' => $this->updated_at,
             'active' => $this->active,
             'role' =>$this->getRoleNames(),
+            'parent_id' =>$this->parent_id,
             'parent_logo' => $this->parent&&$this->parent->getFirstMedia('logo')?$this->parent->getFirstMedia('logo')->original_url:'',
             'parent_title'=>$this->parent?$this->parent->title:'',
         ];

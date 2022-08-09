@@ -53,7 +53,7 @@ class DesignRequestController extends  Controller
             $sort_by = 'id';
         }
 
-        $requests = DesignRequest::with('stages','customer','project','offices','designEnginners')->WhereIn('status',['sent','rejected','accepted','in_progress','completed'])
+        $requests = DesignRequest::with('stages','customer','creator','project','offices','designEnginners')->WhereIn('status',['sent','rejected','pending','accepted','in_progress','completed'])
         ->whereHas('offices',function($q) use ($user){
            $q->where('office_id', $user->id);//->orWhere('office_id', $user->parent_id);
         })->orWhereHas('designEnginners', function ($q) use ($user) {
@@ -113,6 +113,11 @@ class DesignRequestController extends  Controller
                         'is_active'=>$item['order']==1 ? 1 : 0,
                         'created_by' => Auth::id()
                     ]);
+                        $office = $design->offices->find(Auth::id());
+                       // $design->offices()->save($office, ['office_status' => 'pending']);
+                        $office->pivot->office_status = 'pending';
+                        $office->pivot->update();
+                    
                      $data1=[
                          'office_id'=>Auth::user()->id, //$design->office_id,
                           'stage_id'=>$item['stage_id']
@@ -122,7 +127,7 @@ class DesignRequestController extends  Controller
                     }
                   
                 }
-                $design->status='accepted';
+                $design->status='pending';
                 $design->update();
                 DB::commit();
                 $message = Lang::get('site.success_update');
@@ -160,6 +165,12 @@ class DesignRequestController extends  Controller
                 $design_enginner->addMedia($request->pdfPrice)->usingFileName('pdfPrice'.time().'.pdf')->toMediaCollection('pdfPrice');
                 }
                 $project =Project::find($design->project_id);
+                if(Auth::user()->hasRole('Engineer'))
+                $office = $design->offices->find(Auth::user()->parent_id);
+                else
+                $office = $design->offices->find(Auth::user()->id);
+                $office->pivot->office_status = 'finished';
+                $office->pivot->save();
                 ///send notifiaction
                   $data=[
                       'enginner_id'=>$design_enginner->enginner_id,

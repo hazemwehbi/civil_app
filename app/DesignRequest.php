@@ -15,10 +15,13 @@ class DesignRequest extends Model
     {
         return $this->belongsTo('App\Components\User\Models\User','customer_id');
     }
-
+    public function creator()
+    {
+        return $this->belongsTo('App\Components\User\Models\User','created_by');
+    }
     public function offices()
     {
-        return $this->belongsToMany('App\Components\User\Models\User','design_request_office','design_request_id','office_id');
+        return $this->belongsToMany('App\Components\User\Models\User','design_request_office','design_request_id','office_id')->withPivot('office_status');
     }
 
     public function project()

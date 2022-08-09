@@ -83,7 +83,7 @@ class DesignRequestController extends  Controller
                 $design_enginner->is_agreed=1;
                 $design_enginner->is_active=1;
                 $design_enginner->update();
-
+            
                 $data1=[
                     'office_id'=>$design_enginner->created_by,
                     'stage_id'=>$design_enginner->stage_id
@@ -91,6 +91,10 @@ class DesignRequestController extends  Controller
                   
                   $this->_saveDesignRequestSendedToEmployeesNotifications($design_enginner->enginner_id,$data1);
                }
+               $office = $design->offices->find($request->created_by);
+                       // $design->offices()->save($office, ['office_status' => 'pending']);
+                        $office->pivot->office_status = 'accepted';
+                        $office->pivot->update();
                 DB::commit();
                 $message = Lang::get('site.success_update');
                 return $this->respondSuccess($message);
@@ -125,6 +129,10 @@ class DesignRequestController extends  Controller
                   ];
               //    $this->_saveDesignRequestSendedToEmployeesNotifications($design_enginner->enginner_id,$data1);
                }
+               $office = $design->offices->find($request->created_by);
+                $office->pivot->office_status = 'rejected';
+                $office->pivot->update();
+               $office->save();
                 DB::commit();
                 $message = Lang::get('site.success_update');
                 return $this->respondSuccess($message);
@@ -176,8 +184,9 @@ class DesignRequestController extends  Controller
             $designRequest->sent=$input['sent'];
             $designRequest->note=$request->note;
             $designRequest->save();
-            $designRequest->offices()->attach($input['office_id']);
-           
+           // $designRequest->offices()->attach($input['office_id']);
+            $designRequest->offices()->attach($input['office_id'], ['office_status' => 'recieved']);
+         
             if($designRequest->sent== 1){
                  $this->_saveAskDesignRequestOfferNotifications($input['office_id'], Auth::id());
             }

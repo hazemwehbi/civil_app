@@ -92,6 +92,30 @@
                             </v-chip>
                         </div>
                     </td>
+                    <td v-if="$hasRole('Engineer')">
+                        <div align="center">
+                            <v-chip
+                                class="ma-2"
+                                :disabled="!checkActive()"
+                                :color="getColor(props.item.offices.find(val => val.pivot.office_id == getCurrentUser().parent_id).pivot.office_status)"
+                                text-color="white"
+                            >
+                                {{ props.item.offices.find(val => val.pivot.office_id == getCurrentUser().parent_id).pivot.office_status }}
+                            </v-chip>
+                        </div>
+                    </td>
+                    <td v-else>
+                          <div align="center">
+                            <v-chip
+                                class="ma-2"
+                                :disabled="!checkActive()"
+                                :color="getColor(props.item.offices.find(val => val.pivot.office_id == getCurrentUser().id).pivot.office_status)"
+                                text-color="white"
+                            >
+                                {{ props.item.offices.find(val => val.pivot.office_id == getCurrentUser().id).pivot.office_status }}
+                            </v-chip>
+                        </div>
+                    </td>
                     <td>
                         <div align="center">
                             {{ props.item.customer.name }}
@@ -99,7 +123,7 @@
                     </td>
                     <td>
                        <div align="center">
-                            <span v-for="(office,index) in props.item.offices" :key="office.id"> {{ office.name }}<span v-if="index != props.item.offices.length-1">, </span> </span>
+                          {{ props.item.creator.name }}
                         </div>
                     </td>
                     <td>
@@ -178,6 +202,12 @@ export default {
                     align: 'center',
                     sortable: true,
                 },
+                     {
+                    text: self.trans('data.office_status'),
+                    value: 'office_status',
+                    align: 'center',
+                    sortable: true,
+                },
                 {
                     text: self.trans('messages.customer'),
                     value: 'customer',
@@ -185,8 +215,8 @@ export default {
                     sortable: true,
                 },
                 {
-                    text: self.trans('data.office'),
-                    value: 'office',
+                    text: self.trans('data.created_by'),
+                    value: 'creator.name',
                     align: 'center',
                     sortable: true,
                 },
