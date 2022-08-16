@@ -59,6 +59,7 @@
                                             }),
                                     ]"
                                     required
+                                    multiple
                                 ></v-autocomplete>
                             </v-flex>
 
@@ -179,7 +180,7 @@ export default {
             priorities: [],
             request_type: '',
             engennering_offices: [],
-            office_id: '',
+            office_id: [],
             dead_line_date: null,
             enginnering_type: '',
             note: '',

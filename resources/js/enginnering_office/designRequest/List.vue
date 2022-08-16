@@ -351,6 +351,12 @@ export default {
             } else if (status == 'rejected') {
                 return 'yollow';
             }
+              else if (status == 'recieved') {
+                return 'cyan';
+            }
+            else if (status == 'finished') {
+                return 'lightgreen';
+            }
             else if(status=='completed'){
                 return '#06706d';
 
@@ -372,7 +378,7 @@ export default {
             self.$router.push({
                 name: 'create_design_request_price__enginnering_office',
                 params: {
-                    id: data != undefined ? data.id : null,
+                    id: data != undefined ? data.id : null
                 },
             });
         },

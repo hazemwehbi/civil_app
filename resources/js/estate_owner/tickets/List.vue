@@ -32,12 +32,16 @@
                 :total-items="total_items"
                 :loading="loading"
                 :items="projects"
+                :expand="expand"
                 class="elevation-3"
             >
                 <template slot="items" slot-scope="props">
+                     <tr @click="props.expanded = !props.expanded">
                     <td>
                         <div style="display: inline-flex; padding-left: 30%" align="center">
+                             <v-icon>arrow_drop_down</v-icon>
                             <v-btn small fab dark color="success" @click="viewRequest(props.item)">
+                               
                                 <v-icon color="white">info</v-icon>
                             </v-btn>
                             <v-btn
@@ -142,7 +146,31 @@
                             {{ props.item.created_at ? createdDate(props.item.created_at) : '-' }}
                         </div>
                     </td>
+                    </tr>
                 </template>
+                     <template v-slot:expand="props">
+          <v-card flat>
+            <v-card-text>
+                <div align="center" v-for="(office) in props.item.offices" :key="office.id">
+                    <table>
+                        <tr>
+                             <td width="30%"><span>{{ office.name }}</span></td>
+                             <td width="30%"> <v-chip
+                                :disabled="!checkActive()"
+                                :color="getColor(props.item.offices.find(val => val.pivot.office_id == office.id).pivot.office_status)"
+                                text-color="white"
+                            >
+                                 {{trans('data.office_status')+' '+ props.item.offices.find(val => val.pivot.office_id == office.id).pivot.office_status}}
+                            </v-chip></td>
+                             <td width="30%"> <v-btn dark color="success" v-if="props.item.offices.find(val => val.pivot.office_id == office.id).pivot.office_status =='accepted'" 
+                                @click="viewReport(props.item)">
+                                {{trans('data.report')}}
+                            </v-btn></td></tr>
+                            </table>
+                        </div>
+            </v-card-text>
+          </v-card>
+        </template>
             </v-data-table>
         </v-card>
         <br />
@@ -160,6 +188,7 @@ export default {
     data() {
         const self = this;
         return {
+            expand: true,
             currentUser: '',
             projects: [],
             total_items: 0,
@@ -237,16 +266,10 @@ export default {
     },
     mounted() {
         const self = this;
-
-        //self.getFilters();
-        // self.getStatistics();
         self.$eventBus.$on('updateTicketsTable', (data) => {
             self.projectRequest = [];
             self.projects = [];
             self.getAllProjectRequest();
-            //  self.getTicketFromApi();
-            // self.getStatistics();
-            //self.getFilters();
         });
     },
     beforeDestroy() {
@@ -261,7 +284,7 @@ export default {
         this.getAllProjectRequest();
     },
     methods: {
-        getColor(status) {
+           getColor(status) {
             if (status == 'new') {
                 return 'red';
             } else if (status == 'pending') {
@@ -271,8 +294,31 @@ export default {
             } else if (status == 'accepted') {
                 return 'green';
             } else if (status == 'rejected') {
-                return 'orange';
+                return 'yollow';
             }
+            else if (status == 'recieved') {
+                return 'cyan';
+            }
+            else if (status == 'finished') {
+                return 'lightgreen';
+            }
+            else if(status=='completed'){
+                return '#06706d';
+
+            }
+             else if(status=='in_progress'){
+                return 'orange';
+
+            }
+        },
+        viewReport(item){
+            this.$router.push({name: 'edit_report', 
+                                   params:{
+                                   
+                                    id: item.report.media[item.report.media.length-1].full_url.replace('upload','public/upload')
+
+                                   }
+        });
         },
         getRequestTypes() {
             const self = this;

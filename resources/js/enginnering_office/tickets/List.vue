@@ -656,13 +656,23 @@ export default {
 
         createReport(item) {
             const self = this;
+            if(!item.report)
             self.$router.push({
                 name: 'add_report',
                 params: {
                     project: item.project,
+                    visit_request_id: item.id
                 },
             });
-        },
-    },
+            else
+            self.$router.push({name: 'edit_report', 
+                                   params:{
+                                   
+                                    id: item.report.media[item.report.media.length-1].full_url.replace('upload','public/upload')
+
+                                   }
+        });
+    }
+    }
 };
 </script>

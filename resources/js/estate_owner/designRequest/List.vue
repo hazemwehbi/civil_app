@@ -122,6 +122,7 @@
                      <tr @click="props.expanded = !props.expanded">
                     <td>
                         <div style="display: inline-flex; padding-left: 30%" align="center">
+                            <v-icon>arrow_drop_down</v-icon>
                             <v-btn small fab dark color="success" @click="viewDesign(props.item)">
                                 <v-icon color="white">info</v-icon>
                             </v-btn>
@@ -483,6 +484,12 @@ export default {
                 return 'green';
             } else if (status == 'rejected') {
                 return 'yollow';
+            }
+            else if (status == 'recieved') {
+                return 'cyan';
+            }
+            else if (status == 'finished') {
+                return 'lightgreen';
             }
             else if(status=='completed'){
                 return '#06706d';

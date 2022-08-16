@@ -38,7 +38,7 @@
                         </v-flex>
                     </v-layout>
                     <v-layout row>
-                        <v-flex xs12 sm6 md6>
+                        <!--<v-flex xs12 sm6 md6>
                             <v-autocomplete
                                 item-text="name"
                                 item-value="id"
@@ -52,7 +52,7 @@
                                 :error-messages="errors.collect('enginnering_office_name')"
                                 required
                             ></v-autocomplete>
-                        </v-flex>
+                        </v-flex>-->
 
                         <v-flex xs12 sm6 md6>
                             <v-datetime-picker

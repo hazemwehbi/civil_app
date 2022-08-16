@@ -23,10 +23,16 @@ class VisitRequest extends Model
     {
         return $this->belongsTo('App\Project');
     }
-
+    public function report(){
+      return $this->hasOne('App\Report','visit_request_id');
+    }
     public function requestEnginners()
     {
         return $this->hasMany('App\RequestEnginner','request_id');
+    }
+    public function offices()
+    {
+        return $this->belongsToMany('App\Components\User\Models\User','design_request_office','visit_request_id','office_id')->withPivot('office_status','request_type');
     }
     
        /**

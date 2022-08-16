@@ -21,7 +21,7 @@ class DesignRequest extends Model
     }
     public function offices()
     {
-        return $this->belongsToMany('App\Components\User\Models\User','design_request_office','design_request_id','office_id')->withPivot('office_status');
+        return $this->belongsToMany('App\Components\User\Models\User','design_request_office','design_request_id','office_id')->withPivot(['office_status','request_type']);
     }
 
     public function project()

@@ -74,11 +74,11 @@
         </v-card-actions>
         <v-spacer></v-spacer>
         <v-card class="mx-auto report">
-                    <ReportForm  :reportType="report_type" :office="office" :project="project"   :language="language" :report_id="report_id" @getReportData="getReportData" @printPdf="printPdf"/>
+                    <ReportForm  :reportType="report_type" :office="office" :project="project"  :language="language" :report_id="report_id" @getReportData="getReportData" @printPdf="printPdf"/>
                    
         </v-card>
         <div class="mx-auto report">
-             <ReportPdf style="z-index:-15;position:fixed;" :reportData="reportData" :language="language" ref="pdf" />
+             <ReportPdf style="z-index:-15;position:fixed;" :visit_request_id="visit_request_id" :reportData="reportData" :language="language" ref="pdf" />
             </div>
         </v-form>
         <AddReportType :externalDialog="externalDialog" @close="externalDialog = event" @store="externalDialog = event" />
@@ -112,19 +112,20 @@ export default {
             projects:[],
             stages: [{id: 1, stage: 'Stage One'}],
             stage: null,
-            language: null
+            language: null,
+            visit_request_id: null
         };
     },
     created() {
         const self = this;
         self.getReportTypes();
         self.getProject(self.$route.params.id)
+        self.visit_request_id = self.$route.params.visit_request_id
         self.language = localStorage.getItem('currentLange')?localStorage.getItem('currentLange'):'ar'
     },
     methods: {
         printPdf(event){
        this.reportData = event
-        console.log(this.reportData)
          this.$refs.pdf.renderComponent();
         this.$refs.pdf.printPdf();
         },

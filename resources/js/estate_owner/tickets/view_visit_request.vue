@@ -37,20 +37,15 @@
                         </v-flex>
                     </v-layout>
                     <v-layout row>
-                        <v-flex xs12 sm6 md6>
-                            <v-autocomplete
-                                item-text="name"
-                                item-value="id"
-                                :items="engennering_offices"
-                                v-model="office_id"
-                                :readonly="true"
-                                :label="trans('data.enginnering_office_name')"
-                                v-validate="'required'"
-                                data-vv-name="enginnering_office_name"
-                                :data-vv-as="trans('data.enginnering_office_name')"
-                                :error-messages="errors.collect('enginnering_office_name')"
-                                required
-                            ></v-autocomplete>
+                        <v-flex xs12 sm6 md6 >
+                              <v-text-field
+                                     v-for="office in offices"
+                                      :key="office.id"
+                                        v-model="office.name"
+                                        :readonly="true"
+                                        :label="trans('data.enginnering_office_name')"
+                                    ></v-text-field>
+                  
                         </v-flex>
 
                         <v-flex xs12 sm6 md6>
@@ -173,6 +168,7 @@ export default {
             enginnering_type: '',
             enginnering_request: '',
              request_enginners: [],
+             offices:[]
         };
     },
     created() {
@@ -217,6 +213,7 @@ export default {
                     self.status = tem.request.status;
                     self.customer_id = tem.request.customer_id;
                     self.office_id = tem.request.office_id;
+                    self.offices = tem.request.offices;
                     self.note = tem.request.note;
                     self.dead_line_date = tem.request.dead_line_date;
                 } else {

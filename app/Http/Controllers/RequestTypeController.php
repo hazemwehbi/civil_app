@@ -21,6 +21,8 @@ use Notification;
 use App\VisitRequest;
 use App\DefaultEnginnersRequest;
 use App\Http\Responses\Response;
+use App\SpecialtyVisitRequest;
+
 class RequestTypeController extends Controller
 {
     protected $commonUtil;
@@ -99,7 +101,7 @@ class RequestTypeController extends Controller
                  }*/
                  
              }
-             
+           //  dd($request->all());
             $visit_request = VisitRequest::create([
                 'customer_id'=>$customer_id,
                 'project_id'=>$request->project_id,
@@ -110,12 +112,19 @@ class RequestTypeController extends Controller
                 'dead_line_date'=>$request->dead_line_date,
                // 'priority'=>$priority,
                 'sent'=>$request->sent,
-                'office_id'=>$request->office_id,
+                //'office_id'=>$request->office_id,
                 'note'=>$request->note,
                 'created_at'=>Carbon::now()
             ]);
-            $visit_request->specialties()->sync($request->enginnering_type);
-          
+           
+            $visit_request->offices()->attach($request->office_id, ['office_status' => 'recieved','request_type' => 'visit_request']);
+        //    dd($request->enginnering_type);
+            foreach($request->enginnering_type as $type)
+            SpecialtyVisitRequest::create([
+            'specialty_id' => $type,
+            'rquest_id'=> $visit_request->id
+           ]);
+          //  $visit_request->specialties()->attach($request->enginnering_type);
             //if($status=='accepted'){
                 foreach($enginners as $item){
                     DB::table('request_enginners')->insert([
@@ -175,7 +184,7 @@ class RequestTypeController extends Controller
         // if (!request()->user()->can('tickets.edit')) {
         //     abort(403, 'Unauthorized action.');
         // }
-        $request = VisitRequest::with('specialties')->findOrFail($id);
+        $request = VisitRequest::with('specialties','offices')->findOrFail($id);
         $enginnering_types=$this->CommonUtil->getEnginneringTypes();
         $request_types=$this->CommonUtil->getRequestsTypes();
         $data = [
@@ -532,7 +541,7 @@ class RequestTypeController extends Controller
         $project_id = request()->get('projectId', false);
         $user=User::find(request()->user()->id);
         if($user->hasRole('superadmin')){
-         $requests =  VisitRequest::with('customer', 'project','specialties')->where('request_type','visit_request');
+         $requests =  VisitRequest::with('customer', 'project','specialties','offices','report','report.media')->where('request_type','visit_request');
          if (!empty($project_id)) {
             $requests =$requests->where('project_id',$project_id);
          }
@@ -541,7 +550,7 @@ class RequestTypeController extends Controller
         else{
          $childrens=$user->childrenIds($user->id);
          array_push($childrens,$user->id);
-         $requests =  VisitRequest::with('customer', 'project','specialties')->where('request_type','visit_request')->whereIn('customer_id', $childrens);
+         $requests =  VisitRequest::with('customer', 'project','specialties','offices','report','report.media')->where('request_type','visit_request')->whereIn('customer_id', $childrens);
          if (!empty($project_id)) {
             $requests =$requests->where('project_id',$project_id);
          }

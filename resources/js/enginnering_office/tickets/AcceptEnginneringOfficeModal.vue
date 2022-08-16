@@ -223,7 +223,6 @@ export default {
         updatevalues1(value, key) {
             const self = this;
             self.arr.push(value);
-            // this.arr[key]=value;
 
             axios
                 .post('/enginner_office/get-office-empoloyees-specialty', {

@@ -140,7 +140,8 @@ jsPDF
   },
   props:{
     reportData: null,
-    language: null
+    language: null,
+    visit_request_id:null
   },
   data(){
      return{
@@ -180,6 +181,8 @@ jsPDF
             formData.append('project_id', self.reportData.project.id);
             formData.append('office_id', self.reportData.office?.id);
             formData.append('type', self.reportData.type.id);
+            formData.append('visit_request_id',self.visit_request_id);
+            console.log(self.visit_request_id, formData)
             self.$validator.validateAll().then((result) => {
                 if (result == true) {
                     self.loading = true;

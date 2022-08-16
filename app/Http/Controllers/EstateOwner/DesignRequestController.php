@@ -185,7 +185,7 @@ class DesignRequestController extends  Controller
             $designRequest->note=$request->note;
             $designRequest->save();
            // $designRequest->offices()->attach($input['office_id']);
-            $designRequest->offices()->attach($input['office_id'], ['office_status' => 'recieved']);
+            $designRequest->offices()->attach($input['office_id'], ['office_status' => 'recieved','request_type' => 'design_request']);
          
             if($designRequest->sent== 1){
                  $this->_saveAskDesignRequestOfferNotifications($input['office_id'], Auth::id());

@@ -59,16 +59,14 @@ class ReportController extends Controller
             else
             $office_id = $request->input('office_id');
             $report_type = $request->input('type');
-           
+         //  dd($request->visit_request_id);
             $report = Report::create([
                         'project_id' => $project_id,
                         'type_id'=>$report_type,
                         'created_by'=>Auth::id(),
                         'office_id'=> $office_id,
+                        'visit_request_id' => $request->visit_request_id
                     ]);
-                   // if($request->hasFile('pdfFile'))
-                     
-                  //   $reportFile = file_put_contents('report'.time().'.pdf', $request->pdfFile);
                      
                $report->addMedia($request->pdfFile)->usingFileName('report'.time().'.pdf')->toMediaCollection('report');
             DB::commit();

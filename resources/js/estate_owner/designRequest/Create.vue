@@ -136,20 +136,6 @@ export default {
         const self = this;
         self.$eventBus.$off('DESIGN_ADDED');
     },
-    filters: {
-        /* filterCategories: function (categories, project_id) {
-            var project_id = project_id;
-            var filteredCategories = [];
-
-            _.forEach(categories, function (category) {
-                if (category.project_id == project_id) {
-                    filteredCategories.push(category);
-                }
-            });
-
-            return filteredCategories;
-        },*/
-    },
     methods: {
         close() {
             const self = this;
@@ -173,6 +159,7 @@ export default {
             const self = this;
             let data = self.design;
             data['sent'] = sent;
+            
             if (this.$refs.form.validate()) {
                 self.loading = true;
                 axios
