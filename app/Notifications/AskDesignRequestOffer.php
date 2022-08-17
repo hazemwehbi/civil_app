@@ -57,6 +57,7 @@ class AskDesignRequestOffer extends Notification
     {
         return [
             'estate_id' => $this->estate_id,
+            'auth_role_target' => 'ENGINEERING_OFFICE_MANAGER' 
         ];
     }
 }

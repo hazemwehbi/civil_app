@@ -212,7 +212,6 @@ class NotificationController extends Controller
                 $notification['created_by'] = User::findOrFail($notification->data['created_by']);
             }
         }
-        
         return $this->respond($notifications);
     }
 }

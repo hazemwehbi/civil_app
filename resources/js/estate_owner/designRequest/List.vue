@@ -222,7 +222,8 @@
                             >
                                  {{trans('data.office_status')+' '+ props.item.offices.find(val => val.pivot.office_id == office.id).pivot.office_status}}
                             </v-chip></td>
-                             <td> <v-btn dark color="success" v-if="props.item.offices.find(val => val.pivot.office_id == office.id).pivot.office_status =='finished'" @click="viewDesignPrice(props.item)">
+                             <td> <v-btn dark color="success" v-if="props.item.offices.find(val => val.pivot.office_id == office.id).pivot.office_status =='finished'
+                                ||props.item.offices.find(val => val.pivot.office_id == office.id).pivot.office_status =='accepted'" @click="viewDesignPrice(props.item)">
                                 {{trans('data.viewPrice')}}
                             </v-btn></td></tr>
                             </table>

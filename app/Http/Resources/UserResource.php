@@ -28,6 +28,7 @@ class UserResource extends JsonResource
             'parent_id' =>$this->parent_id,
             'parent_logo' => $this->parent&&$this->parent->getFirstMedia('logo')?$this->parent->getFirstMedia('logo')->original_url:'',
             'parent_title'=>$this->parent?$this->parent->title:'',
+            'user_type_log' => $this->user_type_log
         ];
     }
 }

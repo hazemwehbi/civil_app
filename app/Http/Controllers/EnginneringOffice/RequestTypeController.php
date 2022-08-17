@@ -228,7 +228,8 @@ class RequestTypeController extends  Controller
             $request_enginner->dead_line_date = $request->dead_line_date;
 
             $request_enginner->save();
-            // $this->_saveAcceptedRequestNotifications($visit_request->customer_id,$visit_request->office_id);
+            $visit_request =VisitRequest::find($request->request_id);
+             $this->_saveAcceptedRequestNotifications($visit_request->customer_id,Auth::id());
 
 
             DB::commit();
@@ -298,10 +299,10 @@ class RequestTypeController extends  Controller
                 $visit_request->dead_line_date = $request->dead_line_date;
             }
             $visit_request->save();
-            $this->_saveAcceptedRequestNotifications($visit_request->customer_id, $visit_request->office_id);
+            $this->_saveAcceptedRequestNotifications($visit_request->customer_id, Auth::id());
 
 
-            if (!ProjectMember::where('project_id', $visit_request->project_id)->where('user_id', $visit_request->office_id)->first()) {
+            if (!ProjectMember::where('project_id', $visit_request->project_id)->where('user_id', Auth::id())->first()) {
                 if (isset($visit_request->office_id)) {
                     DB::table('project_members')->insert([
                         'user_id' => $visit_request->office_id,
@@ -344,7 +345,7 @@ class RequestTypeController extends  Controller
                         }
                         $data = [
                             'project_id' => $visit_request->project_id,
-                            'office_id' => $visit_request->office_id,
+                            'office_id' => Auth::id(),
                             'request_id' => $visit_request->id,
                         ];
                         $this->_saveProjectRequestCreatedNotifications([$item['enginner_id']], $data);
@@ -406,7 +407,7 @@ class RequestTypeController extends  Controller
                         $tmp = VisitRequest::find($item_request['id']);
                         $tmp->status = 'accepted';
                         $tmp->update();
-                        $this->_saveAcceptedRequestNotifications($tmp->customer_id, $tmp->office_id);
+                        $this->_saveAcceptedRequestNotifications($tmp->customer_id, Auth::id());
                     }
                 }
 

@@ -9,12 +9,8 @@
                                 <div v-if="enginners.length <= 0">
                                     <v-layout row v-for="(input, k) in inputs" :key="k">
                                         <v-flex xs12 md6>
-                                            <v-autocomplete
-                                                item-text="value"
-                                                :readonly="!is_show"
-                                                item-value="id"
-                                                :items="input.stages"
-                                                v-model="input.stage_id"
+                                            <v-text-field
+                                                v-model="input.stages[k].value"
                                                 :label="trans('data.stage')"
                                                 @change="(event) => updatevalues1(event, k)"
                                                 data-vv-name="enginnering_type"
@@ -22,7 +18,7 @@
                                                 :error-messages="errors.collect('enginnering_type')"
                                                 required
                                             >
-                                            </v-autocomplete>
+                                            </v-text-field>
                                         </v-flex>
                                         <v-flex xs12 md6>
                                             <v-autocomplete
@@ -38,7 +34,7 @@
                                                         }),
                                                 ]"
                                                 :label="trans('data.enginner')"
-                                                @change="(event) => updatevalues(event, k)"
+                                                @change="(event) => updatevalues1(event, k)"
                                                 :error-messages="errors.collect('enginner')"
                                                 required
                                             ></v-autocomplete>
@@ -101,7 +97,6 @@ export default {
     },
     mounted() {
         const self = this;
-        self.loadUsers();
         self.getEnginneringTypes();
         self.setCurrentUser();
     },
@@ -160,13 +155,7 @@ export default {
             this.arr.splice(index, 1);
             this.inputs.splice(index, 1);
         },
-        updatevalues(value, key) {
-            //alert(k)
-            // this.arr[key]=value;
-            // const self = this;
-            //  self.arr.push(value);
-            // self.current_customer = value;
-        },
+
         updatevalues1(value, key) {
             const self = this;
             self.arr.push(value);
@@ -188,10 +177,6 @@ export default {
             // self.current_customer = value;
         },
 
-        //detects location from browser
-        loadUsers() {
-            const self = this;
-        },
         setCurrentUser() {
             const self = this;
             axios.get('/get-current-user').then(function (response) {
@@ -271,8 +256,7 @@ export default {
                 stages: self.inputs,
                 design_id:self.design_id
             };
-
-            if (this.$refs.form.validate()) {
+             if (this.$refs.form.validate()) {
                 self.loading = true;
                 axios.post('/enginner_office/accept-design-request', data).then(function (response) {
                     if (response.data.success) {
@@ -299,6 +283,7 @@ export default {
                     }
                 });
             }
+          
         },
         getEnginneringTypes() {
             const self = this;

@@ -739,7 +739,7 @@
                             notification.type &&
                             notification.type ==
                                 'App\\Notifications\\AskDesignRequestOffer'
-                        "
+                         && getCurrentUser().user_type_log === 'ENGINEERING_OFFICE_MANAGER'" 
                         @click="
                             $router.push({
                                 name: 'design_request_enginnering_office_list',
@@ -833,6 +833,7 @@ export default {
         const self = this;
         self.url = '/notifications-mark-as-read';
         self.getNotificationsFromApi();
+       
         setInterval(() => {
             self.getNotificationsFromApi();
         }, APP.NOTIFICATION_REFRESH_TIMEOUT);
@@ -844,6 +845,7 @@ export default {
                 .get('/notifications')
                 .then(function (response) {
                     self.notifications_count = response.data;
+                     
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -863,6 +865,7 @@ export default {
                 .then(function (response) {
                     self.loading = false;
                     self.notifications = _.concat(self.notifications, response.data.data);
+                    console.log(self.notifications)
                     self.url = _.get(response, 'data.next_page_url', null);
                     self.getNotificationsFromApi();
                 })
