@@ -12,7 +12,6 @@
                                             <v-text-field
                                                 v-model="input.stages[k].value"
                                                 :label="trans('data.stage')"
-                                                @change="(event) => updatevalues1(event, k)"
                                                 data-vv-name="enginnering_type"
                                                 :data-vv-as="trans('data.enginnering_type')"
                                                 :error-messages="errors.collect('enginnering_type')"
@@ -34,7 +33,6 @@
                                                         }),
                                                 ]"
                                                 :label="trans('data.enginner')"
-                                                @change="(event) => updatevalues1(event, k)"
                                                 :error-messages="errors.collect('enginner')"
                                                 required
                                             ></v-autocomplete>

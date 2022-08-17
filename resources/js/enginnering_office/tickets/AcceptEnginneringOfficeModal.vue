@@ -41,14 +41,9 @@
                                     <v-layout row v-for="(input, k) in inputs" :key="k">
                                         
                                         <v-flex xs12 md4>
-                                            <v-autocomplete
-                                                item-text="value"
-                                                :readonly="!is_show"
-                                                item-value="key"
-                                                :items="input.enginnering_types"
-                                                v-model="input.specialty_id"
+                                            <v-text-field
+                                                v-model="input.enginnering_types[k].value"
                                                 :label="trans('data.enginnering_type')"
-                                                @change="(event) => updatevalues1(event, k)"
                                                 data-vv-name="enginnering_type"
                                                 :data-vv-as="trans('data.enginnering_type')"
                                                 :error-messages="errors.collect('enginnering_type')"
@@ -59,7 +54,7 @@
                                     :helptext="trans('messages.project_member_tooltip')"
                                 >
                                 </Popover> -->
-                                            </v-autocomplete>
+                                            </v-text-field>
                                         </v-flex>
                                         <v-flex xs12 md3>
                                             <v-autocomplete
@@ -75,7 +70,7 @@
                                                         }),
                                                 ]"
                                                 :label="trans('data.enginner')"
-                                                @change="(event) => updatevalues1(event, k)"
+                                                
                                                 :error-messages="errors.collect('enginner')"
                                                 required
                                             ></v-autocomplete>

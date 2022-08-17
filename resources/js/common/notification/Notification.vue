@@ -738,8 +738,7 @@
                         v-if="
                             notification.type &&
                             notification.type ==
-                                'App\\Notifications\\AskDesignRequestOffer'
-                         && getCurrentUser().user_type_log === 'ENGINEERING_OFFICE_MANAGER'" 
+                                'App\\Notifications\\AskDesignRequestOffer'" 
                         @click="
                             $router.push({
                                 name: 'design_request_enginnering_office_list',
@@ -864,6 +863,10 @@ export default {
                 .get(self.url)
                 .then(function (response) {
                     self.loading = false;
+                    if(self.getCurrentUser().user_type_log == 'ESTATE_OWNER')
+                    self.notifications = _.concat(self.notifications, 
+                    response.data.data.filter(val => val.type != 'App\\Notifications\\AskDesignRequestOffer'));
+                    else
                     self.notifications = _.concat(self.notifications, response.data.data);
                     console.log(self.notifications)
                     self.url = _.get(response, 'data.next_page_url', null);

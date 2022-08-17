@@ -12,6 +12,7 @@ use App\DesignRequest;
 use App\Ticket;
 use App\DesignEnginner;
 use App\StageProject;
+use Auth;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -24,6 +25,9 @@ class NotificationController extends Controller
     public function index()
     {
         $user = request()->user();
+        if(Auth::user()->user_type_log == 'ESTATE_OWNER')
+        $notifications_count = $user->unreadNotifications->where('type','!=','App\\Notifications\\AskDesignRequestOffer')->count(); 
+        else
         $notifications_count = $user->unreadNotifications->count();
         return $this->respond($notifications_count);
     }
@@ -113,7 +117,6 @@ class NotificationController extends Controller
                 ->simplePaginate()->markAsRead();
                 
         foreach ($notifications as $notification) {
-
             if ('App\Notifications\AskDesignRequestOffer' == $notification->type) {
                 $notification['estate'] = User::
                             findOrFail($notification->data['estate_id']);
@@ -212,6 +215,7 @@ class NotificationController extends Controller
                 $notification['created_by'] = User::findOrFail($notification->data['created_by']);
             }
         }
+        
         return $this->respond($notifications);
     }
 }
