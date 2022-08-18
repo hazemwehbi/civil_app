@@ -865,7 +865,7 @@ export default {
                     self.loading = false;
                     if(self.getCurrentUser().user_type_log == 'ESTATE_OWNER')
                     self.notifications = _.concat(self.notifications, 
-                    response.data.data.filter(val => val.type != 'App\\Notifications\\AskDesignRequestOffer'));
+                    response.data.data.filter(val => val.type != 'App\\Notifications\\AskDesignRequestOffer' && val.type != 'App\Notifications\ProjectRequestCreatedNotification'));
                     else
                     self.notifications = _.concat(self.notifications, response.data.data);
                     console.log(self.notifications)

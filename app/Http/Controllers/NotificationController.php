@@ -26,7 +26,10 @@ class NotificationController extends Controller
     {
         $user = request()->user();
         if(Auth::user()->user_type_log == 'ESTATE_OWNER')
-        $notifications_count = $user->unreadNotifications->where('type','!=','App\\Notifications\\AskDesignRequestOffer')->count(); 
+        $notifications_count = $user->unreadNotifications
+        ->where('type','!=','App\\Notifications\\AskDesignRequestOffer')
+        ->where('type','!=','App\Notifications\ProjectRequestCreatedNotification')
+        ->count(); 
         else
         $notifications_count = $user->unreadNotifications->count();
         return $this->respond($notifications_count);

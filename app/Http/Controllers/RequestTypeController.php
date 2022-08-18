@@ -53,17 +53,6 @@ class RequestTypeController extends Controller
             }
             $customer_id=$user_id;//User::find($user_id)->customer_id;
             
-           $user = $request->user();
-    
-            // if(!$user->hasRole('superadmin')){
-                // $status=config('enums.visit_request_status.new');
-            // }
-            // else{
-            //     $status=config('enums.visit_request_status.accepted');
-            // }
-    
-    //        $projects = Project::with('customer', 'categories', 'members', 'members.media');
-
               DB::beginTransaction();
               $status=$request->sent==0 ? 'new' : 'sent';
               $enginners=[];
@@ -96,19 +85,15 @@ class RequestTypeController extends Controller
                     $status='accepted';
 
                  }
-                 /*foreach($deafault_members as $item){
-                     array_push($enginners,$item['user_id']);
-                 }*/
-                 
              }
-           //  dd($request->all());
+            //dd($request->all());
             $visit_request = VisitRequest::create([
                 'customer_id'=>$customer_id,
                 'project_id'=>$request->project_id,
                 'request_type'=>'visit_request',//$request->request_type,
                 'description'=> 'test',//$request->description,
                 'status'=> $status,
-                 'office_status'=>$request->sent== 1? 'recieved' : '',
+               //  'office_status'=>$request->sent== 1? 'recieved' : '',
                 'dead_line_date'=>$request->dead_line_date,
                // 'priority'=>$priority,
                 'sent'=>$request->sent,
@@ -118,7 +103,7 @@ class RequestTypeController extends Controller
             ]);
            
             $visit_request->offices()->attach($request->office_id, ['office_status' => 'recieved','request_type' => 'visit_request']);
-        //    dd($request->enginnering_type);
+         //  dd($request->enginnering_type);
             foreach($request->enginnering_type as $type)
             SpecialtyVisitRequest::create([
             'specialty_id' => $type,
