@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <v-spacer></v-spacer>
-                <v-btn
+                <!--<v-btn
                     style="background-color: #06706d; color: white"
                     v-if="$can('tickets.create')"
                     class="lighten-1"
@@ -30,7 +30,7 @@
                 >
                     {{ trans('messages.add') }}
                     <v-icon right dark>add</v-icon>
-                </v-btn>
+                </v-btn>-->
             </v-card-title>
             <v-divider></v-divider>
             <v-data-table
