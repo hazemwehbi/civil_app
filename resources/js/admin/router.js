@@ -17,6 +17,7 @@ import ViewVisitRequest from '../estate_owner/tickets/view_visit_request'
 import ProjectManagement from '../estate_owner/main/components/ProjectManagement'
 import TasksList from '../common/tasks/List'
 import DesignRequestList from '../estate_owner/designRequest/List'
+import ContractorRequestList from '../estate_owner/contractorRequest/List'
 import ShowDesignRequestReport from '../estate_owner/designRequest/showDesignRequestReport';
 import UserFormEdit from '../estate_owner/users/components/UserFormEdit';
 import EstateOnerView from '../estate_owner/users/components/View';
@@ -240,7 +241,11 @@ const router = new Router({
                     name: 'design_request_estate_list',
                     component: DesignRequestList,
                 },
-
+{
+    path: 'contractor-request',
+    name: 'contractor_request_estate_list',
+    component: ContractorRequestList,
+},
 
                 {
                     path: 'show-design-price/:id',

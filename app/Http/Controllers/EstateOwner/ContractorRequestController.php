@@ -28,7 +28,7 @@ use App\DefaultEnginnersRequest;
 use Lang;
 use App\DesignEnginner;
 use App\Http\Responses\Response;
-class DesignRequestController extends  Controller
+class ContractorRequestController extends  Controller
 {
     protected $commonUtil;
 
@@ -183,7 +183,7 @@ class DesignRequestController extends  Controller
             $designRequest->project_id=$input['project_id'];
             $designRequest->sent=$input['sent'];
             $designRequest->note=$request->note;
-            $designRequest->request_type = 'design_request';
+            $designRequest->request_type = 'contractor_request';
             $designRequest->save();
            // $designRequest->offices()->attach($input['office_id']);
             $designRequest->offices()->attach($input['office_id'], ['office_status' => 'recieved','request_type' => 'design_request']);
