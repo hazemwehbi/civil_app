@@ -26,6 +26,6 @@ jobs:
       - name: civil_app
         uses: ./
         with:
-          server: ${{ secrets.SERVER1}}
+          server: ${{ secrets.SERVER}}
           username: ${{ secrets.USERNAME}}
           password: ${{ secrets.PASSWORD}}
