@@ -81,7 +81,10 @@
                                         open-delay="100"
                                         close-delay="100"
                                     >
-                                        <v-card class="not_working" :elevation="hover ? 16 : 2">
+                                        <v-card 
+                                        class="not_working" 
+                                         @click="$router.push({ name: 'contractor_request_estate_list' })"
+                                        :elevation="hover ? 16 : 2">
                                             <v-card-text>
                                                 <div class="text-md-center mt-2">
                                                     <p

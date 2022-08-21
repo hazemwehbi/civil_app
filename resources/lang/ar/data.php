@@ -281,7 +281,7 @@ return [
       'category'=>'الفئة',
       'neighborhood'=>'المجاورة',
       'district'=>'المنطقة',
-    
+      'create_contractor_request'=>'انشاء طلب مقاول',
 
       'province1'=>'الامانة1',
       'province2'=>'الامانة2',

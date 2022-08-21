@@ -5,80 +5,12 @@
         <Edit ref="designEdit"></Edit>
         <view1 ref="designView"></view1>
         <PricePdf ref="pdfPrice" @refreshTable="refreshTable($event)" />
-        <!-- <v-tabs v-model="tabs" fixed-tabs height="47" class="elevation-3">
-            <v-tab :href="'#tab-1'" @click="getStatistics">
-                <v-icon>bar_chart</v-icon>
-                {{ trans('messages.statistics') }}
-            </v-tab>
 
-            <v-tab :href="'#tab-2'">
-                <v-icon>filter_list</v-icon>
-                {{ trans('messages.filters') }}
-            </v-tab>
-        </v-tabs>
-
-        <v-tabs-items v-model="tabs">
-            <v-divider></v-divider>
-            <v-tab-item :value="'tab-1'">
-                <v-card flat class="elevation-2">
-                    <v-card-text>
-                        <v-container grid-list-md>
-                            <v-layout row wrap>
-                                <v-flex xs12 sm3 md3 v-if="statistics.users > 0">
-                                    <span class="subheading font-weight-medium info--text">
-                                        {{ trans('messages.total') }}: {{ statistics.users }}
-                                    </span>
-                                </v-flex>
-                                <v-flex xs12 sm3 md3 v-if="statistics.active > 0">
-                                    <span class="subheading font-weight-medium success--text">
-                                        {{ trans('messages.active') }}: {{ statistics.active }}
-                                    </span>
-                                </v-flex>
-                                <v-flex xs12 sm3 md3 v-if="statistics.in_active > 0">
-                                    <span class="subheading font-weight-medium warning--text">
-                                        {{ trans('messages.in_active') }}:
-                                        {{ statistics.in_active }}
-                                    </span>
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-card-text>
-                </v-card>
-            </v-tab-item>
-            <v-tab-item :value="'tab-2'">
-                <v-card flat class="elevation-2">
-                    <v-card-text>
-                        <v-layout>
-                            <v-flex xs12 sm12>
-                                <v-container grid-list-md>
-                                    <v-layout row wrap>
-                                        <v-flex xs12 sm6 md6>
-                                            <v-text-field
-                                                prepend-icon="search"
-                                                :label="trans('messages.filter_by_name')"
-                                                v-model="filters.name"
-                                            ></v-text-field>
-                                        </v-flex>
-                                        <v-flex xs12 sm6 md6>
-                                            <v-text-field
-                                                prepend-icon="search"
-                                                :label="trans('messages.filter_by_email')"
-                                                v-model="filters.email"
-                                            ></v-text-field>
-                                        </v-flex>
-                                    </v-layout>
-                                </v-container>
-                            </v-flex>
-                        </v-layout>
-                    </v-card-text>
-                </v-card>
-            </v-tab-item>
-        </v-tabs-items> -->
         <v-card class="mt-3">
             <v-card-title>
                 <div>
                     <div class="headline">
-                        {{ trans('data.design_requests') }}
+                        {{ trans('data.contractor_requests') }}
                     </div>
                 </div>
                 <v-spacer></v-spacer>
@@ -88,7 +20,7 @@
                     style="background-color: #06706d; color: white"
                     class="lighten-1"
                 >
-                    {{ trans('data.create_design') }}
+                    {{ trans('data.create_contractor_request') }}
                     <v-icon right dark>add</v-icon>
                 </v-btn>
             </v-card-title>
@@ -97,7 +29,7 @@
             <v-data-table
                 v-bind:headers="headers"
                 v-bind:pagination.sync="pagination"
-                ref="designData"
+                ref="contractorData"
                 :items="items"
                 :total-items="totalItems"
                 :expand="expand"
@@ -457,7 +389,7 @@ export default {
                 rowsPerPage: self.pagination.rowsPerPage,
             };
 
-            axios.get('/estate_owner/request-design', { params: params }).then(function (response) {
+            axios.get('/estate_owner/request-contractor', { params: params }).then(function (response) {
                 if (response.data.success === true) {
                     self.items = response.data.msg.data;
                     self.totalItems = response.data.msg.total;

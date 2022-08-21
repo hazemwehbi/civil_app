@@ -288,6 +288,7 @@ Route::prefix('estate_owner')
             Route::resource('users', 'UserController');
 
             Route::resource('request-design', 'DesignRequestController');
+            Route::resource('request-contractor', 'ContractorRequestController');
 
             Route::post('confirm-design', 'DesignRequestController@confirmDesign');
 

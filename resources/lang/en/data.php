@@ -16,6 +16,7 @@ return [
     'not equal'=>'Not matching',
     'aproved' => 'Approve',
     'reject' => 'Reject',
+    'create_contractor_request'=>'Create Contractor Request',
 'type_name_ar' => 'Arabic Report Type Name',
 'type_name_en' => 'English Report Type Name',
 'type_list_en' => 'List Type EN',
