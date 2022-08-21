@@ -8,6 +8,15 @@
                         {{ trans('data.viewPrice')}}
                     </span>
                     <v-spacer></v-spacer>
+                     <v-btn
+                style="background-color: #06706d; color: white"
+                color="darken-1"
+                @click="$refs.myPdfComponent.print()"
+                :loading="loading"
+                :disabled="loading"
+            >
+                {{ trans('data.print') }}
+            </v-btn>
                     <v-btn flat icon @click="dialog = false"> <v-icon>clear</v-icon> </v-btn>
                 </v-card-title>
                 <v-divider></v-divider>
@@ -74,7 +83,7 @@ export default {
         openDialog(item){
           this.dialog =true
           this.item = item
-          this.url = item.design_enginners[0].media[0].full_url.replace('upload','public/upload')
+          this.url = item.design_enginners[0].media[0].full_url//.replace('upload','public/upload')
           console.log(this.url)
         },
         agreeOffer(){

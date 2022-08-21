@@ -364,8 +364,7 @@ class UserController extends AdminController
                 $user->clearMediaCollection('logo');
             $user->addMediaFromBase64($request->file)->toMediaCollection('logo');
             }
-            if($payload['signature']){
-               
+            if($payload['signature']){    
                 $user->clearMediaCollection('signature');
                 $user->addMediaFromBase64($payload['signature'])->usingFileName('signature'.time().'.png')->toMediaCollection('signature');
             }

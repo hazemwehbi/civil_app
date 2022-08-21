@@ -111,12 +111,6 @@
                             {{ props.item.customer.name }}
                         </div>
                     </td>
-                    <!-- <td>
-                        <div align="center">
-                            {{ getType(props.item.request_type) }}
-                           <{{ props.item.name?props.item.type_of_request:getVisitRequestType(props.item.id) }}-->
-                    <!-- </div>
-                    </td> -->
 
                     <td>
                         <div align="center">
@@ -151,23 +145,22 @@
                      <template v-slot:expand="props">
           <v-card flat>
             <v-card-text>
-                <div align="center" v-for="(office) in props.item.offices" :key="office.id">
                     <table>
                         <tr>
-                             <td width="30%"><span>{{ office.name }}</span></td>
+                             <td width="30%"><span>{{ props.item.offices[0].name }}</span></td>
                              <td width="30%"> <v-chip
                                 :disabled="!checkActive()"
-                                :color="getColor(props.item.offices.find(val => val.pivot.office_id == office.id).pivot.office_status)"
+                                :color="getColor(props.item.offices[0].pivot.office_status)"
                                 text-color="white"
                             >
-                                 {{trans('data.office_status')+' '+ props.item.offices.find(val => val.pivot.office_id == office.id).pivot.office_status}}
+                                 {{trans('data.office_status')+' '+ props.item.offices[0].pivot.office_status}}
                             </v-chip></td>
-                             <td width="30%"> <v-btn dark color="success" v-if="props.item.offices.find(val => val.pivot.office_id == office.id).pivot.office_status =='accepted'" 
+                             <td width="30%"> <v-btn dark color="success" v-if="props.item.offices[0].pivot.office_status =='accepted'" 
                                 @click="viewReport(props.item)">
                                 {{trans('data.report')}}
                             </v-btn></td></tr>
                             </table>
-                        </div>
+                    
             </v-card-text>
           </v-card>
         </template>
@@ -315,7 +308,7 @@ export default {
             this.$router.push({name: 'edit_report', 
                                    params:{
                                    
-                                    id: item.report.media[item.report.media.length-1].full_url.replace('upload','public/upload')
+                                    id: item.report.media[item.report.media.length-1].full_url//.replace('upload','public/upload')
 
                                    }
         });

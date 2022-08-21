@@ -68,7 +68,7 @@ export default {
                 .get('/reports/'+id)
                 .then(function (response) {
                     self.report = response.data;
-                    self.pdf_url = self.report?.media[self.report?.media.length-1].full_url.replace('upload','public/upload')
+                    self.pdf_url = self.report?.media[self.report?.media.length-1].full_url//.replace('upload','public/upload')
                     self.$forceUpdate()
                 })
                 .catch(function (error) {

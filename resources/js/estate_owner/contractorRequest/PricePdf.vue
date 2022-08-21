@@ -74,7 +74,7 @@ export default {
         openDialog(item){
           this.dialog =true
           this.item = item
-          this.url = item.design_enginners[0].media[0].full_url.replace('upload','public/upload')
+          this.url = item.design_enginners[0].media[0].full_url//.replace('upload','public/upload')
           console.log(this.url)
         },
         agreeOffer(){

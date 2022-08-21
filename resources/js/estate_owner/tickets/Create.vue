@@ -59,7 +59,6 @@
                                             }),
                                     ]"
                                     required
-                                    multiple
                                 ></v-autocomplete>
                             </v-flex>
 

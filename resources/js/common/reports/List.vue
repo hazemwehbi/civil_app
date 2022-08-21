@@ -47,7 +47,7 @@
                                    @click="$router.push({name: 'edit_report', 
                                    params:{
                                     //id :props.item.id,
-                                    id: props.item.media[props.item.media.length-1].full_url.replace('upload','public/upload')
+                                    id: props.item.media[props.item.media.length-1].full_url//.replace('upload','public/upload')
 
                                    }
                                                                         })">
@@ -163,7 +163,7 @@ export default {
     methods: {
         openReport(report){
             if(report.media.length>0)
-        window.open(report.media[report.media.length-1].full_url.replace('upload','public/upload'), '_blank')
+        window.open(report.media[report.media.length-1].full_url, '_blank') //.replace('upload','public/upload')
         },
         getDataFromApi() {
             this.loading = true;

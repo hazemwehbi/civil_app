@@ -8,7 +8,7 @@
                                      @click="$router.push({name: 'edit_report', 
                                    params:{
                                   //  id :item.id,
-                                    id: item.media[item.media.length-1].full_url.replace('upload','public/upload')
+                                    id: item.media[item.media.length-1].full_url//.replace('upload','public/upload')
                                    }
                                                                         })"
                                                                     v-if="$can('project.list')">
