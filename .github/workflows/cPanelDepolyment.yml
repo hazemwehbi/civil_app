@@ -26,7 +26,7 @@ jobs:
       - name: civil_app
         uses: ./
         with:
-          server: sftp://${{ secrets.SERVER}}
+          server: ${{ secrets.SERVER1}}
           username: ${{ secrets.USERNAME}}
           password: ${{ secrets.PASSWORD}}
-          git-ftp-args: --insecure
+          protocol: sftp
