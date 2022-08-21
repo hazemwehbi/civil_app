@@ -1,30 +1,64 @@
 @extends('layouts.front')
 
 @section('content')
-<div class="container">
-    @if (session('status'))
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert @if(session('status.success')) alert-success @else alert-danger @endif alert-dismissible fade show mt-5" role="alert">
-                  {{ session('status.msg') }}
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-            </div>
-        </div>
-    @endif
+
+ 
+<style>
+    /* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+    .style_rtl{
+        text-align: right;
+    }
+    .style_lrt{
+        text-align: left;
+    }
+       
+    </style>
+<div class="container" >
+
     <div class="row">
-        <form class="form-signin" id="form" method="POST" action="{{ route('login') }}">
+        <div class="form-signin" id="form"   >
             {{ csrf_field() }}
 
             @php
                 $pwd = '';
                 $email = '';
             @endphp
-
-     
-
             <div class="col-sm-9 col-md-7 col-lg-5 mx-auto shadow-lg  mb-5 bg-white rounded mt-3" >
                 <div class="card card-signin">
                     <div class="card-body">
@@ -34,43 +68,45 @@
                             </h5>
                         </div>
                         <div style="padding:20px;">
-                           <div class="form-outline mb-1">
-                                <input type="text" id="inputEmail" name="email_id_card" class="form-control form-control-lg" placeholder="Email Address OR ID Card"  required  ><br>
-                                @if ($errors->has('email'))
-                                    <span class="help-block  text-danger">
-                                        <small class="help-text span-email" span-email>
-                                            {{ $errors->first('email') }}
+
+                        <div id="email_pass" >
+                        <div class="form-outline mb-1">
+                                <input type="text" id="inputEmail" name="email_id_card" class="form-control form-control-lg" placeholder="{{ trans('data.email_or_id_card') }}"  onchange="getEmail(this)"  required  >
+                                    <span class="help-block  text-danger ">
+                                        <small class="help-text email_description " >
+                                          
                                         </small>
                                     </span>
-                                @endif
+                              
                             </div>
-                            <div class="form-outline mb-1">
-                                <input type="password" name="password" id="inputPassword" class="form-control form-control-lg" placeholder="Password" value ="{{$pwd}}"  required ><br>
-                                @if ($errors->has('password'))
+                            <div class="form-outline mb-1" style="padding-top: 25px">
+                                <input type="password" name="password" id="inputPassword" class="form-control form-control-lg" placeholder="{{ trans('data.password') }}" value ="{{$pwd}}"  onchange="getPass(this)"  required >
                                     <span class="help-block text-danger">
-                                        <small class="help-text">
-                                            {{ $errors->first('password') }}
+                                        <small class="help-text password_description">
+                                        
                                         </small>
                                     </span>
-                                @endif
+                             
                             </div>
-                            <div class="form-outline mb-1">
-                            <select name="user_type" id="user_type"  class="form-control form-control-lg"   style="display:none" >
+                        </div>
+                        <div id="user_type_log" style="display:none">
+                            <div class="form-outline mb-1" style="padding-top: 5px">
+                            <select name="user_type" id="user_type"  class="form-control form-control-lg"   onchange="getComboA(this)" >
                             
                                     <!-- @foreach(array_keys(config('constants.user_types'))  as $type)
                                         <option value="{{$type}}" >{{config('constants.user_types')[$type]}} </option>
                                     @endforeach -->
                                 </select>
-                                @if ($errors->has('user_type'))
-                                    <span class="help-block text-danger">
+                         
+                                    <span class="help-block text-danger type_description">
                                         <small class="help-text">
-                                            {{ $errors->first('user_type') }}
+                                           
                                         </small>
                                     </span>
-                                @endif
+                    
           
                             </div>
-
+                            </div>
                             <!-- <div class="form-outline mb-1">
                             <select name="type_name" id="type_name"   class="form-control form-control-lg" style="display: none;margin-top:4%;" >
                                 </select>
@@ -83,23 +119,30 @@
                                 @endif
                             </div> -->
                             
-                            <div class="custom-control custom-checkbox mb-3">
+                            <div class="custom-control custom-checkbox mb-3" id="remember_me">
                                 <input type="checkbox" class="custom-control-input" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                                 <label class="custom-control-label" for="remember">
-                                    Remember Me
+                                    {{__('data.remember_me')}}
                                 </label>
                             </div>
                             <br>
-                            <button class="btn btn-lg btn-block text-uppercase" style="background-color:#06706d;color:white;" id="submit" type="submit">
-                                Log in
+                            <button class="btn btn-lg btn-block text-uppercase" onclick="validateMyForm(event);"  style="background-color:#06706d;color:white;" id="submit" >
+                             
+                             {{__('data.login')}}
                             </button>
-                            <a class="btn btn-link d-block text-center" style="color:#06706d;" href="{{ route('password.request') }}">
-                                Forgot Password?
+                            <button class="btn btn-lg btn-block text-uppercase" onclick="validateType(event);"  style="background-color:#06706d;color:white; display:none" id="button_type" >
+                             
+                             {{__('data.ok')}}
+                            </button>
+                            <a class="btn btn-link d-block text-center" id="password_request"  style="color:#06706d;" href="{{ route('password.request') }}">
+                                
+                               
+                                {{__('data.forget_password')}}
                             </a>
                             @if(config('constants.enable_client_signup'))
-                                <a class="btn btn-link d-block text-center py-0" href="{{ route('register')}}">
+                                <a class="btn btn-link d-block text-center py-0"  id="register" style="color:#06706d;"  href="{{ route('register')}}">
                                     <!-- //route('client.register-form')  -->
-                                {{__('messages.client_register')}}
+                                {{__('data.register')}}
                                 </a>
                             @endif
                         </div>
@@ -111,9 +154,20 @@
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
-
+    @if (session('status'))
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert @if(session('status.success')) alert-success @else alert-danger @endif alert-dismissible fade show mt-5" role="alert">
+                  {{ session('status.msg') }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+            </div>
+        </div>
+    @endif
     @if(config('app.env') == 'demo')
         <div class="row justify-content-md-center">
             <div class="col-md-4">
@@ -155,8 +209,19 @@
     @endif
 
 </div>
-@endsection
 
+
+@endsection
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Some text in the Modal..</p>
+  </div>
+
+</div>
 @section('javascript')
 <style>
 
@@ -188,226 +253,162 @@
     <script type="text/javascript">
 const isEmpty = str => !str.trim().length;
 
+//if()
+
+$('input[type=text]').addClass('textbox');
+var flag=false
 $(document).ready(function(){
 
-        $("#inputEmail").on("change",function() {
-        var email = $("#inputEmail").val();
-        var password = $("#inputPassword").val();
-        if(!isEmpty(email) && !isEmpty(password)){
-            $('#user_type').children().remove();
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
-                $.ajax({
-                        headers: {
-                        'X-CSRF-TOKEN': CSRF_TOKEN
-                        },
-                        type:'POST',
-                        url:"{{ route('getType.post') }}",
-                        data:{email: email,password:password},
-                        success:function(result){
-                          
-                            console.log(result.length)
-                            var options = "";
-                                    if (result.length > 1){
-                                        $('#user_type').children().remove();
-                                       $("#user_type").prop('required',true);
-                                      var options1 = `<option value="" disabled selected>choose Type</option>`;
-                                        $("#user_type").append(options1);
-                                            for (var i = 0; i < result.length; i++) {
-                                            options += `<option value=${result[i].id}>${result[i].name}</option>`;//<--string 
-                                            }
-                                            $("#user_type").append(options);
-                                    }
-                                    else{
-
-                                    }
-                            }
-                     
-                    });
-        }
-   });
-   $("#inputPassword").on("change",function() {
-        var email = $("#inputEmail").val();
-        var password = $("#inputPassword").val();
-        if(!isEmpty(email) && !isEmpty(password)){
-            $('#user_type').children().remove();
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
-                $.ajax({
-                        headers: {
-                        'X-CSRF-TOKEN': CSRF_TOKEN
-                        },
-                        type:'POST',
-                        url:"{{ route('getType.post') }}",
-                        data:{email: email,password:password},
-                        success:function(result){
-                           
-                            console.log(result.length)
-                            var options = "";
-                                    if (result.length > 1){
-                                        $("#user_type").show(); 
-                                        $("#user_type").prop('required',true);
-                                        var options1 = `<option value="" disabled selected>choose Type</option>`;
-                                            $("#user_type").append(options1);
-                                                for (var i = 0; i < result.length; i++) {
-                                                options += `<option value=${result[i].id}>${result[i].name}</option>`;//<--string 
-                                                }
-                                                $("#user_type").append(options);
-                                            }
-                                    else{ 
-
-                                   }
-                            }
-                    
-                     
-                    });
-        }
-   });
-//    // e.preventDefault();
-//       var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
-//     $.ajax({
-//             headers: {
-//             'X-CSRF-TOKEN': CSRF_TOKEN
-//             },
-//             type:'POST',
-//             url:"{{ route('getTypes.post') }}",
-//          //   data:{},
-//             success:function(result){
-//                 console.log(result.types.length)
-//                 var options = "";
-//               //  var options1 = `<option value="" disabled selected>choose ${result.type}</option>`;
-//                    // $("#type_name").append(options1);
-//                     for (var i = 0; i < result.types.length; i++) {
-//                     options += `<option value=${result.types[i].id}>${result.types[i].name}</option>`;//<--string 
-//                     }
-//                     $("#user_type").append(options);
-//                 }
-//         });
-
-
-    // var options = "";
-    //     var options1 = `<option value="" disabled selected>choose ${result.type}</option>`;
-    //         $("#type_name").append(options1);
-    //         for (var i = 0; i < result.users.length; i++) {
-    //         options += `<option value=${result.users[i].id}>${result.users[i].name}</option>`;//<--string 
-    //         }
-    //         $("#type_name").append(options);
-
-
-//   $("#form").validate({
-//     // Specify validation rules
-//     rules: {
-//       user_type: "required",
-//       type_name: "required",
-//       email: {
-//         required: true,
-//         email: true
-//       },      
-//       password: {
-//         required: true,
-//        // minlength: 5,
-//       }
-//     },
-//     messages: {
-//         user_type: {
-//       required: "Please Select your type",
-//      },      
-//      type_name: {
-//       required: "Please select name of  type",
-//      },     
-//      password: {
-//       required: "Please enter password",
-//      }, 
-//      email: {
-//       required: "Please enter email address",
-//       email: "Please enter a valid email address.",
-//      },
-//     },
-  
-//   });
- });
  
-//   $("#user_type").change(function(e) {
-//       e.preventDefault();
-//       var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
-//        var value = $("option:selected", this).val();
-//        var email = $("#inputEmail").val();
-//        $(".error-type").remove();
-//        if(true){
-//         $.ajax({
-//             headers: {
-//             'X-CSRF-TOKEN': CSRF_TOKEN
-//             },
-//             type:'POST',
-//             url:"{{ route('checkUser.post') }}",
-//             data:{email: email,user_type:value},
-//             success:function(result){
-//                 $('#type_name').children().remove();
-//                 $("#type_name").prop('required',false);
-//                 $("#type_name").hide(); 
-//                if(true){ 
-//                         if(value == '2' || value == '3' || value == '5')
-//                         {
-//                         $("#type_name").show(); 
-//                         $("#type_name").prop('required',true);
-//                             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-//                                     $.ajax({
-//                                         headers: {
-//                                         'X-CSRF-TOKEN': CSRF_TOKEN
-//                                         },
-//                                     type:'POST',
-//                                     url:"{{ route('ajaxRequest.post') }}",
-//                                     data:{name: value},
-//                                     success:function(result){
-//                                         var options = "";
-//                                     var options1 = `<option value="" disabled selected>choose ${result.type}</option>`;
-//                                         $("#type_name").append(options1);
-//                                         for (var i = 0; i < result.users.length; i++) {
-//                                         options += `<option value=${result.users[i].id}>${result.users[i].name}</option>`;//<--string 
-//                                         }
-//                                         $("#type_name").append(options);
-//                                     }
-//                                     });
-//                         }
-//                }
-//                else{
-//                $('#inputEmail').after('<span class="help-block text-danger error-type"> <small class="help-text"> user not match with type </small> </span>')
-                                   
-//                }
-//              }
-//         });
+    if(document.documentElement.lang=="ar"){
+        $(".container").css("text-align", "right");
+        $("#user_type").css("text-align", "right");
+        $('input[type=text]').addClass('style_rtl');
+        $('input[type=email]').addClass('style_rtl');
+        $('input[type=number]').addClass('style_rtl');
+        $('input[type=password]').addClass('style_rtl');
+    }
+    else{
+        $(".container").css("text-align", "left");
+        $("#user_type").css("text-align", "left");
+        $('input[type=text]').addClass('style_ltr');
+        $('input[type=email]').addClass('style_ltr');
+        $('input[type=number]').addClass('style_ltr');
+        $('input[type=password]').addClass('style_rtl');
+     
+    }
 
-//        }
-    
-//     });
+        $("#inputEmail").on("change",function() {
+   
+   });
 
-//     $('#form').submit(function() {
-//         var isValid=false;
-//         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
-//        var value = $('#user_type').find(":selected").val();
-//        var email = $("#inputEmail").val();
-//         $.ajax({
-//             headers: {
-//             'X-CSRF-TOKEN': CSRF_TOKEN
-//             },
-//             async: false,
-//             type:'POST',
-//             url:"{{ route('checkUser.post') }}",
-//             data:{email: email,user_type:value},
-//             success:function(result){
-//                 isValid= result;
-//             }
+ });
+ function getComboA(selectObject) {
+        var value = selectObject.value;  
+        $(".type_description").text('');
+    }
+    function getEmail(selectObject) {
+        var value = selectObject.value;  
+        $(".email_description").text('');
+    }
 
-//                });
-//                if(!isValid){
-//                 $(".error-type").remove();
-//                 $('#inputEmail').after('<span class="help-block text-danger error-type"> <small class="help-text"> user not match with type </small> </span>')
-//                }
-//                else{
-//                 $(".error-type").remove();
-//                }
-//                return isValid;
-              
+    function getPass(selectObject) {
+        var value = selectObject.value;  
+        $(".password_description").text('');
+    }
+ function validateType(){
+           var email = $("#inputEmail").val();
+           var password = $("#inputPassword").val();
+           var user_type = $("#user_type").val();
+        if(user_type!= null){
+            $(".password_description").text('');
+            $(".email_description").text('');
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
+                       $.ajax({
+                                headers: {
+                                'X-CSRF-TOKEN': CSRF_TOKEN
+                                },
+                                type:'POST',
+                                url:"{{ route('login') }}",
+                                data:{email_id_card: email,password:password,user_type:user_type},
+                                success:function(result){
+                                    window.location.href= "/";
+                                    
+                            
+                            }});
+                  //  return false
+               
+                }
+        else{
+            $(".type_description").text(document.documentElement.lang=="ar" ?  "يجب ان تختار نوع المستخدم " : "you must choose type");
+           
+        }
+ }
+
+  function validateMyForm (event) {
+        var email = $("#inputEmail").val();
+        var password = $("#inputPassword").val();
+        $('#user_type').children().remove();
+        if(!isEmpty(email) ){
+            $(".password_description").text('');
+            $(".email_description").text('');
+            $('#user_type').children().remove();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
+                $.ajax({
+                        headers: {
+                        'X-CSRF-TOKEN': CSRF_TOKEN
+                        },
+                        type:'POST',
+                        url:"{{ route('getType.post') }}",
+                        data:{email: email,password:password},
+                        success:function(result){
+                        if (result.success){
+                            if(result.roles.length > 1){
+                                $("#user_type_log").show(); 
+                                $("#email_pass").hide(); 
+                                $("#button_type").show();
+                                $("#submit").hide();
+                                $('#password_request').removeClass("d-block");
+                                $('#register').removeClass("d-block");
+                                $('#password_request').css('display', 'none');
+                                $('#register').css('display', 'none');
+                                $("#remember_me").hide();
+                                   $("h1").removeClass("page-header");
+                                var options = "";
+                                $('#user_type').children().remove();
+                                $("#user_type").prop('required',true);
+                                var options1 = `<option value="" disabled selected> ${document.documentElement.lang=="ar" ?  "اختر نوع المستخدم" : "choose type"}</option>`;
+                                $("#user_type").append(options1);
+                                    for (var i = 0; i < result.roles.length; i++) {
+                                    options += `<option value=${result.roles[i].type}>${result.roles[i].name}</option>`;//<--string 
+                                    }
+                                    $("#user_type").append(options);
+                            }
+                            else{
+                              $.ajax({
+                                headers: {
+                                'X-CSRF-TOKEN': CSRF_TOKEN
+                                },
+                                type:'POST',
+                                url:"{{ route('login') }}",
+                                data:{email_id_card: email,password:password},
+                                success:function(result){
+                                    
+                                  window.location.href= "/";
+                                    
+                            
+                            }});
+                            }
+                             
+                          
+                        } 
+                        else{
+                          if(result.pass){
+                            $(".email_description").text(result.description);
+                            $(".password_description").text('');
+                          }
+                          else{
+                            $(".password_description").text(result.description);
+                            $(".email_description").text('');
+                          }
+                            
+                           
+                            // return false
+                        }
+                     
+                    }});
+                  //  return false
+               
+                }
+        else{
+            $(".email_description").text(document.documentElement.lang=="ar" ?  "حقل الايميل او رقم البطاقة اجباري" : "Email or Id Card is Required");
+            return false;
+        }
+          
+       
+    }
          
-// });
+
 
        $('button.copy').click(function(){
             $('input#inputEmail').val($(this).data('email'));

@@ -13,8 +13,9 @@
                 <v-flex xs12 sm6 md6 class="text-xs-right pt-1">
                     <v-btn
                         @click="$router.push({ name: 'roles.create' })"
-                        class="primary lighten-1"
-                        dark
+                        style="background-color: #06706d; color: white"
+                        class="lighten-1"
+                        :disabled="!checkActive()"
                     >
                         {{ trans('messages.new_role') }}
                         <v-icon right>add</v-icon>
@@ -26,7 +27,7 @@
             <v-card-title>
                 <div>
                     <div class="headline">
-                        {{ trans('messages.all_roles') }}
+                        {{ trans('data.all_roles') }}
                     </div>
                 </div>
             </v-card-title>
@@ -49,43 +50,62 @@
                 </template>
                 <template slot="items" slot-scope="props">
                     <td>
-                        <v-menu>
-                            <v-btn icon slot="activator"> <v-icon>more_vert</v-icon> </v-btn>
-                            <v-list>
-                                <v-list-tile
-                                    @click="
-                                        $router.push({
-                                            name: 'roles.edit',
-                                            params: { id: props.item.id },
-                                        })
-                                    "
-                                >
-                                    <v-list-tile-title>
-                                        <v-icon small class="mr-2"> edit </v-icon>
-                                        {{ trans('messages.edit') }}
-                                    </v-list-tile-title>
-                                </v-list-tile>
-                                <v-list-tile @click="deleteRole(props.item)">
-                                    <v-list-tile-title>
-                                        <v-icon small class="mr-2"> delete_forever </v-icon>
-                                        {{ trans('messages.delete') }}
-                                    </v-list-tile-title>
-                                </v-list-tile>
-                            </v-list>
-                        </v-menu>
+                        <div align="center">
+                            <v-menu>
+                                <v-btn icon slot="activator"> <v-icon>more_vert</v-icon> </v-btn>
+                                <v-list>
+                                    <v-list-tile
+                                     :disabled="!checkActive()"
+                                        @click="
+                                       
+                                            $router.push({
+                                                name: 'roles.edit',
+                                                params: { id: props.item.id },
+                                            })
+                                        "
+                                    >
+                                        <v-list-tile-title>
+                                            <v-icon small class="mr-2"> edit </v-icon>
+                                            {{ trans('messages.edit') }}
+                                        </v-list-tile-title>
+                                    </v-list-tile>
+                                    <v-list-tile 
+                                     :disabled="!checkActive()"
+                                    @click="deleteRole(props.item)">
+                                        <v-list-tile-title>
+                                            
+                                            <v-icon small class="mr-2"> delete_forever </v-icon>
+                                            {{ trans('messages.delete') }}
+                                        </v-list-tile-title>
+                                    </v-list-tile>
+                                </v-list>
+                            </v-menu>
+                        </div>
                     </td>
-                    <td>{{ props.item.name }}</td>
-                    <td>{{ props.item.created_at | formatDate }}</td>
+                      <td>
+                        <div align="center">{{ props.item.id }}</div>
+                    </td>
+                    <td>
+                        <div align="center">{{ props.item.name }}</div>
+                    </td>
+                    <td>
+                        <div align="center">{{ props.item.created_at | formatDate }}</div>
+                    </td>
                 </template>
             </v-data-table>
         </v-card>
-               <br>
-            <div align="center">
-                <v-btn style="background-color:#06706d;color:white;" @click="$router.go(-1)" :loading="loading" :disabled="loading">
-                    {{ trans('messages.back') }}
-                </v-btn>
-           </div>
-        <br>
+        <br />
+        <div align="center">
+            <v-btn
+                style="background-color: #06706d; color: white"
+                @click="$router.go(-1)"
+                :loading="loading"
+                :disabled="loading"
+            >
+                {{ trans('messages.back') }}
+            </v-btn>
+        </div>
+        <br />
     </div>
 </template>
 <script>
@@ -101,14 +121,25 @@ export default {
                 {
                     text: self.trans('messages.action'),
                     value: false,
-                    align: 'left',
+                    align: 'center',
                     sortable: false,
                 },
-                { text: self.trans('messages.name'), value: 'name', align: 'left', sortable: true },
+                    {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'center',
+                    sortable: true,
+                },
+                {
+                    text: self.trans('messages.name'),
+                    value: 'name',
+                    align: 'center',
+                    sortable: true,
+                },
                 {
                     text: self.trans('messages.created_at'),
                     value: 'created_at',
-                    align: 'left',
+                    align: 'center',
                     sortable: true,
                 },
             ],
@@ -143,12 +174,12 @@ export default {
                         name: self.filters.name,
                     },
                 })
-                .then(function(response) {
+                .then(function (response) {
                     self.total_items = response.data.total;
                     self.items = response.data.data;
                     self.loading = false;
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log(error);
                 });
         },
@@ -166,7 +197,7 @@ export default {
                 okCb: () => {
                     axios
                         .delete('/admin/roles/' + item.id)
-                        .then(function(response) {
+                        .then(function (response) {
                             self.$store.commit('showSnackbar', {
                                 message: response.data.msg,
                                 color: response.data.success,
@@ -176,7 +207,7 @@ export default {
                                 self.getRolesFromApi();
                             }
                         })
-                        .catch(function(error) {
+                        .catch(function (error) {
                             console.log(error);
                         });
                 },

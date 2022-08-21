@@ -8,8 +8,9 @@
                         {{ task.subject }} <small>({{ task.task_id }})</small>
                     </span>
                     <v-spacer></v-spacer>
-                    <v-icon @click="closeDialog">clear</v-icon><br />
+                    <v-icon @click="closeDialog"> clear</v-icon><br />
                 </v-card-title>
+                
                 <v-subheader>
                     <v-chip color="indigo" text-color="white" small>
                         <v-avatar> <v-icon>assessment</v-icon> </v-avatar>
@@ -85,7 +86,7 @@
                                     ></v-textarea>
                                 </v-flex>
                             </v-flex>
-                            <v-flex xs12 md12 v-show="can_file_upload">
+                            <!-- <v-flex xs12 md12 v-show="can_file_upload">
                                 <h3>
                                     <v-icon small>attachment</v-icon>
                                     {{ trans('messages.file_upload') }}
@@ -93,13 +94,13 @@
                                 <v-flex xs12 md12>
                                     <div class="dropzone" id="fileupload"></div>
                                 </v-flex>
-                            </v-flex>
-                            <v-btn
+                            </v-flex> -->
+                            <!-- <v-btn
                                 color="blue lighten-1 white--text"
                                 @click="toggleUploadDocumenet"
                             >
                                 {{ trans('messages.upload_doc') }}
-                            </v-btn>
+                            </v-btn> -->
                             <v-btn color="success" @click="saveComment">
                                 {{ trans('messages.save') }}
                             </v-btn>
@@ -160,7 +161,13 @@
     </v-layout>
 </template>
 <script>
+import Dropzone from "dropzone";
+
 export default {
+       components: {
+        Dropzone,
+    },
+
     data() {
         return {
             dialog: false,
@@ -312,6 +319,8 @@ export default {
                 })
                 .then(function(response) {
                     self.comments = response.data;
+                    console.log('response.data')
+                    console.log(response.data)
                 })
                 .catch(function(error) {
                     console.log(error);

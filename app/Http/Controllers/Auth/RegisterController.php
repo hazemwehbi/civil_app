@@ -76,6 +76,9 @@ class RegisterController extends Controller
             DB::beginTransaction();
 
             $input = $request->only('name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender',  'password', 'id_card_number');
+             $input['active']=true;
+             $input['isActive']=1; 
+             $input['user_type_log']='ESTATE_OWNER';
              
             /** @var User $user */
             $user = $this->userRepository->create($input);

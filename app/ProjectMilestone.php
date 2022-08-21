@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class ProjectMilestone extends Model
 {
@@ -18,4 +19,14 @@ class ProjectMilestone extends Model
 
     protected static $logUnguarded = true;
     protected static $logOnlyDirty = true;
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults();
+    }
+    public static function getMilestonesForDropDown()
+    {
+        $milestones = ProjectMilestone::get()->toArray();
+
+        return $milestones;
+    }
 }

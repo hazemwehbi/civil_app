@@ -26,6 +26,11 @@ class MediaController extends Controller
     {
     }
 
+    public function removeFile(Request $request ){
+            echo json_encode($request);
+            die();
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -39,7 +44,6 @@ class MediaController extends Controller
             if ($this->isDemo()) {
                 return $this->respondWithError();
             }
-            
             $file = $request->file('file')[0];
             $temp_folder = config('constants.temp_upload_folder');
             //Generate a unique name for the file.

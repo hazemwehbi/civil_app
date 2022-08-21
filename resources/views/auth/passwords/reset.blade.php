@@ -15,7 +15,7 @@
                     <div class="form-label-group" >
                         <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email Address" value="{{ $email or old('email') }}" required autofocus>
                         <label for="inputEmail">
-                            Email Address
+                        Email Address
                         </label>
                         @if ($errors->has('email'))
                             <span class="help-block text-danger">

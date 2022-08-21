@@ -82,6 +82,9 @@ return [
     'something_went_wrong' => 'Something went wrong!',
     'updated_successfully' => 'Updated successfully.',
     'deleted_successfully' => 'Deleted successfully.',
+    "rejected_successfully" => "Rejected successfully ",
+    "accepted_successfully" => "Accepted successfully",
+
     'success' => 'Success',
     'view_contact' => 'View Contact',
     'view_customer' => 'View Customer',
@@ -214,6 +217,8 @@ return [
     'my_tasks' => 'My Tasks',
     'welcome' => 'Welcome :name!',
     'project_notification_text' => 'Added you to a project :project_name',
+    'project_request_notification_text' => 'invited you to a project :project_name',
+    'project_edit_notification_text' => 'Edited on  a project :project_name',
     'task_notification_text' => 'Assigned you a task :task_subject',
     'application_copyright' => ':name - :version | &copy; :year All rights reserved.',
     'upload_doc' => 'Upload A Document',
@@ -512,5 +517,40 @@ return [
     'invoice_paid_versus_expense' => 'Invoice Paid Vs Expenses',
     'invoice_paid' => 'Invoice Paid',
     'id' => 'Id',
-    'printed_saved_successfully'=>'Printed and Saved Successfully'
+    'printed_saved_successfully'=>'Printed and Saved Successfully',
+
+    'required'=>' :name is required',
+
+    //notifications
+    'ask_permission_notification_text'=>' :user_name asked for :permission_name',
+    'accept_permission_notification_text'=>' :user_name  accept to give you role :permission_name',
+
+    'reject_permission_notification_text'=>' :user_name  reject to give you role  :permission_name',
+
+
+    'office_accept_notification_text'=>' :office  accept your request',
+    'office_reject_notification_text'=>':office  reject  your request',
+
+    'design_request_offer_notification_text'=>'enginnering office send design for a :stage',
+
+
+    'design_request_accept_notification_text'=>' design accepted for a   :stage',
+
+    'design_request_reject_notification_text'=>'design rejected for a :stage',
+
+
+    'design_request_send_to_employee_notification_text'=>'enginnering office send a request design for :stage',
+
+
+    'ask_for_design_request_enginnering_office_notification_text'=>'recieve new request design ',
+
+
+    'email_valid'=>'Email must be valid',
+
+    'string_length'=>' :name must be at least :length characters  ',
+
+    'password_not_match'=>'Password not match',
+    'user_not_found'=>'User Not Found',
+    'unauthorized_action'=>'Unauthorized Action'
+
 ];

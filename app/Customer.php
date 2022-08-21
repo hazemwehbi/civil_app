@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Activitylog\LogOptions;
 
 class Customer extends Model
 {
@@ -39,7 +40,10 @@ class Customer extends Model
         return $this->hasMany('App\Components\User\Models\User')
             ->whereNotNull('customer_id');
     }
-
+    public function getActivitylogOptions(): LogOptions
+{
+    return LogOptions::defaults();
+}
     /**
      * Get the projects for the customer.
      */

@@ -1,13 +1,15 @@
 <?php
 
 namespace App;
-
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-
-class Project extends Model
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Activitylog\LogOptions;
+use ProjectMember;
+class Project extends Model implements HasMedia
 {
-    use LogsActivity;
+    use LogsActivity , InteractsWithMedia;
 
     /**
      * The attributes that aren't mass assignable.
@@ -19,6 +21,20 @@ class Project extends Model
     protected static $logUnguarded = true;
     protected static $logOnlyDirty = true;
 
+    const USER_ROLE_ADMIN_USER = 'admin';
+
+       /**
+    * Get all of the owning notable models.
+    */
+    public function notable()
+    {
+        return $this->morphTo();
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults();
+    }
     /**
     * The accessors to append to the model's array form.
     *
@@ -40,7 +56,8 @@ class Project extends Model
     {
         return $this->belongsTo('App\Components\User\Models\User', 'lead_id');
     }
-
+  
+  
     /**
      * Get the customer for the project.
      */
@@ -113,6 +130,10 @@ class Project extends Model
     {
         return $this->belongsTo('App\Components\User\Models\User', 'created_by');
     }
+    public function report()
+    {
+        return $this->hasMany('App\Report');
+    }
 
     /**
      * Get all of the projects's notes.
@@ -146,10 +167,10 @@ class Project extends Model
     {
         $projectTypes = [
                             ['key' => 'normal',
-                             'value' => __('messages.normal'),
+                             'value' => __('data.normal'),
                             ],
                             ['key' => 'not_normal',
-                             'value' => __('messages.not_normal'),
+                             'value' => __('data.not_normal'),
                             ],
                         ];
 
@@ -296,5 +317,16 @@ class Project extends Model
                         ];
 
         return $building_using;
+    }
+
+    public static  function getProjectsIdForCustomer()
+    {
+        $user = request()->user();
+        $customer_id=$user->id;
+        $childrens=$user->childrenIds($user->id);
+        array_push($childrens,$user->id);
+        $projects_id=Project::whereIn('customer_id',$childrens)->pluck('id')
+        ->toArray();
+        return $projects_id;
     }
 }

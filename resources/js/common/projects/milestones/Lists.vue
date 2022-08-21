@@ -24,8 +24,11 @@
             <v-subheader>
                 
             </v-subheader>
-            <template v-for="milestone in milestones">
-                <v-list-tile :key="milestone.id">
+            <template>
+                <div v-for="milestone in milestones"
+                :key="milestone.id"
+                >
+                <v-list-tile>
                     <v-list-tile-content>
                         <v-list-tile-title>
                             <span> {{ milestone.name }} </span>
@@ -64,6 +67,7 @@
                     </v-list-tile-content>
                 </v-list-tile>
                 <v-divider></v-divider>
+                </div>
             </template>
         </v-list>
         <v-layout row wrap v-else>
@@ -82,7 +86,6 @@
             </v-btn>
         </div>
     </v-container>
-    </div>
 </template>
 
 <script>

@@ -19,7 +19,7 @@ return [
     "save" => "حفظ",
     "add" => "إضافة",
     "action" => "عمل",
-    "edit" => "تصحيح",
+    "edit" => "تعديل",
     "company" => "شركة",
     "tax_number" => "الرقم الضريبي",
     "mobile" => "رقم الموبايل.",
@@ -80,7 +80,10 @@ return [
     "saved_successfully" => "حفظ بنجاح.",
     "something_went_wrong" => "هناك خطأ ما!",
     "updated_successfully" => "تم التحديث بنجاح.",
+    "accepted_successfully" => "تم التحديث بنجاح.",
     "deleted_successfully" => "حذف بنجاح.",
+    "rejected_successfully" => "تم الرفض  بنجاح.",
+
     "success" => "نجاح",
     "view_contact" => "عرض الاتصال",
     "view_customer" => "عرض العملاء",
@@ -213,6 +216,10 @@ return [
     "my_tasks" => "مهامي",
     'welcome' => 'أهلا بك :name!',
     'project_notification_text' => 'أضافك إلى مشروع :project_name',
+    'project_edit_notification_text' => 'عدل على مشروع :project_name',
+    'project_request_notification_text' => 'تم دعوتك للمشروع :project_name',
+
+    
     'task_notification_text' => 'كلفتك بمهمة :task_subject',
     'application_copyright' => ':name - :version | &copy; :year كل الحقوق محفوظة',
     "upload_doc" => "تحميل مستند",
@@ -343,6 +350,14 @@ return [
     "updated_at" => "تم التحديث في",
     "invoice_count" => "عدد الفواتير",
     'id' => 'المعرف',
+
+    'required'=>'    :name  مطلوب',
+
+
+
+
+
+ 
 
 
 
@@ -501,6 +516,8 @@ return [
     'send_reminder_notification_template' => 'Send Reminder Template',
     'enable_client_signup' => 'Enable Client Registration',
     'register' => 'Register',
+
+
     'registered_successfully' => 'Registered successfully',
     'client_register' => 'Client Register',
     'login' => 'Login',
@@ -528,5 +545,36 @@ return [
     'invoice_paid_versus_expense' => 'Invoice Paid Vs Expenses',
     'invoice_paid' => 'Invoice Paid',
     'id' => 'Id',
-    'printed_saved_successfully'=>'تمت الطباعة والحفظ بنجاح'
+    'printed_saved_successfully'=>'تمت الطباعة والحفظ بنجاح',
+
+          //notifications
+    'ask_permission_notification_text'=>' :user_name طلب صلاحية :permission_name',
+    'accept_permission_notification_text'=>' :user_name  وافق  اعطاءئك صلاحية :permission_name',
+
+    'reject_permission_notification_text'=>' :user_name  رفض  اعطاءئك صلاحية :permission_name',
+     
+
+    'office_accept_notification_text'=>' :office  وافق عل طلبك',
+    'office_reject_notification_text'=>' :office رفض طلبك',
+    'design_request_offer_notification_text'=>'المكتب الهندسي ارسل عرض تصميم للمرحلة :stage',
+
+    'design_request_accept_notification_text'=>'تم قبول التصميم للمرحلة :stage',
+
+    'design_request_reject_notification_text'=>'تم رفض التصميم للمرحلة :stage',
+
+
+    'design_request_send_to_employee_notification_text'=>'المكتب الهندسي ارسل الك طلب  تصميم للمرحلة :stage',
+
+     'ask_for_design_request_enginnering_office_notification_text'=>'استقبال طلب تصميم جديد',
+
+    'email_valid'=>'حقل البريد الالكتروني يجب ان يكون صالح',
+
+   // 'string_length'=>
+     'string_length'=>':name   يجب انو تكون    على الاقل :length احرف  ',
+
+     'password_not_match'=>'كلمة السر غير متطابقة',
+     'user_not_found'=>'المستخدم غير موجود'
+,
+'unauthorized_action'=>'ليش لديك الصلاحية لهذه الفعل'
+
     ];

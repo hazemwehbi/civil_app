@@ -2,9 +2,11 @@
 
 namespace App;
 
-use Spatie\MediaLibrary\Models\Media as BaseMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media as ModelsMedia;
 
-class Media extends BaseMedia
+//use Spatie\MediaLibrary\Models\Media as BaseMedia;
+
+class Media extends ModelsMedia
 {
     /**
      * The attributes that should be hidden for arrays.

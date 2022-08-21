@@ -527,51 +527,127 @@ class CommonUtil
 
     public function getNeighborhoods($append_all = false)
     {
-        $provinceMunicipalities = [
+        $neighborhoods = [
                         [
-                            'key' => 'municipality1',
-                            'value' => __('data.municipality1')
+                            'key' => 'neighborhood1',
+                            'value' => __('data.neighborhood1')
                         ],
                         [
-                            'key' => 'municipality2',
-                            'value' => __('data.municipality2')
+                            'key' => 'neighborhood2',
+                            'value' => __('data.neighborhood2')
                         ],
                         [
-                            'key' => 'municipality3',
-                            'value' => __('data.municipality3')
+                            'key' => 'neighborhood3',
+                            'value' => __('data.neighborhood3')
                         ],
                         
                     ];
 
         
-        return $provinceMunicipalities;
+        return $neighborhoods;
     }
 
 
 
-    public function getDistrict($append_all = false)
+    public function getDistricts($append_all = false)
     {
-        $provinceMunicipalities = [
+        $districts = [
                         [
-                            'key' => 'municipality1',
-                            'value' => __('data.municipality1')
+                            'key' => 'district1',
+                            'value' => __('data.district1')
                         ],
                         [
-                            'key' => 'municipality2',
-                            'value' => __('data.municipality2')
+                            'key' => 'district2',
+                            'value' => __('data.district2')
                         ],
                         [
-                            'key' => 'municipality3',
-                            'value' => __('data.municipality3')
+                            'key' => 'district3',
+                            'value' => __('data.district3')
                         ],
                         
                     ];
 
         
-        return $provinceMunicipalities;
+        return $districts;
     }
 
 
-    
+    public function getVisitRequestStatus($append_all = false)
+    {
+        $statuses = [
+                        [
+                            'key' => 'new',
+                            'value' => __('data.new')
+                        ],
+                        [
+                            'key' => 'pending',
+                            'value' => __('data.pending')
+                        ],
+                        [
+                            'key' => 'sent',
+                            'value' => __('data.sent')
+                        ],
+                        [
+                            'key' => 'accepted',
+                            'value' => __('data.accepted')
+                        ],
+                        
+                    ];
+
+        
+        return $statuses;
+    }
+
+
+    public function getRequestsTypes($append_all = false)
+    {
+        $requestTypes = [
+            [
+                'key' => 'visit_request',
+                'value' => __('data.visit_request')
+            ],
+            [
+                'key' => 'design_request',
+                'value' => __('data.design_request')
+            ],
+            [
+                'key' => 'support_service_request',
+                'value' => __('data.support_service_request')
+            ],
+            [
+                'key' => 'contractor_request',
+                'value' => __('data.contractor_request')
+            ],
+            [
+                'key' => 'supervision_request',
+                'value' => __('data.supervision_request')
+            ],
+        ];
+        return  $requestTypes;
+
+    }
+
+
+
+    public function getEnginneringTypes($append_all = false)
+    {
+        $enginneringTypes = [
+            [
+                'key' => 'civil_enginnering',
+                'value' => __('data.civil_enginnering')
+            ],
+            [
+                'key' => 'it_enginnering',
+                'value' => __('data.it_enginnering')
+            ],
+            [
+                'key' => 'architectural_enginnering',
+                'value' => __('data.architectural_enginnering')
+            ],
+           
+        ];
+        return  $enginneringTypes;
+
+    }
 
 }

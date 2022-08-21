@@ -1,14 +1,22 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Components\Core\Utilities\Helpers;
 use App\Components\User\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
+use App\Components\User\Repositories\UserRepository;
 class ManageProfileController extends Controller
 {
+     /**
+     * @var UserRepository
+     */
+    private $userRepository;
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -18,8 +26,9 @@ class ManageProfileController extends Controller
     {
         try {
             $user_id = request()->user()->id;
-            $user = User::with('media')->findOrFail($user_id);
-
+            $user = User::with('media','specialty')->findOrFail($user_id);
+            $user->signature = $user->getFirstMedia('signature')?$user->getFirstMedia('signature')->original_url:'';
+            $user->logo = $user->getFirstMedia('logo')?$user->getFirstMedia('logo')->original_url:'';
             $output = $this->respond($user);
         } catch (Exception $e) {
             $output = $this->respondWentWrong($e);
@@ -68,16 +77,30 @@ class ManageProfileController extends Controller
      */
     public function edit($id)
     {
-        if (!request()->user()->can('profile.edit')) {
-            abort(403, 'Unauthorized action.');
-        }
+        // if (!request()->user()->can('profile.edit')) {
+        //     abort(403, 'Unauthorized action.');
+        // }
 
         try {
-            $user_id = request()->user()->id;
-            $user = User::findOrFail($user_id);
+            $user = User::find($id);
+            $user->signature = $user->getFirstMedia('signature')?$user->getFirstMedia('signature')->original_url:'';
+            $user->logo = $user->getFirstMedia('logo')?$user->getFirstMedia('logo')->original_url:'';
+            $role_id = $user->roles->first()->id;
             $gender_types = User::getGenders();
+            
+            //$roles = User::getRolesForEmployee();
 
-            $output = $this->respond(['user' => $user, 'gender_types' => $gender_types]);
+            $data = ['user' => $user,
+                    'gender_types' => $gender_types,
+                    //'roles' => $roles,
+                    //'role_ids' => Auth::user()->roles->pluck('id'),
+                    // 'is_edit_role'=>User::canEditRole(),
+                ];
+
+            //return $this->respond($data);
+
+      
+            $output = $data;// $this->respond(['user' => $user, 'gender_types' => $gender_types]);
         } catch (Exception $e) {
             $output = $this->respondWentWrong($e);
         }
@@ -95,68 +118,110 @@ class ManageProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!request()->user()->can('profile.edit')) {
-            abort(403, 'Unauthorized action.');
-        }
-
+          //  if (!request()->user()->can('employee.edit')) {
+        //    abort(403, 'Unauthorized action.');
+        //}
+        //$user=User::findOrFail($id);
         $validate = validator($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
-        ]);
+        ],
+        [
+            'required'  => 'The :attribute field is required.',
+           // 'unique'    =>':attribute is already used',
+            'email'    => ':attribute  not email'
+        ]
+       
+    );
 
+      
         if ($validate->fails()) {
             return $this->respondWithError($validate->errors()->first());
         }
 
         try {
-            if ($this->isDemo()) {
-                return $this->respondDemo();
-            }
+            DB::beginTransaction();
 
-            $data = $request->only(
+            $payload = $request->only(
+                'signature',
                 'name',
-                'email',
-                'password',
                 'mobile',
                 'alternate_num',
+                'home_address',
+                'current_address',
                 'skype',
                 'linkedin',
                 'facebook',
                 'twitter',
-                'gender',
-                'home_address',
-                'current_address',
+                'birth_date',
                 'guardian_name',
                 'gender',
-                'birth_date'
+                'note',
+                'email',
+                'password',
+                'active',
+                'account_holder_name',
+                'account_no',
+                'bank_name',
+                'bank_identifier_code',
+                'branch_location',
+                'tax_payer_id',
+                'id_card_number',
+           'title'
             );
 
-            //password is present but has null/empty
-            //unset it
-            if (empty($data['password'])) {
-                unset($data['password']);
+            // if password field is present but has empty value or null value
+            // we will remove it to avoid updating password with unexpected value
+            if (!Helpers::hasValue($payload['password'])) {
+                unset($payload['password']);
             }
-
-            DB::beginTransaction();
-
-            $user_id = request()->user()->id;
-            $user = User::findOrFail($user_id);
-            $user->update($data);
-
-            //Add medias for employee
-            if (!empty($request->media)) {
-                $profile_img[] = $request->media;
-                $this->addMedias($profile_img, $user, 'avatar');
-            }
-
-            DB::commit();
             
+            if(isset($request->enginnering_type))
+               $payload['enginnering_type']=json_encode($request->enginnering_type);
+            $updated =$this->userRepository->update($id,$payload);
+            if (!$updated) {
+                return $this->respondWithError(__('messages.failed_to_update'));
+            }
+            
+          
+            /** @var User $user */
+            $user = $this->userRepository->find($id);
+            if($request->file){
+                $user->clearMediaCollection('logo');
+            $user->addMediaFromBase64($request->file)->toMediaCollection('logo');
+            }
+            if($payload['signature']){
+               
+                $user->clearMediaCollection('signature');
+                $user->addMediaFromBase64($payload['signature'])->usingFileName('signature'.time().'.png')->toMediaCollection('signature');
+            }
+            // $role_ids = $request->input('role');
+            // if (!empty($role_id)) {
+            //     foreach($role_ids as $role_id){
+            //         $role = Role::findOrFail($role_id);
+            //         if(!Auth::user()->hasRole('superadmin') && $role->is_primary  && !$user->hasRole($role->name)){
+            //                     return $this->respondWithError(__('data.not_permiision_to_assign_primary_role'));
+            //         }
+            //         else{
+            //             if(!$user->hasRole($role->name))
+            //                $user->roles()->attach($role);
+            //         }
+            //     }
+            // }
+
+            if (!empty($request->input('send_email')) && !empty($payload['password'])) {
+                $this->_sendEmailToEmployee($payload, $user);
+            }
+           
+           
+            DB::commit();
+
             $output = $this->respondSuccess(__('messages.updated_successfully'));
+            
         } catch (Exception $e) {
             DB::rollBack();
             $output = $this->respondWentWrong($e);
         }
-
         return $output;
     }
 

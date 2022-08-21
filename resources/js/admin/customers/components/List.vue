@@ -109,6 +109,7 @@
                             </v-list>
                         </v-menu>
                     </td>
+                    <td>{{ props.item.id }}</td>
                     <td>{{ props.item.company }}</td>
                     <td>{{ props.item.tax_number }}</td>
                     <td>{{ props.item.mobile }}</td>
@@ -139,6 +140,12 @@ export default {
                     value: false,
                     align: 'left',
                     sortable: false,
+                },
+                    {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'left',
+                    sortable: true,
                 },
                 {
                     text: self.trans('messages.company'),

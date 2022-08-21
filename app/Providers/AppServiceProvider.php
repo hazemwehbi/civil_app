@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Http\Resources\UserResource;
 use App\System;
+use Auth;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
@@ -26,9 +28,11 @@ class AppServiceProvider extends ServiceProvider
             function ($view) {
                 $logo = System::getValue('logo');
                 $view->with('logo', $logo);
+                
             }
         );
-
+       
+       // View::share('user', Auth::user());
         //Share logo to login form
         View::composer(
             '*',

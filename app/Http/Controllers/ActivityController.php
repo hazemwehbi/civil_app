@@ -21,9 +21,9 @@ class ActivityController extends Controller
     {
         $project_id = request()->get('project_id');
 
-        if (!request()->user()->can('project.'.$project_id.'.activities')) {
-            abort(403, 'Unauthorized action.');
-        }
+        // if (!request()->user()->can('project.'.$project_id.'.activities')) {
+        //     abort(403, 'Unauthorized action.');
+        // }
         
         $project = Project::findOrFail($project_id);
         $activities = Activity::forSubject($project)

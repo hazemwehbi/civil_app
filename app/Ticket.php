@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
+
+    protected $table ="specialties";
     /**
      * The attributes that aren't mass assignable.
      *

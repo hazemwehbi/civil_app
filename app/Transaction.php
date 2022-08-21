@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Transaction extends Model
 {
@@ -30,7 +31,10 @@ class Transaction extends Model
     {
         return $query->where('transactions.type', $type);
     }
-
+    public function getActivitylogOptions(): LogOptions
+{
+    return LogOptions::defaults();
+}
     /**
      * Get the invoice lines for the transaction.
      */

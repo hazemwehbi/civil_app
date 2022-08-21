@@ -16,17 +16,19 @@ let mix = require('laravel-mix');
         rules: [
             {
                 test: /\.styl$/,
-                loader: ['style-loader', 'css-loader', 'stylus-loader']
+              //  loader: ['style-loader', 'css-loader', 'stylus-loader']
             }
         ]
     }
 });
+
 
 mix.copyDirectory('resources/img', 'public/img')
     .js('resources/js/admin/admin.js', 'public/js')
     .js('resources/js/client/client.js', 'public/js')
     .sass('resources/sass/admin.scss', 'public/css')
     .sass('resources/sass/front.scss', 'public/css')
+    .vue()
     .extract(['vue','vue-router','moment','axios','lodash','dropzone']);
     
 if (mix.inProduction()) {

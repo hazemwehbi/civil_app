@@ -12,10 +12,15 @@
                     <v-stepper-step step="2" :complete="e1 > 2" color="teal">
                         {{ trans('data.location_info') }}
                     </v-stepper-step>
-
                     <v-divider></v-divider>
 
                     <v-stepper-step step="3" :complete="e1 > 3" color="teal">
+                        {{ trans('data.document_info') }}
+                    </v-stepper-step>
+
+                    <v-divider></v-divider>
+
+                    <v-stepper-step step="4" :complete="e1 > 4" color="teal">
                         {{ trans('data.project_info') }}
                     </v-stepper-step>
                 </v-stepper-header>
@@ -62,9 +67,27 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
-                        <ProjectInfo @next="getProjectData($event)" ref="projectInfo" />
+                        <Document @next="getDocumentData($event)" ref="documentInfo" />
                         <v-layout row pt-3 justify-center>
                             <v-btn color="teal" small outline @click="e1 = 2">
+                                {{ trans('messages.back') }}
+                            </v-btn>
+                            <div style="display: flex" align="right">
+                                <v-btn
+                                    style="background-color: #06706d; color: white"
+                                    small
+                                    @click="getDocumentInfo"
+                                >
+                                    {{ trans('messages.next') }}
+                                </v-btn>
+                            </div>
+                        </v-layout>
+                    </v-stepper-content>
+
+                    <v-stepper-content step="4">
+                        <ProjectInfo @next="getProjectData($event)" ref="projectInfo" />
+                        <v-layout row pt-3 justify-center>
+                            <v-btn color="teal" small outline @click="e1 = 3">
                                 {{ trans('messages.back') }}
                             </v-btn>
                             <div style="display: flex" align="right">
@@ -93,11 +116,13 @@ import CustomerInfo from './project_info/customerInfo.vue';
 import LocationInfo from './project_info/locationInfo.vue';
 import ProjectInfo from './project_info/ProjectInfo.vue';
 import Popover from '../../../admin/popover/Popover';
+import Document from './project_info/documnets.vue';
 export default {
     components: {
         CustomerInfo,
         LocationInfo,
         ProjectInfo,
+        Document,
         Popover,
     },
     data() {
@@ -111,50 +136,17 @@ export default {
             agency_id: null,
             users_id: [],
             loading: false,
-            isEdit:false,
+            isEdit: false,
+            medias:[]
         };
     },
-    mounted() {
-        if (this.$route.params.isEdit==true) {
-            this.isEdit=false;
-            this.$refs.customerInfo.fillEditData(
-                this.$route.params.project_info_edit.customer,
-                this.$route.params.project_info_edit.agency,
-                 this.isEdit
-            );
-            this.$refs.locationInfo.fillEditData(this.$route.params.project_info_edit.location,this.isEdit);
-            this.$refs.projectInfo.fillEditData(this.$route.params.project_info_edit, this.isEdit);
-        }
-        else if(this.$route.params.isEdit==false){
-            this.isEdit=true;
-            this.$refs.customerInfo.fillEditData(
-                this.$route.params.project_info_edit.customer,
-                this.$route.params.project_info_edit.agency,
-                 this.isEdit
-            );
-            this.$refs.locationInfo.fillEditData(this.$route.params.project_info_edit.location,this.isEdit);
-            this.$refs.projectInfo.fillEditData(this.$route.params.project_info_edit,this.isEdit);
-        }
-    },
+    mounted() {},
 
     created() {
         const self = this;
-        //isEdit
-        //  alert(JSON.stringify(self.$route.params.project_info_edit.customer))
-        // alert(JSON.stringify(self.$route.params.project_info_edit.location))
-        //  alert(JSON.stringify(self.$route.params.project_info_edit.agency_id))
-
-        //   self.customer_id=self.$route.params.project.customer_id;
-        // self.project_id=self.$route.params.project.project_id;
     },
     methods: {
-
-        goTo(step, can, data) {
-            //    alert(JSON.stringify(data))
-            //   if (can) {
-            //     this.e1 = step;
-            //   }
-        },
+        goTo(step, can, data) {},
         getCustomerData(data) {
             this.customers = data.customers;
             this.agency_id = data.agency_id;
@@ -179,10 +171,13 @@ export default {
         getProjectInfo() {
             this.$refs.projectInfo.nextStep();
         },
-        click() {
-            //  this.$refs.customerInfo.nextStep();
-            //  this.$refs.locationInfo.nextStep();
-            //  this.$refs.projectInfo.nextStep();
+        getDocumentInfo() {
+           this.$refs.documentInfo.nextStep();
+        },
+        getDocumentData(data) {
+             this.medias = data;
+            this.e1 = 4;
+            
         },
         store(val) {
             const self = this;
@@ -192,119 +187,30 @@ export default {
                 customers: self.customers,
                 users_id: self.users_id,
                 agency_id: self.agency_id,
+                medias:self.medias
             };
             this.loading = true;
-            if (!self.isEdit) {
-                axios
-                    .post('/add-new-project', data)
-                    .then(function (response) {
-                        self.loading = false;
-                        self.$store.commit('showSnackbar', {
-                            message: response.data.msg,
-                            color: response.data.success,
-                        });
-                        self.$router.push({ path: '/project' });
-                        if (response.data.success) {
-                            // self.loading=false;
-                            //   self.dialog = false;
-                            self.$eventBus.$emit('updateTicketsTable');
-
-                            //   self.goBack();
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
+            axios
+                .post('/add-new-project', data)
+                .then(function (response) {
+                    self.loading = false;
+                    self.$store.commit('showSnackbar', {
+                        message: response.data.msg,
+                        color: response.data.success,
                     });
-            } else {
-                console.log(self.project);
-                axios
-                    .post('/edit-new-project', data)
-                    .then(function (response) {
-                        self.loading = false;
-                        self.$store.commit('showSnackbar', {
-                            message: response.data.msg,
-                            color: response.data.success,
-                        });
-                       self.$router.push({ path: '/project' });
-                        if (response.data.success) {
-                            // self.loading=false;
-                            //   self.dialog = false;
-                            self.$eventBus.$emit('updateTicketsTable');
+                    self.$router.push({ path: '/project' });
+                    if (response.data.success) {
+                        // self.loading=false;
+                        //   self.dialog = false;
+                        self.$eventBus.$emit('updateTicketsTable');
 
-                            //   self.goBack();
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            }
-            //    console.log(data)
-            //     self.$validator.validateAll().then(result => {
-            //         if (result == true) {
-            //             self.loading = true;
-            //             axios
-            //                 .post('/visit-request', data)
-            //                 .then(function(response) {
-            //                     self.loading = false;
-            //                     self.$store.commit('showSnackbar', {
-            //                         message: response.data.msg,
-            //                         color: response.data.success,
-            //                     });
-
-            //                     if (response.data.success === true) {
-            //                       //   self.dialog = false;
-            //                         self.$eventBus.$emit('updateTicketsTable');
-            //                          self.goBack();
-            //                     }
-
-            //                 })
-            //                 .catch(function(error) {
-            //                     console.log(error);
-            //                 });
-            //         }
-            //     });
-            //   self.reset();
+                        //   self.goBack();
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
-        // store() {
-        //   alert(JSON.stringify(this.customer))
-        // const self = this;
-        // let data = {
-        //     name: self.project.name,
-        //     category_id: self.category_id,
-        //     customer_id: self.project.customer_id,
-        //     billing_type: self.project.billing_type,
-        //     total_rate: self.project.total_rate,
-        //     price_per_hours: self.project.price_per_hours,
-        //     estimated_hours: self.project.estimated_hours,
-        //     estimated_cost: self.project.estimated_cost,
-        //     status: self.project.status,
-        //     lead_id: self.project.lead_id,
-        //     description: self.project.description,
-        //     user_id: self.project.user_id,
-        //     start_date: self.start_date,
-        //     end_date: self.end_date,
-        // };
-        // self.$validator.validateAll().then(result => {
-        //     if (result == true) {
-        //         self.loading = true;
-        //         axios
-        //             .post('/projects', data)
-        //             .then(function(response) {
-        //                 self.loading = false;
-        //                 self.$store.commit('showSnackbar', {
-        //                     message: response.data.msg,
-        //                     color: response.data.success,
-        //                 });
-        //                 if (response.data.success === true) {
-        //                     self.$eventBus.$emit('updateProjectTable');
-        //                 }
-        //             })
-        //             .catch(function(error) {
-        //                 console.log(error);
-        //             });
-        //     }
-        // });
-        //},
     },
 };
 </script>

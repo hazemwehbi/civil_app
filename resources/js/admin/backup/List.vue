@@ -22,8 +22,8 @@
             <v-divider></v-divider>
             <v-card-text>
                 <v-list two-line subheader v-if="backups.length">
-                    <template v-for="(backup, index) in backups">
-                        <v-list-tile avatar :key="index">
+                    <template>
+                        <v-list-tile v-for="(backup, index) in backups" avatar :key="index">
 
                             <v-list-tile-avatar>
                                 <v-icon>backup</v-icon>

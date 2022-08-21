@@ -42,6 +42,7 @@
                                                         </v-btn> 
                                                     </div>  
                                                 </td>
+                                                <td>{{ props.item.id }}</td>
                                                 <td>{{ props.item.name }}</td>
                                                 <td> {{ props.item.customer.company }}</td>
                                                 <td>
@@ -91,6 +92,12 @@ export default {
                     value: false,
                     align: 'centre',
                     sortable: false,
+                },
+                      {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'centre',
+                    sortable: true,
                 },
                 {
                     text: self.trans('data.authorization_request_number'),

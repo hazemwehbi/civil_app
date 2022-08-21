@@ -17,7 +17,7 @@
                                 <v-layout row wrap>
                                     <v-flex xs12 md6>
                                         <v-text-field
-                                           :readonly="isEdit"
+                                             :disabled="isEdit"
                                             v-model="project.name"
                                             :label="trans('messages.name')"
                                             v-validate="'required'"
@@ -52,7 +52,12 @@
                                     <v-flex xs12 sm12 md12>
                                         {{ trans('messages.description') }}
                                         <br />
-                                        <quill-editor :readonly="isEdit" v-model="project.description"> </quill-editor>
+                                        <quill-editor
+                                        :disabled="isEdit"
+                                          
+                                            v-model="project.description"
+                                        >
+                                        </quill-editor>
                                     </v-flex>
                                 </v-layout>
                                 <v-layout wrap>
@@ -68,6 +73,7 @@
 
                                     <v-flex xs12 md4>
                                         <v-select
+                                           :disabled="isEdit"
                                             item-text="value"
                                             item-value="key"
                                             :items="status"
@@ -78,7 +84,7 @@
                                             v-validate="'required'"
                                             :data-vv-as="trans('messages.status')"
                                             :error-messages="errors.collect('status')"
-                                            :readonly="isEdit"
+                                           
                                             required
                                         ></v-select>
                                     </v-flex>
@@ -120,7 +126,7 @@
                                                         </label>
                                                         <flat-pickr
                                                             v-model="project.start_date"
-                                                            :readonly="isEdit"
+                                                           :disabled="isEdit"
                                                             name="start_date"
                                                             required
                                                             :config="flatPickerDate()"
@@ -138,17 +144,31 @@
                                     </v-flex>
                                     <v-flex xs12 md4>
                                         <v-autocomplete
-                                            item-text="name"
+                                             class="content-sign"
+                                               multiple
+                                              :disabled="isEdit"
+                                            :clearable="true"
+                                            :deletable-chips="true"
+                                            :dense="true"
+                                            search-input=""
+                                            :solo-inverted="false"
+                                            :eager="true"
+                                            :loading="false"
+                                            :validate-on-blur="false"
+                                            :persistent-placeholder="false"
+                                             item-text="name"
                                             item-value="id"
                                             :items="users"
                                             :readonly="isEdit"
                                             v-model="project.users_id"
                                             :label="trans('messages.members')"
-                                            v-validate="'required'"
-                                            multiple
-                                            data-vv-name="members"
-                                            :data-vv-as="trans('messages.members')"
-                                            :error-messages="errors.collect('members')"
+                                            :rules="[
+                                                (v) =>
+                                                    !!v ||
+                                                    trans('messages.required', {
+                                                        name: trans('messages.members'),
+                                                    }),
+                                            ]"
                                             required
                                         >
                                             <Popover
@@ -156,7 +176,14 @@
                                                 :helptext="trans('messages.project_member_tooltip')"
                                             >
                                             </Popover>
+                                            <!-- <Popover
+                                    slot="append"
+                                    :helptext="trans('messages.project_member_tooltip')"
+                                >
+                                </Popover> -->
                                         </v-autocomplete>
+
+                                     
                                     </v-flex>
                                     <v-flex xs12 md4>
                                         <div class="v-input v-text-field theme--light">
@@ -175,7 +202,7 @@
                                                         </label>
                                                         <flat-pickr
                                                             v-model="project.end_date"
-                                                            :readonly="isEdit"
+                                                            :disabled="isEdit"
                                                             name="end_date"
                                                             required
                                                             :config="flatPickerDate()"
@@ -193,7 +220,7 @@
                                     <v-flex xs12 md4>
                                         <v-text-field
                                             v-model="project.authorization_request_number"
-                                            :readonly="isEdit"
+                                            :disabled="isEdit"
                                             :label="trans('data.authorization_request_number')"
                                             data-vv-name="Authorization Request Number"
                                             :data-vv-as="trans('data.authorization_request_number')"
@@ -208,7 +235,7 @@
                                     <v-flex xs12 md4>
                                         <v-text-field
                                             v-model="project.license_number"
-                                            :readonly="isEdit"
+                                            :disabled="isEdit"
                                             :label="trans('data.license_number')"
                                             data-vv-name="Authorization Request Number"
                                             :data-vv-as="trans('data.license_number')"
@@ -221,7 +248,7 @@
                                     <v-flex xs12 md4>
                                         <v-text-field
                                             v-model="project.plot_number"
-                                            :readonly="isEdit"
+                                             :disabled="isEdit"
                                             :label="trans('data.plot_number')"
                                             data-vv-name="Authorization Request Number"
                                             :data-vv-as="trans('data.plot_number')"
@@ -247,7 +274,7 @@
                                     <v-flex xs12 md4>
                                         <v-text-field
                                             v-model="project.cadastral_decision_number"
-                                            :readonly="isEdit"
+                                            :disabled="isEdit"
                                             :label="trans('data.cadastral_decision_number')"
                                             data-vv-name="Authorization Request Number"
                                             :data-vv-as="trans('data.cadastral_decision_number')"
@@ -263,7 +290,7 @@
                                         <v-autocomplete
                                             item-text="value"
                                             item-value="key"
-                                            :readonly="isEdit"
+                                             :disabled="isEdit"
                                             :items="buiding_types"
                                             v-model="project.buiding_type"
                                             :label="trans('data.buiding_type')"
@@ -275,7 +302,7 @@
                                         <v-text-field
                                             type="number"
                                             ref="input"
-                                            :readonly="isEdit"
+                                          :disabled="isEdit"
                                             :label="trans('data.unit_number')"
                                             v-model.number="project.unit_number"
                                         ></v-text-field>
@@ -285,7 +312,7 @@
                                             v-model="project.build_rate"
                                             :label="trans('data.build_rate')"
                                             v-validate="'required'"
-                                            :readonly="isEdit"
+                                           :disabled="isEdit"
                                             data-vv-name="build_rate"
                                             :data-vv-as="trans('data.build_rate')"
                                             :error-messages="errors.collect('build_rate')"
@@ -296,7 +323,7 @@
                                         <v-autocomplete
                                             item-text="value"
                                             item-value="key"
-                                            :readonly="isEdit"
+                                           :disabled="isEdit"
                                             :items="project_types"
                                             v-model="project.project_type"
                                             :label="trans('data.project_type')"
@@ -311,7 +338,7 @@
                                         <v-autocomplete
                                             item-text="value"
                                             item-value="key"
-                                            :readonly="isEdit"
+                                            :disabled="isEdit"
                                             :items="roles_number"
                                             v-model="project.role_number"
                                             :label="trans('data.role_number')"
@@ -322,7 +349,7 @@
                                         <v-autocomplete
                                             item-text="value"
                                             item-value="key"
-                                            :readonly="isEdit"
+                                          :disabled="isEdit"
                                             :items="using_types"
                                             v-model="project.using"
                                             :label="trans('data.using')"
@@ -362,7 +389,7 @@ export default {
 
             customers: [],
             //    project: [],
-             isEdit:false,
+            isEdit: false,
             project: {
                 buiding_type: '',
                 role_number: 0,
@@ -384,8 +411,8 @@ export default {
                 description: null,
                 lead_id: null,
                 status: null,
-                id:'',
-                
+                id: '',
+
                 //category_id: null,
 
                 // name:'',
@@ -419,24 +446,23 @@ export default {
             self.category_id = [];
             (self.start_date = null),
                 (self.end_date = null),
-                axios
-                    .get('/projects/create')
-                    .then(function (response) {
-                        self.customers = response.data.customers;
-                        self.project_types = response.data.projectTypes;
+                axios.get('/projects/create').then(function (response) {
+                    if (!response.data.error_code) {
+                        self.customers = response.data.data.customers;
+                        self.project_types = response.data.data.projectTypes;
 
-                        self.status = response.data.status;
-                        self.users = response.data.users;
-                        self.categories = response.data.categories;
-                        self.buiding_types = response.data.buildingTypes;
-                        self.using_types = response.data.buildUsing;
-                        self.roles_number = response.data.roles_number;
-                         self.project.status=self.status.filter(c=>c.key=='not_started')[0]['key']
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                   
+                        self.status = response.data.data.status;
+                        self.users = response.data.data.users;
+                        self.categories = response.data.data.categories;
+                        self.buiding_types = response.data.data.buildingTypes;
+                        self.using_types = response.data.data.buildUsing;
+                        self.roles_number = response.data.data.roles_number;
+                        self.project.status = self.status.filter((c) => c.key == 'not_started')[0][
+                            'key'
+                        ];
+                    } else {
+                    }
+                });
         },
         getProjectData() {
             const self = this;
@@ -464,36 +490,33 @@ export default {
                 }
             });
         },
-        fillEditData(data,isEdit) {
+        fillEditData(data, isEdit) {
             const self = this;
-           self.project = data;
-           self.isEdit=isEdit;
-                // self.buiding_type=data.buiding_type;
-                // self.role_number=data.buiding_type;
-                // self.unit_number=data.buiding_type;
-                // self.build_rate=data.buiding_type;
-                // self.using=data.buiding_type;
-                // self.name=data.buiding_type;
-                // self.billing_type=data.buiding_type;
-                // self.total_rate=data.buiding_type;
-                // self.authorization_request_number=data.buiding_type;
-                // self.license_number=data.buiding_type;
-                // //  type_of_request:'',
-                // self.plot_number=data.buiding_type;
-                // self.cadastral_decision_number=data.buiding_type;
-                // self.start_date=data.buiding_type;
-                // self.end_date=data.buiding_type;
-                // // customer_id:null,
-                // self.users_id=data.buiding_type;
-                // self.description=data.buiding_type;
-                // self.lead_id=data.buiding_type;
-                // self.status=data.buiding_type;
-                // self.id=data.buiding_type;
-                
-             
- 
-            self.project.users_id=data.members.map(({ id }) => id);
-           
+            self.project = data;
+            self.isEdit = isEdit;
+            // self.buiding_type=data.buiding_type;
+            // self.role_number=data.buiding_type;
+            // self.unit_number=data.buiding_type;
+            // self.build_rate=data.buiding_type;
+            // self.using=data.buiding_type;
+            // self.name=data.buiding_type;
+            // self.billing_type=data.buiding_type;
+            // self.total_rate=data.buiding_type;
+            // self.authorization_request_number=data.buiding_type;
+            // self.license_number=data.buiding_type;
+            // //  type_of_request:'',
+            // self.plot_number=data.buiding_type;
+            // self.cadastral_decision_number=data.buiding_type;
+            // self.start_date=data.buiding_type;
+            // self.end_date=data.buiding_type;
+            // // customer_id:null,
+            // self.users_id=data.buiding_type;
+            // self.description=data.buiding_type;
+            // self.lead_id=data.buiding_type;
+            // self.status=data.buiding_type;
+            // self.id=data.buiding_type;
+
+            self.project.users_id = data.members.map(({ id }) => id);
         },
     },
 };

@@ -9,7 +9,7 @@
                     <v-container grid-list-lg>
                         <v-layout wrap>
                              <!-- v-if="$hasRole('employee') ||$can('superadmin')" -->
-                            <v-flex xs12 sm12 md3  v-if="$can('project.create')">
+                            <v-flex xs12 sm12 md3    v-if="$can('project.create') && checkActive()">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover  v-slot:default="{ hover }" open-delay="100" close-delay="100">
                                         <v-card  @click="$router.push({name:'add-project'})"

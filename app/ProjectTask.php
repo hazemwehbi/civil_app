@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class ProjectTask extends Model
 {
@@ -26,7 +27,16 @@ class ProjectTask extends Model
     {
         return $this->belongsToMany('App\Components\User\Models\User', 'project_task_members', 'project_task_id', 'user_id');
     }
-    
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults();
+    }
+    public static function getTasksForDropDown()
+    {
+        $tasks = ProjectTask::get()->toArray();
+
+        return $tasks;
+    }
     /**
      * Return the creator of task.
      */

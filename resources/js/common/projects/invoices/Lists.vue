@@ -242,6 +242,7 @@
                             </v-list>
                         </v-menu>
                     </td>
+                    <td>{{ props.item.id }}</td>
                     <td>{{ props.item.invoice_number }}</td>
                     <td>{{ props.item.title }}</td>
                     <td>{{ props.item.customer }}</td>
@@ -278,7 +279,7 @@ export default {
         return {
             projectId: null,
             total_items: 0,
-            loading: true,
+            loading: false,
             pagination: { totalItems: 0 },
             headers: [
                 {
@@ -290,6 +291,12 @@ export default {
                 {
                     text: self.trans('messages.invoice_number'),
                     value: 'invoice_number',
+                    align: 'left',
+                    sortable: true,
+                },
+                {
+                    text: self.trans('data.id'),
+                    value: 'id',
                     align: 'left',
                     sortable: true,
                 },
@@ -333,11 +340,17 @@ export default {
             paid_amount: 0,
         };
     },
+    props:{
+       id:{
+       required: false,
+       }
+    },
     created() {
         const self = this;
-        self.projectId = self.$route.params.id;
+        self.projectId = self.$route.params?self.$route.params.id:this.id;
         self.getFilterData();
         self.getStatistics();
+        self.getInvoiceFromApi();
         self.$eventBus.$on('updatePaymentTransaction', data => {
             self.getInvoiceFromApi();
             self.getStatistics();
@@ -357,8 +370,7 @@ export default {
     methods: {
         getInvoiceFromApi() {
             const self = this;
-
-            if (self.$can('project.' + self.projectId + '.invoice.view')) {
+           // if (self.$can('project.' + self.projectId + '.invoice.view')) {
                 self.loading = true;
                 const { sortBy, descending, page, rowsPerPage } = self.pagination;
                 var params = {
@@ -372,21 +384,21 @@ export default {
                 if (self.filters.payment_status) {
                     params['payment_status'] = self.filters.payment_status;
                 }
-
                 axios
                     .get('/invoices', {
                         params: params,
                     })
-                    .then(function(response) {
+                    .then((response) => {
                         self.total_items = response.data.transactions.total;
                         self.items = response.data.transactions.data;
                         self.currency = response.data.currency;
                         self.loading = false;
                     })
-                    .catch(function(error) {
-                        console.log(error);
+                    .catch((error) => {
+                         console.log(error);
+                         self.loading = false;
                     });
-            }
+          //  }
         },
         view(transaction_id) {
             const self = this;

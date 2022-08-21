@@ -7,6 +7,9 @@ use App\Components\User\Models\User;
 use App\Customer;
 use App\Http\Util\CommonUtil;
 use App\Notifications\ProjectCreatedNotification;
+use App\Notifications\ProjectEditedNotification;
+use App\Notifications\AskPermissionNotification;
+use App\Media;
 use App\Project;
 use App\ProjectMember;
 use App\ProjectMilestone;
@@ -23,6 +26,9 @@ use App\ProjectRequest;
 use App\VisitRequest;
 use App\Agency;
 use App\Location;
+use App\Http\Responses\Response;
+
+
 class ProjectController extends Controller
 {
     /**
@@ -49,22 +55,26 @@ class ProjectController extends Controller
     {
         $user = $request->user();
 
-        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','agency');
 
-        if (!$user->hasRole('superadmin')) {
-            //If employee then get projects assigned or lead.
-            // if ($user->is_employee) {
-            //     $project_ids = $this->CommonUtil->getAssignedProjectForEmployee($user->id);
-            //     $projects->orWhere('projects.lead_id', $user->id)
-            //         ->orWhereIn('projects.id', $project_ids);
-            // }
-
-            //If customer, then get project for that customer.
-            //if ($user->is_client) {
-                $projects->Where('customer_id', $user->id);
-           // }
+        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','creator','report','report.media','report.reportCreator','report.type');
+        $customer_id=$user->id;
+        $reports = []; 
+        $childrens=$user->childrenIds($user->id);
+        array_push($childrens,$user->id);
+        
+        if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
+            $projects = $projects->whereHas('members', function ($q) use ($customer_id,$childrens) {
+              //  $q->where('user_id', $customer_id);
+                $q->WhereIn('user_id', $childrens);
+            });
         }
-
+        else if(Auth::user()->user_type_log=='ESTATE_OWNER'){
+            $projects = $projects->whereHas('members', function ($q) use ($customer_id,$childrens) {
+              //  $q->where('user_id', $customer_id);
+                $q->WhereIn('user_id', $childrens);
+            });
+        }
+ 
         $projects = $projects->withCount(['tasks',
                         'tasks as completed_task' => function ($query) {
                             $query->where('is_completed', 1);
@@ -80,15 +90,16 @@ class ProjectController extends Controller
         if (!empty($request->input('status'))) {
             $projects->where('status', $request->input('status'));
         }
+        else{
+            $projects->where('status','!=', 'completed');
+        }
         if (!empty($request->input('category_id'))) {
             $category_id = $request->input('category_id');
             $projects->whereHas('categories', function ($q) use ($category_id) {
                 $q->where('category_id', $category_id);
             });
         }
-        if (!empty($request->input('customer_id'))) {
-            $projects->where('customer_id', $request->input('customer_id'));
-        }
+      
         if (!empty($request->input('user_id'))) {
             $user_id = $request->input('user_id');
             $projects->whereHas('members', function ($q) use ($user_id) {
@@ -101,11 +112,104 @@ class ProjectController extends Controller
         //Append is_favorited to each project and avatar
         foreach ($result as $key => $val) {
             $result[$key] = $val->append('is_favorited');
+            if($val->reports !=null)
+            array_push($reports, $val->reports);
         }
         
         $status = Project::getStatusForProject();
 
-        $data = ['status' => $status, 'projects' => $result];
+        $data = ['status' => $status, 'projects' => $result, 'reports' => $reports];
+
+        return $data;
+    }
+    
+ public function filterDataResults(Request $request)
+    {
+        $childrens=Auth::user()->childrenIds(Auth::user()->id);
+        array_push($childrens,Auth::user()->id);
+        $projects = Project::with('customer', 'location','creator','report','report.media','report.reportCreator','report.type');
+        if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
+            $projects = $projects->where(function($q) use ($childrens) {
+                $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) use ($childrens) {
+                $qu->WhereIn('user_id', $childrens);
+            }); 
+            });
+        }
+        else if(Auth::user()->user_type_log=='ESTATE_OWNER'){
+            $projects = $projects->where(function($q) use ($childrens) {
+                $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) use ($childrens) {
+                $qu->WhereIn('user_id', $childrens);
+            }); 
+            });
+        }
+        $reports = []; 
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+            if(!empty($startDate))
+          {
+        $projects= $projects->whereDate('start_date','>=', Carbon::parse($startDate));
+        }
+        if(!empty($endDate))
+        $projects= $projects->whereDate('end_date','<=',Carbon::parse($endDate));  
+       if(!empty($request->input('type'))){
+            $search= $request->input('search');
+            $searchIn= $request->input('searchIn');
+            $tableChild= $request->input('type');
+            $columnTable = $request->input('columnTable');
+            $search= $request->input('search');
+            $tableChild= $request->input('type');
+            $province_municipality= $request->input('province_municipality');
+            $municipality= $request->input('municipality');
+            $plan_id= $request->input('plan_id');
+            $piece_number= $request->input('piece_number');
+            if(empty($columnTable) && !empty($search)){
+                if($searchIn === 'reports')
+                $projects= $projects->whereHas('report', function ($q) use ($search){
+                    $q->where('id', $search);
+                });
+                else
+            $projects= $projects->where('id', $search);
+            }
+            if(!empty($columnTable) && !empty($search))
+            $projects= $projects->whereHas('creator', function ($q) use ($search,$columnTable) {
+                $q->where($columnTable,'like', '%'.$search.'%');
+            });
+            if(!empty($province_municipality)) {
+                $projects= $projects->whereHas($tableChild, function ($q) use ($province_municipality) {
+                    $q->where('province_municipality', $province_municipality);
+                });
+              }
+                if(!empty($municipality)) {
+                $projects= $projects->whereHas($tableChild, function ($q) use ($municipality) {
+                    $q->where('municipality',$municipality);
+                });
+            
+            }
+                if(!empty($plan_id)) {
+                $projects= $projects->whereHas($tableChild, function ($q) use ($plan_id) {
+                    $q->where('plan_id','like', '%'.$plan_id.'%');
+                });
+                }
+                if(!empty($piece_number)) {
+                $projects= $projects->whereHas($tableChild, function ($q) use ($piece_number) {
+                    $q->where('piece_number','like', '%'.$piece_number.'%');
+                });
+            }
+        }
+ 
+        $result = $projects->latest()
+                    ->simplePaginate(10);
+                    
+        foreach ($result as $key => $val) {
+          //  $result[$key] = $val->append('is_favorited');
+         //    if($val->report !=null)
+        //     foreach($val->report as $report)
+         //    array_push($reports, $report);
+        }
+        $status = Project::getStatusForProject();
+
+        $data = ['status' => $status, 'projects' => $result, 'reports'=> $reports];
+     
 
         return $data;
     }
@@ -115,15 +219,26 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $lang = $request->header('lang');
+        if (!isset($lang)) {
+            $lang = "ar";
+        }
         if (!request()->user()->can('project.create')) {
-            abort(403, 'Unauthorized action.');
+            
+            return Response::respondError('هذا الفعل غير مسموح');
         }
 
-        $customers =User::getUsersForDropDown() ;//Customer::getCustomersForDropDown();
-        $users = User::getUsersForDropDown();
-      //  $billingTypes = Project::getBillingTypes();
+        $customers =[];//User::getUsersForDropDown() ;//Customer::getCustomersForDropDown();
+      //  $users = User::getUsersMemberForDropDown();
+        $user=Auth::user();
+        $users = User::
+        where(function ($query) {
+            $query->where('parent_id',Auth::id());
+            $query->orWhere('id', Auth::id());
+        })->get();
+
         $projectTypes = Project::getProjectTypes();
         $status = Project::getStatusForProject();
         $categories = Category::forDropdown('projects');
@@ -142,7 +257,37 @@ class ProjectController extends Controller
                 'roles_number'=>$this->CommonUtil->getRolesNumber(),
             ];
 
-        return $project;
+        //return $project;
+        return Response::respondSuccess($project);
+    }
+
+    public function getProjectsOffice(Request $request)
+    {
+        if(isset($request->office_id)){
+            $projects = Project::with('customer', 'categories', 'members', 'members.media','location','creator','report','report.reportCreator','report.type')
+            ->orWhereHas('members', function ($qu) use ($request) {
+                $qu->Where('user_id', $request->office_id);
+            })
+            ->get()
+            ->toArray();
+        }else{
+            $projects = Project::select('id', 'name')
+                        ->get()
+                        ->toArray();
+        }
+        return $projects;
+    }
+    public function getLocationInfo()
+    {
+        $data = [
+                'provinceMunicipalities' =>$this->CommonUtil->getProvinceMunicipalities(),
+                'municipalities' => $this->CommonUtil->getMunicipalities(),
+                'categoriesLocation' => $this->CommonUtil->getCategoriesLocation(),
+                'neighborhoods' => $this->CommonUtil->getNeighborhoods(),
+                'districts' => $this->CommonUtil->getDistricts(),
+            ];
+
+        return $data;
     }
 
     /**
@@ -178,36 +323,29 @@ class ProjectController extends Controller
             );
 
             $project_data['created_by'] = $request->user()->id;
-            $project_data['created_by'] = $request->user()->id;
+           
             $project = Project::create($project_data);
 
             //Add members
             $project_members = $request->input('user_id');
             array_push($project_members, $project_data['lead_id']);
+            
+            if(!in_array($project_data['customer_id'],$project_members)){
+                array_push($project_members,$project_data['customer_id']);
+            }
             $project->members()->sync($project_members);
 
             //Add category
             $category = $request->input('category_id');
             $project->categories()->sync($category);
 
-            // $roles = $this->CommonUtil->createRoleAndPermissionsForProject($project->id);
-
-            //Assign project member role
-            // $users = User::find($project_members);
-            // foreach ($users as $user) {
-            //     $user->assignRole($roles['member']);
-            // }
-            //Assign lead role
-          //  $project_lead = User::find($project_data['lead_id']);
-         //   $project_lead->assignRole($roles['lead']);
+       
 
             //Assign roles to customer contacts
             if (!empty($project_data['customer_id'])) {
                 $contacts = User::find($project_data['customer_id'])
                                 ->contacts;
-             ///   foreach ($contacts as $contact) {
-              ///      $contact->assignRole($roles['customer']);
-              //  }
+        
             }
 
             DB::commit();
@@ -230,55 +368,71 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id,Request $request)
     {
-        if (!request()->user()->can('project.'.$id.'.overview')) {
-            abort(403, 'Unauthorized action.');
+        
+        $lang = $request->header('lang');
+        if (!isset($lang)) {
+            $lang = "ar";
+        }
+        if (!request()->user()->can('project.list')) {
+            
+            return Response::respondError('هذا الفعل غير مسموح');
         }
 
-        $project = Project::with('customer', 'lead', 'lead.media', 'tasks', 'categories', 'members', 'members.media')
+        $project = Project::with('customer', 'lead','location','agency', 'lead.media', 'tasks', 'categories', 'members', 'members.media')
                             ->withCount(['tasks',
                                 'tasks as completed_task' => function ($query) {
                                     $query->where('is_completed', 1);
                                 }, ])
                             ->find($id);
 
-        $task_count = ProjectTask::where('project_id', $id)
-                        ->where('is_completed', 0)
-                        ->count();
 
-        $milestone_count = ProjectMilestone::where('project_id', $id)
-                                            ->count();
 
-        $invoice_count = Transaction::OfTransaction('invoice')
-                                ->where('project_id', $id)
-                                ->where('status', 'final')
-                                ->count();
+            $project_documents = Media::where('model_id', $id)
+            ->where('model_type', 'App\Project')
+                //  ->with(['media'])
+                ->latest()
+                ->get();
+
+
+        // $task_count = ProjectTask::where('project_id', $id)
+        //                 ->where('is_completed', 0)
+        //                 ->count();
+
+        // $milestone_count = ProjectMilestone::where('project_id', $id)
+        //                                     ->count();
+
+        // $invoice_count = Transaction::OfTransaction('invoice')
+        //                         ->where('project_id', $id)
+        //                         ->where('status', 'final')
+        //                         ->count();
         //chart data
-        $project_task = ProjectTask::where('project_id', $id)
-                    ->where('created_at', '>=', Carbon::now()->startOfMonth())
-                    ->where('created_at', '<=', Carbon::now()->endOfMonth())
-                    ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(id) as task'))
-                    ->groupBy('date')
-                    ->get();
+        // $project_task = ProjectTask::where('project_id', $id)
+        //             ->where('created_at', '>=', Carbon::now()->startOfMonth())
+        //             ->where('created_at', '<=', Carbon::now()->endOfMonth())
+        //             ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(id) as task'))
+        //             ->groupBy('date')
+        //             ->get();
 
-        $x_axis = [];
-        $y_axis = [];
-        foreach ($project_task as $task) {
-            $x_axis[] = $task->date;
-            $y_axis[] = $task->task;
-        }
+        // $x_axis = [];
+        // $y_axis = [];
+        // foreach ($project_task as $task) {
+        //     $x_axis[] = $task->date;
+        //     $y_axis[] = $task->task;
+        // }
 
         $project_overview = [
                              'project' => $project,
-                             'task' => $task_count,
-                             'x_axis' => $x_axis,
-                             'y_axis' => $y_axis,
-                             'milestone' => $milestone_count,
-                             'invoice' => $invoice_count,
+                              'media' => $project_documents
+                            //  'task' => $task_count,
+                            //  'x_axis' => $x_axis,
+                            //  'y_axis' => $y_axis,
+                            //  'milestone' => $milestone_count,
+                            //  'invoice' => $invoice_count,
                             ];
-
-        return $project_overview;
+         return Response::respondSuccess($project_overview);
+        
     }
 
     /**
@@ -443,7 +597,8 @@ class ProjectController extends Controller
             DB::commit();
             //notify only newly assigned members
             if (!empty($updated_members['attached'])) {
-                $this->_saveProjectCreatedNotifications($updated_members['attached'], $id);
+               
+                $this->_saveProjectEditedNotifications($updated_members['attached'], $id);
             }
 
             $output = $this->respondSuccess(__('messages.updated_successfully'));
@@ -598,6 +753,7 @@ class ProjectController extends Controller
 
         if ('task' == request()->get('type')) {
             $project_members = User::whereIn('id', $project_members)
+                               // ->where('is_employee',1)
                                 ->select('id', 'name')
                                 ->get()
                                 ->toArray();
@@ -613,8 +769,17 @@ class ProjectController extends Controller
      */
     protected function _saveProjectCreatedNotifications($members, $project_id)
     {
-        $notifiable_users = User::find($members);
-        Notification::send($notifiable_users, new ProjectCreatedNotification($project_id));
+        foreach ($members as $member){
+            $notifiable_users = User::find($member);
+            Notification::send($notifiable_users, new ProjectCreatedNotification($project_id));
+        }
+    }
+    protected function _saveProjectEditedNotifications($members, $data)
+    {
+        foreach ($members as $member){
+            $notifiable_users = User::find($member);
+            Notification::send($notifiable_users, new ProjectEditedNotification($data));
+        }
     }
 
     /**
@@ -675,6 +840,7 @@ class ProjectController extends Controller
             )
             ->first();
 
+
         return $this->respond($project_statistics);
     }
 
@@ -682,29 +848,18 @@ class ProjectController extends Controller
     {
 
 
-        // $rowsPerPage = ($request->get('rowsPerPage') > 0) ? $request->get('rowsPerPage') : 0;
-        // $sort_by = $request->get('sort_by');
-        // $descending = $request->get('descending');
-
-        // if ($descending == 'false') {
-        //     $orderby = 'asc';
-        // } elseif ($descending == 'true') {
-        //     $orderby = 'desc';
-        // } elseif ($descending == '') {
-        //     $orderby = 'desc';
-        //     $sort_by = 'id';
-        // }
-
-        // // $roles = Role::where('type', 'employee')
-        // //             ->select('name', 'created_at', 'id');
-       // with another group
+       
        $user=User::find(request()->user()->id);
        if($user->hasRole('superadmin')){
         $requests =  VisitRequest::with('customer', 'project')->where('request_type','visit_request')->get()
         ->toArray();
        }
        else{
-        $requests =  VisitRequest::with('customer', 'project')->where([['request_type','visit_request'],['customer_id',$user->id]])->orWhere([['request_type','visit_request'],['office_id',$user->id]])->get()
+        $childrens=$user->childrenIds($user->id);
+        array_push($childrens,$user->id);
+                                                   
+                        
+        $requests =  VisitRequest::with('customer', 'project')->where('request_type','visit_request')->whereIn('customer_id', $childrens)
         ->toArray();
        }
 
@@ -743,38 +898,16 @@ class ProjectController extends Controller
         // }        
     }
 
-    public function deleteRequest($id)
-    {
-        try{
-            if(VisitRequest::find($id)){
-                VisitRequest::destroy($id);
-            }else{
-                ProjectRequest::destroy($id);
-            }
-            $output = $this->respondSuccess(__('messages.deleted_successfully'));
-        }catch(\Exception $e){
-            $output = $this->respondWentWrong($e);
-        }
-        return $output;
-    }
-    public function acceptProject(Request $request)
-    {
-        if($request->status=="new"){
-            $project=VisitRequest::find($request->id);
-        }else{
-            $project=ProjectRequest::find($request->id);
-        }
-        $project->status="accepted";
-        $project->save();
-    }
+
 
     public function getCustomerProject(Request $request)
     {
         $user=User::find(request()->user()->id);
-
+          $childrens=$user->childrenIds($user->id);
+         array_push($childrens,$user->id);
         if (!$user->hasRole('superadmin')) { 
         $projects=Project::select('id', 'name')
-                        ->where('customer_id',Auth::id())
+                        ->whereIn('customer_id',$childrens)
                         ->get()
                         ->toArray();
   //      $projectRequest=ProjectRequest::select('id', 'name')
@@ -789,7 +922,11 @@ class ProjectController extends Controller
      //                   ->get()
        //                 ->toArray();
         }
-    //    return array_merge($projects,$projectRequest);        
+    //    return array_merge($projects,$projectRequest);
+    
+                // $projects=Project::select('id', 'name')
+                // ->get()
+                // ->toArray();
         return $projects;
     }
 
@@ -823,13 +960,14 @@ class ProjectController extends Controller
 
 
         DB::table('visit_requests')->insert([
-            'title'=>$request->title,
+            //'title'=>$request->title,
             'customer_id'=>$customer_id,
             'project_id'=>$request->project_id,
             'request_type'=>$request->request_type,
-            'description'=>$request->description,
+            'description'=> 'test',//$request->description,
             'status'=>$status,
-            'priority'=>$priority,
+            'dead_line_date'=>$dead_line_date,
+           // 'priority'=>$priority,
             'sent'=>$request->sent,
             'office_id'=>$request->office_id,
             'created_at'=>Carbon::now()
@@ -859,54 +997,26 @@ class ProjectController extends Controller
         return response()->json(['data'=>$type->name]);
     }
 
-    public function getAllCustomer()
-    {
-        // $customers=User::whereNotNull('customer_id')
-        //         ->select('id', 'name')
-        //         ->get()
-        //         ->toArray();
-        $user=Auth::user();
-       if ($user->hasRole('Estate Owner'))
-        {
-            //$customers=User::where('parent_id',$user->id)->select('id', 'name','email','mobile','id_card_number') ->get()->toArray();
-            $customers = User::
-            where(function ($query) {
-                $query->where('parent_id',Auth::id());
-                $query->orWhere('id', Auth::id());
-            })->get();
+   
 
-         
-        }
-        else{
-         $customers=User::where('id','>',1)->select('id', 'name','email','mobile','id_card_number')->get()->toArray();
-        }
-       
-               
-        return $customers;
-    }
-
-    public function confirmSendRequest(Request $request)
-    {
-        if(isset($request->title)){
-            $visitRequest=VisitRequest::find($request->id);
-            $visitRequest->sent=1;
-            $visitRequest->save();
-        }else{
-            $projectRequest=ProjectRequest::find($request->id);
-            $projectRequest->sent=1;
-            $projectRequest->save();
-        }
-    }
+  
 
     public function editVisitRequest(Request $request)
     {
         try{
+            DB::beginTransaction();
             $visitRequest=VisitRequest::find($request->id);
-            $visitRequest->title=$request->title;
+           // $visitRequest->title=$request->title;
             $visitRequest->customer_id=$request->customer_id;
             $visitRequest->project_id=$request->project_id;
-            $visitRequest->request_type=$request->request_type;
-            $visitRequest->description=$request->description;
+           // $visitRequest->request_type=$request->request_type;
+            $visitRequest->description='test';//$request->description;
+            $visitRequest->office_id=$request->office_id;
+
+            $visitRequest->note=$request->note;
+            $visitRequest->dead_line_date=$request->dead_line_date;
+            $visitRequest->enginnering_type=\json_encode($request->enginnering_type);
+            
             if(isset($request->priority)){
                 $visitRequest->priority=$request->priority;
             }
@@ -914,12 +1024,22 @@ class ProjectController extends Controller
                 $visitRequest->status=$request->status;
             }
             $visitRequest->save();
-            $output = $this->respondSuccess(__('messages.updated_successfully'));
+
+            if(isset($request->office_id)){
+                DB::table('project_members')->insert([
+                    'user_id'=>$request->office_id,
+                    'project_id'=>$request->project_id,
+                    'is_default'=>  0,
+                ]);
+            }
+            DB::commit();
+          return   $this->respondSuccess(__('messages.updated_successfully'));
+           // $output = 
         }catch (Exception $e) {
-            $output = $this->respondWentWrong($e);
+            return $this->respondWentWrong($e);
         }
 
-        return $output;
+       // return $output;
         
     }
 
@@ -928,7 +1048,7 @@ class ProjectController extends Controller
         try{
             $projectRequest=ProjectRequest::find($request->id);
             $projectRequest->name=$request->name;
-            $projectRequest->description=$request->description;
+          //  $projectRequest->description=$request->description;
             $projectRequest->start_date=$request->start_date;
             $projectRequest->end_date=$request->end_date;
 
@@ -946,13 +1066,6 @@ class ProjectController extends Controller
 
         return $output;
     }
-    
-    // public function getProjectInfo(Request $request)
-    // {
-    //     $project=Project::find($request->project_id);
-        
-    //     return $project;
-    // }
 
 
     public function getProjectData(Request $request)
@@ -1017,6 +1130,7 @@ class ProjectController extends Controller
     if (!request()->user()->can('project.create')) {
         abort(403, 'Unauthorized action.');
     }
+
     $project = $request['project'];
     $location = $request['location'];
     $customers = $request['customers'];
@@ -1025,7 +1139,6 @@ class ProjectController extends Controller
         //TODO: optimise the process.
         DB::beginTransaction();
 
-       
         //$location['created_by'] = $request->user()->id;
        $location_data= Location::create($location);
 
@@ -1045,28 +1158,16 @@ class ProjectController extends Controller
         array_push($project_members);
         $project->members()->sync($project_members);
 
-        //Add category
-       // $category = $project['category_id'];
-       // $project->categories()->sync($category);
+         if (!empty($request->medias)) {
+                $this->addMedias($request->medias, $project, 'project_documents');
+         }
 
-        $roles = $this->CommonUtil->createRoleAndPermissionsForProject($project->id);
 
-        //Assign project member role
-        $users = User::find($project_members);
-        foreach ($users as $user) {
-            $user->assignRole($roles['member']);
-        }
-        //Assign lead role
-        //  $project_lead = User::find($project_data['lead_id']);
-        //   $project_lead->assignRole($roles['lead']);
 
-        //Assign roles to customer contacts
         if (!empty($project_data['customer_id'])) {
             $contacts = User::find($project_data['customer_id'])
                             ->contacts;
-        ///   foreach ($contacts as $contact) {
-        ///      $contact->assignRole($roles['customer']);
-        //  }
+        
         }
 
             DB::commit();
@@ -1095,7 +1196,7 @@ class ProjectController extends Controller
         abort(403, 'Unauthorized action.');
     }
 
-
+  
 
     $project_data = $request['project'];
     $location_data = $request['location'];
@@ -1140,6 +1241,12 @@ class ProjectController extends Controller
        // self.id=data.id;
         $project->update();
 
+     
+        if (!empty($request->medias)) {
+            $this->addMedias($request->medias, $project, 'project_documents');
+          }
+
+     
         ProjectMember::where('project_id',$project_data['id'])->delete();
         $project_members = $request['users_id'];
         array_push($project_members);
@@ -1173,9 +1280,12 @@ class ProjectController extends Controller
         //  }
        // }
 
-            DB::commit();
-
-         //   $this->_saveProjectCreatedNotifications($project_members, $project->id);
+           /// DB::commit();
+         $data=[
+               'project_id'=> $project->id,
+                'user_id'=> Auth::id(),
+         ];
+        $this->_saveProjectEditedNotifications($project_members,$data);
 
 
         $output = $this->respondSuccess(__('messages.saved_successfully'));
@@ -1187,38 +1297,60 @@ class ProjectController extends Controller
     }
     return $output;
    }
+  
    public function getLocationStatus(Request $request)
    {
        $location_status = [
            [
-               'key' => 'not_started',
-               'value' => __('messages.not_started')
+               'key' => 'status1',
+               'value' => __('data.status1')
            ],
            [
-               'key' => 'in_progress',
-               'value' => __('messages.in_progress')
+               'key' => 'status2',
+               'value' => __('data.status2')
            ],
            [
-               'key' => 'on_hold',
-               'value' => __('messages.on_hold')
+               'key' => 'status3',
+               'value' => __('data.status3')
            ],
            [
-               'key' => 'cancelled',
-               'value' => __('messages.cancelled')
+               'key' => 'status4',
+               'value' => __('data.status4')
            ],
            [
-               'key' => 'completed',
-               'value' => __('messages.completed')
+               'key' => 'status5',
+               'value' => __('data.status5')
            ],
        ];
        return  $location_status;
 
    }
 
-
    public function  getProject ($id){
-    $project=Project::find($id);
+    $project=Project::with('customer', 'members', 'location','report', 'report.type')->find($id);
     return $project;
+   }
+
+
+
+   public function getCustomer($id){
+      
+        $project=Project::find($id);
+        $user =User::find($project->customer_id);
+        return $user;
+   }
+
+
+   public function getDefaultMembers($id)
+   {
+       $project_members = ProjectMember::where('project_id',$id)->where('is_default', 1)->pluck('user_id')->toArray();
+    //     where(function ($query) {
+    //        $query->where('project_id',$id);
+    //        $query->orWhere('id_default', true);
+    //    })->pluck('user_id')->toArray();
+       
+                           
+       return $project_members;
    }
 
 }

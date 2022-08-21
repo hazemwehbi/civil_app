@@ -43,6 +43,11 @@
                             </v-btn> 
                         </div>
                     </td>
+                      <td>
+                        <div align="center">                        
+                                {{ props.item.id }}
+                        </div>
+                    </td>
                     <td>
                         <div align="center">
                             <v-chip class="ma-2" :color="props.item.status=='pending'?'red':'success'" text-color="white">
@@ -106,6 +111,12 @@ export default {
                     value: false,
                     align: 'center',
                     sortable: false,
+                },
+                  {
+                    text: self.trans('data.id'),
+                    value: 'id',
+                    align: 'center',
+                    sortable: true,
                 },
                 {
                     text: self.trans('messages.status'),

@@ -15,6 +15,7 @@ class CreateLocationTable extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->increments('id');
+            
             $table->enum('province_municipality', ['province1', 'province2', 'province3'])->nullable();
             $table->enum('municipality', ['municipality1', 'municipality2', 'municipality3'])->nullable();
 
@@ -27,14 +28,14 @@ class CreateLocationTable extends Migration
             $table->string('piece_number')->nullable();;
             $table->unsignedInteger('size_number')->nullable();;
             $table->string('instrument_number')->nullable();;
-            $table->dateTime('instrument_date')->nullable();;
+            $table->datetime('instrument_date')->nullable();;
             $table->string('northern_border')->nullable();;
             $table->string('eastern_border')->nullable();;
             $table->string('western_border')->nullable();;
             $table->string('southern_border')->nullable();;
-            $table->enum('status', ['not_started', 'in_progress', 'on_hold', 'cancelled', 'completed'])->nullable();
-            $table->boolean('lon')->nullable();;
-            $table->boolean('lat')->nullable();;
+            $table->enum('status', ['status1', 'status2', 'status3', 'status4', 'status5'])->nullable();
+            $table->string('lon')->nullable();;
+            $table->string('lat')->nullable();;
 
             $table->timestamps();
         });
