@@ -589,6 +589,19 @@ class User extends Authenticatable implements HasMedia
    
           return $users;
       }
+      public static function getAllContractors($append_all = false)
+      {
+        $users = User::whereHas(
+            'roles', function($q){
+                $q->where('type', 'CONTRACTING_COMPANY');
+            }
+        )
+        ->orderBy('name')
+        ->get()
+        ->toArray();
+   
+          return $users;
+      }
       
       public static function getUsersOffice($id)
       {

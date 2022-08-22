@@ -4,6 +4,7 @@ return [
     'projects'=>'المشاريع',
     'project'=>'مشروع',
     'contractor'=>'المقاول',
+    'contractors'=>'المقاولين',
     'work_to_check'=>'العمل المطلوب فحصه',
     'delivery_request_num' => 'رقم طلب الاستلام',
     'day' => 'اليــوم',

@@ -57,7 +57,7 @@
                                     <v-autocomplete
                                         item-text="name"
                                         item-value="id"
-                                        :items="engennering_offices"
+                                        :items="contractors"
                                         v-model="design.office_id"
                                         :label="trans('data.enginnering_office_name')"
                                         :rules="[
@@ -110,7 +110,7 @@ export default {
             design: {
                 customer_id: null,
             },
-            engennering_offices: [],
+            contractors: [],
             customers: [],
             projects: [],
             loading: false,
@@ -175,7 +175,7 @@ export default {
             if (this.$refs.form.validate()) {
                 self.loading = true;
                 axios
-                    .put('/estate_owner/request-design/' + self.design.id, data)
+                    .put('/estate_owner/request-contractor/' + self.design.id, data)
                     .then(function (response) {
                         if (response.data.success) {
                             self.loading = false;
@@ -239,9 +239,9 @@ export default {
         getOffices() {
             const self = this;
             axios
-                .get('/get-offices')
+                .get('/get-contractors')
                 .then(function (response) {
-                    self.engennering_offices = response.data;
+                    self.contractors = response.data;
                 })
                 .catch(function (error) {
                     console.log(error);

@@ -512,7 +512,14 @@ class UserController extends AdminController
        $users = User::getAllOffices();
         return $users;
     }
-
+    
+    
+    public function getAllContractors()
+    {
+       // $users = User::getOfficeUsers();
+       $users = User::getAllContractors();
+        return $users;
+    }
     public function getUsersOffice($id)
     {
        // $users = User::getOfficeUsers();

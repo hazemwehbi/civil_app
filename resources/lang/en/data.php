@@ -4,6 +4,7 @@ return [
     'projects'=>'Projects',
     'search'=>'Search',
     'contractor'=>'Contractor',
+    'contractors'=>'Contractors',
     'work_to_check'=>'Work to be checked',
     'delivery_request_num' => 'Receipt order number',
     'day' => 'Day',

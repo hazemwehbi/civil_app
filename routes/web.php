@@ -126,6 +126,7 @@ Route::middleware(['auth'])
        Route::get('get-customer-project/{id}', 'ProjectController@getCustomer');
         Route::post('add-new-project', 'ProjectController@addNewProject');
         Route::get('get-offices', 'Admin\UserController@getAllOffices');
+        Route::get('get-contractors', 'Admin\UserController@getAllContractors');
         Route::get('get-users-office/{id}', 'Admin\UserController@getUsersOffice');
         
       
