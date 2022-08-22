@@ -373,14 +373,9 @@ $(document).ready(function(){
                                 url:"{{ route('login') }}",
                                 data:{email_id_card: email,password:password},
                                 success:function(result){
-                                    
-                                  window.location.href= "/";
-                                    
-                            
+                                 window.location.href= "/";
                             }});
                             }
-                             
-                          
                         } 
                         else{
                           if(result.pass){
@@ -415,10 +410,6 @@ $(document).ready(function(){
             $('input#inputPassword').val($(this).data('pwd'));
             $('button#submit').trigger('click');
         });
-
-
-
-
 
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\EnginneringOffice;
+namespace App\Http\Controllers\ContractingCompany;
 use App\Http\Util\CommonUtil;
 use Illuminate\Http\Request;
 use App\RequestType;
@@ -27,7 +27,7 @@ use App\VisitRequest;
 use App\DefaultEnginnersRequest;
 use Lang;
 use App\Http\Responses\Response;
-class DesignRequestController extends  Controller
+class ContractorRequestController extends  Controller
 {
     protected $commonUtil;
 
@@ -35,8 +35,6 @@ class DesignRequestController extends  Controller
     {
         $this->CommonUtil = $commonUtil;
     }
-
-
     public function index(Request $request)
     {
         $user=User::find(Auth::user()->id);
@@ -53,14 +51,11 @@ class DesignRequestController extends  Controller
             $sort_by = 'id';
         }
 
-        $requests = DesignRequest::with('stages','customer','creator','project','offices','designEnginners')->WhereIn('status',['sent','rejected','pending','accepted','in_progress','completed'])
-        ->where('request_type','design_request')
+        $requests = DesignRequest::with('stages','customer','creator','project','offices')->WhereIn('status',['sent','rejected','pending','accepted','in_progress','completed'])
+        ->where('request_type','contractor_request')
         ->whereHas('offices',function($q) use ($user){
            $q->where('office_id', $user->id);//->orWhere('office_id', $user->parent_id);
-        })->orWhereHas('designEnginners', function ($q) use ($user) {
-              $q->where('enginner_id', $user->id)->where('is_active', 1);
-          });//->get();
-        ;
+        });
         $requests = $requests->orderBy($sort_by, $orderby)
                     ->paginate($rowsPerPage);
 
@@ -68,21 +63,15 @@ class DesignRequestController extends  Controller
         
       
     }
-
-    
-
-
-    
     public function getStagesDesignRequest(Request $request)
     {
-        
         $stages =[];
         $stages_tmp=[];
        // $stages_tmp =[];
        if (isset($request->design_id) ) {
             $stages=StageProject::where('type','design')->orderBy('order')->get();
             $stages_tmp=$stages;
-            foreach($stages as $item ){
+            foreach($stages as $item){
                 $item['employees']=User::getUsersOfficeForRequest($request->office_id['id']);
               //  $item['stages']=$stages;
             }
@@ -97,39 +86,21 @@ class DesignRequestController extends  Controller
     }
 
 
-    public function acceptDesignRequest(Request $request)
+    public function acceptContractorRequest(Request $request)
     {
-
-        try {
-            $design = DesignRequest::find($request->design_id);
+        
+//   try {
+            $design = DesignRequest::find($request->id);
             if($design!=  null){
                 DB::beginTransaction();
-                foreach($request->stages as $item){
-                    DB::table('stages_project_design_request')->insert([
-                        'design_id'=>$request->design_id,
-                        'enginner_id'=>$item['enginner_id'],
-                        'order'=>$item['order'],
-                        'stage_id'=> $item['stage_id'],
-                        'created_at'=>Carbon::now(),
-                        'is_active'=>$item['order']==1 ? 1 : 0,
-                        'created_by' => Auth::id()
-                    ]);
                         $office = $design->offices->find(Auth::id());
-                       // $design->offices()->save($office, ['office_status' => 'pending']);
+                        
                         $office->pivot->office_status = 'pending';
                         $office->pivot->update();
-                    
-                     $data1=[
-                         'office_id'=>Auth::user()->id, //$design->office_id,
-                          'stage_id'=>$item['stage_id']
-                     ];
-                    if($item['order']==1){
-                        $this->_saveDesignRequestSendedToEmployeesNotifications($item['enginner_id'],$data1);
-                    }
-                  
-                }
+                 //notification to owner
                 $design->status='pending';
                 $design->update();
+           
                 DB::commit();
                 $message = Lang::get('site.success_update');
                 return $this->respondSuccess($message);
@@ -138,17 +109,14 @@ class DesignRequestController extends  Controller
                 $message = Lang::get('site.object_not_found');
                 return $this->respondWentWrong($message);
             }
-
-        }
-         catch (Exception $e) {
+      //  }
+       /*  catch (Exception $e) {
             $output = $this->respondWentWrong($e);
-        }
+        }*/
 
 
 
     }
-    
-
 
     public function sendDesignRequestOffer(Request $request)
     {

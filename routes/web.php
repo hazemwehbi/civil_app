@@ -87,13 +87,6 @@ Route::prefix('admin')->
 
         Route::resource('lead-notes', 'LeadNoteController');
         Route::resource('reminders', 'ReminderController');
-
-        
-       //request roles
-       
-
-     
-        
     });
 
 //Common routes
@@ -245,8 +238,6 @@ Route::middleware(['auth'])
         Route::get('get-location-info', 'ProjectController@getLocationInfo');
 
         
-
-        
         Route::resource('requests-role', 'RequestRoleController');
         Route::get('accept-requests-role/{id}','RequestRoleController@acceptRequestRole');
         Route::get('reject-requests-role/{id}','RequestRoleController@rejectRequestRole');
@@ -298,7 +289,17 @@ Route::prefix('estate_owner')
         // Route::get('dashboards', 'DashboardController@index');
     });
 
-
+    Route::prefix('contracting_company')
+    ->namespace('ContractingCompany')
+   // ->middleware(['auth','enginner_office'])
+    ->name('contracting_company')
+    ->group(function () {
+            Route::get('/', 'SinglePageController@displaySPA')
+            ->name('estate_owner.spa');
+            Route::resource('dashboards', 'DashboardController')->only(['index']);
+            Route::resource('request-contractor', 'ContractorRequestController');
+            Route::post('accept-contractor-request','ContractorRequestController@acceptContractorRequest');
+    });
     /// Enginnering OFFICE
 
     Route::prefix('enginner_office')

@@ -30,6 +30,9 @@ class RedirectIfAuthenticated
             elseif(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
                 return redirect('/enginner_office');
             }
+            elseif(Auth::user()->user_type_log=='CONTRACTING_COMPANY') {
+                return redirect('/contracting_company');
+            }
         }
 
         return $next($request);

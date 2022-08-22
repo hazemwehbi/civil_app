@@ -32,7 +32,7 @@
       
         APP.RTL = @if(in_array(config('app.locale'), config('constants.langs_rtl'))) true @else false @endif;
         APP.FIRST_DAY_OF_WEEK = '{{$first_day_of_week}}';
-        @auth
+           @auth
              window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
 
             @php
@@ -119,11 +119,6 @@
         <!--    </v-navigation-drawer>-->
             <v-toolbar style="background-color:#06706d;z-index: 100" app dark flat fixed dense height="100"
                 :clipped-left="true">
-                <!-- this Line to hide 3 lines in navbar
-                <v-toolbar-side-icon @click="drawerToggle"></v-toolbar-side-icon> 
-                <v-toolbar-title class="hidden-sm-and-down">{{config('app.name')}}</v-toolbar-title>
-                -->
-         
                 <img src="{{asset('img/logo.png')}}"  alt="logo" width="100" style="border-radius:20px;" />
                 <v-layout >
                     <div style="font-size:16px;">

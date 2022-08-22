@@ -5,6 +5,7 @@ import Home from './dashboard/Home';
 import List from './dashboard/List';
 import EstateOwnerHome from '../estate_owner/dashboard/Home';
 import ToDoList from '../estate_owner/main/ToDoList';
+import ToDoListContractor from '../contracing_company/main/ToDoList';
 import UserLists from '../estate_owner/users/components/UserLists';
 import UserFormAdd from '../estate_owner/users/components/UserFormAdd';
 import EnginneringOfficeHome from '../enginnering_office/dashboard/Home'
@@ -17,7 +18,8 @@ import ViewVisitRequest from '../estate_owner/tickets/view_visit_request'
 import ProjectManagement from '../estate_owner/main/components/ProjectManagement'
 import TasksList from '../common/tasks/List'
 import DesignRequestList from '../estate_owner/designRequest/List'
-import ContractorRequestList from '../estate_owner/contractorRequest/List'
+import ContractorRequestList from '../estate_owner/contractorRequest/List';
+import ContractorRequestListReciving from '../contracing_company/contractorRequest/List';
 import ShowDesignRequestReport from '../estate_owner/designRequest/showDesignRequestReport';
 import UserFormEdit from '../estate_owner/users/components/UserFormEdit';
 import EstateOnerView from '../estate_owner/users/components/View';
@@ -127,7 +129,10 @@ const router = new Router({
     routes: [
         {
             path: '/',
-            redirect: APP.USER_TYPE_LOG == 'ESTATE_OWNER' ? '/es' : APP.USER_TYPE_LOG == 'ENGINEERING_OFFICE_MANAGER' ? '/en' : '/dashboard',
+            redirect: APP.USER_TYPE_LOG == 'ESTATE_OWNER' ? '/es' :
+             APP.USER_TYPE_LOG == 'ENGINEERING_OFFICE_MANAGER' ? '/en' : 
+             APP.USER_TYPE_LOG == 'CONTRACTING_COMPANY' ? '/en' : 
+             '/dashboard',
         },
         {
             path: '/to-do"',
@@ -259,6 +264,31 @@ const router = new Router({
         },
 
         //end estate owner 
+        //contractor
+        {
+            name: 'dashboard_estate',
+            path: '/en',
+            component: EstateOwnerHome,
+            children: [
+                {
+                    path: '/',
+                    name: 'dashboard_estate.list',
+                    component: EstateOwnerList,
+                },
+                {
+                    path: 'to-do-list_contractor',
+                    name: 'to-do-list_contractor.list',
+                    component: ToDoListContractor,
+                    name: 'todolist'
+                },
+                {
+                    path: 'contractor-request',
+                    name: 'contractor_request_list',
+                    component: ContractorRequestListReciving,
+                },
+            ]
+            },
+        //end contractor
         ///enginner office
         {
             name: 'dashboard_enginner_office',
@@ -866,6 +896,12 @@ router.beforeEach((to, from, next) => {
         else if (APP.USER_TYPE_LOG == 'ENGINEERING_OFFICE_MANAGER') {
             if (from.path != '/es/to-do-list')
                 next('/en/to-do-list')
+            else
+                next('/')
+        }
+        else if (APP.USER_TYPE_LOG == 'CONTRACTING_COMPANY') {
+            if (from.path != '/es/to-do-list_contractor')
+                next('/en/to-do-list_contractor')
             else
                 next('/')
         }

@@ -31,7 +31,7 @@
                                 </v-flex>
                             </v-layout>
                             <v-layout row>
-                                <v-flex xs12 sm12 md12>
+                               <!-- <v-flex xs12 sm12 md12>
                                     <v-text-field
                                      v-for="office in design.offices"
                                       :key="office.id"
@@ -39,7 +39,7 @@
                                         :readonly="true"
                                         :label="trans('data.enginnering_office_name')"
                                     ></v-text-field>
-                                </v-flex>
+                                </v-flex>-->
                             </v-layout>
                             <v-layout row>
                                 <v-flex xs12 sm12 md12>
@@ -90,8 +90,7 @@ export default {
             const self = this;
             self.loading = false;
             self.dialog = false;
-           // this.$refs.form.resetValidation();
-           // this.$refs.form.reset();
+
         },
         create(data) {
             const self = this;
