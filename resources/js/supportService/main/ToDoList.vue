@@ -12,96 +12,6 @@
                 <v-card-text>
                     <v-container grid-list-lg>
                         <v-layout wrap>
-                            <v-flex xs12 sm12 md4>
-                                <v-flex xs12 sm12 md12>
-                                    <v-hover
-                                        v-slot:default="{ hover }"
-                                        open-delay="100"
-                                        close-delay="100"
-                                    >
-                                        <v-card
-                                            @click="
-                                                $router.push({ name: 'visit_request_estate_list' })
-                                            "
-                                            :elevation="hover ? 16 : 2"
-                                        >
-                                            <v-card-text>
-                                                <div class="text-md-center mt-2">
-                                                    <p
-                                                        x-large
-                                                        style="font-size: 18px; color: #06706d"
-                                                    >
-                                                        {{
-                                                            trans('data.visit_requests')
-                                                        }}&nbsp;&nbsp;
-                                                        <v-icon :color="'#06706d'">settings</v-icon>
-                                                    </p>
-                                                </div>
-                                            </v-card-text>
-                                        </v-card>
-                                    </v-hover>
-                                </v-flex>
-                            </v-flex>
-
-                            <!--add after edititng -->
-                            
-                            <!-- @click="$router.push({name: 'visit_request_list'})" -->
-                            <v-flex xs12 sm12 md4 >
-                                <v-flex xs12 sm12 md12>
-                                    <v-hover
-                                        v-slot:default="{ hover }"
-                                        open-delay="100"
-                                        close-delay="100"
-                                    >
-                                        <v-card 
-                                            @click="$router.push({ name: 'design_request_estate_list' })"
-                                        :elevation="hover ? 16 : 2">
-                                            <v-card-text>
-                                                <div class="text-md-center mt-2">
-                                                    <p
-                                                        x-large
-                                                        style="font-size: 18px; color: #06706d"
-                                                    >
-                                                        {{
-                                                            trans('data.design_requests')
-                                                        }}&nbsp;&nbsp;
-                                                        <v-icon :color="'#06706d'">settings</v-icon>
-                                                    </p>
-                                                </div>
-                                            </v-card-text>
-                                        </v-card>
-                                    </v-hover>
-                                </v-flex>
-                            </v-flex>
-
-                            <v-flex xs12 sm12 md4 v-if="$can('tickets.view')">
-                                <v-flex xs12 sm12 md12>
-                                    <v-hover
-                                        v-slot:default="{ hover }"
-                                        open-delay="100"
-                                        close-delay="100"
-                                    >
-                                        <v-card 
-                                        class="not_working" 
-                                         @click="$router.push({ name: 'contractor_request_estate_list' })"
-                                        :elevation="hover ? 16 : 2">
-                                            <v-card-text>
-                                                <div class="text-md-center mt-2">
-                                                    <p
-                                                        x-large
-                                                        style="font-size: 18px; color: #06706d"
-                                                    >
-                                                        {{
-                                                            trans('data.contractor_request')
-                                                        }}&nbsp;&nbsp;
-                                                        <v-icon :color="'#06706d'">settings</v-icon>
-                                                    </p>
-                                                </div>
-                                            </v-card-text>
-                                        </v-card>
-                                    </v-hover>
-                                </v-flex>
-                            </v-flex>
 
                                 <v-flex xs12 sm12 md4 v-if="$can('archive')">
                                 <v-flex xs12 sm12 md12>
@@ -217,7 +127,7 @@
                                         close-delay="100"
                                     >
                                         <v-card
-                                         @click="$router.push({ name: 'support-service_estate_list' })"
+                                             @click="$router.push({ name: 'support_service_request_list' })"
                                             :elevation="hover ? 16 : 2"
                                         >
                                             <v-card-text>

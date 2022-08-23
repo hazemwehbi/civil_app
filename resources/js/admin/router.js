@@ -4,8 +4,11 @@ import store from '../common/Store';
 import Home from './dashboard/Home';
 import List from './dashboard/List';
 import EstateOwnerHome from '../estate_owner/dashboard/Home';
+import ContractorHome from '../contracing_company/dashboard/Home'
+import SupportServiceHome from '../supportService/dashboard/Home';
 import ToDoList from '../estate_owner/main/ToDoList';
 import ToDoListContractor from '../contracing_company/main/ToDoList';
+import ToDoListSupportService from '../supportService/main/ToDoList';
 import UserLists from '../estate_owner/users/components/UserLists';
 import UserFormAdd from '../estate_owner/users/components/UserFormAdd';
 import EnginneringOfficeHome from '../enginnering_office/dashboard/Home'
@@ -19,7 +22,9 @@ import ProjectManagement from '../estate_owner/main/components/ProjectManagement
 import TasksList from '../common/tasks/List'
 import DesignRequestList from '../estate_owner/designRequest/List'
 import ContractorRequestList from '../estate_owner/contractorRequest/List';
+import SupportServiceRequestList from '../estate_owner/supportServiceRequest/List'
 import ContractorRequestListReciving from '../contracing_company/contractorRequest/List';
+import SupportServiceRequestListReciving from '../supportService/supportServiceRequests/List';
 import ShowDesignRequestReport from '../estate_owner/designRequest/showDesignRequestReport';
 import UserFormEdit from '../estate_owner/users/components/UserFormEdit';
 import EstateOnerView from '../estate_owner/users/components/View';
@@ -119,6 +124,8 @@ import create_project2 from './main/components/superadmin/CreateProject'
 import requestsRole from './requests_role/RequestsRole'
 import requests_role_list from './requests_role/List'
 import EstateOwnerList from '../estate_owner/dashboard/List'
+import SupportServiceList from '../supportService/dashboard/List'
+import ContractingCompanyList from '../contracing_company/dashboard/List'
 import EnginneringOfficeEditVisitRequest from '../enginnering_office/tickets/editVisitRequest'
 import Archives from '../common/archives/ArchivesData'
 Vue.use(Router);
@@ -132,6 +139,7 @@ const router = new Router({
             redirect: APP.USER_TYPE_LOG == 'ESTATE_OWNER' ? '/es' :
              APP.USER_TYPE_LOG == 'ENGINEERING_OFFICE_MANAGER' ? '/en' : 
              APP.USER_TYPE_LOG == 'CONTRACTING_COMPANY' ? '/en' : 
+             APP.USER_TYPE_LOG == 'SUPPORT_SERVICES_OFFICE' ? '/en' : 
              '/dashboard',
         },
         {
@@ -251,6 +259,12 @@ const router = new Router({
     name: 'contractor_request_estate_list',
     component: ContractorRequestList,
 },
+{
+    path: 'support-service-request',
+    name: 'support-service_estate_list',
+    component: SupportServiceRequestList,
+},
+
 
                 {
                     path: 'show-design-price/:id',
@@ -266,14 +280,14 @@ const router = new Router({
         //end estate owner 
         //contractor
         {
-            name: 'dashboard_estate',
+            name: 'dashboard_contractor',
             path: '/en',
-            component: EstateOwnerHome,
+            component: ContractorHome,
             children: [
                 {
                     path: '/',
-                    name: 'dashboard_estate.list',
-                    component: EstateOwnerList,
+                    name: 'dashboard_contractor.list',
+                    component: ContractingCompanyList,
                 },
                 {
                     path: 'to-do-list_contractor',
@@ -289,6 +303,31 @@ const router = new Router({
             ]
             },
         //end contractor
+
+          //support service
+          {
+            name: 'support_service_office',
+            path: '/en',
+            component: SupportServiceHome,
+            children: [
+                {
+                    path: '/',
+                    name: 'dashboard_support_service.list',
+                    component: SupportServiceList,
+                },
+                {
+                    path: 'to-do-list-support-service',
+                    name: 'to-do-list_support_service.list',
+                    component: ToDoListSupportService,
+                    name: 'todolist'
+                },
+                {
+                    path: 'support_service-request',
+                    name: 'support_service_request_list',
+                    component: SupportServiceRequestListReciving,
+                },
+            ]
+            },
         ///enginner office
         {
             name: 'dashboard_enginner_office',
@@ -902,6 +941,12 @@ router.beforeEach((to, from, next) => {
         else if (APP.USER_TYPE_LOG == 'CONTRACTING_COMPANY') {
             if (from.path != '/es/to-do-list_contractor')
                 next('/en/to-do-list_contractor')
+            else
+                next('/')
+        }
+        else if (APP.USER_TYPE_LOG == 'SUPPORT_SERVICES_OFFICE') {
+            if (from.path != '/es/to-do-list-support-service')
+                next('/en/to-do-list-support-service')
             else
                 next('/')
         }

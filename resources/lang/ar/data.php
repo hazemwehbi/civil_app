@@ -5,6 +5,7 @@ return [
     'project'=>'مشروع',
     'contractor'=>'المقاول',
     'contractors'=>'المقاولين',
+    'support_service_requests' => 'طلبات المساندة',
     'work_to_check'=>'العمل المطلوب فحصه',
     'delivery_request_num' => 'رقم طلب الاستلام',
     'day' => 'اليــوم',
@@ -278,11 +279,12 @@ return [
       'edit_report'=>'تعديل تقرير',
       'delete_report'=>'مسح تقرير',
       'project_type'=>'نوع المشروع',
-
+      'support_services' => 'مكاتب المساندة',
       'category'=>'الفئة',
       'neighborhood'=>'المجاورة',
       'district'=>'المنطقة',
       'create_contractor_request'=>'انشاء طلب مقاول',
+      'create_support_service_request'=>'انشاء طلب مساندة',
 
       'province1'=>'الامانة1',
       'province2'=>'الامانة2',
@@ -467,6 +469,8 @@ return [
         'view_design'=>'عرض التصميم',
         'stage'=>'المرحلة',
         'accept_design_request'=>'الموافقة على طلب التصميم',
+        'accept_contractor_request'=>'الموافقة على طلب المقاول',
+        'accept_support_service_request'=>'الموافقة على طلب المساندة',
 
         'price'=>'السعر',
         'enginner_name'=>'اسم المهندس',

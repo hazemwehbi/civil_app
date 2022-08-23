@@ -1,14 +1,13 @@
 
 <template id="panel-template">
     <v-container justify-center>
-        <v-form ref="form" v-model="valid" lazy-validation enctype="multipart/form-data">
+        <v-form ref="form" v-model="valid" lazy-validation>
             <v-card-actions justify-left>
                 <v-btn style="color: #06706d" @click="$router.go(-1)">
                     {{ trans('messages.back') }}
                 </v-btn>
 
                 <v-btn
-                    v-if="false"
                     style="background-color: #06706d; color: white"
                     color="darken-1"
                     @click="generatePDF"
@@ -17,14 +16,31 @@
                 </v-btn>
 
                 <v-btn
-                    v-if="design_enginner.is_sent == 0"
+                    v-if="design_enginner.is_rejected != 1"
                     style="background-color: #06706d; color: white"
                     color="darken-1"
-                    @click="send"
+                    @click="accept(1)"
                     :loading="loading"
-                    :disabled="!valid || !checkActive()"
+                    :disabled="!valid || !checkActive() || design_enginner.is_agreed==1"
                 >
-                    {{ trans('data.send') }}
+                    {{
+                        design_enginner.is_agreed ? trans('data.accepted_done') : trans('data.accept')
+                    }}
+                </v-btn>
+
+                <v-btn
+                    v-if="design_enginner.is_agreed != 1"
+                    style="background-color: #06706d; color: white"
+                    color="darken-1"
+                    @click="accept(0)"
+                    :loading="loading"
+                    :disabled="!valid || !checkActive() || design_enginner.is_rejected==1"
+                >
+                    {{
+                        design_enginner.is_rejected
+                            ? trans('data.reject_done')
+                            : trans('data.reject')
+                    }}
                 </v-btn>
             </v-card-actions>
             <v-spacer></v-spacer>
@@ -67,7 +83,7 @@
                                 </b-card-group>
                             </v-flex>
                         </v-layout>
-                        <!--<v-layout row wrap>
+                        <v-layout row wrap>
                             <v-flex xs12 sm12 md12>
                                 <b-card-group deck>
                                     <b-card
@@ -75,7 +91,7 @@
                                         header-tag="header1"
                                         title=""
                                     >
-                                        <!--<vuetify-money
+                                        <vuetify-money
                                             v-model="price"
                                             v-bind:label="label"
                                             v-bind:placeholder="placeholder"
@@ -94,38 +110,11 @@
                                                         name: trans('data.price'),
                                                     }),
                                             ]"
-                                        />-->
-
-                                        <!-- <v-text-field
-                                        id="input_name"
-                                        v-model="price"
-                                        v-validate="'required'"
-                                        data-vv-name="name"
-                                        hide-details
-                                        single-line
-                                        type="number"
-                                        :data-vv-as="trans('messages.name')"
-                                        :error-messages="errors.collect('name')"
-                                        required
-                                    >
-                                    </v-text-field> 
+                                        />
                                     </b-card>
                                 </b-card-group>
                             </v-flex>
-                        </v-layout>-->
-  <v-layout row wrap>
-                            <v-flex xs12 sm12 md12>
-                                <div class="my-3">{{ trans('data.viewPrice') }}: </div>
-           <input
-              type="file"
-              :label="trans('data.viewPrice')"
-              ref="pdf"
-              accept=".pdf"
-              @change="onFilePicked"
-            />
-        </v-flex>
-        </v-layout>
-                      
+                        </v-layout>
                     </v-container>
                 </v-card-text>
             </v-card>
@@ -141,7 +130,7 @@ export default {
         jsPDF,
     },
     props: {
-        design_enginner_id: {
+        design_id: {
             required: true,
         },
     },
@@ -149,10 +138,10 @@ export default {
         return {
             valid: true,
             type: 'testt',
-            project_id: '',
-            price_pdf: null,
-            enginner_id: '',
             design_enginner: {},
+            project_id: '',
+            enginner_id: '',
+            //  design_enginner_id:null,
 
             price: null,
             enginner_name: '',
@@ -162,8 +151,8 @@ export default {
             value: '',
             label: '',
             placeholder: ' ',
-            readonly: false,
-            disabled: false,
+            readonly: true,
+            disabled: true,
             outlined: true,
             clearable: true,
             valueWhenIsEmpty: '',
@@ -174,6 +163,10 @@ export default {
                 length: 11,
                 precision: 2,
             },
+            properties: {
+                hint: '',
+                // You can add other v-text-field properties, here.
+            },
 
             heading: 'Design Request',
             moreText: [''],
@@ -182,27 +175,32 @@ export default {
     },
     created() {
         const self = this;
-        self.enginner_name = self.getCurrentUser().name;
-        self.enginner_id = self.getCurrentUser().id;
+        self.reset();
+
         self.getRequestDesignStageDetail();
     },
-    methods: {
-     
-            onFilePicked(e) {
-     this.price_pdf = e.target.files[0]
+    beforeDestroy() {
+        const self = this;
     },
+
+    mounted: function () {},
+    methods: {
+        reset() {
+            // alert(4)
+            //     this.$refs.form.reset();
+        },
         resetValidation() {
             this.$refs.form.resetValidation();
         },
 
         getRequestDesignStageDetail() {
             const self = this;
+
             let data = {
-                design_enginner_id: self.design_enginner_id,
-                //enginner_id: self.enginner_id,
+                id: self.design_id,
             };
             axios
-                .post('enginner_office/show-design-request-details', data)
+                .post('show-design-request-details', data)
                 .then(function (response) {
                     var result = response.data.msg;
                     self.loading = false;
@@ -211,9 +209,11 @@ export default {
                     } else {
                         self.create_time = self.currentDateTime();
                     }
-                    self.stage_name = result.stage.value;
-                    self.price = result.price;
                     self.design_enginner = result;
+                    self.stage_name = result.stage.value;
+                    self.enginner_name = result.enginner.name;
+                    self.price = result.price;
+                    // self.design_enginner_id=result.id
                     /* self.$store.commit('showSnackbar', {
                         message: response.data.msg,
                         color: response.data.success,
@@ -236,29 +236,37 @@ export default {
             const dateTime = date + ' ' + time;
             return dateTime;
         },
-        send() {
+        accept(status) {
             const self = this;
-            let formData=new FormData()
-            formData.append('pdfPrice',self.price_pdf)
-            formData.append('design_enginner_id',self.design_enginner.id)
+
+            let data = {
+                design_enginner_id: self.design_enginner.id,
+                status: status,
+            };
             if (this.$refs.form.validate()) {
                 self.loading = true;
                 axios
-                    .post('enginner_office/send-design-request-offer', formData)
+                    .post('/estate_owner/accept-design-request-offer', data)
                     .then(function (response) {
                         self.loading = false;
+                        self.$store.commit('showSnackbar', {
+                            message: response.data.msg,
+                            color: response.data.success,
+                        });
                         if (response.data.success === true) {
-                            self.$store.commit('showSnackbar', {
-                                message: response.data.msg,
-                                color: response.data.success,
-                            });
-                           self.goBack();
+                            // self.goBack();
+                            window.location.reload();
+                            /* self.$router.push({
+                                name: 'show_design_request_price_estate_list',
+                                params: { id:  self.design_enginner_id },
+                            })*/
                         }
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
             }
+            //self.reset();
         },
         generatePDF() {
             const self = this;
@@ -309,14 +317,10 @@ export default {
             } else {
             }
         },
-
-        enableReport(value) {
-            const self = this;
-            self.enable_report = true;
-        },
     },
 };
 </script>
+
 <style scoped>
 .card {
     position: relative;

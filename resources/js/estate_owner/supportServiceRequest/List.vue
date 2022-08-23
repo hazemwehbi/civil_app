@@ -10,7 +10,7 @@
             <v-card-title>
                 <div>
                     <div class="headline">
-                        {{ trans('data.contractor_requests') }}
+                        {{ trans('data.support_service_requests') }}
                     </div>
                 </div>
                 <v-spacer></v-spacer>
@@ -20,7 +20,7 @@
                     style="background-color: #06706d; color: white"
                     class="lighten-1"
                 >
-                    {{ trans('data.create_contractor_request') }}
+                    {{ trans('data.create_support_service_request') }}
                     <v-icon right dark>add</v-icon>
                 </v-btn>
             </v-card-title>
@@ -282,7 +282,7 @@ export default {
                 title: self.trans('messages.are_you_sure'),
                 okCb: () => {
                     axios
-                        .post('/estate_owner/confirm-design', { design_id: id })
+                        .post('/estate_owner/request-support-service', { design_id: id })
                         .then(function (response) {
                             if (response.data.success === true) {
                                 self.$eventBus.$emit('DESIGN__UPDATED');
@@ -346,7 +346,7 @@ export default {
                 message: self.trans('messages.you_cant_restore_it'),
                 okCb: () => {
                     axios
-                        .delete('/estate_owner/request-contractor/' + id)
+                        .delete('/estate_owner/request-support-service/' + id)
                         .then(function (response) {
                             if (response.data.success === true) {
                                 self.$eventBus.$emit('DESIGN__DELETED');
@@ -389,7 +389,7 @@ export default {
                 rowsPerPage: self.pagination.rowsPerPage,
             };
 
-            axios.get('/estate_owner/request-contractor', { params: params }).then(function (response) {
+            axios.get('/estate_owner/request-support-service', { params: params }).then(function (response) {
                 if (response.data.success === true) {
                     self.items = response.data.msg.data;
                     self.totalItems = response.data.msg.total;

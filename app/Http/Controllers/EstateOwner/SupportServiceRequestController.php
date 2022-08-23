@@ -10,16 +10,13 @@ use App\DesignRequest;
 use App\Components\User\Models\User;
 use App\Notifications\AcceptContractorRequestByEstateOwner;
 use App\Notifications\RejectContractorRequestByEstateOwner;
-
-
-
 use Notification;
 use App\Http\Controllers\Controller;
 use Lang;
 use App\Http\Responses\Response;
 use App\Notifications\AskContractorRequestOffer;
 
-class ContractorRequestController extends  Controller
+class SupportServiceRequestController extends  Controller
 {
     protected $commonUtil;
 
@@ -50,7 +47,7 @@ class ContractorRequestController extends  Controller
         
         $requests = DesignRequest::with('customer','offices','project','media')
         ->whereIn('customer_id', $childrens)
-        ->where('request_type','contractor_request');
+        ->where('request_type','support_service_request');
 
         $requests = $requests->orderBy($sort_by, $orderby)
                     ->paginate($rowsPerPage);
@@ -60,7 +57,7 @@ class ContractorRequestController extends  Controller
       
     }
 
-    public function acceptContractorRequestOffer(Request $request)
+    public function acceptSupportServiceRequestOffer(Request $request)
     {
         try {
             $design=DesignRequest::find($request->design_id);
@@ -71,7 +68,7 @@ class ContractorRequestController extends  Controller
                $office = $design->offices->find($request->office_id);
                $office->pivot->office_status = 'accepted';
                $office->pivot->update();
-               $this->_saveAcceptContractorRequestByEstateOwnerNotifications($request->office_id,[]);
+               $this->_saveAcceptSupportServiceRequestByEstateOwnerNotifications($request->office_id,[]);
                 DB::commit();
                 $message = Lang::get('site.success_update');
                 return $this->respondSuccess($message);
@@ -87,7 +84,7 @@ class ContractorRequestController extends  Controller
             return $output ;
         }
     }
-    public function rejectContractorRequestOffer(Request $request)
+    public function rejectSupoortServiceRequestOffer(Request $request)
     {
         try {
             $design=DesignRequest::find($request->design_id);
@@ -99,7 +96,7 @@ class ContractorRequestController extends  Controller
                 $office->pivot->office_status = 'rejected';
                 $office->pivot->update();
                 $office->save();
-                $this->_saveRejectContractorRequestByEstateOwnerNotifications($request->office_id,[]);
+                $this->_saveRejectSupportServiceRequestByEstateOwnerNotifications($request->office_id,[]);
                 DB::commit();
                 $message = Lang::get('site.success_update');
                 return $this->respondSuccess($message);
@@ -134,7 +131,8 @@ class ContractorRequestController extends  Controller
 
             $design=DesignRequest::where('project_id', $request->project_id)
             ->whereIn('status',['sent','new','accepted','in_progress','sent'])
-            ->where('request_type','contractor_request')->first();
+            ->where('request_type','support_service_request')
+            ->first();
             if($design != null){
               $message='يوجد هناك طلب مقاول تابع لفس المشروع ';
               return  $this->respondSuccess($message);
@@ -152,13 +150,13 @@ class ContractorRequestController extends  Controller
             $designRequest->project_id=$input['project_id'];
             $designRequest->sent=$input['sent'];
             $designRequest->note=$request->note;
-            $designRequest->request_type = 'contractor_request';
+            $designRequest->request_type = 'support_service_request';
             $designRequest->save();
            // $designRequest->offices()->attach($input['office_id']);
-            $designRequest->offices()->attach($input['office_id'], ['office_status' => 'recieved','request_type' => 'contractor_request']);
+            $designRequest->offices()->attach($input['office_id'], ['office_status' => 'recieved','request_type' => 'support_service_request']);
          
             if($designRequest->sent== 1){
-                 $this->_saveAskContractorRequestOfferNotifications($input['office_id'], Auth::id());
+                 $this->_saveAskSupportServiceRequestOfferNotifications($input['office_id'], Auth::id());
             }
 
             DB::commit();
@@ -269,7 +267,7 @@ class ContractorRequestController extends  Controller
 
 
     
-    protected function _saveAskContractorRequestOfferNotifications($members, $estate_id)
+    protected function _saveAskSupportServiceRequestOfferNotifications($members, $estate_id)
     {
         foreach ($members as $member){
             $notifiable_users = User::find($member);
@@ -277,12 +275,12 @@ class ContractorRequestController extends  Controller
         }
     }
 
-    protected function _saveAcceptContractorRequestByEstateOwnerNotifications($member,$data)
+    protected function _saveAcceptSupportServiceRequestByEstateOwnerNotifications($member,$data)
     {
             $notifiable_users = User::find($member);
             Notification::send($notifiable_users, new AcceptContractorRequestByEstateOwner($data));
     }
-    protected function _saveRejectContractorRequestByEstateOwnerNotifications($member,$data)
+    protected function _saveRejectSupportServiceRequestByEstateOwnerNotifications($member,$data)
     {
             $notifiable_users = User::find($member);
             Notification::send($notifiable_users, new RejectContractorRequestByEstateOwner($data));

@@ -2,8 +2,7 @@
 <template>
     <div class="component-wrap">
         <view1 ref="designView"></view1>
-        <PricePdf ref="pdfPrice" @refreshTable="refreshTable($event)" />
-
+<AcceptModelDEsignRequest ref="acceptenginneringoffice" @refreshTable="refreshTable"/>
         <v-card class="mt-3">
             <v-card-title>
                 <div>
@@ -169,13 +168,14 @@ import Create from './Create';
 import Edit from './Edit';
 import view1 from './view1';
 import _ from 'lodash';
-import PricePdf from './PricePdf.vue'
+import AcceptModelDEsignRequest from './AcceptModelDEsignRequest';
+ 
 export default {
     components: {
         view1,
         Create,
         Edit,
-       PricePdf
+       AcceptModelDEsignRequest
     },
     data() {
         const self = this;
@@ -277,18 +277,7 @@ export default {
                         id: item.id,
                         office_id: self.getCurrentUser(),
                     };
-                     axios.post('/contracting_company/accept-contractor-request', data).then(function (response) {
-                    if (response.data.success) {
-                        self.loading = false;
-                        self.dialog = false;
-                        self.$store.commit('hideLoader');
-                        self.$store.commit('showSnackbar', {
-                                message: response.data.msg,
-                                color: response.data.success,
-                            });
-                           self.refreshTable() 
-                    }
-                })
+                    self.$refs.acceptenginneringoffice.create(data);
                 },
                 cancelCb: () => {
                     console.log('CANCEL');

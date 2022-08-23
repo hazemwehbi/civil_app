@@ -508,7 +508,6 @@ class UserController extends AdminController
 
     public function getAllOffices()
     {
-       // $users = User::getOfficeUsers();
        $users = User::getAllOffices();
         return $users;
     }
@@ -516,8 +515,11 @@ class UserController extends AdminController
     
     public function getAllContractors()
     {
-       // $users = User::getOfficeUsers();
        $users = User::getAllContractors();
+        return $users;
+    }
+    public function getAllSupportServices(){
+        $users = User::getAllSupportServices();
         return $users;
     }
     public function getUsersOffice($id)

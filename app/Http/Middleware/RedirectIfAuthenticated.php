@@ -33,6 +33,9 @@ class RedirectIfAuthenticated
             elseif(Auth::user()->user_type_log=='CONTRACTING_COMPANY') {
                 return redirect('/contracting_company');
             }
+            elseif(Auth::user()->user_type_log=='SUPPORT_SERVICES_OFFICE') {
+                return redirect('/support_service_office');
+            }
         }
 
         return $next($request);

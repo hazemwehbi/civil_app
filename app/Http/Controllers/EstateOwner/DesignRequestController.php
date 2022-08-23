@@ -3,13 +3,9 @@
 namespace App\Http\Controllers\EstateOwner;
 use App\Http\Util\CommonUtil;
 use Illuminate\Http\Request;
-use App\RequestType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
-use App\ProjectMember;
 use App\DesignRequest;
-use App\RequestEnginner;
 
 use App\Components\User\Models\User;
 use App\Notifications\ProjectCreatedNotification;
@@ -23,8 +19,6 @@ use App\Notifications\DesignRequestSendedToEmployees;
 
 use Notification;
 use App\Http\Controllers\Controller;
-use App\VisitRequest;
-use App\DefaultEnginnersRequest;
 use Lang;
 use App\DesignEnginner;
 use App\Http\Responses\Response;
@@ -57,9 +51,7 @@ class DesignRequestController extends  Controller
         $childrens=$user->childrenIds($user->id);
         array_push($childrens,$user->id);
         
-        $requests = DesignRequest::with('stages','customer','offices','project','designEnginners','designEnginners.media')
-        ->whereIn('customer_id', $childrens)
-        ->where('request_type','design_request');
+        $requests = DesignRequest::with('stages','customer','offices','project','designEnginners','designEnginners.media')->whereIn('customer_id', $childrens);
 
         $requests = $requests->orderBy($sort_by, $orderby)
                     ->paginate($rowsPerPage);
@@ -167,9 +159,7 @@ class DesignRequestController extends  Controller
 
         try {
 
-            $design=DesignRequest::where('project_id', $request->project_id)
-            ->whereIn('status',['sent','new','accepted','in_progress','sent'])
-            ->where('request_type','design_request')->first();
+            $design=DesignRequest::where('project_id', $request->project_id)->whereIn('status',['sent','new','accepted','in_progress','sent'])->first();
             if($design != null){
               $message='يوجد هناك تصميم تابع لفس المشروع  بمرحلة العمل';
               return  $this->respondSuccess($message);
@@ -230,12 +220,10 @@ class DesignRequestController extends  Controller
         }
 
         try {
-            $design=DesignRequest::find($id);
-            //where('project_id', $request->project_id)
-           // ->whereIn('status',['sent','new','accepted','in_progress','sent'])->first();
-           /* if($design != null){
+            $design=DesignRequest::where('project_id', $request->project_id)->whereIn('status',['sent','new','accepted','in_progress','sent'])->first();
+            if($design != null){
               return  $this->respondWentWrong('هناك طلب تصميم لنفس المشروع  في مرحلة العمل');
-            }*/
+            }
             if($design!=  null){
                 DB::beginTransaction();
                 $input = $request->all();

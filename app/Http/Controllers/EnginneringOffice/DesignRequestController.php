@@ -3,16 +3,13 @@
 namespace App\Http\Controllers\EnginneringOffice;
 use App\Http\Util\CommonUtil;
 use Illuminate\Http\Request;
-use App\RequestType;
 use App\StageProject;
 use App\DesignEnginner;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use App\ProjectMember;
 use App\Project;
 use App\DesignRequest;
-use App\RequestEnginner;
 use App\Components\User\Models\User;
 use App\Notifications\ProjectCreatedNotification;
 use App\Notifications\AcceptedRequestOfficeNotification;
@@ -23,10 +20,7 @@ use App\Notifications\DesignRequestSendedToEmployees;
 
 use Notification;
 use App\Http\Controllers\Controller;
-use App\VisitRequest;
-use App\DefaultEnginnersRequest;
 use Lang;
-use App\Http\Responses\Response;
 class DesignRequestController extends  Controller
 {
     protected $commonUtil;
@@ -69,10 +63,6 @@ class DesignRequestController extends  Controller
       
     }
 
-    
-
-
-    
     public function getStagesDesignRequest(Request $request)
     {
         
@@ -143,13 +133,8 @@ class DesignRequestController extends  Controller
          catch (Exception $e) {
             $output = $this->respondWentWrong($e);
         }
-
-
-
     }
     
-
-
     public function sendDesignRequestOffer(Request $request)
     {
         try {

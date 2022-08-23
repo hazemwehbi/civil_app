@@ -56,7 +56,8 @@ export default {
             dialog: false,
             loading: false,
             url: null,
-            item: null
+            item: null,
+            office_id: null
         };
     },
     mounted() {
@@ -71,22 +72,22 @@ export default {
     },
 
     methods: {
-        openDialog(item){
+        openDialog(item,office_id){
           this.dialog =true
           this.item = item
-          this.url = item.design_enginners[0].media[0].full_url//.replace('upload','public/upload')
-          console.log(this.url)
+          this.office_id=office_id
+          this.url = item.media[0].original_url
         },
         agreeOffer(){
             const self = this;
             let data = {
                 design_id: self.item.id,
-                created_by: self.item.design_enginners[0].created_by
+                office_id: this.office_id
             };
 
                 self.loading = true;
                 axios
-                    .post('estate_owner/acceptDesignRequestOffer', data)
+                    .post('estate_owner/acceptContractorRequestOffer', data)
                     .then(function (response) {
                         self.loading = false;
                         if (response.data.success === true) {
@@ -108,12 +109,12 @@ export default {
             const self = this;
             let data = {
                 design_id: self.item.id,
-                created_by: self.item.design_enginners[0].created_by
+                created_by: self.office_id
             };
 
                 self.loading = true;
                 axios
-                    .post('estate_owner/rejectDesignRequestOffer', data)
+                    .post('estate_owner/rejectContractorRequestOffer', data)
                     .then(function (response) {
                         self.loading = false;
                         if (response.data.success === true) {

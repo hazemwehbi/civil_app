@@ -119,6 +119,8 @@ Route::middleware(['auth'])
        Route::get('get-customer-project/{id}', 'ProjectController@getCustomer');
         Route::post('add-new-project', 'ProjectController@addNewProject');
         Route::get('get-offices', 'Admin\UserController@getAllOffices');
+        Route::get('get-supprt-services', 'Admin\UserController@getAllSupportServices');
+        
         Route::get('get-contractors', 'Admin\UserController@getAllContractors');
         Route::get('get-users-office/{id}', 'Admin\UserController@getUsersOffice');
         
@@ -277,10 +279,18 @@ Route::prefix('estate_owner')
             
             Route::post('rejectDesignRequestOffer','DesignRequestController@rejectDesignRequestOffer');
             Route::post('acceptDesignRequestOffer','DesignRequestController@acceptDesignRequestOffer');
+
+            Route::post('rejectContractorRequestOffer','ContractorRequestController@rejectContractorRequestOffer');
+            Route::post('acceptContractorRequestOffer','ContractorRequestController@acceptContractorRequestOffer');
+
+            Route::post('rejectSupportServiceRequestOffer','SupportServiceRequestController@rejectSupoortServiceRequestOffer');
+            Route::post('acceptSupportServiceRequestOffer','SupportServiceRequestController@acceptSupportServiceRequestOffer');
+
             Route::resource('users', 'UserController');
 
             Route::resource('request-design', 'DesignRequestController');
             Route::resource('request-contractor', 'ContractorRequestController');
+            Route::resource('request-support-service', 'SupportServiceRequestController');
 
             Route::post('confirm-design', 'DesignRequestController@confirmDesign');
 
@@ -288,7 +298,7 @@ Route::prefix('estate_owner')
             
         // Route::get('dashboards', 'DashboardController@index');
     });
-
+//contractor
     Route::prefix('contracting_company')
     ->namespace('ContractingCompany')
    // ->middleware(['auth','enginner_office'])
@@ -299,6 +309,19 @@ Route::prefix('estate_owner')
             Route::resource('dashboards', 'DashboardController')->only(['index']);
             Route::resource('request-contractor', 'ContractorRequestController');
             Route::post('accept-contractor-request','ContractorRequestController@acceptContractorRequest');
+    });
+
+    //support service
+    Route::prefix('support_service_office')
+    ->namespace('SupportService')
+   // ->middleware(['auth','enginner_office'])
+    ->name('support_service_office')
+    ->group(function () {
+            Route::get('/', 'SinglePageController@displaySPA')
+            ->name('estate_owner.spa');
+            Route::resource('dashboards', 'DashboardController')->only(['index']);
+            Route::resource('request-support-service', 'SupportServiceRequestController');
+            Route::post('accept-support-service-request','ContractorRequestController@acceptSupportServiceRequest');
     });
     /// Enginnering OFFICE
 

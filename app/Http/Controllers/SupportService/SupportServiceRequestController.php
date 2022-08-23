@@ -1,20 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\ContractingCompany;
+namespace App\Http\Controllers\SupportService;
 use App\Http\Util\CommonUtil;
 use Illuminate\Http\Request;
+use App\RequestType;
+use App\StageProject;
+use App\DesignEnginner;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\ProjectMember;
+use App\Project;
 use App\DesignRequest;
+
 use App\Components\User\Models\User;
-
-
 use Notification;
 use App\Http\Controllers\Controller;
 use Lang;
 use App\Notifications\AcceptRequestSendedFromContractor;
 
-class ContractorRequestController extends  Controller
+class SupportServiceRequestController extends  Controller
 {
     protected $commonUtil;
 
@@ -39,7 +44,7 @@ class ContractorRequestController extends  Controller
         }
 
         $requests = DesignRequest::with('stages','customer','creator','project','offices')->WhereIn('status',['sent','rejected','pending','accepted','in_progress','completed'])
-        ->where('request_type','contractor_request')
+        ->where('request_type','support_service_request')
         ->whereHas('offices',function($q) use ($user){
            $q->where('office_id', $user->id);//->orWhere('office_id', $user->parent_id);
         });
@@ -50,7 +55,7 @@ class ContractorRequestController extends  Controller
         
       
     }
-    public function acceptContractorRequest(Request $request)
+    public function acceptSupportServiceRequest(Request $request)
     {
            try {
             $design = DesignRequest::find($request->design_id);
@@ -66,14 +71,14 @@ class ContractorRequestController extends  Controller
                 $design->update();
              
                 if($request->pdfPrice){
-                    $design->clearMediaCollection('pdfPriceContractor');
-                    $design->addMedia($request->pdfPrice)->usingFileName('pdfPriceContractor'.time().'.pdf')->toMediaCollection('pdfPriceContractor');
+                    $design->clearMediaCollection('pdfPriceSupportService');
+                    $design->addMedia($request->pdfPrice)->usingFileName('pdfPriceSupportService'.time().'.pdf')->toMediaCollection('pdfPriceSupportService');
                     }
                 //notification to owner
                  $data1=[
-                    'office_id'=>Auth::user()->id,
+                    'office_id'=>Auth::user()->id,//$design->office_id,
                 ];
-                $this->_saveContractorRequestNotifications($design->created_by,$data1);
+                $this->_saveSupportServiceRequestNotifications($design->created_by,$data1);
                 DB::commit();
                 $message = Lang::get('site.success_update');
                 return $this->respondSuccess($message);
@@ -89,9 +94,8 @@ class ContractorRequestController extends  Controller
     }
     //////////////////////////////////Notifications///////////////////////
 
-    protected function _saveContractorRequestNotifications($member, $data)
+    protected function _saveSupportServiceRequestNotifications($member, $data)
     {
-        //foreach ($members as $member){
             $notifiable_users = User::find($member);
             Notification::send($notifiable_users, new AcceptRequestSendedFromContractor($data));
      }

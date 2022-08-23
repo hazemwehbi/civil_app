@@ -2,7 +2,6 @@
 
 namespace App\Components\User\Models;
 
-use App\OfficeDetaile;
 use App\System;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -600,6 +599,19 @@ class User extends Authenticatable implements HasMedia
         ->get()
         ->toArray();
    
+          return $users;
+      }
+      public static function getAllSupportServices($append_all = false)
+      {
+        $users = User::whereHas(
+            'roles', function($q){
+                $q->where('type', 'SUPPORT_SERVICES_OFFICE');
+            }
+        )
+        ->orderBy('name')
+        ->get()
+        ->toArray();
+          
           return $users;
       }
       
