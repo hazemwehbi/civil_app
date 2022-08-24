@@ -38,7 +38,7 @@ class ContractorRequestController extends  Controller
             $sort_by = 'id';
         }
 
-        $requests = DesignRequest::with('stages','customer','creator','project','offices')->WhereIn('status',['sent','rejected','pending','accepted','in_progress','completed'])
+        $requests = DesignRequest::with('stages','customer','creator','project','offices','media')->WhereIn('status',['sent','rejected','pending','accepted','in_progress','completed'])
         ->where('request_type','contractor_request')
         ->whereHas('offices',function($q) use ($user){
            $q->where('office_id', $user->id);//->orWhere('office_id', $user->parent_id);

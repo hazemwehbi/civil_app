@@ -76,7 +76,7 @@ export default {
           this.dialog =true
           this.item = item
           this.office_id=office_id
-          this.url = item.media[0].original_url
+          this.url = item.media[0].full_url
         },
         agreeOffer(){
             const self = this;

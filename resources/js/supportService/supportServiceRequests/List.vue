@@ -3,6 +3,8 @@
     <div class="component-wrap">
         <view1 ref="designView"></view1>
 <AcceptModelDEsignRequest ref="acceptenginneringoffice" @refreshTable="refreshTable"/>
+<PricePdf ref="pdfPrice" @refreshTable="refreshTable($event)" />
+
         <v-card class="mt-3">
             <v-card-title>
                 <div>
@@ -67,7 +69,17 @@
                                     <!--{{trans('data.accept')}}-->
                                 </v-btn>
                             </div>
-
+  <v-btn
+                                    color="primary"
+                                    small
+                                    fab
+                                    v-if="props.item.status == 'accepted'"
+                                    :disabled="!checkActive()"
+                                    @click="viewPrice(props.item)"
+                                >
+                                    <v-icon color="white">visibility</v-icon>
+                                    <!--{{trans('data.accept')}}-->
+                                </v-btn>
                             <div>
                                 <v-btn
                                     color="primary"
@@ -169,11 +181,13 @@ import Edit from './Edit';
 import view1 from './view1';
 import _ from 'lodash';
 import AcceptModelDEsignRequest from './AcceptModelDEsignRequest';
- 
+ import PricePdf from './PricePdf.vue'
+
 export default {
     components: {
         view1,
         Create,
+        PricePdf,
         Edit,
        AcceptModelDEsignRequest
     },
@@ -263,6 +277,10 @@ export default {
     methods: {
         refreshTable(){
             this.loadRequests();
+        },
+           viewPrice(item){
+         const self = this;
+         self.$refs.pdfPrice.openDialog(item)
         },
            acceptProject(item) {
             const self = this;
