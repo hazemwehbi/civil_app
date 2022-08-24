@@ -2,7 +2,7 @@
     <div justify="center">
             <v-dialog v-model="dialog" persistent max-width="600px">
                 <v-card>
-                    <v-card-title > <span class="text-h2">{{trans('data.accept_design_request')}}</span>  </v-card-title>
+                    <v-card-title > <span class="text-h2">{{trans('data.accept_contractor_request')}}</span>  </v-card-title>
                     <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation enctype="multipart/form-data">
            <v-layout row wrap>

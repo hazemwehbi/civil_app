@@ -71,7 +71,11 @@ class ContractorRequestController extends  Controller
                $office = $design->offices->find($request->office_id);
                $office->pivot->office_status = 'accepted';
                $office->pivot->update();
-               $this->_saveAcceptContractorRequestByEstateOwnerNotifications($request->office_id,[]);
+               $data = [
+                'estate_id' => Auth::id()
+            ];
+           
+            $this->_saveAcceptContractorRequestByEstateOwnerNotifications($request->office_id,$data);
                 DB::commit();
                 $message = Lang::get('site.success_update');
                 return $this->respondSuccess($message);
@@ -99,7 +103,10 @@ class ContractorRequestController extends  Controller
                 $office->pivot->office_status = 'rejected';
                 $office->pivot->update();
                 $office->save();
-                $this->_saveRejectContractorRequestByEstateOwnerNotifications($request->office_id,[]);
+                $data = [
+                'estate_id' => Auth::id()
+            ];
+                $this->_saveRejectContractorRequestByEstateOwnerNotifications($request->office_id,$data);
                 DB::commit();
                 $message = Lang::get('site.success_update');
                 return $this->respondSuccess($message);

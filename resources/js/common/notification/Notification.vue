@@ -355,6 +355,95 @@
                     </v-list-tile>
 
                     <!-- task notification -->
+
+                     <!-- request contracting office -->
+ <v-list-tile
+                        v-if="
+                            notification.type &&
+                            notification.type ==
+                                'App\\Notifications\\AcceptRequestSendedFromContractor'
+                        "
+                        @click="
+                            $router.push({
+                                //name: 'projects.project-tasks.list',
+                                name: 'contractor_request_estate_list',
+                                //params: { id: notification.project.id },
+                            })
+                        "
+                        :style="notificationBackgroundColor(notification.read_at)"
+                        avatar
+                    >
+                        <v-list-tile-avatar>
+                            <avatar
+                                :members="convertObjectToArray(notification.office.name)"
+                                :tooltip="true"
+                            >
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.office.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                    trans('messages.office_accept_notification_text', {
+                                        office: notification.office.name,
+                                    })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                     <!-- end request -->
+                            <!-- request support service office -->
+ <v-list-tile
+                        v-if="
+                            notification.type &&
+                            notification.type ==
+                                'App\\Notifications\\AcceptRequestSendedFromSupportServiceOffice'
+                        "
+                        @click="
+                            $router.push({
+                                //name: 'projects.project-tasks.list',
+                                name: 'support-service_estate_list',
+                                //params: { id: notification.project.id },
+                            })
+                        "
+                        :style="notificationBackgroundColor(notification.read_at)"
+                        avatar
+                    >
+                        <v-list-tile-avatar>
+                            <avatar
+                                :members="convertObjectToArray(notification.office.name)"
+                                :tooltip="true"
+                            >
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.office.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                    trans('messages.office_accept_notification_text', {
+                                        office: notification.office.name,
+                                    })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                     <!-- end request -->
                     <v-list-tile
                         @click="view(notification.task)"
                         v-if="
@@ -648,6 +737,88 @@
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
                     </v-list-tile>
+                      <v-list-tile
+                        v-if="
+                            notification.type &&
+                            notification.type ==
+                                'App\\Notifications\\AcceptContractorRequestByEstateOwner'
+                        "
+                        @click="
+                            $router.push({
+                                name: 'contractor_request_list',
+                                // params: { id: notification.data['design_enginner_id'] },
+                            })
+                        "
+                        :style="notificationBackgroundColor(notification.read_at)"
+                        avatar
+                    >
+                        <v-list-tile-avatar>
+                            <avatar
+                                :members="convertObjectToArray(notification.estate)"
+                                :tooltip="true"
+                            >
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.estate.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                    trans('messages.contractor_request_accept_notification_text', {
+                                    
+                                    })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                        <v-list-tile
+                        v-if="
+                            notification.type &&
+                            notification.type ==
+                                'App\\Notifications\\AcceptSupportServiceOfficeRequestByEstateOwner'
+                        "
+                        @click="
+                            $router.push({
+                                name: 'support_service_request_list',
+                                // params: { id: notification.data['design_enginner_id'] },
+                            })
+                        "
+                        :style="notificationBackgroundColor(notification.read_at)"
+                        avatar
+                    >
+                        <v-list-tile-avatar>
+                            <avatar
+                                :members="convertObjectToArray(notification.estate)"
+                                :tooltip="true"
+                            >
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.estate.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                    trans('messages.support_request_accept_notification_text', {
+                                        
+                                    })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
 
                     <!------------------------------------rejected design----------------------------------------------------!-->
                     <v-list-tile
@@ -686,6 +857,88 @@
                                 {{
                                     trans('messages.design_request_reject_notification_text', {
                                         stage: notification.stage.value,
+                                    })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile> 
+                       <v-list-tile
+                        v-if="
+                            notification.type &&
+                            notification.type ==
+                                'App\\Notifications\\RejectContractorRequestByEstateOwner'
+                        "
+                        @click="
+                            $router.push({
+                                name: 'contractor_request_list',
+                                // params: { id: notification.data['design_enginner_id'] },
+                            })
+                        "
+                        :style="notificationBackgroundColor(notification.read_at)"
+                        avatar
+                    >
+                         <v-list-tile-avatar>
+                            <avatar
+                                :members="convertObjectToArray(notification.estate)"
+                                :tooltip="true"
+                            >
+                            </avatar>
+                        </v-list-tile-avatar> >
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    <!-- {{ notification.estate.name }} -->
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                    trans('messages.contractor_request_reject_notification_text', {
+                                        
+                                    })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile> 
+                       <v-list-tile
+                        v-if="
+                            notification.type &&
+                            notification.type ==
+                                'App\\Notifications\\RejectSupportServiceOfficeRequestByEstateOwner'
+                        "
+                        @click="
+                            $router.push({
+                                name: 'support_service_request_list',
+                                // params: { id: notification.data['design_enginner_id'] },
+                            })
+                        "
+                        :style="notificationBackgroundColor(notification.read_at)"
+                        avatar
+                    >
+                         <v-list-tile-avatar>
+                            <avatar
+                                :members="convertObjectToArray(notification.estate)"
+                                :tooltip="true"
+                            >
+                            </avatar>
+                        </v-list-tile-avatar> >
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    <!-- {{ notification.estate.name }} -->
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                    trans('messages.RejectSupportServiceOfficeRequestByEstateOwner', {
+                                       
                                     })
                                 }}
                             </v-list-tile-sub-title>
@@ -768,7 +1021,87 @@
                             <v-list-tile-sub-title>
                                 {{
                                     trans('messages.ask_for_design_request_enginnering_office_notification_text', {
-                                       ///  stage: notification.stage.value,
+                                        stage: notification.stage.value,
+                                    })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                       <v-list-tile
+                        v-if="
+                            notification.type &&
+                            notification.type ==
+                                'App\\Notifications\\AskContractorRequestOffer'" 
+                        @click="
+                            $router.push({
+                                name: 'contractor_request_list',
+                                // params: { id: notification.data['design_enginner_id'] },
+                            })
+                        "
+                        :style="notificationBackgroundColor(notification.read_at)"
+                        avatar
+                    >
+                        <v-list-tile-avatar>
+                            <avatar
+                                :members="convertObjectToArray(notification.estate)"
+                                :tooltip="true"
+                            >
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.estate.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                    trans('messages.ask_for_contracting_company_notification_text', {
+                                      
+                                    })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                      <v-list-tile
+                        v-if="
+                            notification.type &&
+                            notification.type ==
+                                'App\\Notifications\\AskSupportServiceRequestOffer'" 
+                        @click="
+                            $router.push({
+                                name: 'support_service_request_list',
+                                // params: { id: notification.data['design_enginner_id'] },
+                            })
+                        "
+                        :style="notificationBackgroundColor(notification.read_at)"
+                        avatar
+                    >
+                        <v-list-tile-avatar>
+                            <avatar
+                                :members="convertObjectToArray(notification.estate)"
+                                :tooltip="true"
+                            >
+                            </avatar>
+                        </v-list-tile-avatar>
+
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.estate.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                    trans('messages.ask_for_support_service_office_notification_text', {
+                                       
                                     })
                                 }}
                             </v-list-tile-sub-title>

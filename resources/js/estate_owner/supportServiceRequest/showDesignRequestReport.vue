@@ -254,12 +254,8 @@ export default {
                             color: response.data.success,
                         });
                         if (response.data.success === true) {
-                            // self.goBack();
                             window.location.reload();
-                            /* self.$router.push({
-                                name: 'show_design_request_price_estate_list',
-                                params: { id:  self.design_enginner_id },
-                            })*/
+                      
                         }
                     })
                     .catch(function (error) {

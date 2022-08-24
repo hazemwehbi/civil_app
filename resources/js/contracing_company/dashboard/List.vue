@@ -343,7 +343,7 @@ export default {
            
            
                axios
-                .get('/contracting_company/dashboards')
+                .get('/dashboards')
                 .then(function(response) {
                     self.project_counts = response.data.project_counts;
                     self.project_counts_completed=response.data.project_counts_completed;

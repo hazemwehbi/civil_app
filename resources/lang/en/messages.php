@@ -535,14 +535,21 @@ return [
 
 
     'design_request_accept_notification_text'=>' design accepted for a   :stage',
+    'contractor_request_accept_notification_text'=>'contractor request accepted',
+    'support_request_accept_notification_text'=>'support service office accepted',
 
     'design_request_reject_notification_text'=>'design rejected for a :stage',
+    'contractor_request_reject_notification_text'=>'contractor request reject',
+    'support_request_reject_notification_text'=>'support service office reject',
 
 
     'design_request_send_to_employee_notification_text'=>'enginnering office send a request design for :stage',
 
 
     'ask_for_design_request_enginnering_office_notification_text'=>'recieve new request design ',
+    'ask_for_contracting_company_notification_text'=>'recieve new request contracing company',
+    'ask_for_support_service_office_notification_text'=>'recieve new request support service office',
+
 
 
     'email_valid'=>'Email must be valid',

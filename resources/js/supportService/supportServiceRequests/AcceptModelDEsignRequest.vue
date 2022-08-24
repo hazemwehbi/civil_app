@@ -2,7 +2,7 @@
     <div justify="center">
             <v-dialog v-model="dialog" persistent max-width="600px">
                 <v-card>
-                    <v-card-title > <span class="text-h2">{{trans('data.accept_design_request')}}</span>  </v-card-title>
+                    <v-card-title > <span class="text-h2">{{trans('data.accept_support_service_request')}}</span>  </v-card-title>
                     <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation enctype="multipart/form-data">
            <v-layout row wrap>
@@ -81,7 +81,7 @@ export default {
             formData.append('design_id',self.design_id) 
              if (this.$refs.form.validate()) {
                 self.loading = true;
-              axios.post('/contracting_company/accept-contractor-request', formData).then(function (response) {
+              axios.post('/support_service_office/accept-support-service-request', formData).then(function (response) {
                     if (response.data.success) {
                         self.loading = false;
                         self.dialog = false;

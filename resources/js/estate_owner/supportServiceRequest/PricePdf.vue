@@ -87,7 +87,7 @@ export default {
 
                 self.loading = true;
                 axios
-                    .post('estate_owner/acceptContractorRequestOffer', data)
+                    .post('estate_owner/acceptSupportServiceRequestOffer', data)
                     .then(function (response) {
                         self.loading = false;
                         if (response.data.success === true) {
@@ -109,12 +109,12 @@ export default {
             const self = this;
             let data = {
                 design_id: self.item.id,
-                created_by: self.office_id
+                office_id: this.office_id
             };
 
                 self.loading = true;
                 axios
-                    .post('estate_owner/rejectContractorRequestOffer', data)
+                    .post('estate_owner/rejectSupportServiceRequestOffer', data)
                     .then(function (response) {
                         self.loading = false;
                         if (response.data.success === true) {

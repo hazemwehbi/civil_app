@@ -125,6 +125,16 @@ class NotificationController extends Controller
                             findOrFail($notification->data['estate_id']);
       
             }
+            if ('App\Notifications\AskContractorRequestOffer' == $notification->type) {
+                $notification['estate'] = User::
+                            findOrFail($notification->data['estate_id']);
+      
+            }
+            if ('App\Notifications\AskSupportServiceRequestOffer' == $notification->type) {
+                $notification['estate'] = User::
+                            findOrFail($notification->data['estate_id']);
+      
+            }
             if ('App\Notifications\AcceptDesignRequestByEstateOwner' == $notification->type) {
                 $notification['estate'] = User::
                             findOrFail($notification->data['estate_id']);
@@ -139,6 +149,29 @@ class NotificationController extends Controller
                 $notification['stage'] = StageProject::
                              findOrFail($notification->data['stage_id']);
             }
+
+            ////////////////////////////
+            if ('App\Notifications\AcceptContractorRequestByEstateOwner' == $notification->type) {
+                $notification['estate'] = User::
+                            findOrFail($notification->data['estate_id']);     
+            }
+           
+            if ('App\Notifications\RejectContractorRequestByEstateOwner' == $notification->type) {
+                $notification['estate'] = User::
+                            findOrFail($notification->data['estate_id']);
+            }
+
+            if ('App\Notifications\AcceptSupportServiceOfficeRequestByEstateOwner' == $notification->type) {
+                $notification['estate'] = User::
+                            findOrFail($notification->data['estate_id']);     
+            }
+           
+            if ('App\Notifications\RejectSupportServiceOfficeRequestByEstateOwner' == $notification->type) {
+                $notification['estate'] = User::
+                            findOrFail($notification->data['estate_id']);
+            }
+            ///////////////////////////
+      
 
             if ('App\Notifications\DesignRequestSendedToEmployees' == $notification->type) {
                 $notification['office'] = User::
@@ -185,7 +218,13 @@ class NotificationController extends Controller
             elseif ('App\Notifications\RejectedRequestOfficeNotification' == $notification->type) {
                 $notification['office'] = User::findOrFail($notification->data['office_id']);
             } 
-
+            if ('App\Notifications\AcceptRequestSendedFromContractor' == $notification->type) {
+                $notification['office'] = User::findOrFail($notification->data['office_id']);
+            }
+           
+            if ('App\Notifications\AcceptRequestSendedFromSupportServiceOffice' == $notification->type) {
+                $notification['office'] = User::findOrFail($notification->data['office_id']);
+            }
 
             elseif ('App\Notifications\AskPermissionNotification' == $notification->type) {
                 $notification['user'] = User::findOrFail($notification->data['user_id']);

@@ -559,13 +559,19 @@ return [
     'design_request_offer_notification_text'=>'المكتب الهندسي ارسل عرض تصميم للمرحلة :stage',
 
     'design_request_accept_notification_text'=>'تم قبول التصميم للمرحلة :stage',
+    'contractor_request_accept_notification_text'=>'تم قبول طلب المقاول ',
+    'support_request_accept_notification_text'=>'تم قبول طلب المساندة ',
 
     'design_request_reject_notification_text'=>'تم رفض التصميم للمرحلة :stage',
+    'contractor_request_reject_notification_text'=>'تم رفض  طلب المقاول',
+    'support_request_reject_notification_text'=>'تم رفض  طلب المساندة',
 
 
     'design_request_send_to_employee_notification_text'=>'المكتب الهندسي ارسل الك طلب  تصميم للمرحلة :stage',
 
      'ask_for_design_request_enginnering_office_notification_text'=>'استقبال طلب تصميم جديد',
+     'ask_for_contracting_company_notification_text'=>'استقبال طلب مقاول جديد',
+     'ask_for_support_service_office_notification_text'=>'استقبال طلب مساندة جديد',
 
     'email_valid'=>'حقل البريد الالكتروني يجب ان يكون صالح',
 

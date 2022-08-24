@@ -3,21 +3,15 @@
 namespace App\Http\Controllers\SupportService;
 use App\Http\Util\CommonUtil;
 use Illuminate\Http\Request;
-use App\RequestType;
-use App\StageProject;
-use App\DesignEnginner;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
-use App\ProjectMember;
-use App\Project;
 use App\DesignRequest;
 
 use App\Components\User\Models\User;
 use Notification;
 use App\Http\Controllers\Controller;
 use Lang;
-use App\Notifications\AcceptRequestSendedFromContractor;
+use App\Notifications\AcceptRequestSendedFromSupportServiceOffice;
 
 class SupportServiceRequestController extends  Controller
 {
@@ -97,6 +91,6 @@ class SupportServiceRequestController extends  Controller
     protected function _saveSupportServiceRequestNotifications($member, $data)
     {
             $notifiable_users = User::find($member);
-            Notification::send($notifiable_users, new AcceptRequestSendedFromContractor($data));
+            Notification::send($notifiable_users, new AcceptRequestSendedFromSupportServiceOffice($data));
      }
 }

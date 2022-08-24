@@ -96,6 +96,7 @@ Route::middleware(['auth'])
         Route::resource('manage-profiles', 'ManageProfileController')
             ->only(['index', 'edit', 'update']);
 
+            Route::resource('dashboards', 'DashboardController')->only(['index']);
         Route::resource('media', 'MediaController');
 
         Route::post('removeFile', 'MediaController@removeFile');
@@ -306,7 +307,6 @@ Route::prefix('estate_owner')
     ->group(function () {
             Route::get('/', 'SinglePageController@displaySPA')
             ->name('estate_owner.spa');
-            Route::resource('dashboards', 'DashboardController')->only(['index']);
             Route::resource('request-contractor', 'ContractorRequestController');
             Route::post('accept-contractor-request','ContractorRequestController@acceptContractorRequest');
     });
@@ -319,9 +319,9 @@ Route::prefix('estate_owner')
     ->group(function () {
             Route::get('/', 'SinglePageController@displaySPA')
             ->name('estate_owner.spa');
-            Route::resource('dashboards', 'DashboardController')->only(['index']);
+            
             Route::resource('request-support-service', 'SupportServiceRequestController');
-            Route::post('accept-support-service-request','ContractorRequestController@acceptSupportServiceRequest');
+            Route::post('accept-support-service-request','SupportServiceRequestController@acceptSupportServiceRequest');
     });
     /// Enginnering OFFICE
 

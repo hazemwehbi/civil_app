@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Auth;
 use App\DesignRequest;
 
 use App\Components\User\Models\User;
-use App\Notifications\AcceptContractorRequestByEstateOwner;
-use App\Notifications\RejectContractorRequestByEstateOwner;
+use App\Notifications\AcceptSupportServiceOfficeRequestByEstateOwner;
+use App\Notifications\RejectSupportServiceOfficeRequestByEstateOwner;
 use Notification;
 use App\Http\Controllers\Controller;
 use Lang;
 use App\Http\Responses\Response;
-use App\Notifications\AskContractorRequestOffer;
+use App\Notifications\AskSupportServiceRequestOffer;
 
 class SupportServiceRequestController extends  Controller
 {
@@ -68,7 +68,11 @@ class SupportServiceRequestController extends  Controller
                $office = $design->offices->find($request->office_id);
                $office->pivot->office_status = 'accepted';
                $office->pivot->update();
-               $this->_saveAcceptSupportServiceRequestByEstateOwnerNotifications($request->office_id,[]);
+               $data = [
+                   'estate_id' => Auth::id()
+               ];
+              
+               $this->_saveAcceptSupportServiceRequestByEstateOwnerNotifications($request->office_id,$data);
                 DB::commit();
                 $message = Lang::get('site.success_update');
                 return $this->respondSuccess($message);
@@ -93,10 +97,14 @@ class SupportServiceRequestController extends  Controller
                 $design->status='rejected';
                 $design->update();
                 $office = $design->offices->find($request->office_id);
+              //  dd($office, $request->office_id);
                 $office->pivot->office_status = 'rejected';
                 $office->pivot->update();
-                $office->save();
-                $this->_saveRejectSupportServiceRequestByEstateOwnerNotifications($request->office_id,[]);
+             //   $office->save();
+                $data = [
+                    'estate_id' => Auth::id()
+                ];
+                $this->_saveRejectSupportServiceRequestByEstateOwnerNotifications($request->office_id,$data);
                 DB::commit();
                 $message = Lang::get('site.success_update');
                 return $this->respondSuccess($message);
@@ -271,18 +279,18 @@ class SupportServiceRequestController extends  Controller
     {
         foreach ($members as $member){
             $notifiable_users = User::find($member);
-            Notification::send($notifiable_users, new AskContractorRequestOffer($estate_id));
+            Notification::send($notifiable_users, new AskSupportServiceRequestOffer($estate_id));
         }
     }
 
     protected function _saveAcceptSupportServiceRequestByEstateOwnerNotifications($member,$data)
     {
             $notifiable_users = User::find($member);
-            Notification::send($notifiable_users, new AcceptContractorRequestByEstateOwner($data));
+            Notification::send($notifiable_users, new AcceptSupportServiceOfficeRequestByEstateOwner($data));
     }
     protected function _saveRejectSupportServiceRequestByEstateOwnerNotifications($member,$data)
     {
             $notifiable_users = User::find($member);
-            Notification::send($notifiable_users, new RejectContractorRequestByEstateOwner($data));
+            Notification::send($notifiable_users, new RejectSupportServiceOfficeRequestByEstateOwner($data));
     }
 }
