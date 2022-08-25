@@ -162,48 +162,7 @@
                                     </v-layout>
                                 </v-container>
                             </div>
-                            <!-- <v-layout row wrap>
-                                            <v-flex  md3 >
-                                                                   <v-autocomplete
-                                    item-text="name"
-                                    item-value="id"
-                                    :items="customers"
-                                     v-model="customer.id2"
-                                     :label="trans('data.name2')"
-                                    v-validate="'required'"
-                                    data-vv-name="name"
-                                    :data-vv-as="trans('data.name2')"
-                                     @change="(event) => updateRegion2(event)"
-                                    :error-messages="errors.collect('name2')"
-                                            required
-                                ></v-autocomplete>
-                                              </v-flex> 
-                                                <v-flex  md3>
-                                                <v-text-field
-                                                v-model="customer.id_card_number2"
-                                                 type="number"
-                                                :label="trans('data.id_card_number')"
-                                            ></v-text-field>
-                                            </v-flex>
-                                               <v-flex  md3>
-                                                   <v-text-field
-                                                    :label="trans('messages.email')"
-                                                    v-model="customer.email2"
-                                                    v-validate="'required|email'"
-                                                    data-vv-name="email"
-                                                    :data-vv-as="trans('messages.email')"
-                                                    :error-messages="errors.collect('email')"
-                                                    required
-                                                ></v-text-field>
-                                                </v-flex>
-                                               <v-flex  md3>
-                                                <v-text-field
-                                                 v-model="customer.mobile2"
-                                                  type="number"
-                                                :label="trans('messages.mobile')"
-                                            ></v-text-field>
-                                            </v-flex> 
-                                        </v-layout> -->
+                           
                             <v-layout row wrap>
                                 <v-flex md3>
                                     <v-btn

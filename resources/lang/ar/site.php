@@ -1,16 +1,15 @@
 <?php
 
 return array (
-  '' => '',
   'active' => 'فعال',
   'add' => 'اضافة',
   'choose_image' => 'أختر الصورة',
-  'complete' => 'قام بالخدمة',
+  'complete' => 'مكتمل',
   'dashb' => 'لوحة التحكم',
   'email' => 'البريد الالكتروني',
   'employee' => 'موظف',
   'employees' => 'الموظفون',
-  'english_name' => 'الاسم الانكليزي',
+  'english_name' => 'الاسم بالانكليزي',
   'exempt' => 'معفى',
   'home' => 'الرئيسية',
   'home_number' => 'رقم المنزل',
@@ -28,8 +27,6 @@ return array (
   'select' => 'اختر',
   'single' => 'وحيد',
   'submit' => 'ارسال',
-  //'success_add' => 'تمت الاضافة بنجاح',
-  //success_delete' => 'تم الحذف',
   'username' => 'اسم المستخدم',
   'users' => 'المستخدمين',
   'yes' => 'نعم',

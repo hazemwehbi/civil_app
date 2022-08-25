@@ -35,7 +35,6 @@ return [
     'Accepted comments' => 'Accepted comments',
     'notes' =>'Comments and recommendations',
     'create_report_type' => 'Creat Report Type',
-   'Details'=>'Details',
    'reportTypeAdd' => 'Add Report Type',
     'review_the_engineering_office_data'=>'Review the engineering office data',
     'notifications'=>'Notifications',

@@ -25,43 +25,7 @@
                                     <v-flex xs12 sm12>
                                         <v-container grid-list-md>
                                             <v-layout row wrap>
-                                                <!-- <v-flex xs12 md4 v-if="ShowAllTask === true">
-                                                    <v-autocomplete
-                                                        item-text="name"
-                                                        item-value="id"
-                                                        :items="project_list"
-                                                        v-model="filters.project_id"
-                                                        :label="trans('messages.project')"
-                                                        @change="filterChanged"
-                                                    ></v-autocomplete>
-                                                </v-flex> -->
-                                                <!-- <v-flex
-                                                    xs12
-                                                    md4
-                                                    v-if="user_filter_type === 'checkbox'"
-                                                >
-                                                    <v-checkbox
-                                                        :label="trans('messages.assigned_to_me')"
-                                                        color="primary"
-                                                        value="1"
-                                                        v-model="filters.assigned_to_me"
-                                                        @change="filterChanged"
-                                                    ></v-checkbox>
-                                                </v-flex> -->
-                                                <!-- <v-flex
-                                                    xs12
-                                                    md4
-                                                    v-else-if="user_filter_type === 'dropdown'"
-                                                >
-                                                    <v-autocomplete
-                                                        item-text="name"
-                                                        item-value="id"
-                                                        :items="usersList"
-                                                        v-model="filters.user_id"
-                                                        :label="trans('messages.members')"
-                                                        @change="filterChanged"
-                                                    ></v-autocomplete>
-                                                </v-flex> -->
+                                              
                                                 <v-flex xs12 md4>
                                                     <v-select
                                                         item-text="name"

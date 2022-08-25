@@ -1021,7 +1021,7 @@
                             <v-list-tile-sub-title>
                                 {{
                                     trans('messages.ask_for_design_request_enginnering_office_notification_text', {
-                                        stage: notification.stage.value,
+                                      //  stage: notification.stage.value,
                                     })
                                 }}
                             </v-list-tile-sub-title>

@@ -1,21 +1,18 @@
 <template>
-    <div>
-        <v-row justify="center">
+    <div justify="center">
             <v-dialog v-model="dialog" persistent max-width="550px">
                 <v-card>
                     <v-card-text>
                         <v-form ref="form" v-model="valid" lazy-validation>
                             <v-container>
-                                <v-row>
-                                    <v-col cols="12" sm="6">
+                                    <div cols="12" sm="6">
                                         <v-datetime-picker
                                             :label="trans('data.visit_datetime')"
                                             :datetime="dead_line_date"
                                             v-model="dead_line_date"
                                         >
                                         </v-datetime-picker>
-                                    </v-col>
-                                </v-row>
+                                    </div>
                                 <v-layout row v-if="enginners.length > 0">
                                     <v-flex xs12 md12>
                                         <v-autocomplete
@@ -109,7 +106,6 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-        </v-row>
     </div>
 </template>
 <style scoped>
@@ -133,6 +129,7 @@ export default {
             loading: false,
             status: '',
             office_id: null,
+            isEdit:false,
             id: '',
             inputs: [
                 {

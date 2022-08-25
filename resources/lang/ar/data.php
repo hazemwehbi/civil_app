@@ -43,25 +43,18 @@ return [
     'warrning_date'=>'تاريخ التنبيه',
     'current_projects'=>'المشاريع الحالية',
     'finished_projects'=>'المشاريع المنتهية',
-    'schedule'=>'الجدولة',
-    'company_name'=>'اسم الشركة',
-    'complated_projects'=>'المشاريع المكتملة',
-    'reset'=>'إعادة ضبط',
+    'reset'=>'إعادة تعيين',
     'startDate' => 'من تاريخ',
     'endDate' => 'الى تاريخ',
     'name'=> 'الاسم',
     'type'=> 'النوع',
-    'mobile'=> 'رقم الهاتف',
+    'mobile'=> 'موبايل',
     'address'=> 'العنوان',
     'subject'=> 'الموضوع',
     'hourly_rate'=> 'معدل الساعة',
     'start_date'=> 'تاريخ البداية',
     'due_date'=> 'تاريخ الانجاز',
     'priority'=> 'الفترة الزمنية',
-    'show_to_customer' =>'',
-    'is_completed' =>'',
-    'show_to_customer' =>'',
-    'show_to_customer' =>'',
     'searchBy' => [
       'id'=>'رقم المشروع',
       'id_card_number' => 'رقم الهوية',
@@ -88,28 +81,18 @@ return [
        'location' => 'بيانات الموقع ',
        'Agency' => 'بيانات الوكيل',
        'tasks' => 'المهام',
-       'category' => 'النوع ',
-       'visitRequest' => 'طلبات الزيارة',
+       'category' => 'النوع',
        'report' => ' بيانات التقرير',
      ],
     'basic_information'=>'البيانات الأساسية',
     'home'=>'الرئيسية',
     'to_do_list'=>'قائمة المهام',
-    'Details'=>'التفاصيل',
-    'review_the_engineering_office_data'=>'مراجعة بيانات المكتب الهندسي',
-    'notifications'=>'الاشعارات',
-    'warnings'=>'التنبيهات',
-    'warning_message'=>'رسالة تنبيه',
-    'warrning_date'=>'تاريخ التنبيه',
-    'current_projects'=>'المشاريع الحالية',
-    'finished_projects'=>'المشاريع المنتهية',
-    'schedule'=>'الجدولة',
+   
     'company_name'=>'اسم الشركة',
     'complated_projects'=>'المشاريع المكتملة',
-    'reset'=>'إعادة ضبط',
 
     'authorization_request_number'=>'رقم طلب التفويض',
-    'license_number'=>'رقم الرخصة',
+    'license_number'=>'رقم الترخيص',
     'beneficiary_id_number'=>'رقم هوية المستفيد',
     'beneficiary_id_type'=>'نوع هوية المستفيد',
     'beneficiary_name'=>'اسم المستفيد',
@@ -121,7 +104,6 @@ return [
     'Notice Date'=>'تاريخ الإشعار',
     'notice_message'=>'رسالة الإشعار',
     'notice_period_in_days'=>'فترة الإشعار بالأيام',
-    'visit_requests'=>'طلبات الزيارات',
     'project_management'=>'إدارة المشاريع',
     'public_bills'=>'الفواتير العامة',
     'statistics'=>'الإحصائيات',
@@ -152,16 +134,15 @@ return [
     'review_owner_data'=>'استعراض بيانات المالك',
     'identification_number'=>'رقم الهوية',
     'first_name'=>'الاسم الأول',
-    'middle_name'=>'الاسم الثاني',
     'last_name'=>'الاسم الأخير',
     'second_name'=>'الاسم الثاني',
     'fourth_name'=>'الاسم الرابع',
     'identity_granting_authority'=>'جهة منح الهوية',
     'identity_granted_date'=>'تاريخ إصدار الهوية',
     'identity_expiration_date'=>'تاريخ انتهاء الهوية',
-    'other_owners'=>' أكثر من مالك',
+    'other_owners'=>'بقية الملاك',
     'agent_data'=>'بيانات الوكيل',
-    'if_existing'=>'إذا كان موجودًا',
+    'if_existing'=>'إن كان موجودًا',
     'agency_number'=>'رقم الوكالة',
     'agent\'s_name'=>'اسم الوكيل',
     'order_type'=>'نوع الطلب',
@@ -169,7 +150,6 @@ return [
     'waste_removal_contractor'=>'مقاول إزالة المخلفات',
     'supervising_office'=>'مكتب الإشراف',
     'project_name'=>'اسم المشروع',
-    'reset'=>'إعادة تعيين',
     'identity_check_choose_the_type_of_building'=>'فحص الهوية اختيار نوع المبنى',
     'widget_data'=>'بيانات القطعة',
     'complete_the_application_data'=>'إكمال بيانات الطلب',
@@ -181,7 +161,7 @@ return [
     'primary_contact_id'=>'معرف جهة الاتصال الأساسية',
     'review_project_data'=>'استعراض بيانات المشروع',
     'project_name'=>'اسم المشروع',
-    'delete'=>'مسح',
+    'delete'=>'حذف',
     'language'=>'اللغة',
     'customer_data'=>'بيانات المالك',
     'id_card_number'=>' رقم بطاقة الهوية',
@@ -204,7 +184,6 @@ return [
     'role_number'=>'عدد الادوار',
     'unit_number'=>'عدد الوحدات',
     'build_rate'=>'نسبة البناء',
-    'name2'=>'المالك الثاني',
     'location_status'=>'حالة الموقع ',
     'location_info'=>'بيانات الموقع',
     'project_info'=>'بيانات المشروع',
@@ -231,7 +210,7 @@ return [
     'accounting'=>'المحاسبة',
     'add_customer'=>'إضافة زبون',
     'reports'=>'التقارير',
-    'institutional'=>'مؤسساتي',
+    'institutional'=>'مؤسسي',
     'business'=>'اعمال',
     'storage'=>'تخزين',
     'assembly'=>'تجميع',
@@ -241,15 +220,13 @@ return [
     //role managment
     'create_role' => 'انشاء دور',
     'edit_role' => 'تعديل دور',
-    'delete_role' => 'مسح دور',
+    'delete_role' => 'حذف دور',
     'view_role' => 'عرض دور ',
     'is_primary'=>'دور رئيسي',
     'required' => 'الحقل مطلوب',
     'enginnering_office_name'=>'اسم المكتب الهندسي',
      'yes' => 'نعم',
      'no' => 'لا',
-
-    //report 
       //report 
       'project_name_and_address'=> 'اسم وعنوان المشروع',
       'owner_name'=>' اسم المالك ',
@@ -263,11 +240,10 @@ return [
      'report_type'=>'نوع التقرير',
      'create_time'=>'تاريخ الانشاء ' ,
      'decription_report'=>'الوصف ',
-     'name_report'=>'الاسم ',
+     'name_report'=>'اسم التقرير',
      'print'=>'طباعة',
      'agency_info'=>'معلومات الوكيل',
      'edit'=>'تعديل',
-     'delete'=>'مسح',
      'view'=>'عرض',
       //
       'close'=>'اغلاق',
@@ -277,8 +253,7 @@ return [
       'add_report'=>'إضافة تقرير',
       'view_report'=>'عرض تقرير',
       'edit_report'=>'تعديل تقرير',
-      'delete_report'=>'مسح تقرير',
-      'project_type'=>'نوع المشروع',
+      'delete_report'=>'حذف تقرير',
       'support_services' => 'مكاتب المساندة',
       'category'=>'الفئة',
       'neighborhood'=>'المجاورة',
@@ -326,7 +301,7 @@ return [
 
       'note'=>'ملاحظة',
 
-      'location_status'=>'خالة الموقع',
+
       'status1'=>'حالة 1',
       'status2'=>'2 حالة',
       'status3'=>'حالة 3',
@@ -383,7 +358,6 @@ return [
 
       
        //bank detail
-
        'bank_details'=>'تفاصيل البنك',
        'account_holder_name'=>'اسم صاحب الحساب',
        'account_no'=>'رقم الحساب',
@@ -408,41 +382,34 @@ return [
        'select_gender'=>'اختر الجنس',
        'male'=>'رجل',
        'female'=>'انثى',
-       'delete_project'=>'مسح مشروع',
+       'delete_project'=>'حذف مشروع',
        'can_not_static_role'=>'لايمكنك اسناد دور اساسي',
        'not_permiision_to_assign_primary_role'=>'لايمكنك اسناد دور رئيسي لمستخدم، يجب ان يطلب الأذن',
 
 
 
        //enginnering office
-       'speciality'=>'الاختصاص',
+        'speciality'=>'الاختصاص',
         'new_employee_off'=>'موظف جديد',
         'all_employees'=>'جميع الموظفين',
         'add_employee_off'=>'اضافة موظف',
         'edit_employee_off'=>'تعديل موظف',
         'employees'=>'الموظفين',
-
-
-        'engennering_request'=>'مهندسيين الطلب',
+        'engennering_request'=>'مهندسين الطلب',
 
         'add_project'=>'اضف مشروع',
         'clear'=>'الغاء',
 
-
-
         ////taskss
-        'tasks'=>'المهام'
-        ,
+        'tasks'=>'المهام',
         'add_task'=>'اضافة مهمة',
-        'delete_task'=>'مسح مهمة',
+        'delete_task'=>'حذف مهمة',
         'edit_task'=>'تعديل مهمة',
-        'view_task'=>'عرض مهمة'
-        ,
+        'view_task'=>'عرض مهمة',
         'task'=>'المهمة',
 
         'id' => 'المعرف',
-
-        'employee_and_Dead_lines'=>'الموظفيين ومواعيدهم',
+        'employee_and_Dead_lines'=>'الموظفين ومواعيدهم',
 
 
         'specialties'=>'التخصصات',
@@ -477,18 +444,6 @@ return [
         'generate_pdf'=>'توليد ملف pdf',
         'reject'=>'رفض',
         'accepted_done'=>'تمت الموافقة',
-        'reject_done'=>'لم تتم الموافقة',
+        'reject_done'=>'تم الرفض',
         'document_info'=>'المستندات'
-        
-
-
-     
-
-
-
-
-
-
-      
-
 ];
