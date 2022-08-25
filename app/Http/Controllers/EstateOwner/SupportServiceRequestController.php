@@ -63,7 +63,7 @@ class SupportServiceRequestController extends  Controller
             $design=DesignRequest::find($request->design_id);
             if($design!=  null){
                 DB::beginTransaction();
-               $design->status='accepted';
+               $design->status='completed';
                $design->update();
                $office = $design->offices->find($request->office_id);
                $office->pivot->office_status = 'accepted';
@@ -94,7 +94,6 @@ class SupportServiceRequestController extends  Controller
             $design=DesignRequest::find($request->design_id);
             if($design!=  null){
                 DB::beginTransaction();
-                $design->status='rejected';
                 $design->update();
                 $office = $design->offices->find($request->office_id);
               //  dd($office, $request->office_id);

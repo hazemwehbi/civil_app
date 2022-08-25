@@ -61,7 +61,7 @@
                                     color="primary"
                                     small
                                     fab
-                                    v-if="props.item.status == 'sent'"
+                                    v-if="props.item.offices.find(val => val.pivot.office_id == getCurrentUser().id).pivot.office_status =='recieved'"
                                     :disabled="!checkActive()"
                                     @click="acceptProject(props.item)"
                                 >
@@ -73,7 +73,7 @@
                                     color="primary"
                                     small
                                     fab
-                                    v-if="props.item.status == 'accepted'"
+                                    v-if="props.item.offices.find(val => val.pivot.office_id == getCurrentUser().id).pivot.office_status =='accepted'"
                                     :disabled="!checkActive()"
                                     @click="viewPrice(props.item)"
                                 >

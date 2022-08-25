@@ -71,7 +71,7 @@ class DesignRequestController extends  Controller
             if($design!=  null){
                 DB::beginTransaction();
                // $design_enginner->price =$request->price;
-               $design->status='accepted';
+               $design->status='completed';
                $design->update();
                foreach($design_enginners as $design_enginner) {
                 $design_enginner->is_agreed=1;
@@ -112,7 +112,6 @@ class DesignRequestController extends  Controller
             $design=DesignRequest::find($request->design_id);
             if($design!=  null){
                 DB::beginTransaction();
-                $design->status='rejected';
                 $design->update();
                foreach($design_enginners as $design_enginner) {
                 $design_enginner->is_rejected=1;

@@ -41,7 +41,7 @@
                                     color="primary"
                                     small
                                     fab
-                                    v-if="props.item.status == 'sent'"
+                                    v-if="props.item.offices.find(val => val.pivot.office_id == getCurrentUser().id).pivot.office_status =='recieved'"
                                     :disabled="!checkActive()"
                                     @click="acceptProject(props.item)"
                                 >
