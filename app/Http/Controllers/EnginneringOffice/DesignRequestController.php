@@ -47,7 +47,7 @@ class DesignRequestController extends  Controller
             $sort_by = 'id';
         }
 
-        $requests = DesignRequest::with('stages','customer','creator','project','offices','designEnginners')->WhereIn('status',['sent','rejected','pending','accepted','in_progress','completed'])
+        $requests = DesignRequest::with('stages','customer','creator','project','offices','designEnginners','designEnginners.media')->WhereIn('status',['sent','rejected','pending','accepted','in_progress','completed'])
         ->where('request_type','design_request')
         ->whereHas('offices',function($q) use ($user){
            $q->where('office_id', $user->id);//->orWhere('office_id', $user->parent_id);

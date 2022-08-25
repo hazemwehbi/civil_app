@@ -327,19 +327,6 @@ export default {
         this.getAllProjectRequest();
     },
     methods: {
-        getColor(status) {
-            if (status == 'new') {
-                return 'red';
-            } else if (status == 'pending') {
-                return 'yellow';
-            } else if (status == 'sent') {
-                return 'blue';
-            } else if (status == 'accepted') {
-                return 'green';
-            } else if (status == 'rejected') {
-                return 'orange';
-            }
-        },
 
         getRequestTypes() {
             const self = this;

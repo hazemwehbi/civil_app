@@ -7,6 +7,15 @@
                     <span class="headline">
                         {{ trans('data.viewPrice')}}
                     </span>
+                                     <v-btn
+                style="background-color: #06706d; color: white"
+                color="darken-1"
+                @click="$refs.myPdfComponent.print()"
+                :loading="loading"
+                :disabled="loading"
+            >
+                {{ trans('data.print') }}
+            </v-btn>
                     <v-spacer></v-spacer>
                     <v-btn flat icon @click="dialog = false"> <v-icon>clear</v-icon> </v-btn>
                 </v-card-title>
@@ -87,7 +96,7 @@ export default {
 
                 self.loading = true;
                 axios
-                    .post('estate_owner/acceptContractorRequestOffer', data)
+                    .post('', data)
                     .then(function (response) {
                         self.loading = false;
                         if (response.data.success === true) {
@@ -114,7 +123,7 @@ export default {
 
                 self.loading = true;
                 axios
-                    .post('estate_owner/rejectContractorRequestOffer', data)
+                    .post('', data)
                     .then(function (response) {
                         self.loading = false;
                         if (response.data.success === true) {

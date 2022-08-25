@@ -10,7 +10,38 @@ export default {
             //     _.get(APP.USER_PERMISSIONS, permissionName, false)
             // );
         },
-
+   getColor(status) {
+            if (status == 'new') {
+                return 'red';
+            } else if (status == 'not_started') {
+                return 'grey';
+            } else if (status == 'pending') {
+                return 'yellow';
+            } else if (status == 'sent') {
+                return 'orange';
+            } else if (status == 'accepted') {
+                return 'green';
+            } else if (status == 'rejected') {
+                return '#c71717';
+            }
+              else if (status == 'recieved') {
+                return 'cyan';
+            }
+            else if (status == 'finished') {
+                return 'rgb(102 151 88)';
+            }
+            else if(status=='completed'){
+                return '#06706d';
+            }
+            else if (status == 'in_progress') {
+                return 'blue';
+            } else if (status == 'on_hold') {
+                return 'red';
+            }
+            else if (status == 'cancelled') {
+                return 'orange';
+            }
+        },
         $checklang() {
             return APP.RTL;
         },

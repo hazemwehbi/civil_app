@@ -39,7 +39,7 @@
                      <tr @click="props.expanded = !props.expanded">
                     <td>
                         <div style="display: inline-flex; padding-left: 30%" align="center">
-                             <v-icon>arrow_drop_down</v-icon>
+                             <v-icon v-if="props.item.offices.length>0">arrow_drop_down</v-icon>
                             <v-btn small fab dark color="success" @click="viewRequest(props.item)">
                                
                                 <v-icon color="white">info</v-icon>
@@ -144,7 +144,7 @@
                 </template>
                      <template v-slot:expand="props">
           <v-card flat>
-            <v-card-text>
+            <v-card-text v-if="props.item.offices.length>0">
                     <table>
                         <tr>
                              <td width="30%"><span>{{ props.item.offices[0].name }}</span></td>
@@ -277,33 +277,6 @@ export default {
         this.getAllProjectRequest();
     },
     methods: {
-           getColor(status) {
-            if (status == 'new') {
-                return 'red';
-            } else if (status == 'pending') {
-                return 'yellow';
-            } else if (status == 'sent') {
-                return 'blue';
-            } else if (status == 'accepted') {
-                return 'green';
-            } else if (status == 'rejected') {
-                return 'yollow';
-            }
-            else if (status == 'recieved') {
-                return 'cyan';
-            }
-            else if (status == 'finished') {
-                return 'lightgreen';
-            }
-            else if(status=='completed'){
-                return '#06706d';
-
-            }
-             else if(status=='in_progress'){
-                return 'orange';
-
-            }
-        },
         viewReport(item){
             this.$router.push({name: 'edit_report', 
                                    params:{

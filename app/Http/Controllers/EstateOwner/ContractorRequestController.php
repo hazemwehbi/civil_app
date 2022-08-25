@@ -62,6 +62,7 @@ class ContractorRequestController extends  Controller
 
     public function acceptContractorRequestOffer(Request $request)
     {
+       // dd($request->all());
         try {
             $design=DesignRequest::find($request->design_id);
             if($design!=  null){

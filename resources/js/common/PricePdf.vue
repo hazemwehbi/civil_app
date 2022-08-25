@@ -34,7 +34,7 @@
     ></v-progress-circular>
         </pdf>
                 </v-card-text>
-                <v-card-actions>
+                <v-card-actions v-if="user_type == 'owner'">
                     <v-spacer></v-spacer>
                     <v-btn color="green darken-1" flat @click="rejectOffer">
                         {{ trans('data.reject') }}
@@ -65,7 +65,11 @@ export default {
             dialog: false,
             loading: false,
             url: null,
-            item: null
+            item: null,
+            user_type:null,
+            office_id:null,
+            reject_link:null,
+            accept_link: null
         };
     },
     mounted() {
@@ -80,22 +84,26 @@ export default {
     },
 
     methods: {
-        openDialog(item){
+       // item,link,office_id,user_type,accept_link,reject_link
+        openDialog(data){
           this.dialog =true
-          this.item = item
-          this.url = item.design_enginners[0].media[0].full_url//.replace('upload','public/upload')
-          console.log(this.url)
+          this.item = data[0]
+          this.url = data[1].original_url//.replace('upload','public/upload')
+         this.office_id= data[2]
+         this.user_type=data[3]
+         this.accept_link =data[4]
+         this.reject_link =data[5]
         },
         agreeOffer(){
             const self = this;
             let data = {
                 design_id: self.item.id,
-                created_by: self.item.design_enginners[0].created_by
+                office_id: this.office_id
+              //  created_by: self.item.design_enginners[0].created_by
             };
-
                 self.loading = true;
                 axios
-                    .post('estate_owner/acceptDesignRequestOffer', data)
+                    .post(self.accept_link, data)
                     .then(function (response) {
                         self.loading = false;
                         if (response.data.success === true) {
@@ -117,12 +125,12 @@ export default {
             const self = this;
             let data = {
                 design_id: self.item.id,
-                created_by: self.item.design_enginners[0].created_by
+                office_id: this.office_id
             };
 
                 self.loading = true;
                 axios
-                    .post('estate_owner/rejectDesignRequestOffer', data)
+                    .post(self.reject_link, data)
                     .then(function (response) {
                         self.loading = false;
                         if (response.data.success === true) {

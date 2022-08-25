@@ -51,7 +51,9 @@ class DesignRequestController extends  Controller
         $childrens=$user->childrenIds($user->id);
         array_push($childrens,$user->id);
         
-        $requests = DesignRequest::with('stages','customer','offices','project','designEnginners','designEnginners.media')->whereIn('customer_id', $childrens);
+        $requests = DesignRequest::with('stages','customer','offices','project','designEnginners','designEnginners.media')
+        ->where('request_type','design_request')
+        ->whereIn('customer_id', $childrens);
 
         $requests = $requests->orderBy($sort_by, $orderby)
                     ->paginate($rowsPerPage);
@@ -63,7 +65,7 @@ class DesignRequestController extends  Controller
 
     public function acceptDesignRequestOffer(Request $request)
     {
-    //   dd($request->all());
+      // dd($request->all());
         try {
             $design_enginners = DesignEnginner::where('created_by',$request->created_by)
             ->where('design_id',$request->design_id)->get();
@@ -158,7 +160,9 @@ class DesignRequestController extends  Controller
 
         try {
 
-            $design=DesignRequest::where('project_id', $request->project_id)->whereIn('status',['sent','new','accepted','in_progress','sent'])->first();
+            $design=DesignRequest::where('project_id', $request->project_id)
+            ->where('request_type','design_request')
+            ->whereIn('status',['sent','new','accepted','in_progress','sent'])->first();
             if($design != null){
               $message='يوجد هناك تصميم تابع لفس المشروع  بمرحلة العمل';
               return  $this->respondSuccess($message);

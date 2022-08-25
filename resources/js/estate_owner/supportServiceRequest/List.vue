@@ -185,7 +185,7 @@ import Create from './Create';
 import Edit from './Edit';
 import view1 from './view1';
 import _ from 'lodash';
-import PricePdf from './PricePdf.vue'
+import PricePdf from '../../common/PricePdf.vue'
 export default {
     components: {
         view1,
@@ -331,7 +331,13 @@ export default {
         },
         viewDesignPrice(item,office_id){
            const self = this;
-            self.$refs.pdfPrice.openDialog(item,office_id)
+           let pdf_data=[
+            item,item.media[0],
+            office_id,'owner',
+            'estate_owner/acceptSupportServiceRequestOffer',
+            'estate_owner/rejectSupoortServiceRequestOffer'
+           ]
+            self.$refs.pdfPrice.openDialog(pdf_data)
         },
         createdDate(date) {
             const current_datetime = new Date(date);
@@ -406,33 +412,7 @@ export default {
             });
         },
 
-        getColor(status) {
-            if (status == 'new') {
-                return 'red';
-            } else if (status == 'pending') {
-                return 'yellow';
-            } else if (status == 'sent') {
-                return 'blue';
-            } else if (status == 'accepted') {
-                return 'green';
-            } else if (status == 'rejected') {
-                return 'yollow';
-            }
-            else if (status == 'recieved') {
-                return 'cyan';
-            }
-            else if (status == 'finished') {
-                return 'lightgreen';
-            }
-            else if(status=='completed'){
-                return '#06706d';
-
-            }
-             else if(status=='in_progress'){
-                return 'orange';
-
-            }
-        },
+      
     },
 };
 </script>

@@ -5,6 +5,7 @@
         <Edit ref="designEdit"></Edit>
         <view1 ref="designView"></view1>
         <AcceptModelDEsignRequest ref="acceptenginneringoffice" />
+        <PricePdf ref="pdfPrice" @refreshTable="refreshTable($event)" />
 
         <v-card class="mt-3">
             <v-data-table
@@ -36,7 +37,31 @@
                             small fab dark color="success" @click="viewDesign(props.item)">
                                 <v-icon color="white">info</v-icon>
                             </v-btn>
-                            <div>
+                            <div  v-if="$hasRole('Engineer')">
+                                 <v-btn
+                                    color="primary"
+                                    small
+                                    fab
+                                    v-if="props.item.offices.find(val => val.pivot.office_id == getCurrentUser().parent_id).pivot.office_status =='recieved'"
+                                    :disabled="!checkActive()"
+                                    @click="acceptProject(props.item)"
+                                >
+                                    <v-icon color="white">check</v-icon>
+                                    <!--{{trans('data.accept')}}-->
+                                </v-btn>
+                                  <v-btn
+                                    color="primary"
+                                    small
+                                    fab
+                                    v-if="props.item.offices.find(val => val.pivot.office_id == getCurrentUser().parent_id).pivot.office_status =='finished'"
+                                    :disabled="!checkActive()"
+                                    @click="viewPrice(props.item)"
+                                >
+                                    <v-icon color="white">visibility</v-icon>
+                                    <!--{{trans('data.accept')}}-->
+                                </v-btn>
+                                </div>
+                            <div v-else>
                                 <v-btn
                                     color="primary"
                                     small
@@ -46,6 +71,17 @@
                                     @click="acceptProject(props.item)"
                                 >
                                     <v-icon color="white">check</v-icon>
+                                    <!--{{trans('data.accept')}}-->
+                                </v-btn>
+                                   <v-btn
+                                    color="primary"
+                                    small
+                                    fab
+                                    v-if="props.item.offices.find(val => val.pivot.office_id == getCurrentUser().id).pivot.office_status =='finished'"
+                                    :disabled="!checkActive()"
+                                    @click="viewPrice(props.item)"
+                                >
+                                    <v-icon color="white">visibility</v-icon>
                                     <!--{{trans('data.accept')}}-->
                                 </v-btn>
                             </div>
@@ -170,12 +206,15 @@ import Edit from './Edit';
 import view1 from './view1';
 import AcceptModelDEsignRequest from './AcceptModelDEsignRequest';
 import _ from 'lodash';
+import PricePdf from '../../common/PricePdf.vue'
+
 export default {
     components: {
         view1,
         Create,
         Edit,
         AcceptModelDEsignRequest,
+        PricePdf
         // View,
     },
     data() {
@@ -267,6 +306,15 @@ export default {
         }, 700),
     },
     methods: {
+        viewPrice(item){
+         const self = this;
+          let pdf_data=[
+            item,item.design_enginners[0].media[0],
+            office_id,'office_eng',
+            null,null
+           ]
+            self.$refs.pdfPrice.openDialog(pdf_data)
+        },
         createdDate(date) {
             const current_datetime = new Date(date);
             return current_datetime.toLocaleDateString('en-US');
@@ -337,34 +385,6 @@ export default {
                         self.$store.commit('hideLoader');
                     }
                 });
-        },
-
-       getColor(status) {
-            if (status == 'new') {
-                return 'red';
-            } else if (status == 'pending') {
-                return 'yellow';
-            } else if (status == 'sent') {
-                return 'blue';
-            } else if (status == 'accepted') {
-                return 'green';
-            } else if (status == 'rejected') {
-                return 'yollow';
-            }
-              else if (status == 'recieved') {
-                return 'cyan';
-            }
-            else if (status == 'finished') {
-                return 'lightgreen';
-            }
-            else if(status=='completed'){
-                return '#06706d';
-
-            }
-             else if(status=='in_progress'){
-                return 'orange';
-
-            }
         },
 
         createReport(design_enginners) {

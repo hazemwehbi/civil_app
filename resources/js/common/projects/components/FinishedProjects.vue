@@ -493,7 +493,7 @@ export default {
                     });
             }
         },
- getColor(status) {
+ /*getColor(status) {
             if (status == 'not_started') {
                 return 'grey';
             } else if (status == 'in_progress') {
@@ -505,7 +505,7 @@ export default {
             } else if (status == 'cancelled') {
                 return 'orange';
             }
-        },
+        },*/
          getprogress(status) {
             if (status == 'not_started') {
                 return this.projectProgress(5,1)

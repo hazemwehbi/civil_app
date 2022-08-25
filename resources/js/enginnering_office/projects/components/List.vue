@@ -534,19 +534,6 @@ export default {
                     });
             }
         },
-        getColor(status) {
-            if (status == 'not_started') {
-                return 'grey';
-            } else if (status == 'in_progress') {
-                return 'blue';
-            } else if (status == 'on_hold') {
-                return 'red';
-            } else if (status == 'completed') {
-                return 'green';
-            } else if (status == 'cancelled') {
-                return 'orange';
-            }
-        },
         getprogress(status) {
             if (status == 'not_started') {
                 return this.projectProgress(5, 1);

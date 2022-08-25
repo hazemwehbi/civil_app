@@ -93,19 +93,6 @@ export default {
 
             // self.$refs.projectEdit.edit(id);
         },
-         getColor(status) {
-            if (status == 'not_started') {
-                return 'grey';
-            } else if (status == 'in_progress') {
-                return 'blue';
-            } else if (status == 'on_hold') {
-                return 'red';
-            } else if (status == 'completed') {
-                return 'green';
-            } else if (status == 'cancelled') {
-                return 'orange';
-            }
-        },
                 toggleFavorite(project) {
             if (project.is_favorited) {
                 return 'yellow darken-2';
