@@ -11,6 +11,7 @@
     "format": "prettier --write 'resources/**/*.{css,js,vue}'"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.8",
     "axios": "^0.21",
     "bootstrap": "^4.6.0",
     "bootstrap-sass": "^3.3.7",
@@ -19,13 +20,14 @@
     "laravel-mix": "^6.0.6",
     "lodash": "^4.17.19",
     "popper.js": "^1.16.1",
-    "postcss": "^8.1.14",
+    "postcss": "^8.4.16",
     "prettier": "1.16.4",
     "resolve-url-loader": "5.0.0",
     "sass": "1.32.6",
     "sass-loader": "^11.0.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
+    "tailwindcss": "^3.1.8",
     "vue": "^2.6.12",
     "vue-loader": "15.9.8",
     "vue-template-compiler": "^2.6.12"

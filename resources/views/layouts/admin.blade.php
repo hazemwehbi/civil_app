@@ -328,6 +328,11 @@ div[aria-required=true].v-autocomplete .v-label::after {
     overflow-y: scroll;
     resize: vertical;
 }
-
+.v-card{
+    width: 100%
+ }
+ .v-progress-circular{
+    margin: auto
+ }
 </style>
 </html>

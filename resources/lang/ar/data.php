@@ -10,6 +10,7 @@ return [
     'delivery_request_num' => 'رقم طلب الاستلام',
     'day' => 'اليــوم',
     'date' => 'التاريخ',
+    'guardian_name'=>'اسم الوصي',
     'contractor_actor' => 'مندوب المقاول',
     'signature'=>'التوقيع',
 'viewPrice' =>'عرض السعر',
