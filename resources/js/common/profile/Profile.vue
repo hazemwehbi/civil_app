@@ -1,5 +1,5 @@
 <template>
-    <div class="page_wrap_vue pa-3">
+    <div class="page_wrap_vue">
         <transition name="fade"> <router-view></router-view> </transition>
     </div>
 </template>

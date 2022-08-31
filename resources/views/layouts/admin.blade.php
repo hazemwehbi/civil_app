@@ -32,6 +32,7 @@
       
         APP.RTL = @if(in_array(config('app.locale'), config('constants.langs_rtl'))) true @else false @endif;
         APP.FIRST_DAY_OF_WEEK = '{{$first_day_of_week}}';
+        APP.LANGUAGES = {!! json_encode(Config::get('languages'), true) !!};
            @auth
              window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
 
@@ -117,7 +118,8 @@
                     @endforeach
                 </v-list> -->
         <!--    </v-navigation-drawer>-->
-            <v-toolbar style="background-color:#06706d;z-index: 100" app dark flat fixed dense height="100"
+  
+            <v-toolbar v-if='!$vuetify.breakpoint.xsOnly' style="background-color:#06706d;z-index: 100" app dark flat fixed dense height="100"
                 :clipped-left="true">
                 <img src="{{asset('img/logo.png')}}"  alt="logo" width="100" style="border-radius:20px;" />
                 <v-layout >
@@ -171,11 +173,6 @@
 
                      </v-menu>
                     
-
-                     <v-menu>
-                
-
-                    </v-menu>
                     <v-menu
                         attach
                         offset-y
@@ -301,7 +298,15 @@ localStorage.setItem("currentLange","{{ app()->getLocale() }}");
    
 </body>
 <style type="text/css">
-
+/* show when screen is at least 600px wide */
+@media (min-width: 600px) {
+  .large {
+    display: block;
+  }
+  .mobile{
+    display:none;
+  }
+}
 div[aria-required=true].v-input .v-label::after {
     content: " *";
     color: red;

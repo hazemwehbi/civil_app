@@ -52,6 +52,9 @@ export default {
             console.log(APP.CURRENT_USER)
             return APP.CURRENT_USER;
         },
+        getLanguages(){
+           return APP.LANGUAGES
+        },
         checkActive() {
             return APP.CURRENT_USER.active !=null;
         },

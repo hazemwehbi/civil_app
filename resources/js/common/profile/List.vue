@@ -1,6 +1,11 @@
 <template>
- <div class="z-10 inset-0 mx-auto w-3/4">
-    <div class="flex items-stretch md:items-center justify-center min-h-full text-center md:px-2 lg:px-4">
+<div>
+    <MobileHeader v-if="$vuetify.breakpoint.xsOnly" :drawer="drawer" />
+<ProfileMobile v-if="$vuetify.breakpoint.xsOnly">
+  <v-icon color="white" @click.stop="drawer = !drawer">fas fa-list</v-icon>
+  </ProfileMobile>
+ <div v-else class="z-10 inset-0 mx-auto w-3/4">
+    <div  class="flex items-stretch md:items-center justify-center min-h-full text-center md:px-2 lg:px-4">
       <div class="flex text-base text-left transform transition w-full md:max-w-2xl md:px-4 md:my-8 lg:max-w-4xl">
         <div class="w-full relative flex items-center bg-white px-4 pt-14 pb-8 overflow-hidden shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8">
           <!--<button type="button" class="absolute top-4 right-4 text-gray-400 hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6 lg:top-8 lg:right-8">
@@ -191,11 +196,19 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 <script>
+import ProfileMobile from  './components/ProfileMobile.vue'
+import MobileHeader from '../../common/MobileHeader'
 export default {
+    components:{
+ProfileMobile,
+MobileHeader
+    },
     data() {
         return {
+          drawer: null,
             data: [],
             profileImg: [],
         //    enginnering_type: '',
