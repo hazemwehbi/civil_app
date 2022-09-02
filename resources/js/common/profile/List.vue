@@ -1,9 +1,7 @@
 <template>
 <div>
-    <MobileHeader v-if="$vuetify.breakpoint.xsOnly" :drawer="drawer" />
-<ProfileMobile v-if="$vuetify.breakpoint.xsOnly">
-  <v-icon color="white" @click.stop="drawer = !drawer">fas fa-list</v-icon>
-  </ProfileMobile>
+    
+<ProfileMobile v-if="$vuetify.breakpoint.xsOnly" :data="data"/>
  <div v-else class="z-10 inset-0 mx-auto w-3/4">
     <div  class="flex items-stretch md:items-center justify-center min-h-full text-center md:px-2 lg:px-4">
       <div class="flex text-base text-left transform transition w-full md:max-w-2xl md:px-4 md:my-8 lg:max-w-4xl">
@@ -21,22 +19,21 @@
               <img  v-if="data.avatar_url"
                                     :src="data.avatar_url"  class="object-center object-cover mx-auto rounded-full w-40 h-40 mt-4">
             <div v-else class="mx-auto rounded-full w-40 h-40 mt-3 bg-gray-300 text-center text-7xl pt-10">
-           {{data.name[0]}}
+           {{data.name?data.name[0]:''}}
            </div>
             <h2 class="text-2xl font-bold text-gray-900 text-center mt-3">{{ data.name }}</h2>
             <h3 id="information-heading" class="font-bold text-gray-900 text-center">{{ trans('messages.guardian_name') }}</h3>
-                <table class="border-collapse table-auto w-full text-sm">
-  <tbody class="dark:bg-slate-800">
-    <tr>
-      <td class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ trans('data.id_card_number') }}:</td>
-      <td class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ data.id_card_number}}</td>
-    </tr>
-    <tr>
-      <td class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ trans('messages.email') }}:</td>
-      <td class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ data.email }}</td>
-      </tr>
-  </tbody>
-                </table>
+           
+  <div class="dark:bg-slate-800 w-full text-sm flex-col">
+    <div class="flex justify-between flex-wrap">
+      <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400 w-1/2">{{ trans('data.id_card_number') }}:</div>
+      <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400 w-1/2">{{ data.id_card_number}}</div>
+    </div>
+    <div class="flex justify-between flex-wrap">
+      <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400 w-1/2">{{ trans('messages.email') }}:</div>
+      <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400 w-1/2">{{ data.email }}</div>
+      </div>
+  </div>
                  <!-- <fieldset class="mt-8 mb-4 absolute bottom-4 w-80">
                       <legend class="sr-only">Choose a color</legend>
                       <span class="flex items-center space-x-3">
@@ -116,7 +113,7 @@
                   <v-tabs
       color="accent-4"
     >
-      <v-tab><h3 id="information-heading">{{trans('messages.personal_data')}}</h3></v-tab>
+      <v-tab active-class>{{trans('messages.personal_data')}}</v-tab>
       <v-tab>{{trans('data.document_info')}}</v-tab>
 
       <v-tab-item
@@ -126,7 +123,7 @@
   <tbody class="bg-white dark:bg-slate-800">
     <tr>
       <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ trans('messages.date_of_birth') }}:</td>
-      <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ data.birth_date | formatDate }}fldgfldg</td>
+      <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ data.birth_date | formatDate }}</td>
     </tr>
     <tr>
       <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ trans('messages.gender') }}:</td>
@@ -154,12 +151,12 @@
       </v-tab-item>
       <v-tab-item>
      
-<div class="container mx-auto space-y-2 lg:space-y-0 lg:gap-2 lg:grid lg:grid-cols-2">
+<div v-if="data.signature" class="container mx-auto space-y-2 lg:space-y-0 lg:gap-2 lg:grid lg:grid-cols-2">
     <div class="w-full rounded hover:shadow-2xl">
         <img :src="data.signature"
             alt="image">
     </div>
-    <div class="w-full rounded hover:opacity-50">
+    <div v-if="data.signature" class="w-full rounded hover:opacity-50">
         <img :src="data.logo"
             alt="image">
     </div>
@@ -170,11 +167,7 @@
 
                                    
               </section>
-              <!-- <section v-if="data.signature" aria-labelledby="options-heading" class=" mx-auto flex mt-4">
-        <span>{{ trans('data.signature') }}:</span>        
-<img  :src="data.signature" height="150" class="max-h-40" />
-
-</section>-->
+   
               <section aria-labelledby="options-heading" class="mt-2 mx-auto">
               
                   <div class="flex">
@@ -208,7 +201,6 @@ MobileHeader
     },
     data() {
         return {
-          drawer: null,
             data: [],
             profileImg: [],
         //    enginnering_type: '',

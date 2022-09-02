@@ -1,110 +1,140 @@
 <template>
-<div>
-        <v-navigation-drawer
-        v-model="drawer"
-        absolute
-        temporary
-      >
-        <v-list class="pa-1">
-          <v-list-tile avatar>
-             <v-list-tile-content>
-              <v-list-tile-title>{{getCurrentUser().name}}</v-list-tile-title>
-            </v-list-tile-content>
-            <v-list-tile-avatar class="min-width-20 mt-7 ">
-             <img src="img/logo.png"  alt="logo" width="150" style="border-radius:20px;" />
-            </v-list-tile-avatar>
-  
-          </v-list-tile>
-        </v-list>
-  
-        <v-list class="pt-0" dense>
-          <v-divider></v-divider>
-  
-          <v-list-tile
-          >
-            <v-list-tile-action>
-              <v-icon>kfld</v-icon>
-            </v-list-tile-action>
-  
-            <v-list-tile-content>
-              <v-list-tile-title>
-              <notification></notification>
-              {{trans('data.notifications')}}
-              </v-list-tile-title>
-              <v-list-tile-title>
-                <router-link to="/" style="color:white;">
-                    {{trans('data.home')}}
-                </router-link> 
-              </v-list-tile-title>
-               <v-list-tile-title>
-                <router-link to="/" style="color:white;">
-                    {{trans('data.to_do_list')}}
-                </router-link> 
-              </v-list-tile-title>
-              <v-list-tile-content>
-                <v-menu 
-                attach
-                   offset-y
-                   bottom
-                   center
-                   nudge-bottom="14"
-                   transition="slide-x-transition"
-                   >
-                    <v-btn flat slot="activator">
-                       <b style="font-size:14px;">
+<div class="fixed w-full z-30">
+
+    <v-toolbar dense style="background: linear-gradient(45deg, #119f9b, #06706d);box-shadow: none;height:60px;">
+       <v-menu 
+       :close-on-content-click="false"
+        :nudge-width="200"
+         offset-y
+          style="margin-inline-start: 10px;width:100%;left:auto">
+      <template v-slot:activator="{ on }">
+      <v-toolbar-side-icon
+      color="#fff"
+          v-on="on">
+          </v-toolbar-side-icon>
+          <notification color="#fff" colorIcon="#fff" class="mx-1" ref="notifications"></notification>
+  </template>
+      <v-list>
+        <v-list-tile
+          @click="$router.push('/')"
+        >
+          <v-list-tile-title>
+            {{trans('data.home')}} 
+          </v-list-tile-title>
+        </v-list-tile>
+         <v-list-tile
+          @click="$router.push('/to-do')"
+        >
+          <v-list-tile-title>
+            {{trans('data.to_do_list')}}
+          </v-list-tile-title>
+        </v-list-tile>
+        
+            <v-list-group
+              no-action
+            >
+              <template v-slot:activator>
+                <v-list-tile>
+                  <v-list-tile-content>
+                    <v-list-tile-title style="font-size:14px;  margin-top:15px">
                            <v-icon>language</v-icon>
-                           {{trans('data.language')}}
-                           </b>
-                   </v-btn> 
-                  
-               
-                   <v-list>
-                       <v-list-tile style="background: darkgrey;"  @click="save()"> 
-                           <v-list-tile-title>
-                           <span :class="'flag-icon flag-icon-'+language=='ar'?'sa':'us'"></span> {{ language }}
+                           <span class="mx-1">{{trans('data.language')}}</span>
                            </v-list-tile-title>
-                       </v-list-tile>
-                       <v-list-tile v-for="(lang,key) in getLanguages()" :key="key" class="min-h-max">
-                           <v-list-tile-title>
-                                   <div v-if="key!=language" @click='change(lang)' >
-                                    <span :class="'pa-0 ma-0 max-h-full w-full flag-icon flag-icon-'+lang['flag-icon']"></span>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </template>
+  
+              <v-list-tile
+               v-for="(lang,key) in getLanguages()" 
+               :key="key"
+               @click='change(key)' 
+               class="mx-4"
+              >
+                <v-list-tile-content class="py-2">
+                  <v-list-tile-title>
+                    <div v-if="key!=language">
+                                    <span :class="'pa-0 ma-0 max-h-full flag-icon flag-icon-'+lang['flag-icon']"></span>
                                      {{lang['display']}}
                                     </div>
+                  </v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-group>
+      <v-list-group
+              no-action
+            >
+              <template v-slot:activator>
+                <v-list-tile>
+                  <v-list-tile-content>
+                    <v-list-tile-title style="font-size:14px;  margin-top:15px">
+                                {{trans('data.basic_information')}}
+                             &nbsp;&nbsp;
+                            <avatar :members="getCurrentUser()[0]" :tooltip="true">
+                            </avatar>&nbsp;
+                            <v-icon dark medium>more_vert</v-icon>
                            </v-list-tile-title>
-                       </v-list-tile>
-                   </v-list>
-                  
+                  </v-list-tile-content>
+                </v-list-tile>
+              </template>
+  
+              <v-list-tile
+              @click="$router.push({ name: 'profile.list' })"
+              >
+                <v-list-tile-content class="py-2">
+                  <v-list-tile-title>
+                    <v-icon> account_circle </v-icon>
+                                    {{trans('messages.profile')}}
+                  </v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-list-tile @click="logoutUser">
+                                <v-list-tile-title>
+                                    <v-icon> directions_walk </v-icon>
+                                    {{trans('messages.logout')}}
+                                </v-list-tile-title>
+                            </v-list-tile>
+            </v-list-group>
+      </v-list>
+    </v-menu>
 
 
-                </v-menu>
-              </v-list-tile-content>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-navigation-drawer>
+      <v-spacer></v-spacer>
+
+      <div>
+         <img src="img/logo.png" class="rounded-lg"  alt="logo" width="150" />
+      </div>
+    </v-toolbar>
+      
       </div>
 </template>
 
 <script>
 export default {
-  props:{
-drawer: null
-  },
 data(){
 return {
 language: null,
+  items: [
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me 2' },
+      ],
 }
 },
 created(){
      self.language = localStorage.getItem('currentLange')?localStorage.getItem('currentLange'):self.getLanguages().ar
 },
 methods:{
+  logoutUser(){
+   axios.post('/logout').then(r => {
+                window.location.href = '/login';
+            });
+  },
     change(lang){
-        ///lang/ar
         localStorage.setItem("currenpathaftercjange",localStorage.getItem("currenpath"));
         localStorage.setItem("currentLange",lang);
         localStorage.removeItem("currenpath");
-       // window.location.href = "lang/"+lang; //causes the browser to refresh and load the requested url
+        window.location.href = "lang/"+lang;
         language= lang;
         console.log(lang)
         }
@@ -112,6 +142,11 @@ methods:{
 }
 </script>
 
-<style>
-
+<style scoped>
+>>> .v-toolbar__content{
+  height: 100%!important;
+}
+>>> .v-list__tile__title{
+  @apply min-h-full
+}
 </style>

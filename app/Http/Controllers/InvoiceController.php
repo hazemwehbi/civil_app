@@ -92,9 +92,9 @@ class InvoiceController extends Controller
         $data = ['transactions' => $transactions];
 
         if (!empty($project_id)) {
-            $project = Project::with('customer.currency')->find($project_id);
-            $currency = !empty($project->customer) ? $project->customer->currency : System::getBusinessCurrency('currency_id');
-            $data['currency'] = $currency;
+          //  $project = Project::with('customer.currency')->find($project_id);
+          //  $currency = !empty($project->customer) ? $project->customer->currency : System::getBusinessCurrency('currency_id');
+          //  $data['currency'] = $currency;
         }
 
         return $this->respond($data);

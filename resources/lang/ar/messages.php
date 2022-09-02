@@ -135,7 +135,7 @@ return [
     "linkedin" => "تابعني على",
     "facebook" => "فيس بوك",
     "twitter" => "تغريد",
-    "gender" => "جنس",
+    "gender" => "الجنس",
     "note" => "ملاحظة",
     "male" => "الذكر",
     "female" => "إناثا",

@@ -14,13 +14,13 @@
                     </v-stepper-step>
                     <v-divider></v-divider>
 
-                    <v-stepper-step step="3" :complete="e1 > 3" color="teal">
+                    <!--<v-stepper-step step="3" :complete="e1 > 3" color="teal">
                         {{ trans('data.document_info') }}
                     </v-stepper-step>
 
-                    <v-divider></v-divider>
+                    <v-divider></v-divider>-->
 
-                    <v-stepper-step step="4" :complete="e1 > 4" color="teal">
+                    <v-stepper-step step="3" :complete="e1 > 3" color="teal">
                         {{ trans('data.project_info') }}
                     </v-stepper-step>
                 </v-stepper-header>
@@ -66,7 +66,7 @@
                         </v-layout>
                     </v-stepper-content>
 
-                    <v-stepper-content step="3">
+                    <!--<v-stepper-content step="3">
                         <Document @next="getDocumentData($event)" ref="documentInfo" />
                         <v-layout row pt-3 justify-center>
                             <v-btn color="teal" small outline @click="e1 = 2">
@@ -82,9 +82,9 @@
                                 </v-btn>
                             </div>
                         </v-layout>
-                    </v-stepper-content>
+                    </v-stepper-content>-->
 
-                    <v-stepper-content step="4">
+                    <v-stepper-content step="3">
                         <ProjectInfo @next="getProjectData($event)" ref="projectInfo" />
                         <v-layout row pt-3 justify-center>
                             <v-btn color="teal" small outline @click="e1 = 3">

@@ -126,7 +126,7 @@
         <!-- /tab -->
         <v-layout row pt-3>
             <v-flex xs12 sm12>
-                <v-card class="elevation-3">
+                <v-card class="elevation-3 w-full">
                     <v-card-text>
                         <v-container grid-list-md>
                                 <v-layout wrap>
@@ -137,7 +137,7 @@
                                                 :total-items="total_items"
                                                 :loading="loading"
                                                 :items="projectData"
-                                                class="elevation-3"
+                                                class="elevation-3 w-full"
                                             >
                                             
                                             <template slot="items" slot-scope="props">

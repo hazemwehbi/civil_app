@@ -367,7 +367,6 @@ export default {
         },
         nextStep() {
             const self = this;
-            console.log(self.location);
             //  alert(JSON.stringify(self.location))
             this.$emit('next', this.location);
         },
@@ -383,7 +382,6 @@ export default {
 
             self.location = data;
 
-            console.log(self.location);
         },
     },
 };

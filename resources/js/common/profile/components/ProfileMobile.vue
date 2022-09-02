@@ -4,86 +4,88 @@
     :class="mobile?'':'elevation-1 mx-auto my-2'"
   >
     <div class="header">
-      <slot />
-      <div class="header-bar row mx-auto ">
-        <v-btn 
-        to=""
-        icon>
-        <v-icon
-          color="#fff"
-          size="24"
-          class="col-2"
-        >
-          mdi-square-edit-outline
-        </v-icon>
-        </v-btn>
-        <span 
-        :class="$vuetify.breakpoint.mdAndDown? 'col-9' : 'col-10'"
-        class="text-center pa-0"
-        >
-        {{trans('data.basic_information')}}
-        </span>
+     
+      <div class="header-bar mx-auto ">
+        <div  class="text-center w-full text-white pa-0 col-9 text-2xl">
+      {{trans('data.basic_information')}}
       </div>
-      <img
+      </div>
+      <img v-if="getCurrentUser().avatar_url"
         class="profile-img mx-auto"
         src="svg/profile.svg"
       />
+      <div class="profile-img text-center pt-12 text-4xl text-white bg-slate-300 mx-auto">{{getCurrentUser().name[0]}}</div>
     </div>
-    <div class="mt-8 shadow-md rounded-2xl bg-white pa-3">
+    <div class="shadow-md rounded-2xl bg-white pa-3" style="margin-top: 5rem; width: 90%;">
     <span class="personal-title">{{trans('messages.personal_data')}}</span>
     <v-container class="person-data">
-      <div class="columns-2">
-        <div class="my-2">
-          {{trans('data.name')}}
+        <div class="my-2 flex justify-between whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+<div>{{trans('data.name')}}</div>    
+     <div> {{data.name}}</div>
         </div>
-        <div class="my-2">
-          {{trans('data.email_address')}}
+        <div class="my-2 flex justify-between whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+        <div>  {{trans('data.email_address')}}</div>
+        <div>{{data.email}}</div>
         </div>
-        <div class="my-2">
-          {{trans('data.mobile')}}
+        <div class="my-2 flex justify-between whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+       <div> {{trans('data.id_card_number')}}</div>
+       <div>{{data.id_card_number}}</div>
         </div>
-         <div class="my-2">
-          {{getCurrentUser().name}}
+        <div class="my-2 flex justify-between whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+        <div>  {{trans('data.mobile')}}</div>
+       <div>{{data.mobile}}</div>
         </div>
-          <div class="my-2">
-          {{getCurrentUser().email}}
+         <div class="my-2 flex justify-between whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+       <div>   {{trans('messages.date_of_birth')}}</div>
+       <div>{{ data.birth_date | formatDate }}</div>
         </div>
-        <div class="my-2">
-          {{getCurrentUser().mobile}}
+        <div class="my-2 flex justify-between whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+        <div>  {{trans('messages.gender')}}</div>
+       <div>{{data.gender}}</div>
         </div>
+            <div class="my-2 flex justify-between whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+        <div>  {{trans('messages.home_address')}}</div>
+       <div>{{data.home_address}}</div>
         </div>
+             <div class="my-2 flex justify-between whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+         <div> {{trans('messages.speciality')}}</div>
+       <div>{{ data.specialty != null ?  data.specialty.name : ''  }}</div>
+        </div>
+        <div class="container mx-auto space-y-2 lg:space-y-0 lg:gap-2 lg:grid lg:grid-cols-2">
+    <div v-if="data.signature" class="w-full rounded hover:shadow-2xl">
+        <img :src="data.signature"
+            alt="image">
+    </div>
+    <div v-if="data.logo" class="w-full rounded hover:opacity-50">
+        <img :src="data.logo"
+            alt="image">
+    </div>
+</div>
+   
+     <div class="flex">
+                  <button  v-if="true"
+                   @click="$router.push({ name: 'profile.edit', params: { id: data.id } })"
+                   class="mt-6 w-full bg-indigo-600 border border-transparent rounded-md py-2 px-8 mx-2 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                   >
+                     {{ trans('messages.edit') }}</button>
+                      <button  
+                   @click="$router.go(-1)"
+                   class="mt-6 w-full bg-gray-600 border border-transparent rounded-md py-2 px-8 mx-2 flex items-center justify-center text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                   >{{ trans('messages.back') }}
+                    </button>
+                    </div>
     </v-container>
   </div>
-    <div
-      v-if="validate"
-      class="text-right full-width pr-10 mt-6 mb-10"
-    >
-      <v-icon
-        color="#fff"
-        class="icon-validate ml-3"
-      >
-        mdi-account-check
-      </v-icon>
-      <span class="validate-text">تم الحقق من الحساب</span>
-    </div>
-    <cp-button
-      v-if="validate"
-      :label="trans('messages.edit')"
-      background-color="#37D39B"
-      class="mx-auto mt-3 mb-2"
-      to=""
-    />
+ 
   </div>
 </template>
 
 <script>
-import CpButton from './CpButton'
-
 export default {
-  components: {
-    CpButton
+
+  props:{
+  data:null
   },
-  layout: 'cp/default',
   data () {
     return {
       validate: false,
@@ -98,20 +100,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.btns-list{
-  width: 80%;
-}
-.validate-text{
 
-  color: #37d39b;
-}
 span{
   color: white;
 }
   .header{
     width:100%;
-    height:192px;
-    background: linear-gradient(45deg, #3498DB, #2980B9);
+    height:9rem;
+    margin-top: 60px;
+        background: linear-gradient(45deg, #119f9b, #06706d);
     @apply from-slate-300;
   }
    .header:before {
@@ -123,12 +120,11 @@ span{
    }
   .profile-img{
     position:absolute;
-    width: 158px;
-    height: 158px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
-    top: 91px;
     border: 4px solid #37D39B;
-    right: calc(50% - 79px)
+    right: calc(50% - 65px)
   }
   .header-bar{
     color: var(--v-anchor-base);

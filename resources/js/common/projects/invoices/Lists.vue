@@ -64,7 +64,7 @@
                                     </span>
                                 </v-flex>
                                 <v-flex xs12 sm3 md3>
-                                    <span class="subheading font-weight-medium success--text">
+                                    <span class="subheading font-weight-medium success--text" v-if="currency">
                                         {{ trans('messages.paid_amount') }}:
                                         {{ paid_amount | formatMoney(currency.symbol) }}
                                     </span>
@@ -123,7 +123,7 @@
                 :total-items="total_items"
                 :loading="loading"
                 :items="items"
-                class="elevation-3"
+                class="elevation-3 w-full"
             >
                 <template slot="headerCell" slot-scope="props">
                     <span v-if="props.header.value == 'invoice_number'">
@@ -253,7 +253,7 @@
                         ></status-label>
                     </td>
                     <td>{{ props.item.due_date | formatDate }}</td>
-                    <td>{{ props.item.total | formatMoney(currency.symbol) }}</td>
+                    <td v-if="currenc">{{ props.item.total | formatMoney(currency.symbol) }}</td>
                 </template>
             </v-data-table>
             <!-- /dataTable -->

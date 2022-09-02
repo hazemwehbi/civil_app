@@ -62,7 +62,8 @@
 <div id="admin">
     <template>
         <v-app id="inspire">
-         <!--   <v-navigation-drawer
+            
+         {{--   <v-navigation-drawer
                 class="blue-grey lighten-5"
                 app
                 fixed
@@ -116,9 +117,9 @@
                             <v-divider></v-divider>
                         @endif
                     @endforeach
-                </v-list> -->
+                </v-list> --}}
         <!--    </v-navigation-drawer>-->
-  
+            <div>
             <v-toolbar v-if='!$vuetify.breakpoint.xsOnly' style="background-color:#06706d;z-index: 100" app dark flat fixed dense height="100"
                 :clipped-left="true">
                 <img src="{{asset('img/logo.png')}}"  alt="logo" width="100" style="border-radius:20px;" />
@@ -150,8 +151,6 @@
                                 {{trans('data.language')}}
                                 
                         </v-btn> 
-                       
-                    
                         <v-list>
                             <v-list-tile style="background: darkgrey;"  @click="save()"> 
                                 <v-list-tile-title>
@@ -212,7 +211,8 @@
                      </v-menu>
        
             </v-toolbar>
-
+            <mobileheader v-if="$vuetify.breakpoint.xsOnly" />
+            </div>
             <v-content>
                 <transition name="fade">
                     <router-view></router-view>
@@ -289,9 +289,6 @@ localStorage.setItem("currentLange","{{ app()->getLocale() }}");
         localStorage.removeItem("currenpath");
         window.location.href = "lang/"+lang; //causes the browser to refresh and load the requested url
         language= lang;
-
-       
-
           //  alert(lang)
         }
 </script>

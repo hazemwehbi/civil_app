@@ -7,7 +7,7 @@
                     <template slot="badge" v-if="notifications_count > 0">
                         <span> {{ notifications_count }} </span>
                     </template>
-                    <v-icon dark medium>notifications</v-icon>
+                    <v-icon :color="colorIcon" medium>notifications</v-icon>
                 </v-badge>
             </v-btn>
             
@@ -1149,6 +1149,9 @@ import TaskShow from '../projects/tasks/Show';
 export default {
     components: {
         TaskShow,
+    },
+    props:{
+colorIcon: null
     },
     data() {
         return {

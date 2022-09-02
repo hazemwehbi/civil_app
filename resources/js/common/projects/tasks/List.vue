@@ -301,7 +301,6 @@ export default {
                     var tasks = [];
                     //  if (self.view_style == 'grid') {
                     tasks = response.data.tasks;
-                    console.log(response.data.tasks);
                     //} else {
                     //   tasks = response.data.tasks.data;
                     // }
@@ -310,8 +309,6 @@ export default {
                     self.pagination.totalItems = response.data.tasks.total;
 
                     self.taskLists = _.concat(self.taskLists, tasks);
-
-                    console.log(self.taskLists);
 
                     self.url = _.get(response, 'data.next_page_url', null);
                     self.projectCategories = response.data.project_categories;

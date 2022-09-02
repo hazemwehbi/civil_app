@@ -13,6 +13,12 @@
                     <v-divider></v-divider>
                     <v-card-text>
                         <v-container grid-list-md>
+                            <div v-for="(file,index) in media" :key="index" class="container mx-auto space-y-2 lg:space-y-0 lg:gap-2 lg:grid lg:grid-cols-2">
+    <div class="w-full rounded hover:shadow-2xl">
+        <img :src="file.original_url"
+            alt="image" class="max-w-40">
+    </div>
+</div>
                             <v-form ref="form" v-if="isEdit">
                                 <v-layout row wrap>
                                     <v-flex xs12 md12 v-show="can_file_upload">
@@ -64,10 +70,10 @@ export default {
     components: {
         Dropzone,
     },
-    props: ['customerId'],
+    props: ['customerId','media'],
     data() {
         return {
-            isEdit: false,
+            isEdit: true,
             medias: [],
             tempMedia: [],
             dropzone: null,

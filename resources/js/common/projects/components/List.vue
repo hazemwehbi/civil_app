@@ -7,7 +7,7 @@
         <v-container grid-list-md>
             <v-layout row pt-3>
                 <v-flex xs12 sm12>
-                    <v-card class="elevation-3">
+                    <v-card class="elevation-3 w-full">
                         <v-card-title primary-title xs8 sm8>
                             <div>
                                 <div class="headline">
@@ -41,7 +41,7 @@
                                             :total-items="total_items"
                                             :loading="loading"
                                             :items="projectData"
-                                            class="elevation-3"
+                                            class="elevation-3 w-full"
                                         >
                                             <template slot="items" slot-scope="props">
                                                 <td>

@@ -60,7 +60,7 @@
             <v-tab-item :key="1" :value="'tab-1'">
                 <v-card flat>
                     <v-card-text>
-                        <ProjectInfo ref="projectInfo" />
+                        <ProjectInfo ref="projectInfo" compo_type="view" />
 
                         <!-- <ProjectOverview ref="projectOverview"> </ProjectOverview> -->
                     </v-card-text>
@@ -111,7 +111,7 @@
             <v-tab-item :key="8" :value="'tab-8'">
                 <v-card flat>
                     <v-card-text>
-                        <Document ref="documentsInfo"> </Document>
+                        <Document ref="documentsInfo" :media="media"> </Document>
                     </v-card-text>
                 </v-card>
             </v-tab-item>
@@ -171,6 +171,7 @@ export default {
             projectId: null,
             project: [],
             tabs: 'tab-1',
+            media: null
         };
     },
     created() {
@@ -187,12 +188,14 @@ export default {
             const self = this;
 
             axios.get('projects/' + self.propProjectId).then(function (response) {
+                console.log(response)
                 if (!response.data.error_code) {
                     self.$refs.customerInfo.fillEditData(
                         response.data.data.project.customer,
                         response.data.data.project.agency,
                         true
                     );
+                    self.media =  response.data.data.project.media
                     //  alert(JSON.stringify(response.data.data.project))
                     self.$refs.locationInfo.fillEditData(response.data.data.project.location, true);
                     // this.$refs.projectInfo.fillEditData();

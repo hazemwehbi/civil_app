@@ -26,7 +26,7 @@
                                             :total-items="total_items"
                                             :loading="loading"
                                             :items="projectData"
-                                            class="elevation-3"
+                                            class="elevation-3 w-full"
                                         >
                                             <template slot="items" slot-scope="props">
                                                 <td>

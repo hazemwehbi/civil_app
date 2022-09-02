@@ -56,7 +56,7 @@ class ProjectController extends Controller
         $user = $request->user();
 
 
-        $projects = Project::with('customer', 'categories', 'members', 'members.media','location','creator','report','report.media','report.reportCreator','report.type');
+        $projects = Project::with('customer', 'categories', 'members','media', 'members.media','location','creator','report','report.media','report.reportCreator','report.type');
         $customer_id=$user->id;
         $reports = []; 
         $childrens=$user->childrenIds($user->id);
@@ -127,7 +127,7 @@ class ProjectController extends Controller
     {
         $childrens=Auth::user()->childrenIds(Auth::user()->id);
         array_push($childrens,Auth::user()->id);
-        $projects = Project::with('customer', 'location','creator','report','report.media','report.reportCreator','report.type');
+        $projects = Project::with('customer', 'media','location','creator','report','report.media','report.reportCreator','report.type');
         if(Auth::user()->user_type_log=='ENGINEERING_OFFICE_MANAGER') {
             $projects = $projects->where(function($q) use ($childrens) {
                 $q->where('created_by',Auth::user()->id)->orWhereHas('members', function ($qu) use ($childrens) {
@@ -264,7 +264,7 @@ class ProjectController extends Controller
     public function getProjectsOffice(Request $request)
     {
         if(isset($request->office_id)){
-            $projects = Project::with('customer', 'categories', 'members', 'members.media','location','creator','report','report.reportCreator','report.type')
+            $projects = Project::with('customer', 'categories','media', 'members', 'members.media','location','creator','report','report.reportCreator','report.type')
             ->orWhereHas('members', function ($qu) use ($request) {
                 $qu->Where('user_id', $request->office_id);
             })
@@ -380,7 +380,7 @@ class ProjectController extends Controller
             return Response::respondError('هذا الفعل غير مسموح');
         }
 
-        $project = Project::with('customer', 'lead','location','agency', 'lead.media', 'tasks', 'categories', 'members', 'members.media')
+        $project = Project::with('customer', 'lead','media','location','agency', 'lead.media', 'tasks', 'categories', 'members', 'members.media')
                             ->withCount(['tasks',
                                 'tasks as completed_task' => function ($query) {
                                     $query->where('is_completed', 1);
@@ -488,7 +488,7 @@ class ProjectController extends Controller
 
 
     public function  getProjectInfo($id){
-        $project = Project::with('customer', 'categories', 'members', 'members.media','location','agency')->find($id);
+        $project = Project::with('customer','media', 'categories', 'members', 'members.media','location','agency')->find($id);
         return $project;
     }
     /**
@@ -1176,15 +1176,12 @@ class ProjectController extends Controller
 
             $output = $this->respondSuccess(__('messages.saved_successfully'));
 
-
-
-
-
         $output = $this->respondSuccess(__('messages.saved_successfully'));
         DB::commit();
     } catch (\Exception $e) {
         DB::rollBack();
         $output = $this->respondWentWrong($e);
+        //dd($output);
       
     }
     return $output;
@@ -1327,7 +1324,8 @@ class ProjectController extends Controller
    }
 
    public function  getProject ($id){
-    $project=Project::with('customer', 'members', 'location','report', 'report.type')->find($id);
+    $project=Project::with('customer', 'media','members', 'location','report', 'report.type')->find($id);
+    
     return $project;
    }
 

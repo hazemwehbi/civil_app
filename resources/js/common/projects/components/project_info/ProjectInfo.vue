@@ -48,7 +48,7 @@
                                         </v-btn>
                                     </v-flex>-->
                                 </v-layout>
-                                <v-layout row wrap>
+                                <v-layout row wrap class="my-3">
                                     <v-flex xs12 sm12 md12>
                                         {{ trans('messages.description') }}
                                         <br />
@@ -60,6 +60,7 @@
                                         </quill-editor>
                                     </v-flex>
                                 </v-layout>
+                                <Document @next="getDocumentData($event)" ref="documentInfo" v-if="compo_type != 'view'" />
                                 <v-layout wrap>
                                     <!-- <v-flex xs12 md4 v-if="$hasRole('employee') ||$can('superadmin')">
                                         <v-autocomplete
@@ -374,11 +375,13 @@
 </template>
 <script>
 import Popover from '../../../../admin/popover/Popover';
+import Document from './documnets.vue';
 export default {
     components: {
         Popover,
+        Document
     },
-    props: ['projectId'],
+    props: ['projectId','compo_type'],
     data() {
         return {
             project_types: [],
@@ -521,3 +524,8 @@ export default {
     },
 };
 </script>
+<style scoped>
+>>> .ql-container{
+    max-height: 70%;
+}
+</style>

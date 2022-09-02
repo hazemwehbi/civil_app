@@ -122,6 +122,7 @@ export default {
     name: 'permission',
     data() {
         return {
+            valid: true,
             users: [],
             enginners: [],
             dialog: false,

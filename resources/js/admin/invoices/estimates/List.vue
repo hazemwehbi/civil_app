@@ -78,7 +78,7 @@
                 :total-items="total_items"
                 :loading="loading"
                 :items="items"
-                class="elevation-3"
+                class="elevation-3 w-full"
             >
                 <template slot="headerCell" slot-scope="props">
                     <span v-if="props.header.value == 'invoice_date'">
