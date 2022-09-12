@@ -32,7 +32,7 @@
                 </template>
                 <template slot="items" slot-scope="props">
                     <td>
-                        <div style="display: inline-flex; padding-left: 30%" align="center">
+                        <div align="center">
                             <v-btn 
                             small fab dark color="success" @click="viewDesign(props.item)">
                                 <v-icon color="white">info</v-icon>
@@ -277,8 +277,6 @@ export default {
             pagination: {
                 rowsPerPage: 10,
             },
-
-            tabs: 'tab-1',
             filters: {
                 name: '',
             },
@@ -308,9 +306,10 @@ export default {
     methods: {
         viewPrice(item){
          const self = this;
+          
           let pdf_data=[
             item,item.design_enginners[0].media[0],
-            office_id,'office_eng',
+            self.getCurrentUser().parent_id?self.getCurrentUser().parent_id:self.getCurrentUser().id,'office_eng',
             null,null
            ]
             self.$refs.pdfPrice.openDialog(pdf_data)

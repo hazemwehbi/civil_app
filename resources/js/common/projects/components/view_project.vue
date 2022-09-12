@@ -1,130 +1,160 @@
 <template>
-    <div>
-        <v-toolbar color="cyan" dark tabs height="28">
-            <v-toolbar-title>{{ project.name }}</v-toolbar-title>
-            <template slot="extension">
-                <v-tabs
-                    centered
-                    color="cyan"
-                    slider-color="yellow"
-                    v-model="tabs"
-                    dark
-                    icons-and-text
-                    height="50"
-                >
-                    <!-- tab menu -->
-                    <v-tab href="#tab-1" @click="projectOverview">
-                        {{ trans('messages.overview') }}
-                        <v-icon>dvr</v-icon>
-                    </v-tab>
+    <div class="flex">
+     <v-navigation-drawer
+    v-model="drawer"
+    :mini-variant.sync="mini"
+    hide-overlay
+    stateless
+  >
+    <v-toolbar flat class="transparent">
+      <v-list class="pa-0">
+        <v-list-tile avatar>
+          <v-list-tile-avatar>
+           <v-icon>business</v-icon>
+          </v-list-tile-avatar>
 
-                    <v-tab href="#tab-2" @click="projectLocation">
-                        {{ trans('data.location_info') }}
-                        <v-icon>timeline</v-icon>
-                    </v-tab>
-                    <v-tab href="#tab-3" @click="projectLocation">
-                        {{ trans('data.customer_info') }}
-                        <v-icon>timeline</v-icon>
-                    </v-tab>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ resultData?resultData.data.data.project.name:'' }}</v-list-tile-title>
+          </v-list-tile-content>
 
-                    <v-tab href="#tab-4" @click="projectActivities">
-                        {{ trans('messages.activities') }}
-                        <v-icon>timeline</v-icon>
-                    </v-tab>
+          <v-list-tile-action>
+            <v-btn
+              icon
+              @click.stop="mini = !mini"
+            >
+              <v-icon>chevron_left</v-icon>
+            </v-btn>
+          </v-list-tile-action>
+        </v-list-tile>
+      </v-list>
+    </v-toolbar>
 
-                    <v-tab href="#tab-5" @click="tasks">
-                        {{ trans('messages.tasks') }}
-                        <v-icon>assignment</v-icon>
-                    </v-tab>
+    <v-list class="pt-0" dense>
+      <v-divider></v-divider>
 
-                    <v-tab href="#tab-6">
-                        {{ trans('data.visit_request') }}
-                        <v-icon>assignment</v-icon>
-                    </v-tab>
-                     <v-tab href="#tab-7">
-                        {{ trans('data.public_bills') }}
-                        <v-icon>assignment</v-icon>
-                    </v-tab>
-                    <v-tab href="#tab-8">
-                        {{ trans('data.document_info') }}
-                        <v-icon>perm_media</v-icon>
-                    </v-tab>
+      <v-list-tile
+        @click="projectOverview"
+      >
+        <v-list-tile-action>
+          <v-icon color="#617BFF" small>dvr</v-icon>
+        </v-list-tile-action>
 
-                    <!-- /tab menu-->
-                </v-tabs>
-            </template>
-        </v-toolbar>
+        <v-list-tile-content>
+          <v-list-tile-title>{{ trans('messages.overview') }}</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+        <v-list-tile
+        @click="projectLocation"
+      >
+        <v-list-tile-action>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#617BFF" class="w-5 h-5">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+</svg>
+        </v-list-tile-action>
 
-        <!-- tab content -->
-        <v-tabs-items v-model="tabs">
-            <v-tab-item :key="1" :value="'tab-1'">
-                <v-card flat>
+        <v-list-tile-content>
+          <v-list-tile-title>{{ trans('data.location_info') }}</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+        <v-list-tile
+        @click="projectCustomer"
+      >
+        <v-list-tile-action>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#617BFF" class="w-5 h-5">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+</svg>
+
+        </v-list-tile-action>
+
+        <v-list-tile-content>
+          <v-list-tile-title>{{ trans('data.customer_info') }}</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+          <v-list-tile
+        @click="projectActivities"
+      >
+        <v-list-tile-action>
+          <v-icon color="#617BFF" small>timeline</v-icon>
+        </v-list-tile-action>
+
+        <v-list-tile-content>
+          <v-list-tile-title>{{ trans('messages.activities') }}</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+          <v-list-tile
+        @click="tasks"
+      >
+        <v-list-tile-action>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#617BFF" class="w-5 h-5">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
+</svg>
+
+        </v-list-tile-action>
+
+        <v-list-tile-content>
+          <v-list-tile-title>{{ trans('messages.tasks') }}</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+         <v-list-tile
+         @click="currentCard = 'visitRequests'"
+      >
+        <v-list-tile-action>
+          <v-icon color="#617BFF" small>assignment</v-icon>
+        </v-list-tile-action>
+
+        <v-list-tile-content>
+          <v-list-tile-title>{{ trans('data.visit_request') }}</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+         <v-list-tile
+        @click="currentCard = 'visitInvoices'"
+      >
+        <v-list-tile-action>
+          <v-icon color="#617BFF" small>assignment</v-icon>
+        </v-list-tile-action>
+
+        <v-list-tile-content>
+          <v-list-tile-title>{{ trans('data.public_bills') }}</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+         <v-list-tile
+         @click="getProjectMedia();showSub=!showSub"
+      >
+        <v-list-tile-action>
+          <v-icon color="#617BFF" small>perm_media</v-icon>
+        </v-list-tile-action>
+
+        <v-list-tile-content>
+          <v-list-tile-title>{{ trans('data.document_info') }}</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+    </v-list>
+  </v-navigation-drawer>
+    <v-card class="mx-3" flat>
                     <v-card-text>
-                        <ProjectInfo ref="projectInfo" compo_type="view" />
-
-                        <!-- <ProjectOverview ref="projectOverview"> </ProjectOverview> -->
-                    </v-card-text>
-                </v-card>
-            </v-tab-item>
-
-            <v-tab-item :key="2" :value="'tab-2'">
-                <v-card flat>
-                    <v-card-text>
-                        <LocationInfo ref="locationInfo" />
-                    </v-card-text>
-                </v-card>
-            </v-tab-item>
-            <v-tab-item :key="3" :value="'tab-3'">
-                <v-card flat>
-                    <v-card-text>
-                        <CustomerInfo
-                            @next="getCustomerData($event)"
+                        <ProjectDataOverview ref="projectData" v-show="currentCard === 'projectInfo'" :projectData="resultData.data.data.project" />
+                        <LocationDataView ref="locationInfo" :location="resultData.data.data.project.location" v-show="currentCard === 'locationInfo'" />
+                         <UserDataOverview
+                           v-show="currentCard === 'customerInfo'"
+                           :ownerData="resultData.data.data.project.customer"
                             ref="customerInfo"
                         />
+                        <ProjectActivity ref="projectActivity"
+                        v-show="currentCard === 'projectActivity'"
+                        > </ProjectActivity>
+                        <TaskLists v-show="currentCard === 'taskLists'"></TaskLists>
+                        <visitRequests v-show="currentCard === 'visitRequests'" :id="projectId" ></visitRequests>
+                         <visitInvoices :id="projectId" v-show="currentCard === 'visitInvoices'"></visitInvoices>
+                         <Document ref="documentsInfo" v-show="currentCard === 'document'"> </Document>
                     </v-card-text>
-                </v-card>
-            </v-tab-item>
-
-            <v-tab-item :key="4" :value="'tab-4'">
-                <v-card flat>
-                    <v-card-text>
-                        <ProjectActivity ref="projectActivity"> </ProjectActivity>
-                    </v-card-text>
-                </v-card>
-            </v-tab-item>
-
-            <v-tab-item :key="5" :value="'tab-5'">
-                <v-card flat>
-                    <v-card-text> <TaskLists></TaskLists> </v-card-text>
-                </v-card>
-            </v-tab-item>
-            <v-tab-item :key="6" :value="'tab-6'">
-                <v-card flat>
-                    <v-card-text> <visitRequests :id="projectId" ></visitRequests> </v-card-text>
-                </v-card>
-            </v-tab-item>
-              <v-tab-item :key="7" :value="'tab-7'">
-                <v-card flat>
-                    <v-card-text> <visitInvoices :id="projectId" ></visitInvoices> </v-card-text>
-                </v-card>
-            </v-tab-item>
-            <v-tab-item :key="8" :value="'tab-8'">
-                <v-card flat>
-                    <v-card-text>
-                        <Document ref="documentsInfo" :media="media"> </Document>
-                    </v-card-text>
-                </v-card>
-            </v-tab-item>
-        </v-tabs-items>
-        <!-- /tab content -->
-        <v-layout justify-center>
-            <v-card-actions jusi>
+                         <v-card-actions jusi>
                 <v-spacer></v-spacer>
-                <v-btn style="color: #06706d" @click="$router.go(-1)">
+                <v-btn class="mx-auto" style="color: #06706d" @click="$router.go(-1)">
                     {{ trans('messages.back') }}
                 </v-btn>
             </v-card-actions>
-        </v-layout>
+                </v-card>
     </div>
 </template>
 <script>
@@ -138,70 +168,60 @@ import visitRequests from '../../tickets/List.vue';
 
 import visitInvoices from '../invoices/Lists.vue';
 
-import VueTelInputVuetify from 'vue-tel-input-vuetify';
-import CustomerInfo from './project_info/customerInfo.vue';
-import LocationInfo from './project_info/locationInfo.vue';
-import ProjectInfo from './project_info/ProjectInfo.vue';
+import UserDataOverview from './project_info/UserDataOverview.vue';
+import LocationDataView from './project_info/LocationDataView.vue';
+import ProjectDataOverview from './project_info/ProjectDataOverview.vue';
 import Document from './project_info/documnets.vue';
 import Popover from '../../../admin/popover/Popover';
 
-export default {
-    components: {
-        TaskLists,
+  export default {
+     components: {
+       TaskLists,
         MilestonesLists,
         ProjectOverview,
         ProjectActivity,
         InvoiceLists,
         NotesAndDocumentsList,
         Document,
-        CustomerInfo,
-        LocationInfo,
-        ProjectInfo,
+        UserDataOverview,
+        LocationDataView,
         Popover,
         visitRequests,
+        ProjectDataOverview,
         visitInvoices
-    },
-    props: {
+     },
+         props: {
         propProjectId: {
             required: true,
         },
     },
-    data() {
-        return {
-            projectId: null,
-            project: [],
-            tabs: 'tab-1',
-            media: null
-        };
+    data () {
+      return {
+        drawer: true,
+        mini: false,
+        currentCard:'projectInfo',
+        right: null,
+        media: null,
+        resultData: null,
+        showSub: false
+      }
     },
-    created() {
+        created() {
         const self = this;
         self.projectId = self.$route.params.id;
         self.loadProject();
-        //   self.getProject(self.projectId);
         self.$store.commit('drawer', {
             drawer: false,
         });
     },
-    methods: {
-        loadProject() {
+    methods:{
+       loadProject() {
             const self = this;
-
-            axios.get('projects/' + self.propProjectId).then(function (response) {
-                console.log(response)
+           axios.get('projects/' + self.propProjectId).then(function (response) {
                 if (!response.data.error_code) {
-                    self.$refs.customerInfo.fillEditData(
-                        response.data.data.project.customer,
-                        response.data.data.project.agency,
-                        true
-                    );
-                    self.media =  response.data.data.project.media
-                    //  alert(JSON.stringify(response.data.data.project))
-                    self.$refs.locationInfo.fillEditData(response.data.data.project.location, true);
-                    // this.$refs.projectInfo.fillEditData();
-                    self.$refs.projectInfo.fillEditData(response.data.data.project, true);
-
-                    self.$refs.documentsInfo.fillEditData(response.data.data.media, false);
+                  self.resultData = response
+                   self.$forceUpdate()
+                   //self.$refs.projectData.fillEditData(response.data.data.project, true);
                 } else {
                     self.$store.commit('hideLoader');
                     self.$store.commit('showSnackbar', {
@@ -211,27 +231,41 @@ export default {
                 }
             });
         },
+        getProjectMedia(){
+          this.currentCard = 'document'
+this.$refs.documentsInfo.fillEditData(this.resultData.data.data.project.media, false);
+        },
         projectOverview() {
             const self = this;
-            self.$refs.projectInfo.fillEditData(response.data.data.project, true);
-            //self.$refs.projectOverview.getProjectOverviewFromApi(self.projectId);
+            self.currentCard = 'projectInfo'
+           // self.$refs.projectData.fillEditData(this.resultData.data.data.project, true);
         },
         projectLocation() {
             const self = this;
-            // self.$refs.projectActivity.getProjectActivities();
+             self.currentCard = 'locationInfo'
+             
+          //  self.$refs.locationInfo.fillEditData(this.resultData.data.data.project.location, true);
+        },
+        projectCustomer() {
+            const self = this;
+            self.currentCard = 'customerInfo'
+             /* self.$refs.customerInfo.fillEditData(
+                        self.resultData.data.data.project.customer,
+                        self.resultData.data.data.project.agency,
+                        true
+                    );*/
         },
         projectActivities() {
             const self = this;
+             self.currentCard = 'projectActivity'
             self.$refs.projectActivity.getProjectActivities();
         },
         tasks() {
             const self = this;
+            self.currentCard = 'taskLists'
             self.$eventBus.$emit('updateTaskTable', self.propProjectId);
         },
-        // documentAndNotes() {
-        //     const self = this;
-        //     self.$refs.documents.getProjectDocumets();
-        // },
+ 
         milestones() {
             const self = this;
             self.$refs.milestone.getMilestoneList();
@@ -252,5 +286,7 @@ export default {
                 });
         },
     },
-};
+    }
 </script>
+ 
+

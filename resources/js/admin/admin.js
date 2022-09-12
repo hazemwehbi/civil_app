@@ -7,6 +7,7 @@ import eventBus from '../common/Event';
 import store from '../common/Store';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css'
+
 var x=APP.RTL;
 Vue.use(Vuetify, {
     // rtl: true,

@@ -13,13 +13,9 @@
                         {{ trans('data.location_info') }}
                     </v-stepper-step>
 
+                  
                     <v-divider></v-divider>
                     <v-stepper-step step="3" :complete="e1 > 3" color="teal">
-                        {{ trans('data.document_info') }}
-                    </v-stepper-step>
-                    
-                    <v-divider></v-divider>
-                    <v-stepper-step step="4" :complete="e1 > 4" color="teal">
                         {{ trans('data.project_info') }}
                     </v-stepper-step>
                 </v-stepper-header>
@@ -66,27 +62,10 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="3">
+                        <ProjectInfo @next="getProjectData($event)" ref="projectInfo" />
                         <Document @next="getDocumentData($event)" ref="documentInfo" />
                         <v-layout row pt-3 justify-center>
                             <v-btn color="teal" small outline @click="e1 = 2">
-                                {{ trans('messages.back') }}
-                            </v-btn>
-                            <div style="display: flex" align="right">
-                                <v-btn
-                                    style="background-color: #06706d; color: white"
-                                    small
-                                    @click="getDocumentInfo"
-                                >
-                                    {{ trans('messages.next') }}
-                                </v-btn>
-                            </div>
-                        </v-layout>
-                    </v-stepper-content>
-
-                    <v-stepper-content step="4">
-                        <ProjectInfo @next="getProjectData($event)" ref="projectInfo" />
-                        <v-layout row pt-3 justify-center>
-                            <v-btn color="teal" small outline @click="e1 = 3">
                                 {{ trans('messages.back') }}
                             </v-btn>
                             <div style="display: flex" align="right">

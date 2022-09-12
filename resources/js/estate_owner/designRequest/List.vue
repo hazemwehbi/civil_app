@@ -121,7 +121,7 @@
                 <template slot="items" slot-scope="props">
                      <tr @click="props.expanded = !props.expanded">
                     <td>
-                        <div style="display: inline-flex; padding-left: 30%" align="center">
+                        <div  align="center">
                             <v-icon>arrow_drop_down</v-icon>
                             <v-btn small fab dark color="success" @click="viewDesign(props.item)">
                                 <v-icon color="white">info</v-icon>

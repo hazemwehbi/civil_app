@@ -532,19 +532,7 @@ export default {
             }
         },
    
-        getprogress(status) {
-            if (status == 'not_started') {
-                return this.projectProgress(5, 1);
-            } else if (status == 'in_progress') {
-                return this.projectProgress(5, 2);
-            } else if (status == 'on_hold') {
-                return this.projectProgress(5, 3);
-            } else if (status == 'completed') {
-                return this.projectProgress(5, 5);
-            } else if (status == 'cancelled') {
-                return this.projectProgress(5, 0);
-            }
-        },
+
         getEnginneringTypes() {
             const self = this;
             axios

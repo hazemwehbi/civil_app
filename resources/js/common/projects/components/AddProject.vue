@@ -86,8 +86,9 @@
 
                     <v-stepper-content step="3">
                         <ProjectInfo @next="getProjectData($event)" ref="projectInfo" />
+                        <Document @next="getDocumentData($event)" ref="documentInfo" />
                         <v-layout row pt-3 justify-center>
-                            <v-btn color="teal" small outline @click="e1 = 3">
+                            <v-btn color="teal" small outline @click="e1 = 2">
                                 {{ trans('messages.back') }}
                             </v-btn>
                             <div style="display: flex" align="right">
@@ -176,10 +177,10 @@ export default {
         },
         getDocumentData(data) {
              this.medias = data;
-            this.e1 = 4;
-            
+         //   this.e1 = 4;
         },
         store(val) {
+            console.log(this.medias)
             const self = this;
             let data = {
                 project: self.project,

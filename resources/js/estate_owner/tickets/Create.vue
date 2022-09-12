@@ -69,6 +69,7 @@
                                     :okText="trans('data.ok')"
                                     :clearText="trans('data.clear')"
                                     v-model="dead_line_date"
+                                    class="w-full"
                                 >
                                 </v-datetime-picker>
                             </v-flex>

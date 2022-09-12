@@ -246,7 +246,6 @@ class RequestTypeController extends  Controller
 
         $specialties = [];
         $specialties_tmp = [];
-
         if (isset($request->request_id)) {
             $vist_request  = VisitRequest::with('specialties', 'offices')->where('id', $request->request_id)->first();
 
@@ -262,8 +261,8 @@ class RequestTypeController extends  Controller
                     array_push($specialties_tmp, $item);
                 }
             }
-
             foreach ($specialties_tmp as $item) {
+               
                 $item['employees'] = User::getUsersOfficeForSpecialty(Auth::id(), $item->id);
             }
         }

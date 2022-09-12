@@ -21,6 +21,7 @@
     
     <link href="{{ asset('css/font-tajaw.css') }}" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Tajawal' rel='stylesheet'>
+    
     <script type="application/javascript">
         var APP = {};
         APP.APP_URL = '{{config('app.url')}}';

@@ -49,6 +49,8 @@ return [
     "estimated_cost" => "التكلفة المتوقعة",
     "status" => "الحالة",
     "not_started" => "لم يبدأ",
+    "normal" => "عادي",
+    "not_normal" => "غير عادي",
     "in_progress" => "في تقدم",
     "on_hold" => "في الانتظار",
     "cancelled" => "ألغيت",

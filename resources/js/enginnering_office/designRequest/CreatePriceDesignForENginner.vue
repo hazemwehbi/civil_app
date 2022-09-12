@@ -34,21 +34,23 @@
                     <v-container grid-list-md>
                         <v-layout row wrap>
                             <v-flex xs12 sm4 md4>
-                                <b-card-group deck>
+                                <b-card-group deck class="w-full">
                                     <b-card
                                         :header="trans('data.enginner_name')"
                                         header-tag="header1"
                                         title=""
+                                        class="w-full"
                                     >
                                         <b-card-text>{{ enginner_name }}</b-card-text>
                                     </b-card>
                                 </b-card-group>
                             </v-flex>
                             <v-flex xs12 sm4 md4>
-                                <b-card-group deck>
+                                <b-card-group deck class="w-full">
                                     <b-card
                                         :header="trans('data.create_time')"
                                         header-tag="header1"
+                                        class="w-full"
                                         title=""
                                     >
                                         <b-card-text>{{ create_time }}</b-card-text>
@@ -56,11 +58,12 @@
                                 </b-card-group>
                             </v-flex>
                             <v-flex xs12 sm4 md4>
-                                <b-card-group deck>
+                                <b-card-group deck class="w-full">
                                     <b-card
                                         :header="trans('data.stage')"
                                         header-tag="header1"
                                         title=""
+                                        class="w-full"
                                     >
                                         <b-card-text>{{ stage_name }}</b-card-text>
                                     </b-card>
@@ -114,8 +117,9 @@
                             </v-flex>
                         </v-layout>-->
   <v-layout row wrap>
+    <div class="my-3">{{ trans('data.viewPrice') }}: </div>
                             <v-flex xs12 sm12 md12>
-                                <div class="my-3">{{ trans('data.viewPrice') }}: </div>
+                                
            <input
               type="file"
               :label="trans('data.viewPrice')"

@@ -210,7 +210,7 @@ return [
     'agent_card_number'=>'Agent Card Number',
     'billing_type'=>'Billing Type',
 
-    'visit_request'=>'Visit Request',
+    'visit_request_detaile'=>'Visit Request Detail',
     'design_request'=>'Design Request',
     'support_service_request'=>'Support Service Request',
     'contractor_request'=>'Contractor Request',
@@ -408,7 +408,9 @@ return [
       'add_enginner'=>'Add Enginner',
       'is_default'=>'Is Default',
 
-
+'project images'=> 'Project Images',
+        'project files'=> 'Project Files',
+        'project videos'=> 'Project Videos',
       'select_gender'=>'Select Gendre',
       'male'=>'Male',
       'female'=>'Female',

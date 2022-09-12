@@ -370,7 +370,6 @@ class ProjectController extends Controller
      */
     public function show($id,Request $request)
     {
-        
         $lang = $request->header('lang');
         if (!isset($lang)) {
             $lang = "ar";
@@ -386,7 +385,12 @@ class ProjectController extends Controller
                                     $query->where('is_completed', 1);
                                 }, ])
                             ->find($id);
-
+                            $project->projectTypes = Project::getProjectTypes();
+                            $project->statuss = Project::getStatusForProject();
+                            $project->categories = Category::forDropdown('projects');
+                    
+                            $project->buildingTypes = Project::getBuildingTypes();
+                            $project->buildUsing = Project::getBuildingUsing();
 
 
             $project_documents = Media::where('model_id', $id)
@@ -1127,6 +1131,7 @@ class ProjectController extends Controller
 
 
    public function  addNewProject(Request $request){
+    //dd($request->all());
     if (!request()->user()->can('project.create')) {
         abort(403, 'Unauthorized action.');
     }

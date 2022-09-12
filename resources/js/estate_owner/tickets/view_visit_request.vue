@@ -1,5 +1,62 @@
 <template>
-    <v-container row justify-center>
+<!-- This example requires Tailwind CSS v2.0+ -->
+<div class="overflow-hidden bg-white shadow sm:rounded-lg w-2/3 mx-auto">
+  <div class="px-4 py-4 sm:px-6">
+    <h3 class="text-lg font-medium leading-6 text-gray-900">{{ trans('data.visit_request_detaile') }}</h3>
+    <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ note }}</p>
+  </div>
+  <div class="border-t border-gray-200">
+    <dl>
+      <div class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-md font-medium text-gray-500">{{trans('data.project_name')}}</dt>
+        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ projects.find(x => x.id == project_id)?projects.find(x => x.id == project_id).name:'' }}</dd>
+      </div>
+      <div class="bg-white px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-md font-medium text-gray-500">{{trans('messages.customer')}}</dt>
+        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ customers.find(x => x.id == customer_id)?customers.find(x => x.id == customer_id).name:'' }}</dd>
+      </div>
+      <div class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-md font-medium text-gray-500">{{ trans('data.visit_datetime') }}</dt>
+        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ dead_line_date }}</dd>
+      </div>
+      <div class="bg-white px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-md font-medium text-gray-500">{{trans('data.enginnering_type')}}</dt>
+        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ enginnering_type }}</dd>
+      </div>
+      <div class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-md font-medium text-gray-500">{{ trans('data.note') }}</dt>
+        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ note }}</dd>
+      </div>
+          <div class="bg-white px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-md font-medium text-gray-500">{{ trans('data.enginnering_office_name') }}</dt>
+        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ offices[0]?offices[0].name:'' }}</dd>
+      </div>
+      <div class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-md font-medium text-gray-500">{{trans('data.employee_and_Dead_lines')}}</dt>
+        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">
+          <ul role="list" class="divide-y divide-gray-200 rounded-md border border-gray-200">
+            <li class="flex items-center justify-between py-3 pl-3 pr-4 text-md" v-for="enginner in request_enginners" :key="enginner.id">
+              <div class="flex w-0 flex-1 items-center">
+                <!-- Heroicon name: mini/paper-clip -->
+                <span class="ml-2 w-0 flex-1 truncate">{{ enginner.employee.name }}</span>
+                 <span class="ml-2 w-0 flex-1 truncate"> {{trans('data.dead_line_date')}}</span>
+                  <span class="ml-2 w-0 flex-1 truncate">{{ enginner.dead_line_date !=null ?  enginner.dead_line_date : 'لم يحدد بعد'}}</span>
+                
+              </div>
+            </li>
+          </ul>
+        </dd>
+      </div>
+    </dl>
+    <div class="mx-auto my-2 flex justify-center">
+      <v-btn style="color: #06706d" @click="$router.go(-1)">
+                        {{ trans('messages.back') }}
+                    </v-btn>
+                    </div>
+  </div>
+</div>
+
+    <!--<v-container row justify-center>
         <v-card>
             <v-divider></v-divider>
             <v-card-text>
@@ -81,15 +138,7 @@
                             ></v-text-field>
                         </v-flex>
                     </v-layout>
-                  <!-- <v-layout row v-if="status == 'accepted'">
-                        <v-flex xs12 sm12 md12>
-                            <v-text-field
-                                v-model="enginnering_request"
-                                :readonly="true"
-                                :label="trans('data.engennering_request')"
-                            ></v-text-field>
-                        </v-flex>
-                    </v-layout> -->
+               
                     <v-container grid-list-md v-if="request_enginners.length > 0" >
                         <h3>{{trans('data.employee_and_Dead_lines')}}</h3>
                         <v-layout v-for="enginner in request_enginners" :key="enginner.id">
@@ -97,14 +146,14 @@
                                 <v-card light>
                                     <v-card-text>
                                           <div>
-                                            <!-- <v-icon small>create</v-icon> -->
+                                            <!-- <v-icon small>create</v-icon> 
                                            <h3>
                                             {{ enginner.employee.name }}
                                             </h3>
                                             {{trans('data.dead_line_date')}}
                                             ::
                                             <!-- <v-icon small>date_range</v-icon> -->
-                                           <span> {{ enginner.dead_line_date !=null ?  enginner.dead_line_date : 'لم يحدد بعد'}} </span>
+                                           <!--<span> {{ enginner.dead_line_date !=null ?  enginner.dead_line_date : 'لم يحدد بعد'}} </span>
                                         </div>
                                     </v-card-text>
                                 </v-card>
@@ -124,7 +173,7 @@
                 </v-card-actions>
             </v-layout>
         </v-card>
-    </v-container>
+    </v-container>-->
 </template>
 <script>
 export default {
@@ -132,12 +181,7 @@ export default {
         propRequestId: {
             required: true,
         },
-        // propisView: {
-        //     required: true,
-        // },
-        propVisitRequest: {
-          //  required: true,
-        },
+        propVisitRequest: null,
     },
     data() {
         return {
@@ -174,6 +218,7 @@ export default {
     created() {
         const self = this;
         self.getEnginners();
+        
     },
     beforeDestroy() {
         const self = this;

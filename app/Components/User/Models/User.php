@@ -636,7 +636,7 @@ class User extends Authenticatable implements HasMedia
       public static function getUsersOfficeForSpecialty($office_id,$specialty_id)
       {
         $users = User::where('parent_id',$office_id)
-        ->where('is_emp',1)
+      //  ->where('is_emp',1)
         ->where('specialty_id',$specialty_id)
         ->permission('project.list')
         ->select('id', 'name')

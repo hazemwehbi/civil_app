@@ -131,7 +131,7 @@ import Archives from '../common/archives/ArchivesData'
 Vue.use(Router);
 
 const router = new Router({
-    // mode: 'history',
+   // mode: 'history',
     //hash: false,
     routes: [
         {
@@ -917,7 +917,6 @@ const router = new Router({
             component: Archives,
         },
     ],
-    // mode: "history",
 });
 
 

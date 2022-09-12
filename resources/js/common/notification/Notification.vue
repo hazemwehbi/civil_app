@@ -277,7 +277,7 @@
                         @click="
                             $router.push({
                                 //name: 'projects.project-tasks.list',
-                                name: 'visit_request_list',
+                                name: 'visit_request_estate_list'//'visit_request_list',
                                 //params: { id: notification.project.id },
                             })
                         "
@@ -320,7 +320,7 @@
                         @click="
                             $router.push({
                                 //name: 'projects.project-tasks.list',
-                                name: 'visit_request_list',
+                                name: 'visit_request_estate_list'//'visit_request_list',
                                 //params: { id: notification.project.id },
                             })
                         "

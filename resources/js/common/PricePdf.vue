@@ -84,11 +84,10 @@ export default {
     },
 
     methods: {
-       // item,link,office_id,user_type,accept_link,reject_link
         openDialog(data){
           this.dialog =true
           this.item = data[0]
-          this.url = data[1].full_url//.replace('upload','public/upload')
+          this.url = data[1].original_url//full_url
          this.office_id= data[2]
          this.user_type=data[3]
          this.accept_link =data[4]

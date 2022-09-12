@@ -155,7 +155,7 @@
                             >
                                  {{trans('data.office_status')+' '+ props.item.offices[0].pivot.office_status}}
                             </v-chip></td>
-                             <td width="30%"> <v-btn dark color="success" v-if="props.item.offices[0].pivot.office_status =='accepted'" 
+                             <td width="30%"> <v-btn dark color="success" v-if="props.item.report && props.item.offices[0].pivot.office_status =='accepted'" 
                                 @click="viewReport(props.item)">
                                 {{trans('data.report')}}
                             </v-btn></td></tr>

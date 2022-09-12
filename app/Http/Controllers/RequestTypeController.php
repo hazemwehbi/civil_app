@@ -535,7 +535,8 @@ class RequestTypeController extends Controller
         else{
          $childrens=$user->childrenIds($user->id);
          array_push($childrens,$user->id);
-         $requests =  VisitRequest::with('customer', 'project','specialties','offices','report','report.media')->where('request_type','visit_request')->whereIn('customer_id', $childrens);
+         $requests =  VisitRequest::with('customer', 'project','specialties','offices','report','report.media')->where('request_type','visit_request')
+         ->whereIn('customer_id', $childrens);
          if (!empty($project_id)) {
             $requests =$requests->where('project_id',$project_id);
          }

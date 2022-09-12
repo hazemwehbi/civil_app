@@ -53,14 +53,16 @@
                                         {{ trans('messages.description') }}
                                         <br />
                                         <quill-editor
+                                        v-if="!isEdit"
                                         :disabled="isEdit"
                                           
                                             v-model="project.description"
                                         >
                                         </quill-editor>
+                                        <div class="max-2" v-else v-html="project.description"></div>
                                     </v-flex>
                                 </v-layout>
-                                <Document @next="getDocumentData($event)" ref="documentInfo" v-if="compo_type != 'view'" />
+            
                                 <v-layout wrap>
                                     <!-- <v-flex xs12 md4 v-if="$hasRole('employee') ||$can('superadmin')">
                                         <v-autocomplete
@@ -497,29 +499,8 @@ export default {
             const self = this;
             self.project = data;
             self.isEdit = isEdit;
-            // self.buiding_type=data.buiding_type;
-            // self.role_number=data.buiding_type;
-            // self.unit_number=data.buiding_type;
-            // self.build_rate=data.buiding_type;
-            // self.using=data.buiding_type;
-            // self.name=data.buiding_type;
-            // self.billing_type=data.buiding_type;
-            // self.total_rate=data.buiding_type;
-            // self.authorization_request_number=data.buiding_type;
-            // self.license_number=data.buiding_type;
-            // //  type_of_request:'',
-            // self.plot_number=data.buiding_type;
-            // self.cadastral_decision_number=data.buiding_type;
-            // self.start_date=data.buiding_type;
-            // self.end_date=data.buiding_type;
-            // // customer_id:null,
-            // self.users_id=data.buiding_type;
-            // self.description=data.buiding_type;
-            // self.lead_id=data.buiding_type;
-            // self.status=data.buiding_type;
-            // self.id=data.buiding_type;
-
             self.project.users_id = data.members.map(({ id }) => id);
+            
         },
     },
 };

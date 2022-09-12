@@ -12,6 +12,9 @@ window.Vue = require('vue').default;
 //import Vue from 'vue'
 // VeeValidate
 import VeeValidate from 'vee-validate';
+
+
+
 Vue.use(VeeValidate, { validity: true, fieldsBagName: 'veeFields' });
 
 
@@ -106,6 +109,7 @@ import MobileHeader from "../common/MobileHeader.vue"
 import Calendar from "../common/calendar/Calendar.vue"
 import Avatar from "../common/projects/components/Avatar.vue"
 import Create from "../admin/quick_add/Create.vue"
+
 
 Vue.component('moon-loader', MoonLoader);
 Vue.component('notification', Notification);
