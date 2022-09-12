@@ -40,8 +40,8 @@
                 </template>
                 <template slot="items" slot-scope="props">
                      <tr @click="props.expanded = !props.expanded">
-                    <td>
-                        <div style="display: inline-flex; padding-left: 30%" align="center">
+                    <td class="flex juistify-center">
+                        <div class="flex" align="center">
                             <v-btn small fab dark color="success" @click="viewDesign(props.item)">
                                 <v-icon color="white">info</v-icon>
                             </v-btn>
@@ -283,7 +283,7 @@ export default {
          const self = this;
          let pdf_data=[
             item,item.media[0],
-            office_id,'office_eng',
+            self.getCurrentUser().id,'office_eng',
             null,null
            ]
             self.$refs.pdfPrice.openDialog(pdf_data)

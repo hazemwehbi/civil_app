@@ -31,8 +31,8 @@
                     <span v-else>{{ props.header.text }}</span>
                 </template>
                 <template slot="items" slot-scope="props">
-                    <td>
-                        <div align="center">
+                    <td class="flex juistify-center">
+                        <div class="flex" align="center">
                             <v-btn 
                             small fab dark color="success" @click="viewDesign(props.item)">
                                 <v-icon color="white">info</v-icon>

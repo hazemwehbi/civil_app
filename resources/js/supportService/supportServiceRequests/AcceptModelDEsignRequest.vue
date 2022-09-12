@@ -6,8 +6,9 @@
                     <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation enctype="multipart/form-data">
            <v-layout row wrap>
+              <div class="my-3">{{ trans('data.viewPrice') }}: </div>
                             <v-flex xs12 sm12 md12>
-                                <div class="my-3">{{ trans('data.viewPrice') }}: </div>
+                              
            <input
               type="file"
               :label="trans('data.viewPrice')"

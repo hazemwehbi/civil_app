@@ -45,7 +45,7 @@
         </dd>
       </div>
     </dl>
-    <div class="mx-auto my-2 flex justify-center">
+    <div class="mx-auto my-2 flex justify-center border-t border-gray-200">
         <v-btn color="green darken-1" flat @click="close">
                         {{ trans('data.close') }}
                     </v-btn>

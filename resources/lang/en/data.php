@@ -463,7 +463,9 @@ return [
 
   'create_design'=>'Create Design Request',
   'edit_design'=>'Edit Design',
-  'view_design'=>'Design Info',
+  'view_design'=>'Design Request View',
+  'view_contractor' => 'Contractor Request View',
+  'view_support' => 'Support Service Request View',
   'stage'=>'Stage',
   'accept_design_request'=>'Design Request Acception',
 

@@ -436,7 +436,9 @@ return [
 
         'create_design'=>'انشاء طلب تصميم',
         'edit_design'=>'تعديل التصميم',
-        'view_design'=>'عرض التصميم',
+        'view_design'=>'عرض طلب التصميم',
+        'view_contractor' => 'عرض طلب مقاول',
+        'view_support' => 'عرض طلب المساندة',
         'stage'=>'المرحلة',
         'accept_design_request'=>'الموافقة على طلب التصميم',
         'accept_contractor_request'=>'الموافقة على طلب المقاول',
