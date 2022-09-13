@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div class="inline-flex rounded-md shadow-sm" role="group" v-if="!isEdit">
+    <div class="flex flex-wrap rounded-md shadow-sm" role="group" v-if="!isEdit">
   <button @click="getMedia('images')" type="button" class="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-l-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
              <svg lass="mx-auto feather feather-image text-slate-400" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -62,7 +62,7 @@
  
         <!-- All images with side view -->
         <div class="side_view max-h-80 overflow-y-auto" v-if="type === 'image'">
-            <img  v-for="(media,index) in filterMedia" :key="media.id" :src="media.original_url" @click="currentSrc = media.original_url">
+            <img  v-for="(media,index) in filterMedia" :key="media.id" :src="media.full_url" @click="currentSrc = media.full_url">
         </div>
           <div class="main_view overflow-y-auto max-h-full" v-if="type === 'file'">
  <button v-if="numPages>0" type="button" class="text-blue-700 hover:text-white border-solid border-2 border-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-800" @click="myPdfComponentPrint.print()">print</button>
@@ -81,11 +81,11 @@
             <div class="bg-slate-400" 
              v-for="(media,index) in filterMedia"
               :key="media.id" 
-               @click="changePdf(media.original_url,$refs.myPdfComponent[index])">
+               @click="changePdf(media.full_url,$refs.myPdfComponent[index])">
             	<pdf
         class="mx-auto"
       ref="myPdfComponent"
-       :src="media.original_url" 
+       :src="media.full_url" 
 		>
        <v-progress-circular
       :size="15"
@@ -117,7 +117,7 @@
              :key="media.id"
              >
                   <img
-                   @click="currentSrc = media.original_url"
+                   @click="currentSrc = media.full_url"
                      src="https://api.tailgrids.com/images/tag/069d8cd8-ca1b-4570-9d4a-1cff18ee2a8d.svg"
                      alt="image"
                      class="w-full h-full object-center object-cover"
@@ -176,15 +176,15 @@ export default {
            this.filterMedia = this.tempMedia
            
            if(type === 'images'){
-             this.filterMedia = this.tempMedia.filter(val => val? /\.(jpe?g|png|gif)$/i.test( val.original_url):'')
+             this.filterMedia = this.tempMedia.filter(val => val? /\.(jpe?g|png|gif)$/i.test( val.full_url):'')
              this.type = 'image'
            }
                     if(type === 'files'){
-             this.filterMedia = this.tempMedia.filter(val => val?/\.(pdf|docx)$/i.test( val.original_url ):'')
+             this.filterMedia = this.tempMedia.filter(val => val?/\.(pdf|docx)$/i.test( val.full_url ):'')
              this.type = 'file'
                     }
                     if(type === 'videos'){
-             this.filterMedia = this.tempMedia.filter(val => val?/\.(mp4|wav)$/i.test( val.original_url):'')
+             this.filterMedia = this.tempMedia.filter(val => val?/\.(mp4|wav)$/i.test( val.full_url):'')
              this.type = 'video'
                     }
         },

@@ -1,14 +1,16 @@
 <template>
-    <div class="p-4 mx-auto w-3/5  bg-white rounded-lg border-2 shadow-md sm:p-6 dark:bg-gray-800 dark:border-gray-700">
+    <div
+    :class="$vuetify.breakpoint.xsOnly?'w-full mt-2':'w-3/5 border-2 rounded-lg shadow-lg'" 
+   class="p-4 mx-auto bg-white sm:p-6 dark:bg-gray-800 dark:border-gray-700">
         <h5 class="mb-3 flex text-base font-semibold text-slate-600 md:text-xl dark:text-white">
              {{ trans('data.customer_info') }}
         </h5>
         <p class="text-sm font-normal text-gray-500 dark:text-gray-400"></p>
-        <ul class="my-4 space-y-3">
+        <ul  :class="$vuetify.breakpoint.xsOnly?'my-1':'my-4'" class="space-y-3">
 
             <li>
                 <a href="#" class="flex items-center p-3 text-base font-bold text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#617BFF" class="w-6 h-6">
+         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#617BFF" class="w-6 h-6" >
   <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
 </svg>
 <span class="flex-1 ml-3 whitespace-nowrap mx-1">{{trans('data.name')}} :  {{ownerData.name}}</span>
@@ -26,7 +28,7 @@
             </li>
             <li>
                 <a href="#" class="flex items-center p-3 text-base font-bold text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#617BFF" class="w-6 h-6">
+   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#617BFF" class="w-6 h-6" >
   <path stroke-linecap="round" d="M16.5 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 10-2.636 6.364M16.5 12V8.25" />
 </svg>
 
@@ -35,7 +37,7 @@
             </li>
              <li>
                 <a href="#" class="flex items-center p-3 text-base font-bold text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#617BFF" class="w-6 h-6">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#617BFF" class="w-6 h-6" >
   <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
 </svg>
 

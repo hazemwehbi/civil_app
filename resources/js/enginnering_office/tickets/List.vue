@@ -656,7 +656,7 @@ export default {
             self.$router.push({name: 'edit_report', 
                                    params:{
                                    
-                                    id: item.report.media[item.report.media.length-1].original_url//.replace('upload','public/upload')
+                                    id: item.report.media[item.report.media.length-1].full_url//.replace('upload','public/upload')
 
                                    }
         });

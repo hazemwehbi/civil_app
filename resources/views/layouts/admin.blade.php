@@ -214,7 +214,7 @@
             </v-toolbar>
             <mobileheader v-if="$vuetify.breakpoint.xsOnly" />
             </div>
-            <v-content>
+            <v-content :class="$vuetify.breakpoint.xsOnly?'mt-5':'mt-0'">
                 <transition name="fade">
                     <router-view></router-view>
                 </transition>

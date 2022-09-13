@@ -2,14 +2,16 @@
     <div class="flex">
      <v-navigation-drawer
     v-model="drawer"
-    :mini-variant.sync="mini"
+    :mini-variant.sync="$vuetify.breakpoint.xsOnly?false:mini"
     hide-overlay
-    stateless
+    mobile-break-point
+    class="min-h-full h-auto"
+    style="min-width: 4rem"
   >
     <v-toolbar flat class="transparent">
-      <v-list class="pa-0">
-        <v-list-tile avatar>
-          <v-list-tile-avatar>
+      <v-list class="p-0">
+        <v-list-tile>
+          <v-list-tile-avatar :style="$vuetify.breakpoint.xsOnly?'padding:0!important':'padding:auto!important'">
            <v-icon>business</v-icon>
           </v-list-tile-avatar>
 
@@ -131,7 +133,7 @@
       </v-list-tile>
     </v-list>
   </v-navigation-drawer>
-    <v-card class="mx-3" flat>
+    <v-card :class="$vuetify.breakpoint.xsOnly?'mt-4':''" class="mx-3" style="min-width: 80%;" flat>
                     <v-card-text>
                         <ProjectDataOverview ref="projectData" v-show="currentCard === 'projectInfo'" :projectData="resultData.data.data.project" />
                         <LocationDataView ref="locationInfo" :location="resultData.data.data.project.location" v-show="currentCard === 'locationInfo'" />
@@ -149,7 +151,6 @@
                          <Document ref="documentsInfo" v-show="currentCard === 'document'"> </Document>
                     </v-card-text>
                          <v-card-actions jusi>
-                <v-spacer></v-spacer>
                 <v-btn class="mx-auto" style="color: #06706d" @click="$router.go(-1)">
                     {{ trans('messages.back') }}
                 </v-btn>
@@ -288,5 +289,8 @@ this.$refs.documentsInfo.fillEditData(this.resultData.data.data.project.media, f
     },
     }
 </script>
- 
-
+<style scoped>
+>>> .v-list__tile{
+  
+}
+</style>
