@@ -1,5 +1,5 @@
 <template>
-        <v-card>
+        <v-card :class="$vuetify.breakpoint.xsOnly?'pt-4':''">
              <SignaturePad ref="signature" @save="signature = $event"/>
             <v-form ref="form" v-model="valid" lazy-validation>
                 <v-card-title>
@@ -348,7 +348,7 @@
                     </v-container>
                 </v-card-text>
                 <v-layout justify-center>
-                    <v-card-actions>
+                    <v-card-actions class="flex-wrap">
                         <v-spacer></v-spacer>
                         <v-btn color="error" class="mr-4" @click="reset">
                             {{ trans('data.reset') }}

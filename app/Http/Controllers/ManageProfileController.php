@@ -27,8 +27,8 @@ class ManageProfileController extends Controller
         try {
             $user_id = request()->user()->id;
             $user = User::with('media','specialty')->findOrFail($user_id);
-            $user->signature = $user->getFirstMedia('signature')?$user->getFirstMedia('signature')->original_url:'';
-            $user->logo = $user->getFirstMedia('logo')?$user->getFirstMedia('logo')->original_url:'';
+            $user->signature = $user->getFirstMedia('signature')?$user->getFirstMedia('signature')->full_url:'';
+            $user->logo = $user->getFirstMedia('logo')?$user->getFirstMedia('logo')->full_url:'';
             $output = $this->respond($user);
         } catch (Exception $e) {
             $output = $this->respondWentWrong($e);
@@ -83,8 +83,8 @@ class ManageProfileController extends Controller
 
         try {
             $user = User::find($id);
-            $user->signature = $user->getFirstMedia('signature')?$user->getFirstMedia('signature')->original_url:'';
-            $user->logo = $user->getFirstMedia('logo')?$user->getFirstMedia('logo')->original_url:'';
+            $user->signature = $user->getFirstMedia('signature')?$user->getFirstMedia('signature')->full_url:'';
+            $user->logo = $user->getFirstMedia('logo')?$user->getFirstMedia('logo')->full_url:'';
             $role_id = $user->roles->first()->id;
             $gender_types = User::getGenders();
             

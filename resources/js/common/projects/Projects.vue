@@ -1,5 +1,5 @@
 <template>
-    <div class="page_wrap_vue">
+    <div class="page_wrap_vue" :class="$vuetify.breakpoint.xsOnly?'':''">
         <transition name="fade">
             <router-view :key="$route.fullPath"> </router-view>
         </transition>

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div  :class="$vuetify.breakpoint.xsOnly?'pt-2':''">
         <v-toolbar color="cyan" dark tabs height="28">
             <v-toolbar-title>{{ employee.name }}</v-toolbar-title>
             <template slot="extension">

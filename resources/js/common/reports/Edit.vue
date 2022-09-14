@@ -1,6 +1,6 @@
 <template id="panel-template">
     <div class="mx-5">
-        <v-card-actions justify-left>
+        <v-card-actions justify-left :class="$vuetify.breakpoint.xsOnly?'mt-5':''">
             <v-btn style="color: #06706d" @click="$router.go(-1)">
                 {{ trans('messages.back') }}
             </v-btn>
@@ -21,7 +21,7 @@
             	<pdf
         ref="myPdfComponent"
         class="mx-auto"
-        style="width:60%"
+        :style="$vuetify.breakpoint.xsOnly?'width:100%':'width:60%'"
 			:src="url"
 		>
                 <v-progress-circular

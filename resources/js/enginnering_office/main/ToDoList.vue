@@ -75,7 +75,7 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md4 v-if="$can('tickets.view')">
+                            <!--<v-flex xs12 sm12 md4 v-if="$can('tickets.view')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"
@@ -99,7 +99,7 @@
                                         </v-card>
                                     </v-hover>
                                 </v-flex>
-                            </v-flex>
+                            </v-flex>-->
 
                             <v-flex xs12 sm12 md4 v-if="$can('archive')">
                                 <v-flex xs12 sm12 md12>
@@ -209,7 +209,7 @@
                             </v-flex>
 
                             <!--add after edititng -->
-                            <v-flex xs12 sm12 md4 v-if="$can('tickets.view')">
+                            <!--<v-flex xs12 sm12 md4 v-if="$can('tickets.view')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"
@@ -233,7 +233,7 @@
                                         </v-card>
                                     </v-hover>
                                 </v-flex>
-                            </v-flex>
+                            </v-flex>-->
 
                             <v-flex xs12 sm12 md4 v-if="$can('project.list')">
                                 <v-flex xs12 sm12 md12>

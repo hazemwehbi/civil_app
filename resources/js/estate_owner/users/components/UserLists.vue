@@ -1,6 +1,6 @@
 <!-- Employees -->
 <template>
-    <div class="component-wrap">
+    <div class="component-wrap"  :class="$vuetify.breakpoint.xsOnly?'pt-4':''">
         <v-tabs v-model="tabs" fixed-tabs height="47" class="elevation-3">
             <v-tab :href="'#tab-1'" @click="getStatistics" >
                 <v-icon>bar_chart</v-icon>

@@ -1,7 +1,7 @@
 
 <!-- For customer -->
 <template>
-    <v-container grid-list-md>
+    <v-container grid-list-md :class="$vuetify.breakpoint.xsOnly?'pt-4':''">
         <v-card class="mt-3">
             <v-card-title primary-title xs8 sm8>
                 <div>

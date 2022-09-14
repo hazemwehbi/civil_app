@@ -55,7 +55,7 @@
                                 </v-layout>
                             </v-form>
                             <div class="flex">
-                                 <div class="main_view" v-if="type === 'image'">
+                                 <div class="main_view" :class="$vuetify.breakpoint.xsOnly?'w-full':'w-3/4'" v-if="type === 'image'">
             <img v-if="currentSrc" :src="currentSrc" id="main" alt="IMAGE">
             <img v-else src="img/image-1@2x.jpg" >
         </div>
@@ -64,7 +64,7 @@
         <div class="side_view max-h-80 overflow-y-auto" v-if="type === 'image'">
             <img  v-for="(media,index) in filterMedia" :key="media.id" :src="media.full_url" @click="currentSrc = media.full_url">
         </div>
-          <div class="main_view overflow-y-auto max-h-full" v-if="type === 'file'">
+          <div class="main_view overflow-y-auto max-h-full" :class="$vuetify.breakpoint.xsOnly?'w-full':'w-3/4'" v-if="type === 'file'">
  <button v-if="numPages>0" type="button" class="text-blue-700 hover:text-white border-solid border-2 border-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-600 dark:focus:ring-blue-800" @click="myPdfComponentPrint.print()">print</button>
 		<pdf
 			v-for="i in numPages"
@@ -95,7 +95,7 @@
         </pdf>
             </div>
         </div>
-          <div class="main_view" v-if="type === 'video'">
+          <div class="main_view" :class="$vuetify.breakpoint.xsOnly?'w-full':'w-3/4'" v-if="type === 'video'">
             <div
          @click.outside="videoOpen = false"
          class="max-w-[550px] w-full mx-auto bg-white"
@@ -253,7 +253,6 @@ export default {
 </script>
 <style scoped>
    .main_view{
-        width: 80%;
         height: 25rem;
     }
     .main_view img{

@@ -62,63 +62,7 @@
 <body>
 <div id="admin">
     <template>
-        <v-app id="inspire">
-            
-         {{--   <v-navigation-drawer
-                class="blue-grey lighten-5"
-                app
-                fixed
-                width="232"
-                v-model="drawer"
-                clipped
-                mobile-break-point="400"
-                >-->
-              <!-- this code for side bar "v-list expand dense"
-                   <v-list expand dense>
-
-                    @foreach($nav as $n)
-                        @if($n->navType==\App\Components\Core\Menu\MenuItem::$NAV_TYPE_NAV)
-                            <v-list-tile :to="{name:'{{$n->routeName}}'}" :exact="false">
-                                <v-list-tile-action>
-                                    <v-icon>{{$n->icon}}</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-content>
-                                    <v-list-tile-title>
-                                        {{$n->label}}
-                                    </v-list-tile-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
-                        @elseif($n->navType==\App\Components\Core\Menu\MenuItem::$NAV_TYPE_PARENT)
-                            <v-list-group
-                                prepend-icon="{{$n->icon}}"
-                              >
-                                <template slot="activator">
-                                    <v-list-tile>
-                                            <v-list-tile-title>
-                                                {{$n->label}}
-                                            </v-list-tile-title>
-                                    </v-list-tile>
-                                </template>
-                                @foreach($n->children as $sub_menu)
-                                    <v-list-tile :to="{name:'{{$sub_menu['route_name']}}'}"
-                                        :exact="false">
-                                        <v-list-tile-action>
-                                            <v-icon>{{$sub_menu['icon']}}</v-icon>
-                                        </v-list-tile-action>
-
-                                        <v-list-tile-content>
-                                            <v-list-tile-title>
-                                                {{$sub_menu['label']}}
-                                            </v-list-tile-title>
-                                        </v-list-tile-content>
-                                    </v-list-tile>
-                                @endforeach
-                            </v-list-group>
-                        @else
-                            <v-divider></v-divider>
-                        @endif
-                    @endforeach
-                </v-list> --}}
+        <v-app id="inspire-font">
         <!--    </v-navigation-drawer>-->
             <div>
             <v-toolbar v-if='!$vuetify.breakpoint.xsOnly' style="background-color:#06706d;z-index: 100" app dark flat fixed dense height="100"
@@ -214,7 +158,7 @@
             </v-toolbar>
             <mobileheader v-if="$vuetify.breakpoint.xsOnly" />
             </div>
-            <v-content :class="$vuetify.breakpoint.xsOnly?'mt-5':'mt-0'">
+            <v-content>
                 <transition name="fade">
                     <router-view></router-view>
                 </transition>
@@ -297,14 +241,7 @@ localStorage.setItem("currentLange","{{ app()->getLocale() }}");
 </body>
 <style type="text/css">
 /* show when screen is at least 600px wide */
-@media (min-width: 600px) {
-  .large {
-    display: block;
-  }
-  .mobile{
-    display:none;
-  }
-}
+
 div[aria-required=true].v-input .v-label::after {
     content: " *";
     color: red;
@@ -319,7 +256,7 @@ div[aria-required=true].v-autocomplete .v-label::after {
   color: red;
 }
     /* quill editor toolbar */
-   #inspire {
+   #inspire-font {
     font-family: 'Tajawal', sans-serif;
    }
 .ql-toolbar {

@@ -1,5 +1,5 @@
 <template>
-    <v-container row justify-center>
+    <v-container row justify-center :class="$vuetify.breakpoint.xsOnly?'':''">
         <AddRequestType ref="RequestTypeAdd"></AddRequestType>
         <v-card>
             <v-divider></v-divider>

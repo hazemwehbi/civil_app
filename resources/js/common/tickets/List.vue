@@ -1,7 +1,7 @@
 
 <!-- For customer -->
 <template>
-    <v-container grid-list-md>
+    <v-container grid-list-md :class="$vuetify.breakpoint.xsOnly?'':''">
         <AcceptEnginneringOfficeModal
             ref="acceptenginneringoffice"
             @next="getAllProjectRequest($event)"

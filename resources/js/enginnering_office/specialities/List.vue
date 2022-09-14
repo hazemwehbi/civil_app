@@ -1,6 +1,6 @@
 <!-- Employees -->
 <template>
-    <div class="component-wrap">
+    <div class="component-wrap" :class="$vuetify.breakpoint.xsOnly?'pt-4':''">
         <Create ref="specialtyAdd"></Create>
         <Edit ref="specialtyEdit"></Edit>
         <!-- <v-tabs v-model="tabs" fixed-tabs height="47" class="elevation-3">

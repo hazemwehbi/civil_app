@@ -1,5 +1,5 @@
 <template>
-    <v-container grid-list-md>
+    <v-container grid-list-md  :class="$vuetify.breakpoint.xsOnly?'pt-4':''">
         <v-layout wrap>
             <v-flex xs12 sm7 md7>
                 <v-card elevation="4">

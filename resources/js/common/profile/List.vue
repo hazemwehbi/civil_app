@@ -156,7 +156,7 @@
         <img :src="data.signature"
             alt="image">
     </div>
-    <div v-if="data.signature" class="w-full rounded hover:opacity-50">
+    <div v-if="data.logo" class="w-full rounded hover:opacity-50">
         <img :src="data.logo"
             alt="image">
     </div>

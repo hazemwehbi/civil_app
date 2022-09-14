@@ -107,7 +107,7 @@ span{
   .header{
     width:100%;
     height:9rem;
-    margin-top: 60px;
+
         background: linear-gradient(45deg, #119f9b, #06706d);
     @apply from-slate-300;
   }

@@ -1,5 +1,5 @@
 <template>
-        <v-card>
+        <v-card  :class="$vuetify.breakpoint.xsOnly?'pt-4':''">
 
             <SignaturePad ref="signature" @save="signature = $event"/>
            <v-form ref="form" v-model="valid" lazy-validation>

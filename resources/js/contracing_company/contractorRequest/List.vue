@@ -1,6 +1,6 @@
 <!-- Employees -->
 <template>
-    <div class="component-wrap">
+    <div class="component-wrap" :class="$vuetify.breakpoint.xsOnly?'pt-3':''">
         <view1 ref="designView"></view1>
 <AcceptModelDEsignRequest ref="acceptenginneringoffice" @refreshTable="refreshTable"/>
  <PricePdf ref="pdfPrice" @refreshTable="refreshTable($event)" />

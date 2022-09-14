@@ -1,8 +1,8 @@
 <template id="panel-template">
 
-    <v-container justify-center>
+    <v-container justify-center :class="$vuetify.breakpoint.xsOnly?'pt-5':''">
         <v-form>
-        <v-card-actions justify-left>
+        <v-card-actions justify-left class="flex-wrap">
             <v-btn style="color: #06706d" @click="$router.go(-1)">
                 {{ trans('messages.back') }}
             </v-btn>
@@ -73,11 +73,11 @@
                                  
         </v-card-actions>
         <v-spacer></v-spacer>
-        <v-card class="mx-auto report">
+        <v-card class="mx-auto" :class="$vuetify.breakpoint.xsOnly?'max-w-full':'report'">
                     <ReportForm  :reportType="report_type" :office="office" :project="project"  :language="language" :report_id="report_id" @getReportData="getReportData" @printPdf="printPdf"/>
                    
         </v-card>
-        <div class="mx-auto report">
+        <div class="mx-auto" :class="$vuetify.breakpoint.xsOnly?'max-w-full':'report'">
              <ReportPdf style="z-index:-15;position:fixed;" :visit_request_id="visit_request_id" :reportData="reportData" :language="language" ref="pdf" />
             </div>
         </v-form>
@@ -186,11 +186,6 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (max-width: 600px) {
-    .report{
-max-width: 100%
-    }
-}
    .report{
 max-width: 65%
     }

@@ -338,7 +338,7 @@
                     </v-container>
                 </v-card-text>
                 <v-layout justify-center>
-                    <v-card-actions>
+                    <v-card-actions class="flex-wrap">
                         <v-spacer></v-spacer>
                         <v-btn color="error" class="mr-4" @click="reset">
                             {{ trans('data.reset') }}

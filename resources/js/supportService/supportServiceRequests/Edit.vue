@@ -82,7 +82,7 @@
                         </v-container>
                     </v-form>
                 </v-card-text>
-                <v-card-actions>
+                <v-card-actions class="flex-wrap">
                     <v-spacer></v-spacer>
                     <v-btn color="green darken-1" flat @click="close">
                         {{ trans('data.cancel') }}

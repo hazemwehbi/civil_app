@@ -1,5 +1,5 @@
 <template>
-    <div class="component-wrap">
+    <div class="component-wrap" :class="$vuetify.breakpoint.xsOnly?'pt-4':''">
         <v-card>
             <v-card-title>
                 <v-icon medium>control_point</v-icon>

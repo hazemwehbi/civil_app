@@ -1,5 +1,5 @@
 <template>
-<div class="fixed w-full z-30">
+<div class="fixed inset-x-0 z-30">
 
     <v-toolbar dense style="background: linear-gradient(45deg, #119f9b, #06706d);box-shadow: none;height:60px;">
        <v-menu 
@@ -113,12 +113,6 @@ export default {
 data(){
 return {
 language: null,
-  items: [
-        { title: 'Click Me' },
-        { title: 'Click Me' },
-        { title: 'Click Me' },
-        { title: 'Click Me 2' },
-      ],
 }
 },
 created(){

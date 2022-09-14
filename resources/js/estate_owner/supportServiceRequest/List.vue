@@ -1,6 +1,6 @@
 <!-- Employees -->
 <template>
-    <div class="component-wrap">
+    <div class="component-wrap" :class="$vuetify.breakpoint.xsOnly?'pt-3':''">
         <Create ref="designAdd"></Create>
         <Edit ref="designEdit"></Edit>
         <view1 ref="designView"></view1>

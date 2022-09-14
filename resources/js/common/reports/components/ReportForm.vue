@@ -1,5 +1,4 @@
 <template>
-
   <div>
 <v-container grid-list-md  id="printMe">
 <div class="mt-5"  style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">

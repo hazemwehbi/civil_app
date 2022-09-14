@@ -2,7 +2,7 @@
 <template id="panel-template">
     <v-container justify-center>
         <v-form ref="form" v-model="valid" lazy-validation enctype="multipart/form-data">
-            <v-card-actions justify-left>
+            <v-card-actions justify-left class="flex-wrap">
                 <v-btn style="color: #06706d" @click="$router.go(-1)">
                     {{ trans('messages.back') }}
                 </v-btn>

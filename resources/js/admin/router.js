@@ -435,7 +435,7 @@ const router = new Router({
                 {
                     path: 'projects',
                     name: 'projects_enginnering_office.list',
-                    component: EnginneringOfficeProjectList,
+                    component: ProjectManagement //EnginneringOfficeProjectList,
                 },
                 {
                     path: 'addProject',

@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div :class="$vuetify.breakpoint.xsOnly?'pt-2':''">
      <v-tabs
       v-model="tab"
       background-color="transparent"
       color="basil"
-      class="mx-5"
+      :class="$vuetify.breakpoint.xsOnly?'':'mx-5'"
       grow
     >
       <v-tab
@@ -19,7 +19,7 @@
      <v-tabs-items v-model="tab">
       <v-tab-item
       >
-  <v-card flat class="mx-5 elevation-2 px-5 pt-1 pb-3 my-2" style="min-width:70%;flex:4">
+  <v-card flat class="elevation-2 pt-1 pb-3 my-2" :class="$vuetify.breakpoint.xsOnly?'mx-auto':'px-5 mx-5'" style="min-width:70%;flex:4">
   <ProjectFilters  :projects="true" :reports="false"/>
   <v-btn class="mx-auto" style="color: #06706d" @click="$router.go(-1)">
                         {{ trans('messages.back') }}
@@ -27,7 +27,7 @@
   </v-card>
   </v-tab-item>
       <v-tab-item>
-  <v-card flat class="mx-5 elevation-2 px-5 pt-1 pb-3 my-2" style="min-width:70%;flex:4">
+  <v-card flat class="elevation-2 pt-1 pb-3 my-2" :class="$vuetify.breakpoint.xsOnly?'mx-auto':'px-5 mx-5'" style="min-width:70%;flex:4">
    <ProjectFilters :reports="true" :projects="false" />
    <v-btn class="mx-auto" style="color: #06706d" @click="$router.go(-1)">
                         {{ trans('messages.back') }}

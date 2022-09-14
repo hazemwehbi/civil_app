@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <v-card>
+        <v-card  :class="$vuetify.breakpoint.xsOnly?'pt-4':''">
             <v-form ref="form" v-model="valid" lazy-validation>
                 <v-card-title>
                     <v-icon medium>person</v-icon>
@@ -309,7 +308,6 @@
                 </v-layout>
             </v-form>
         </v-card>
-    </div>
 </template>
 
 <script>

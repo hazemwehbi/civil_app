@@ -74,7 +74,7 @@
         append-icon="time"
         :label="trans('data.startDate')"
         single-line
-        
+        class="w-full"
         hide-details
       />
       </v-flex>
@@ -84,7 +84,7 @@
         append-icon="time"
         :label="trans('data.endDate')"
         single-line
-        
+        class="w-full"
         hide-details
       />
       </v-flex>

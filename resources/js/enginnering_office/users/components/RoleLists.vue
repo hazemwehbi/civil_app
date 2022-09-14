@@ -1,5 +1,5 @@
 <template>
-    <div class="component-wrap">
+    <div class="component-wrap" :class="$vuetify.breakpoint.xsOnly?'pt-4':''">
         <v-card class="mb-3">
             <v-layout row wrap>
                 <v-flex xs12 sm6 md6>
