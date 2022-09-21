@@ -61,6 +61,7 @@ import Projects from '../common/projects/Projects'
 import edit_report from '../common/reports/Edit'
 import add_report from '../common/reports/Add'
 import reportsList from '../common/reports/Lists'
+import ServiceTypes from '../common/service_type/List'
 import requestsCreatingProjects from './main/components/RequestsCreatingProjects'
 import customersNotesList from './customers/components/notes/List'
 import customersContactsList from './customers/components/contacts/List'
@@ -144,6 +145,7 @@ const router = new Router({
         },
         {
             path: '/to-do"',
+            
             // redirect: APP.USER_TYPE_LOG=='ESTATE_OWNER' ?  '/es/to-do-list' :'/to-do-list',
         },
         {
@@ -569,12 +571,11 @@ const router = new Router({
             name: 'reports_list',
             component: reportsList,
         },
-       /* {
-            path: '/add_report',
-            name: 'add_report',
-            component: add_report,
-            props: route => ({ project: route.params.project }),
-        },*/
+        {
+            path: '/service_type',
+            name: 'service_types_list',
+            component: ServiceTypes,
+        },
         {
             path: '/add_report/:id?',
             name: 'add_report',

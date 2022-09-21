@@ -49,8 +49,9 @@
                                     </v-flex>-->
                                 </v-layout>
                                 <v-layout row wrap class="my-3">
+                                    {{ trans('messages.description') }}
                                     <v-flex xs12 sm12 md12>
-                                        {{ trans('messages.description') }}
+                                        
                                         <br />
                                         <quill-editor
                                         v-if="!isEdit"
@@ -80,6 +81,7 @@
                                             item-text="value"
                                             item-value="key"
                                             :items="status"
+                                            :class="$vuetify.breakpoint.xsOnly?'mt-5':''"
                                             v-model="project.status"
                                             :label="trans('messages.status')"
                                             :data-vv-name="status"

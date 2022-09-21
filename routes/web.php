@@ -17,7 +17,13 @@ use App\Http\Controllers\Admin\ManageRolesController;
 Route::get('/', function () {
     return redirect(route('login'));
 });
+Route::get('cache', function () {
+    $exitCode = Artisan::call('cache:clear');
+    $exitCode = Artisan::call('config:clear');
+    $exitCode = Artisan::call('config:cache');
 
+    //$exitCode = Artisan::call('optimize:clear');
+});
 Auth::routes(['register' => true]);
 
 Route::post('ajaxRequest', [UserController::class, 'getUserData'])->name('ajaxRequest.post');
@@ -189,7 +195,7 @@ Route::middleware(['auth'])
         Route::get('getProjectsOffice','ProjectController@getProjectsOffice');
         Route::resource('reports', 'ReportController');
         Route::resource('reportTypes', 'ReportTypesController');
-        
+        Route::resource('serviceTypes', 'ServiceTypeController');
         
         Route::get('get-Customer-name/{id}','Admin\CustomerController@getCustomerName');
         Route::get('visit-request-type/{id}','ProjectController@getVisitRequestType');

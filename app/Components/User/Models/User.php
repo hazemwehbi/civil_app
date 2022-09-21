@@ -425,7 +425,6 @@ class User extends Authenticatable implements HasMedia
     public static function getUserPermissions($user)
     {
         $userPermissions = $user->getAllPermissions();
-
         $permissions = [];
         foreach ($userPermissions as $userPermission) {
             $permissions[$userPermission->name] = 1;

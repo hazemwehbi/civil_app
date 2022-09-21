@@ -1245,6 +1245,7 @@ class ProjectController extends Controller
 
      
         if (!empty($request->medias)) {
+           // dd($request->medias);
             $this->addMedias($request->medias, $project, 'project_documents');
           }
 

@@ -188,10 +188,11 @@ export default {
         },
         getDocumentData(data) {
             this.medias = data;
-            this.e1 = 4;
+            console.log(data)
         },
         store(val) {
             const self = this;
+            
             let data = {
                 project: self.project,
                 location: self.location,

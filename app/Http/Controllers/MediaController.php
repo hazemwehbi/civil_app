@@ -44,14 +44,24 @@ class MediaController extends Controller
             if ($this->isDemo()) {
                 return $this->respondWithError();
             }
-            $file = $request->file('file')[0];
-            $temp_folder = config('constants.temp_upload_folder');
-            //Generate a unique name for the file.
-            $file_name = time().'_'.$file->getClientOriginalName();
+          
+             $files_names=[];
+          //  dd($request->all()); 
+           // foreach( $request->file as $file){
 
-            $path = $file->storeAs($temp_folder, $file_name);
+                $file = $request->file('file');//[0];
+                $temp_folder = config('constants.temp_upload_folder');
+                //Generate a unique name for the file.
+                $file_name = time().'_'.$file->getClientOriginalName();
+    
+                $path = $file->storeAs($temp_folder, $file_name);
 
-            $output = $this->respondSuccess(__('messages.saved_successfully'), ['file_name' => $file_name]);
+                array_push($files_names,$file_name);
+
+         //   }
+      
+
+            $output = $this->respondSuccess(__('messages.saved_successfully'), ['files_name' => $files_names]);
         } catch (Exception $e) {
             $output = $this->respondWentWrong($e);
         }

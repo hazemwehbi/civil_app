@@ -274,6 +274,9 @@ export default {
         ViewPayment,
         StatusLabel,
     },
+    props:{
+backBtn: true
+    },
     data() {
         const self = this;
         return {

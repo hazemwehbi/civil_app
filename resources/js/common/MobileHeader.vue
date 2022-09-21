@@ -16,14 +16,14 @@
   </template>
       <v-list>
         <v-list-tile
-          @click="$router.push('/')"
+          @click="$router.push('/').catch(() => { /* ignore */ })"
         >
           <v-list-tile-title>
             {{trans('data.home')}} 
           </v-list-tile-title>
         </v-list-tile>
          <v-list-tile
-          @click="$router.push('/to-do')"
+          @click="$router.push('/to-do').catch(() => { /* ignore */ })"
         >
           <v-list-tile-title>
             {{trans('data.to_do_list')}}
@@ -78,7 +78,7 @@
               </template>
   
               <v-list-tile
-              @click="$router.push({ name: 'profile.list' })"
+              @click="$router.push({ name: 'profile.list' }).catch(() => { /* ignore */ })"
               >
                 <v-list-tile-content class="py-2">
                   <v-list-tile-title>

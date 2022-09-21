@@ -2,7 +2,7 @@
 export default {
     methods: {
         $can(permissionName) {
-         //  console.log(APP.USER_PERMISSIONS);
+        //  console.log(APP.USER_PERMISSIONS);
             return _.get(APP.USER_PERMISSIONS, permissionName, false);
             // return _.get(
             //     APP.USER_PERMISSIONS,
@@ -49,7 +49,7 @@ export default {
             return APP.USER_TYPE_LOG;
         },
         getCurrentUser() {
-            console.log(APP.CURRENT_USER)
+          //  console.log(APP.CURRENT_USER)
             return APP.CURRENT_USER;
         },
         getLanguages(){

@@ -104,7 +104,7 @@
         </v-card>
         <br />
         <div align="center">
-            <v-btn style="background-color: #06706d; color: white" @click="$router.go(-1)">
+            <v-btn v-if="backBtn" style="background-color: #06706d; color: white" @click="$router.go(-1)">
                 {{ trans('messages.back') }}
             </v-btn>
         </div>
@@ -125,6 +125,7 @@ export default {
         id: {
             required: false,
         },
+        backBtn: true
     },
     data() {
         const self = this;

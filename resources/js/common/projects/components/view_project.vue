@@ -2,9 +2,9 @@
     <div class="flex">
      <v-navigation-drawer
     v-model="drawer"
-    :mini-variant.sync="$vuetify.breakpoint.xsOnly?false:mini"
+    :mini-variant.sync="mini"
     hide-overlay
-    mobile-break-point
+    stateless
     class="min-h-full h-auto"
     style="min-width: 4rem"
   >
@@ -146,8 +146,8 @@
                         v-show="currentCard === 'projectActivity'"
                         > </ProjectActivity>
                         <TaskLists v-show="currentCard === 'taskLists'"></TaskLists>
-                        <visitRequests v-show="currentCard === 'visitRequests'" :id="projectId" ></visitRequests>
-                         <visitInvoices :id="projectId" v-show="currentCard === 'visitInvoices'"></visitInvoices>
+                        <visitRequests v-show="currentCard === 'visitRequests'" :backBtn="false" :id="projectId" ></visitRequests>
+                         <visitInvoices :backBtn="false" :id="projectId" v-show="currentCard === 'visitInvoices'"></visitInvoices>
                          <Document ref="documentsInfo" v-show="currentCard === 'document'"> </Document>
                     </v-card-text>
                          <v-card-actions jusi>

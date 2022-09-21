@@ -42,7 +42,8 @@
                                             {{ trans('messages.file_upload') }}
                                         </h3>
                                         <v-flex xs12 md12>
-                                            <div class="dropzone" id="fileupload"></div>
+                                            <!--<div class="dropzone" id="fileupload"></div>-->
+                                            <vue-dropzone @vdropzone-success="vsuccessMuliple" class="w-full" ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone>
                                         </v-flex>
                                     </v-flex>
 
@@ -73,7 +74,7 @@
 			:page="i"
 			style=""
 		></pdf>
-<img v-if="numPages" src="img/image-1@2x.jpg" >
+<img v-if="!numPages" src="img/image-1@2x.jpg" >
         </div>
  
         <!-- All images with side view -->
@@ -135,12 +136,16 @@
 </template>
 <script>
 import Dropzone from 'dropzone';
+import vue2Dropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+
 Dropzone.autoDiscover = false;
 import pdf from 'vue-pdf'
 export default {
     components: {
         Dropzone,
-        pdf
+        pdf,
+        vueDropzone: vue2Dropzone
     },
     props: ['customerId','media'],
     data() {
@@ -154,7 +159,13 @@ export default {
             can_file_upload: false,
             type: null,
             currentSrc:null,
-            myPdfComponentPrint:null
+            myPdfComponentPrint:null,
+             dropzoneOptions: {
+          url: APP.APP_URL + '/media',
+          thumbnailWidth: 150,
+          maxFilesize: 10,
+          headers: { 'X-CSRF-TOKEN': _token }
+      }
         };
     },
 
@@ -167,7 +178,7 @@ export default {
     methods: {
         toggleUploadDocumenet() {
             const self = this;
-            self.initDropzone();
+         //   self.initDropzone();
 
             self.can_file_upload = !self.can_file_upload;
         },
@@ -190,9 +201,16 @@ export default {
         },
         nextStep() {
             const self = this;
+            console.log(self.medias)
             this.$emit('next', self.medias);
         },
-        initDropzone() {
+          vsuccessMuliple(files, response){
+            console.log(this.medias,response,files)
+    response.files_name.forEach(val => this.medias.push(val));
+                        
+                         this.$emit('next', this.medias);
+        },
+       /* initDropzone() {
             const self = this;
             if (self.dropzone) {
                 self.dropzone.destroy();
@@ -229,12 +247,13 @@ export default {
                 autoProcessQueue: true,
                 success: function (file, response) {
                     if (response.success == true) {
-                        self.medias.push(response.file_name);
+                        response.files_name.forEach(val => self.medias.push(val));
+                        console.log(self.medias,response,response.files_name)
                          self.$emit('next', self.medias);
                     }
                 },
             });
-        },
+        },*/
         fillEditData(data, isEdit) {
             const self = this;
             (self.tempMedia = data), (self.isEdit = isEdit);

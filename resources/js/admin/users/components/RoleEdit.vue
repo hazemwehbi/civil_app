@@ -728,6 +728,60 @@
                             </v-checkbox>
                         </v-flex>
                     </v-layout>
+                     <v-layout row wrap class="mt-2">
+                        <v-flex
+                            xs12
+                            sm3
+                            md3
+                            v-if="
+                                $can('serviceType.edit') ||
+                                $can('serviceType.delete') ||
+                                $can('serviceType.create') ||
+                                $can('serviceType.view')
+                            "
+                        >
+                            <h4>{{ trans('data.service_types_list') }}</h4>
+                        </v-flex>
+                        <v-flex
+                            xs12
+                            sm3
+                            md3
+                            v-if="
+                                $can('serviceType.edit') ||
+                                $can('serviceType.delete') ||
+                                $can('serviceType.create') ||
+                                $can('serviceType.view')
+                            "
+                        >
+                            <v-checkbox
+                           
+                                v-model="permissions"
+                                :label="trans('data.create_service_type')"
+                                value="serviceType.add"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                       
+                                v-model="permissions"
+                                :label="trans('data.all_service_types')"
+                                value="serviceType.view"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                          
+                                v-model="permissions"
+                                :label="trans('data.edit_service_type')"
+                                value="serviceType.edit"
+                            >
+                            </v-checkbox>
+                            <v-checkbox
+                                v-model="permissions"
+                                :label="trans('data.delete')"
+                                value="serviceType.delete"
+                            >
+                            </v-checkbox>
+                        </v-flex>
+                    </v-layout>
                     <v-divider></v-divider>
                     <v-layout row wrap class="mt-2">
                         <v-flex
@@ -769,6 +823,7 @@
                         </v-flex>
                         
                     </v-layout>
+                    
                 </v-container>
             </v-card-text>
             <v-layout justify-center>
