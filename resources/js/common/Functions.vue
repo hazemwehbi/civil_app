@@ -52,6 +52,9 @@ export default {
           //  console.log(APP.CURRENT_USER)
             return APP.CURRENT_USER;
         },
+        getCurrentLang(){
+            return APP.CURRENT_LANGUAGE
+        },
         getLanguages(){
            return APP.LANGUAGES
         },

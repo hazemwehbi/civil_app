@@ -7,7 +7,7 @@
             <v-spacer></v-spacer>
                     <v-btn flat icon @click="dialog = false"> <v-icon>clear</v-icon> </v-btn>
   </div>
-  <div class="border-t border-gray-200">
+  <div class="border-t border-gray-200" v-if="design.project">
     <dl>
       <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{trans('data.project_name')}}</dt>
@@ -16,6 +16,10 @@
       <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-white px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{trans('messages.customer')}}</dt>
         <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ design.customer.name }}</dd>
+      </div>
+        <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-md font-medium text-gray-500">{{trans('data.location_info')}}</dt>
+        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ design.location.province_municipality+'-'+design.location.municipality+'-'+ design.location.category+'-'+ design.location.plan_id}}</dd>
       </div>
      <div class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{ trans('data.enginnering_office_name') }}</dt>
@@ -31,7 +35,11 @@
           </ul>
         </dd>
       </div>
-      <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-white px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-white px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-md font-medium text-gray-500">{{trans('data.service_types_list')}}</dt>
+        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ design.service_type['name_'+getCurrentLang()] }}</dd>
+      </div>
+      <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{ trans('data.note') }}</dt>
         <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ design.note }}</dd>
       </div>
@@ -43,65 +51,7 @@
                     </div>
   </div>
 </div>
-            <!--<v-card>
-                <v-card-title>
-                    <v-icon>assignment</v-icon>
-                    <span class="headline">
-                        {{ trans('data.view_design') }}
-                    </span>
-                    <v-spacer></v-spacer>
-                    <v-btn flat icon @click="dialog = false"> <v-icon>clear</v-icon> </v-btn>
-                </v-card-title>
-                <v-divider></v-divider>
-                <v-card-text>
-                    <v-form ref="form" v-model="valid" lazy-validation>
-                        <v-container grid-list-md>
-                            <v-layout row wrap>
-                                <v-flex xs12 sm6 md6>
-                                    <v-text-field
-                                        v-model="design.project.name"
-                                        :readonly="true"
-                                        :label="trans('messages.customer')"
-                                    ></v-text-field>
-                                </v-flex>
-                                <v-flex xs12 sm6 md6>
-                                    <v-text-field
-                                        v-model="design.customer.name"
-                                        :readonly="true"
-                                        :label="trans('messages.customer')"
-                                    ></v-text-field>
-                                </v-flex>
-                            </v-layout>
-                            <v-layout row>
-                                <v-flex xs12 sm12 md12>
-                                    <v-text-field
-                                     v-for="office in design.offices"
-                                      :key="office.id"
-                                        v-model="office.name"
-                                        :readonly="true"
-                                        :label="trans('data.enginnering_office_name')"
-                                    ></v-text-field>
-                                </v-flex>
-                            </v-layout>
-                            <v-layout row>
-                                <v-flex xs12 sm12 md12>
-                                    <v-text-field
-                                        v-model="design.note"
-                                        :readonly="true"
-                                        :label="trans('data.note')"
-                                    ></v-text-field>
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-form>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" flat @click="close">
-                        {{ trans('data.close') }}
-                    </v-btn>
-                </v-card-actions>
-            </v-card>-->
+          
         </v-dialog>
     </v-layout>
 </template>

@@ -138,7 +138,7 @@ class TicketController extends Controller
 
             $user = $request->user();
 
-            $input = $request->only('title', 'category_id', 'priority', 'description', 'status', 'assigned_to', 'customer_id');
+            $input = $request->only('title','category_id', 'priority', 'description', 'status', 'assigned_to', 'customer_id');
             $input['created_by'] = $user->id;
             $input['updated_by'] = $user->id;
 
@@ -149,7 +149,6 @@ class TicketController extends Controller
             }
             
             $input['reference_no'] = $this->CommonUtil->generateReferenceNo('ticket');
-
             $ticket = Ticket::create($input);
 
             //QUERY:superadmin & contacts & assigned member.

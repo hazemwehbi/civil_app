@@ -23,15 +23,20 @@
         <dt class="text-md font-medium text-gray-500">{{trans('data.enginnering_type')}}</dt>
         <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ enginnering_type }}</dd>
       </div>
+       
       <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{ trans('data.note') }}</dt>
         <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ note }}</dd>
       </div>
           <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-white px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+        <dt class="text-md font-medium text-gray-500">{{trans('data.location_info')}}</dt>
+        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ location.province_municipality+'-'+design.location.municipality+'-'+ design.location.category+'-'+ design.location.plan_id}}</dd>
+      </div>
+          <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{ trans('data.enginnering_office_name') }}</dt>
         <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ offices[0]?offices[0].name:'' }}</dd>
       </div>
-      <div class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+      <div class="bg-white px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{trans('data.employee_and_Dead_lines')}}</dt>
         <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">
           <ul role="list" class="divide-y divide-gray-200 rounded-md border border-gray-200">
@@ -56,124 +61,6 @@
   </div>
 </div>
 
-    <!--<v-container row justify-center>
-        <v-card>
-            <v-divider></v-divider>
-            <v-card-text>
-                <v-container grid-list-md>
-                    <v-layout row wrap>
-                        <v-flex xs12 sm6 md6>
-                            <v-autocomplete
-                                item-text="name"
-                                :readonly="true"
-                                item-value="id"
-                                :items="projects"
-                                v-model="project_id"
-                                :label="trans('data.project_name')"
-                                v-validate="'required'"
-                                data-vv-name="project_name"
-                                :data-vv-as="trans('data.project_name')"
-                                :error-messages="errors.collect('project_name')"
-                                required
-                            ></v-autocomplete>
-                        </v-flex>
-                        <v-flex xs12 sm6 md6>
-                            <v-autocomplete
-                                item-text="name"
-                                item-value="id"
-                                :items="customers"
-                                :readonly="true"
-                                v-model="customer_id"
-                                :label="trans('messages.customer')"
-                                v-validate="'required'"
-                                data-vv-name="customer"
-                                :data-vv-as="trans('messages.customer')"
-                                :error-messages="errors.collect('customer')"
-                                required
-                            ></v-autocomplete>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row>
-                        <v-flex xs12 sm6 md6 >
-                              <v-text-field
-                                     v-for="office in offices"
-                                      :key="office.id"
-                                        v-model="office.name"
-                                        :readonly="true"
-                                        :label="trans('data.enginnering_office_name')"
-                                    ></v-text-field>
-                  
-                        </v-flex>
-
-                        <v-flex xs12 sm6 md6>
-                            <v-datetime-picker
-                                :label="trans('data.visit_datetime')"
-                                :datetime="dead_line_date"
-                                :okText="trans('data.ok')"
-                                :clearText="trans('data.clear')"
-                                :readonly="true"
-                                v-model="dead_line_date"
-                            >
-                            </v-datetime-picker>
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row>
-                        <v-flex xs12 sm12 md12>
-
-                             <v-text-field
-                                    v-model="enginnering_type"
-                                    :label="trans('data.enginnering_type')"
-                                 
-                                ></v-text-field>
-
-                           
-                        </v-flex>
-                    </v-layout>
-                    <v-layout row>
-                        <v-flex xs12 sm12 md12>
-                            <v-text-field
-                                v-model="note"
-                                :readonly="true"
-                                :label="trans('data.note')"
-                            ></v-text-field>
-                        </v-flex>
-                    </v-layout>
-               
-                    <v-container grid-list-md v-if="request_enginners.length > 0" >
-                        <h3>{{trans('data.employee_and_Dead_lines')}}</h3>
-                        <v-layout v-for="enginner in request_enginners" :key="enginner.id">
-                            <v-flex xs12 md12>
-                                <v-card light>
-                                    <v-card-text>
-                                          <div>
-                                            <!-- <v-icon small>create</v-icon> 
-                                           <h3>
-                                            {{ enginner.employee.name }}
-                                            </h3>
-                                            {{trans('data.dead_line_date')}}
-                                            ::
-                                            <!-- <v-icon small>date_range</v-icon> -->
-                                           <!--<span> {{ enginner.dead_line_date !=null ?  enginner.dead_line_date : 'لم يحدد بعد'}} </span>
-                                        </div>
-                                    </v-card-text>
-                                </v-card>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
-                    <v-layout row wrap> </v-layout>
-                </v-container>
-            </v-card-text>
-            <v-divider></v-divider>
-            <v-layout justify-center>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn style="color: #06706d" @click="$router.go(-1)">
-                        {{ trans('messages.back') }}
-                    </v-btn>
-                </v-card-actions>
-            </v-layout>
-        </v-card>
-    </v-container>-->
 </template>
 <script>
 export default {
@@ -212,7 +99,8 @@ export default {
             enginnering_type: '',
             enginnering_request: '',
              request_enginners: [],
-             offices:[]
+             offices:[],
+             location: null
         };
     },
     created() {
@@ -260,6 +148,7 @@ export default {
                     self.office_id = tem.request.office_id;
                     self.offices = tem.request.offices;
                     self.note = tem.request.note;
+                    self.location =  tem.request.location
                     self.dead_line_date = tem.request.dead_line_date;
                 } else {
                     self.$store.commit('showSnackbar', {

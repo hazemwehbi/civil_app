@@ -1,5 +1,6 @@
 <template>
     <v-layout row justify-center>
+        <Location ref="locationInfo" @savedLocation="saveLocation"/>
         <v-dialog v-model="dialog" persistent max-width="600px">
             <v-card>
                 <v-card-title>
@@ -72,6 +73,16 @@
                                         required
                                     ></v-autocomplete>
                                 </v-flex>
+                                 <!-- <v-flex xs12 sm12 md12>
+                                    <v-autocomplete
+                                        item-text="province_municipality"
+                                        item-value="id"
+                                        :items="locations"
+                                        v-model="design.location_id"
+                                        :label="trans('data.location_info')"
+                                      
+                                    ></v-autocomplete>
+                                </v-flex>-->
                             </v-layout>
                             <v-layout row>
                                 <v-flex xs12 sm12 md12>
@@ -88,6 +99,9 @@
                     <v-spacer></v-spacer>
                     <v-btn color="green darken-1" flat @click="close">
                         {{ trans('data.cancel') }}
+                    </v-btn>
+                      <v-btn color="white darken-1" class="bg-slate-600" flat @click="openLocation">
+                        {{ trans('data.location_info') }}
                     </v-btn>
                     <v-btn
                         :disabled="!valid || !checkActive()"
@@ -107,7 +121,11 @@
 </template>
 
 <script>
+import Location from '../locationInfo.vue'
 export default {
+    components:{
+Location
+    },
     data() {
         return {
             valid: true,
@@ -119,6 +137,8 @@ export default {
             customers: [],
             projects: [],
             loading: false,
+            locations: [],
+            location_id: null
         };
     },
 
@@ -127,6 +147,7 @@ export default {
         self.getCustomerProject();
         self.getCustomers();
         self.getOffices();
+        self.getLocations();
     },
     mounted() {
         const self = this;
@@ -137,6 +158,24 @@ export default {
         self.$eventBus.$off('DESIGN_ADDED');
     },
     methods: {
+        saveLocation(event){
+           this.location_id = event
+        },
+        openLocation(){
+            this.$refs.locationInfo.openLocationDialog()
+        },
+           getLocations(){
+            const self = this;
+ axios
+                .get('/locations')
+                .then(function(response) {
+                    console.log(response)
+                    self.locations = response.data;
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        },
         close() {
             const self = this;
             self.loading = false;
@@ -159,7 +198,7 @@ export default {
             const self = this;
             let data = self.design;
             data['sent'] = sent;
-            
+            data['location_id'] = self.location_id
             if (this.$refs.form.validate()) {
                 self.loading = true;
                 axios

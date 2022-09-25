@@ -5,75 +5,7 @@
         <Edit ref="designEdit"></Edit>
         <view1 ref="designView"></view1>
         <PricePdf ref="pdfPrice" @refreshTable="refreshTable($event)" />
-        <!-- <v-tabs v-model="tabs" fixed-tabs height="47" class="elevation-3">
-            <v-tab :href="'#tab-1'" @click="getStatistics">
-                <v-icon>bar_chart</v-icon>
-                {{ trans('messages.statistics') }}
-            </v-tab>
-
-            <v-tab :href="'#tab-2'">
-                <v-icon>filter_list</v-icon>
-                {{ trans('messages.filters') }}
-            </v-tab>
-        </v-tabs>
-
-        <v-tabs-items v-model="tabs">
-            <v-divider></v-divider>
-            <v-tab-item :value="'tab-1'">
-                <v-card flat class="elevation-2">
-                    <v-card-text>
-                        <v-container grid-list-md>
-                            <v-layout row wrap>
-                                <v-flex xs12 sm3 md3 v-if="statistics.users > 0">
-                                    <span class="subheading font-weight-medium info--text">
-                                        {{ trans('messages.total') }}: {{ statistics.users }}
-                                    </span>
-                                </v-flex>
-                                <v-flex xs12 sm3 md3 v-if="statistics.active > 0">
-                                    <span class="subheading font-weight-medium success--text">
-                                        {{ trans('messages.active') }}: {{ statistics.active }}
-                                    </span>
-                                </v-flex>
-                                <v-flex xs12 sm3 md3 v-if="statistics.in_active > 0">
-                                    <span class="subheading font-weight-medium warning--text">
-                                        {{ trans('messages.in_active') }}:
-                                        {{ statistics.in_active }}
-                                    </span>
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-card-text>
-                </v-card>
-            </v-tab-item>
-            <v-tab-item :value="'tab-2'">
-                <v-card flat class="elevation-2">
-                    <v-card-text>
-                        <v-layout>
-                            <v-flex xs12 sm12>
-                                <v-container grid-list-md>
-                                    <v-layout row wrap>
-                                        <v-flex xs12 sm6 md6>
-                                            <v-text-field
-                                                prepend-icon="search"
-                                                :label="trans('messages.filter_by_name')"
-                                                v-model="filters.name"
-                                            ></v-text-field>
-                                        </v-flex>
-                                        <v-flex xs12 sm6 md6>
-                                            <v-text-field
-                                                prepend-icon="search"
-                                                :label="trans('messages.filter_by_email')"
-                                                v-model="filters.email"
-                                            ></v-text-field>
-                                        </v-flex>
-                                    </v-layout>
-                                </v-container>
-                            </v-flex>
-                        </v-layout>
-                    </v-card-text>
-                </v-card>
-            </v-tab-item>
-        </v-tabs-items> -->
+    
         <v-card class="mt-3">
             <v-card-title>
                 <div>
@@ -119,10 +51,10 @@
                     <span v-else>{{ props.header.text }}</span>
                 </template>
                 <template slot="items" slot-scope="props">
-                     <tr @click="props.expanded = !props.expanded">
+                     <tr>
                     <td>
                         <div  align="center">
-                            <v-icon>arrow_drop_down</v-icon>
+                            <v-icon @click="props.expanded = !props.expanded">arrow_drop_down</v-icon>
                             <v-btn small fab dark color="success" @click="viewDesign(props.item)">
                                 <v-icon color="white">info</v-icon>
                             </v-btn>
@@ -184,6 +116,11 @@
                     <td>
                         <div align="center">
                             {{ props.item.customer.name }}
+                        </div>
+                    </td>
+                       <td>
+                        <div align="center">
+                            {{ props.item.location.province_municipality+' '+props.item.location.municipality }}
                         </div>
                     </td>
                     <td>
@@ -292,6 +229,12 @@ export default {
                     align: 'center',
                     sortable: true,
                 },
+                      {
+                    text: self.trans('data.location_info'),
+                    value: 'name',
+                    align: 'center',
+                    sortable: true,
+                },
                 {
                     text: self.trans('data.project_name'),
                     value: 'project_name',
@@ -395,7 +338,7 @@ export default {
         },
         viewDesign(item) {
             const self = this;
-             self.$refs.designView.create(item);
+            self.$refs.designView.create(item);
         },
         viewDesignPrice(item){
            const self = this;

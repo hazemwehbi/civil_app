@@ -1,5 +1,6 @@
 <template>
     <v-container row justify-center>
+         <Location ref="locationInfo" @savedLocation="saveLocation"/>
         <v-card>
             <v-form ref="form" v-model="valid" lazy-validation>
                 <v-divider></v-divider>
@@ -143,7 +144,11 @@
     </v-container>
 </template>
 <script>
+import Location from '../locationInfo.vue'
 export default {
+    components:{
+Location
+    },
     data() {
         return {
             valid: false,
@@ -225,6 +230,9 @@ export default {
         });
     },
     methods: {
+         saveLocation(event){
+           this.location_id = event
+        },
         getCustomers() {
             const self = this;
             axios

@@ -196,6 +196,7 @@ Route::middleware(['auth'])
         Route::resource('reports', 'ReportController');
         Route::resource('reportTypes', 'ReportTypesController');
         Route::resource('serviceTypes', 'ServiceTypeController');
+        Route::resource('locations', 'LocationController');
         
         Route::get('get-Customer-name/{id}','Admin\CustomerController@getCustomerName');
         Route::get('visit-request-type/{id}','ProjectController@getVisitRequestType');

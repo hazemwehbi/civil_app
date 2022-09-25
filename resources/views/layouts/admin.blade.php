@@ -34,6 +34,7 @@
         APP.RTL = @if(in_array(config('app.locale'), config('constants.langs_rtl'))) true @else false @endif;
         APP.FIRST_DAY_OF_WEEK = '{{$first_day_of_week}}';
         APP.LANGUAGES = {!! json_encode(Config::get('languages'), true) !!};
+        APP.CURRENT_LANGUAGE = "{{App::getLocale()}}";
            @auth
              window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
 

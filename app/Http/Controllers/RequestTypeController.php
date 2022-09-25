@@ -90,6 +90,7 @@ class RequestTypeController extends Controller
             $visit_request = VisitRequest::create([
                 'customer_id'=>$customer_id,
                 'project_id'=>$request->project_id,
+                'location'=>$request->location_id,
                 'request_type'=>'visit_request',//$request->request_type,
                 'description'=> 'test',//$request->description,
                 'status'=> $status,
@@ -526,7 +527,7 @@ class RequestTypeController extends Controller
         $project_id = request()->get('projectId', false);
         $user=User::find(request()->user()->id);
         if($user->hasRole('superadmin')){
-         $requests =  VisitRequest::with('customer', 'project','specialties','offices','report','report.media')->where('request_type','visit_request');
+         $requests =  VisitRequest::with('customer', 'project','specialties','offices','report','report.media','location')->where('request_type','visit_request');
          if (!empty($project_id)) {
             $requests =$requests->where('project_id',$project_id);
          }
@@ -535,7 +536,7 @@ class RequestTypeController extends Controller
         else{
          $childrens=$user->childrenIds($user->id);
          array_push($childrens,$user->id);
-         $requests =  VisitRequest::with('customer', 'project','specialties','offices','report','report.media')->where('request_type','visit_request')
+         $requests =  VisitRequest::with('customer', 'project','specialties','offices','report','report.media','location')->where('request_type','visit_request')
          ->whereIn('customer_id', $childrens);
          if (!empty($project_id)) {
             $requests =$requests->where('project_id',$project_id);

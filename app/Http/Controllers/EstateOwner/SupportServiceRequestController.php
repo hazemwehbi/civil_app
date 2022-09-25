@@ -45,7 +45,7 @@ class SupportServiceRequestController extends  Controller
         $childrens=$user->childrenIds($user->id);
         array_push($childrens,$user->id);
         
-        $requests = DesignRequest::with('customer','offices','project','media')
+        $requests = DesignRequest::with('customer','service_type','offices','project','media','location')
         ->whereIn('customer_id', $childrens)
         ->where('request_type','support_service_request');
 
@@ -155,7 +155,9 @@ class SupportServiceRequestController extends  Controller
             $designRequest->status=$input['status'];
             $designRequest->customer_id=$input['customer_id'];
             $designRequest->project_id=$input['project_id'];
+            $designRequest->location_id=$input['location_id'];
             $designRequest->sent=$input['sent'];
+            $designRequest->service_type_id=$input['service_type_id'];
             $designRequest->note=$request->note;
             $designRequest->request_type = 'support_service_request';
             $designRequest->save();

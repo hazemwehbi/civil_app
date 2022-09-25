@@ -51,10 +51,10 @@ class DesignRequestController extends  Controller
         $childrens=$user->childrenIds($user->id);
         array_push($childrens,$user->id);
         
-        $requests = DesignRequest::with('stages','customer','offices','project','designEnginners','designEnginners.media')
+        $requests = DesignRequest::with('stages','location','customer','offices','project','designEnginners','designEnginners.media')
         ->where('request_type','design_request')
         ->whereIn('customer_id', $childrens);
-
+        
         $requests = $requests->orderBy($sort_by, $orderby)
                     ->paginate($rowsPerPage);
 
@@ -145,6 +145,7 @@ class DesignRequestController extends  Controller
     }
     public function store(Request $request)
     {
+      //  dd($request->all());
         $validate = validator($request->all(), [
                 'customer_id' => 'required',
                 'project_id' => 'required',
@@ -179,6 +180,7 @@ class DesignRequestController extends  Controller
             $designRequest->customer_id=$input['customer_id'];
             $designRequest->project_id=$input['project_id'];
             $designRequest->sent=$input['sent'];
+            $designRequest->location_id=$input['location_id'];
             $designRequest->note=$request->note;
             $designRequest->request_type = 'design_request';
             $designRequest->save();

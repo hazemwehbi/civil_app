@@ -7,7 +7,7 @@
             <v-spacer></v-spacer>
                     <v-btn flat icon @click="dialog = false"> <v-icon>clear</v-icon> </v-btn>
   </div>
-  <div class="border-t border-gray-200">
+  <div class="border-t border-gray-200" v-if="design.project">
     <dl>
       <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{trans('data.project_name')}}</dt>

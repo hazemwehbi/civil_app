@@ -8,7 +8,10 @@ class VisitRequest extends Model
 {
     protected $guarded = ['id'];
 
-
+    public function location(){
+        return $this->belongsTo(Location::class,'location_id');
+    }
+    
     public function specialties()
     {
         return $this->belongsToMany('App\Specialty', 'specialtiy_visit_request', 'rquest_id', 'specialty_id' );

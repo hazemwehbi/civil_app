@@ -14,7 +14,12 @@ class DesignRequest extends Model implements HasMedia
 
     //protected $fillable= ['name'];
     protected $table ="design_request";
-    
+    public function location(){
+        return $this->belongsTo(Location::class,'location_id');
+    }
+    public function service_type(){
+        return $this->belongsTo(ServiceType::class,'service_type_id');
+    }
     public function customer()
     {
         return $this->belongsTo('App\Components\User\Models\User','customer_id');

@@ -118,6 +118,11 @@
                             {{ props.item.customer.name }}
                         </div>
                     </td>
+                            <td>
+                        <div align="center">
+                            {{ props.item.service_type['name_'+getCurrentLang()] }}
+                        </div>
+                    </td>
                     <td>
                         <div align="center">
                             <v-btn
@@ -221,6 +226,12 @@ export default {
                 {
                     text: self.trans('messages.customer'),
                     value: 'customer',
+                    align: 'center',
+                    sortable: true,
+                },
+                     {
+                    text: self.trans('data.service_types_list'),
+                    value: 'name',
                     align: 'center',
                     sortable: true,
                 },

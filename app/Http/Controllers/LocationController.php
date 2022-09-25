@@ -2,24 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App;
-use App\Http\Util\CommonUtil;
-use App\ServiceType;
-use Config;
+use App\Location;
 use Illuminate\Http\Request;
 
-class ServiceTypeController extends Controller
+class LocationController extends Controller
 {
     public function index()
     {
        
-        $types= ServiceType::all();
-        $types=$types->map(function($name, $key) {
-             $name['name'] = Config::get('languages')[App::getLocale()]['display'] === 'Arabic' ? $name->name_ar : $name->name_en;
-       return $name;
-            });
+        $location= Location::all();
         
-        return $this->respond($types); 
+        return $this->respond($location); 
     }
 
     /**
@@ -40,11 +33,8 @@ class ServiceTypeController extends Controller
     public function store(Request $request)
     {
        // dd($request->all());
-        $service= new ServiceType();
-        $service->name_ar=$request->name_ar;
-        $service->name_en=$request->name_en;
-        $service->save();
-        return $this->respondSuccess(__('messages.saved_successfully'));
+        $location= Location::create($request->all());
+        return $this->respondSuccess(__('messages.saved_successfully'),['id'=>$location->id]);
     }
 
     /**
@@ -66,8 +56,8 @@ class ServiceTypeController extends Controller
      */
     public function edit($id)
     {
-        $type= ServiceType::find($id);
-        return $this->respond($type); 
+        $location= Location::find($id);
+        return $this->respond($location); 
     }
 
     /**
@@ -79,10 +69,8 @@ class ServiceTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $service=ServiceType::find($id);
-        $service->name_ar=$request->name_ar;
-        $service->name_en=$request->name_en;
-        $service->save();
+        $service=Location::find($id);
+        $service->update($request->all());
         return $this->respondSuccess(__('messages.saved_successfully'));
     }
 
@@ -94,9 +82,8 @@ class ServiceTypeController extends Controller
      */
     public function destroy($id)
     {
-        $type=ServiceType::find($id);
-        $type->delete();
+        $location=Location::find($id);
+        $location->delete();
         return $this->respondSuccess(__('messages.saved_successfully'));
     }
-
 }

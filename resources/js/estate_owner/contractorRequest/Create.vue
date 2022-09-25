@@ -1,5 +1,6 @@
 <template>
     <v-layout row justify-center>
+        <Location ref="locationInfo" @savedLocation="saveLocation"/>
         <v-dialog v-model="dialog" persistent max-width="600px">
             <v-card>
                 <v-card-title>
@@ -107,7 +108,11 @@
 </template>
 
 <script>
+import Location from '../locationInfo.vue'
 export default {
+      components:{
+Location
+    },
     data() {
         return {
             valid: true,
@@ -137,6 +142,9 @@ export default {
         self.$eventBus.$off('DESIGN_ADDED');
     },
     methods: {
+          saveLocation(event){
+           this.location_id = event
+        },
         close() {
             const self = this;
             self.loading = false;

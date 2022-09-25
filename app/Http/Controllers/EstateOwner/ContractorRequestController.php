@@ -48,7 +48,7 @@ class ContractorRequestController extends  Controller
         $childrens=$user->childrenIds($user->id);
         array_push($childrens,$user->id);
         
-        $requests = DesignRequest::with('customer','offices','project','media')
+        $requests = DesignRequest::with('customer','offices','project','media','location')
         ->whereIn('customer_id', $childrens)
         ->where('request_type','contractor_request');
 
@@ -157,6 +157,7 @@ class ContractorRequestController extends  Controller
             $designRequest->status=$input['status'];
             $designRequest->customer_id=$input['customer_id'];
             $designRequest->project_id=$input['project_id'];
+            $designRequest->location_id=$input['location_id'];
             $designRequest->sent=$input['sent'];
             $designRequest->note=$request->note;
             $designRequest->request_type = 'contractor_request';

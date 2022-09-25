@@ -1,5 +1,6 @@
 <template>
     <v-layout row justify-center>
+        <Location ref="locationInfo" @savedLocation="saveLocation"/>
         <v-dialog v-model="dialog" persistent max-width="600px">
             <v-card>
                 <v-card-title>
@@ -50,6 +51,15 @@
                                         ]"
                                         
                                         required
+                                    ></v-autocomplete>
+                                </v-flex>
+                                <v-flex xs12 sm12 md12>
+                                    <v-autocomplete
+                                        item-text="name"
+                                        item-value="id"
+                                        :items="serviceTypes"
+                                        v-model="design.service_type_id"
+                                        :label="trans('data.service_types_list')"
                                     ></v-autocomplete>
                                 </v-flex>
                             </v-layout>
@@ -107,7 +117,11 @@
 </template>
 
 <script>
+import Location from '../locationInfo.vue'
 export default {
+    components:{
+Location
+    },
     data() {
         return {
             valid: true,
@@ -119,6 +133,7 @@ export default {
             customers: [],
             projects: [],
             loading: false,
+            serviceTypes: []
         };
     },
 
@@ -127,6 +142,7 @@ export default {
         self.getCustomerProject();
         self.getCustomers();
         self.getSupportServices();
+          self.getServiceTypes()
     },
     mounted() {
         const self = this;
@@ -137,6 +153,20 @@ export default {
         self.$eventBus.$off('DESIGN_ADDED');
     },
     methods: {
+          saveLocation(event){
+           this.location_id = event
+        },
+                getServiceTypes(){
+            const self = this;
+ axios
+                .get('/serviceTypes')
+                .then(function(response) {
+                    self.serviceTypes = response.data;
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        },
         close() {
             const self = this;
             self.loading = false;
