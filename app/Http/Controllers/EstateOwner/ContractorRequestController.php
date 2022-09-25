@@ -157,7 +157,7 @@ class ContractorRequestController extends  Controller
             $designRequest->status=$input['status'];
             $designRequest->customer_id=$input['customer_id'];
             $designRequest->project_id=$input['project_id'];
-            $designRequest->location_id=$input['location_id'];
+            $designRequest->location_id=$request->location_id;
             $designRequest->sent=$input['sent'];
             $designRequest->note=$request->note;
             $designRequest->request_type = 'contractor_request';

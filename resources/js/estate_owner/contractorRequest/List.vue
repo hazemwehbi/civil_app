@@ -51,10 +51,10 @@
                     <span v-else>{{ props.header.text }}</span>
                 </template>
                 <template slot="items" slot-scope="props">
-                     <tr @click="props.expanded = !props.expanded">
+                     <tr>
                     <td>
                         <div align="center">
-                            <v-icon>arrow_drop_down</v-icon>
+                            <v-icon @click="props.expanded = !props.expanded">arrow_drop_down</v-icon>
                             <v-btn small fab dark color="success" @click="viewDesign(props.item)">
                                 <v-icon color="white">info</v-icon>
                             </v-btn>

@@ -36,10 +36,10 @@
                 class="elevation-3"
             >
                 <template slot="items" slot-scope="props">
-                     <tr @click="props.expanded = !props.expanded">
+                     <tr>
                     <td>
                         <div style="display: inline-flex; padding-left: 30%" align="center">
-                             <v-icon v-if="props.item.offices.length>0">arrow_drop_down</v-icon>
+                             <v-icon  v-if="props.item.offices.length>0" @click="props.expanded = !props.expanded">arrow_drop_down</v-icon>
                             <v-btn small fab dark color="success" @click="viewRequest(props.item)">
                                
                                 <v-icon color="white">info</v-icon>

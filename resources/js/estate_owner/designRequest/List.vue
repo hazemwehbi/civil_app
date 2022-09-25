@@ -120,7 +120,7 @@
                     </td>
                        <td>
                         <div align="center">
-                            {{ props.item.location.province_municipality+' '+props.item.location.municipality }}
+                            <span v-if="props.item.location">{{ props.item.location.province_municipality+' '+props.item.location.municipality }}</span>
                         </div>
                     </td>
                     <td>

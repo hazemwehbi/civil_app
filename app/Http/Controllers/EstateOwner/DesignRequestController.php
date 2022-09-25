@@ -180,7 +180,7 @@ class DesignRequestController extends  Controller
             $designRequest->customer_id=$input['customer_id'];
             $designRequest->project_id=$input['project_id'];
             $designRequest->sent=$input['sent'];
-            $designRequest->location_id=$input['location_id'];
+            $designRequest->location_id=$request->location_id;
             $designRequest->note=$request->note;
             $designRequest->request_type = 'design_request';
             $designRequest->save();

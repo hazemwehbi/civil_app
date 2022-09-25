@@ -19,7 +19,7 @@
       </div>
         <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{trans('data.location_info')}}</dt>
-        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ design.location.province_municipality+'-'+design.location.municipality+'-'+ design.location.category+'-'+ design.location.plan_id}}</dd>
+        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0"><span v-if="design.location">{{ design.location.province_municipality+'-'+design.location.municipality+'-'+ design.location.category+'-'+ design.location.plan_id}}</span></dd>
       </div>
      <div class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{ trans('data.enginnering_office_name') }}</dt>
