@@ -100,7 +100,7 @@
                     <v-btn color="green darken-1" flat @click="close">
                         {{ trans('data.cancel') }}
                     </v-btn>
-                      <v-btn color="white darken-1" class="bg-slate-600" flat @click="openLocation">
+                      <v-btn color="white darken-1" class="bg-gray-600" flat @click="openLocation">
                         {{ trans('data.location_info') }}
                     </v-btn>
                     <v-btn
