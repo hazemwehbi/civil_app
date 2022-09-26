@@ -45,6 +45,17 @@
                                     required
                                 ></v-text-field>
                             </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                    <v-select
+                                        item-text="value"
+                                        item-value="key"
+                                        :items="province_municipalities"
+                                        v-model="location_data"
+                                        :label="trans('data.province_municipality')"
+                                        :data-vv-as="trans('data.province_municipality')"
+                                        :error-messages="errors.collect('province_municipality')"
+                                    ></v-select>
+                                </v-flex>
                             <v-flex xs12 sm12>
                                 <v-text-field
                                     v-model="id_card_number"
@@ -390,6 +401,8 @@ Popover
             active: '',
             id_card_number: '',
             send_email: false,
+                 province_municipalities: [],
+            location_data:"",
             is_edit_role: false,
                   signature: null,
             signatureUrl: null,
@@ -404,9 +417,25 @@ Popover
     created() {
         const self = this;
         self.userId = self.$route.params.id;
+        self.getLocationInfo()
         self.edit(self.userId);
     },
     methods: {
+            getLocationInfo() {
+            const self = this;
+            axios
+                .get('/get-location-info')
+                .then(function (response) {
+                    self.province_municipalities = response.data.provinceMunicipalities;
+                    self.municipalities = response.data.municipalities;
+                    self.categories_location = response.data.categoriesLocation;
+                    self.neighborhoods = response.data.neighborhoods;
+                    self.districts = response.data.districts;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
           pickFile() {
             this.$refs.image.click();
         },
@@ -441,6 +470,7 @@ Popover
                     self.birth_date = User.birth_date;
                     self.name = User.name;
                     self.email = User.email;
+                    self.location_data= User.location_data,
                     self.id_card_number = User.id_card_number;
                     self.active = User.active !== null;
                     self.signatureUrl = response.data.user.signature;
@@ -506,6 +536,7 @@ Popover
                     current_address: self.form_fields.current_address,
                     skype: self.form_fields.skype,
                     linkedin: self.form_fields.linkedin,
+                    location_data: self.location_data,
                     facebook: self.form_fields.facebook,
                     twitter: self.form_fields.twitter,
                     birth_date: self.birth_date,

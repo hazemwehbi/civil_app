@@ -132,7 +132,7 @@ import Archives from '../common/archives/ArchivesData'
 Vue.use(Router);
 
 const router = new Router({
-   // mode: 'history',
+  //  mode: 'history',
     //hash: false,
     routes: [
         {
@@ -178,7 +178,7 @@ const router = new Router({
                     path: 'to-do-list',
                     name: 'to-do-list_estate.list',
                     component: ToDoList,
-                    name: 'todolist'
+                    name: 'todolistEstate'
                 },
 
 
@@ -295,7 +295,7 @@ const router = new Router({
                     path: 'to-do-list_contractor',
                     name: 'to-do-list_contractor.list',
                     component: ToDoListContractor,
-                    name: 'todolist'
+                    name: 'toDoListContractor'
                 },
                 {
                     path: 'contractor-request',
@@ -321,7 +321,7 @@ const router = new Router({
                     path: 'to-do-list-support-service',
                     name: 'to-do-list_support_service.list',
                     component: ToDoListSupportService,
-                    name: 'todolist'
+                    name: 'toDoListSupportService'
                 },
                 {
                     path: 'support_service-request',
@@ -345,7 +345,7 @@ const router = new Router({
                     path: 'to-do-list',
                     name: 'to-do-list_enginner_office.list',
                     component: EnginneringOfficeToDoList,
-                    name: 'todolist'
+                    name: 'enginneringOfficeToDoList'
                 },
 
 
@@ -933,19 +933,19 @@ router.beforeEach((to, from, next) => {
             // return ;
         }
         else if (APP.USER_TYPE_LOG == 'ENGINEERING_OFFICE_MANAGER') {
-            if (from.path != '/es/to-do-list')
+            if (from.path != '/en/to-do-list')
                 next('/en/to-do-list')
             else
                 next('/')
         }
         else if (APP.USER_TYPE_LOG == 'CONTRACTING_COMPANY') {
-            if (from.path != '/es/to-do-list_contractor')
+            if (from.path != '/en/to-do-list_contractor')
                 next('/en/to-do-list_contractor')
             else
                 next('/')
         }
         else if (APP.USER_TYPE_LOG == 'SUPPORT_SERVICES_OFFICE') {
-            if (from.path != '/es/to-do-list-support-service')
+            if (from.path != '/en/to-do-list-support-service')
                 next('/en/to-do-list-support-service')
             else
                 next('/')

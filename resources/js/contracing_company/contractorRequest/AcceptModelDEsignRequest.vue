@@ -26,7 +26,7 @@
                         <v-btn style="color: #06706d" text @click="close()">
                             {{ trans('data.cancel') }}
                         </v-btn>
-                        <v-btn  dark
+                        <v-btn dark
                                 color="teal"
                                 @click="viewProject(project.id)">
                             {{ trans('data.project_info') }}

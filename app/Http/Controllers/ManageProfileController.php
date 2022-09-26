@@ -151,6 +151,7 @@ class ManageProfileController extends Controller
                 'current_address',
                 'skype',
                 'linkedin',
+                'location_data',
                 'facebook',
                 'twitter',
                 'birth_date',
