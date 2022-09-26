@@ -65,6 +65,24 @@ export default {
             return _.get(APP.USER_ROLES, roleName, false);
             //  return _.get(APP.USER_ROLES, 'superadmin', _.get(APP.USER_ROLES, roleName, false));
         },
+              viewProject(id) {
+            const self = this;
+            self.$router.push({
+                name: 'view_project',
+                params: { id: id },
+            });
+        },
+                 getProject(project_id) {
+         const self = this;
+            axios
+                .get('/get-project/'+ project_id)
+                .then(function (response) {
+                    self.project  = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         trans(string, params = []) {
             var str = _.get(window.i18n, string);
             _.forEach(params, function (value, key) {

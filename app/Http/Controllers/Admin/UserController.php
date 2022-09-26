@@ -155,7 +155,7 @@ class UserController extends AdminController
         try {
             DB::beginTransaction();
 
-            $input = $request->only('name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number','title');
+            $input = $request->only('name', 'email','location_data', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number','title');
             $input['parent_id']=Auth::id(); 
 
             $input['isActive']=1; 
@@ -325,6 +325,7 @@ class UserController extends AdminController
                 'skype',
                 'linkedin',
                 'facebook',
+                'location_data',
                 'twitter',
                 'birth_date',
                 'guardian_name',

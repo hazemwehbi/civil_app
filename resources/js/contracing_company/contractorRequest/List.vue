@@ -279,6 +279,7 @@ export default {
         refreshTable(){
             this.loadRequests();
         },
+        
         viewPrice(item){
          const self = this;
          let pdf_data=[
@@ -290,6 +291,7 @@ export default {
         },
            acceptProject(item) {
             const self = this;
+          //  console.log(item)
             self.$store.commit('showDialog', {
                 type: 'confirm',
                 icon: 'warning',
@@ -299,6 +301,7 @@ export default {
                     let data = {
                         status: item.status,
                         id: item.id,
+                        project: item.project,
                         office_id: self.getCurrentUser(),
                     };
                     self.$refs.acceptenginneringoffice.create(data);
@@ -343,13 +346,6 @@ export default {
         createdDate(date) {
             const current_datetime = new Date(date);
             return current_datetime.toLocaleDateString('en-US');
-        },
-        viewProject(id) {
-            const self = this;
-            self.$router.push({
-                name: 'view_project',
-                params: { id: id },
-            });
         },
         create() {
             const self = this;

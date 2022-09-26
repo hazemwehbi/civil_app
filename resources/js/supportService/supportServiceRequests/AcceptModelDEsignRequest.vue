@@ -26,6 +26,11 @@
                         <v-btn style="color: #06706d" text @click="close()">
                             {{ trans('data.cancel') }}
                         </v-btn>
+                                 <v-btn  dark
+                                color="teal"
+                                @click="viewProject(project.id)">
+                            {{ trans('data.project_info') }}
+                        </v-btn>
                         <v-btn
                             style="background-color: #06706d; color: white"
                             color="darken-1"
@@ -52,6 +57,7 @@ export default {
             id: '',
             design_id: '',
             price_pdf: null,
+            project: null
         };
     },
     mounted() {
@@ -73,6 +79,7 @@ export default {
         create(data) {
             const self = this;
             self.design_id = data.id
+            self.project = data.project
             self.dialog = true;
         },
         save() {

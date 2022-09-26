@@ -488,6 +488,7 @@ export default {
                     let data = {
                         status: item.status,
                         id: item.id,
+                        project: self.project,
                         office_id: item.office_id,
                     };
                     self.$refs.acceptenginneringoffice.fillData(data);
@@ -630,14 +631,6 @@ export default {
                         color: 'red',
                     });
                 }
-            });
-        },
-
-        viewProject(id) {
-            const self = this;
-            self.$router.push({
-                name: 'view_project',
-                params: { id: id },
             });
         },
 

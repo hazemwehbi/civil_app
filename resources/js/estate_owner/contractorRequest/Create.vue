@@ -6,7 +6,7 @@
                 <v-card-title>
                     <v-icon>assignment</v-icon>
                     <span class="headline">
-                        {{ trans('data.create_design') }}
+                        {{ trans('data.create_contractor_request') }}
                     </span>
                     <v-spacer></v-spacer>
                     <v-btn flat icon @click="dialog = false"> <v-icon>clear</v-icon> </v-btn>
@@ -90,9 +90,9 @@
                     <v-btn color="green darken-1" flat @click="close">
                         {{ trans('data.cancel') }}
                     </v-btn>
-                            <v-btn color="white darken-1" class="bg-gray-600" flat @click="openLocation">
+                           <!-- <v-btn color="white darken-1" class="bg-gray-600" flat @click="openLocation">
                         {{ trans('data.location_info') }}
-                    </v-btn>
+                    </v-btn>-->
                     <v-btn
                         :disabled="!valid || !checkActive()"
                         color="success"
@@ -127,7 +127,8 @@ Location
             customers: [],
             projects: [],
             loading: false,
-            location_id: null
+            location_id: null,
+            project: null
         };
     },
 
@@ -209,6 +210,8 @@ Location
         //////get data/////
         updateEmployee(value) {
             const self = this;
+               self.getProject(value)
+            self.getContractors();
             axios
                 .get('get-customer-project/' + value)
                 .then(function (response) {
@@ -245,7 +248,7 @@ Location
             axios
                 .get('/get-contractors')
                 .then(function (response) {
-                    self.contractors = response.data;
+                    self.contractors = response.data.filter(val => val.location_data == self.project.location.province_municipality);
                 })
                 .catch(function (error) {
                     console.log(error);

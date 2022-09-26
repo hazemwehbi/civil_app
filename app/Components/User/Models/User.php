@@ -2,6 +2,7 @@
 
 namespace App\Components\User\Models;
 
+use App\Location;
 use App\System;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -73,7 +74,6 @@ class User extends Authenticatable implements HasMedia
     {
         $this->attributes['password'] = bcrypt($password);
     }
-
     /**
      * register medias for users
      *

@@ -120,6 +120,17 @@
                                     :label="trans('messages.alternate_num')"
                                 ></v-text-field>
                             </v-flex>
+                               <v-flex xs12 sm6 md4>
+                                    <v-select
+                                        item-text="value"
+                                        item-value="key"
+                                        :items="province_municipalities"
+                                        v-model="location_data"
+                                        :label="trans('data.province_municipality')"
+                                        :data-vv-as="trans('data.province_municipality')"
+                                        :error-messages="errors.collect('province_municipality')"
+                                    ></v-select>
+                                </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-text-field
                                     v-model="form_fields.skype"
@@ -377,6 +388,8 @@ export default {
             form_fields: [],
             birth_date: null,
             gender_types: [],
+            province_municipalities: [],
+            location_data:"",
             email: '',
             passwordConfirm: null,
             id_card_number: '',
@@ -395,13 +408,28 @@ export default {
     mounted() {
         const self = this;
         self.loadRolesAndGenders();
+        self.getLocationInfo()
         self.$store.commit('setBreadcrumbs', [
             { label: 'Users', name: 'users.list' },
             { label: 'Create', name: '' },
         ]);
     },
     methods: {
-      
+        getLocationInfo() {
+            const self = this;
+            axios
+                .get('/get-location-info')
+                .then(function (response) {
+                    self.province_municipalities = response.data.provinceMunicipalities;
+                    self.municipalities = response.data.municipalities;
+                    self.categories_location = response.data.categoriesLocation;
+                    self.neighborhoods = response.data.neighborhoods;
+                    self.districts = response.data.districts;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
          pickFile() {
       this.$refs.image.click()
     },
@@ -432,6 +460,7 @@ export default {
                 let payload = {
                     signature: self.signatureData,
                     name: self.name,
+                    location_data: self.location_data,
                     email: self.email,
                     mobile: self.form_fields.mobile,
                     alternate_num: self.form_fields.alternate_num,

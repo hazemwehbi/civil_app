@@ -118,11 +118,11 @@
                             {{ props.item.customer.name }}
                         </div>
                     </td>
-                       <td>
+                       <!--<td>
                         <div align="center">
                             <span v-if="props.item.location">{{ props.item.location.province_municipality+' '+props.item.location.municipality }}</span>
                         </div>
-                    </td>
+                    </td>-->
                     <td>
                         <div align="center">
                             <v-btn
@@ -229,12 +229,12 @@ export default {
                     align: 'center',
                     sortable: true,
                 },
-                      {
+                    /*  {
                     text: self.trans('data.location_info'),
                     value: 'name',
                     align: 'center',
                     sortable: true,
-                },
+                },*/
                 {
                     text: self.trans('data.project_name'),
                     value: 'project_name',

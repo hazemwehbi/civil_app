@@ -318,13 +318,6 @@ export default {
             const current_datetime = new Date(date);
             return current_datetime.toLocaleDateString('en-US');
         },
-        viewProject(id) {
-            const self = this;
-            self.$router.push({
-                name: 'view_project',
-                params: { id: id },
-            });
-        },
         create() {
             const self = this;
             self.$refs.designAdd.create();
@@ -352,6 +345,7 @@ export default {
                     let data = {
                         status: item.status,
                         id: item.id,
+                        project: item.project,
                         office_id: self.getCurrentUser(),
                     };
                     self.$refs.acceptenginneringoffice.create(data);

@@ -17,11 +17,11 @@
         <dt class="text-md font-medium text-gray-500">{{trans('messages.customer')}}</dt>
         <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ design.customer.name }}</dd>
       </div>
-          <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <!--<div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{trans('data.location_info')}}</dt>
         <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0"><span v-if="design.location">{{ design.location.province_municipality+'-'+design.location.municipality+'-'+ design.location.category+'-'+ design.location.plan_id}}</span></dd>
-      </div>
-     <div class="bg-white px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+      </div>-->
+     <div class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{ trans('data.enginnering_office_name') }}</dt>
         <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">
           <ul role="list" class="divide-y divide-gray-200 rounded-md border border-gray-200">
@@ -35,7 +35,7 @@
           </ul>
         </dd>
       </div>
-      <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+      <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-white px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{ trans('data.note') }}</dt>
         <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ design.note }}</dd>
       </div>

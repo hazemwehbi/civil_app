@@ -100,9 +100,9 @@
                     <v-btn color="green darken-1" flat @click="close">
                         {{ trans('data.cancel') }}
                     </v-btn>
-                      <v-btn color="white darken-1" class="bg-gray-600" flat @click="openLocation">
+                      <!--<v-btn color="white darken-1" class="bg-gray-600" flat @click="openLocation">
                         {{ trans('data.location_info') }}
-                    </v-btn>
+                    </v-btn>-->
                     <v-btn
                         :disabled="!valid || !checkActive()"
                         color="success"
@@ -138,7 +138,8 @@ Location
             projects: [],
             loading: false,
             locations: [],
-            location_id: null
+            location_id: null,
+            project: null
         };
     },
 
@@ -169,7 +170,6 @@ Location
  axios
                 .get('/locations')
                 .then(function(response) {
-                    console.log(response)
                     self.locations = response.data;
                 })
                 .catch(function(error) {
@@ -232,6 +232,8 @@ Location
         //////get data/////
         updateEmployee(value) {
             const self = this;
+            self.getProject(value)
+            self.getOffices();
             axios
                 .get('get-customer-project/' + value)
                 .then(function (response) {
@@ -268,8 +270,12 @@ Location
             axios
                 .get('/get-offices')
                 .then(function (response) {
-                    self.engennering_offices = response.data;
-                })
+                 //   if(self.project.location.province_municipality)
+                    self.engennering_offices = response.data.filter(val => val.location_data == self.project.location.province_municipality);
+                 //   else
+                //    self.engennering_offices = response.data
+              console.log(self.engennering_offices)
+              })
                 .catch(function (error) {
                     console.log(error);
                 });

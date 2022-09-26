@@ -129,9 +129,9 @@
                         <v-btn style="color: #06706d" @click="$router.go(-1)">
                             {{ trans('data.back') }}
                         </v-btn>
-                            <v-btn color="white darken-1" class="bg-gray-600" flat @click="openLocation">
+                            <!--<v-btn color="white darken-1" class="bg-gray-600" flat @click="openLocation">
                         {{ trans('data.location_info') }}
-                    </v-btn>
+                    </v-btn>-->
                         <v-btn
                             :disabled="!valid || !checkActive()"
                             color="success"
@@ -192,7 +192,8 @@ Location
             dead_line_date: null,
             enginnering_type: '',
             note: '',
-            location_id: null
+            location_id: null,
+            project: null
         };
     },
     computed: {
@@ -257,7 +258,7 @@ Location
             axios
                 .get('/get-offices')
                 .then(function (response) {
-                    self.engennering_offices = response.data;
+                    self.engennering_offices = response.data.filter(val => val.location_data == self.project.location.province_municipality);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -363,6 +364,8 @@ Location
         },
         updateEmployee(value) {
             const self = this;
+            self.getProject(value)
+            self.getOffices();
             axios
                 .get('get-customer-project/' + value)
                 .then(function (response) {

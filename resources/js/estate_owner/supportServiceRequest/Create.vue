@@ -105,9 +105,9 @@
                                             ">
                         {{ trans('data.all_service_types') }}
                     </v-btn>
-                            <v-btn color="white darken-1" class="bg-gray-600" flat @click="openLocation">
+                           <!-- <v-btn color="white darken-1" class="bg-gray-600" flat @click="openLocation">
                         {{ trans('data.location_info') }}
-                    </v-btn>
+                    </v-btn>-->
                     <v-btn
                         :disabled="!valid || !checkActive()"
                         color="success"
@@ -142,7 +142,8 @@ Location
             projects: [],
             loading: false,
             serviceTypes: [],
-            location_id: null
+            location_id: null,
+            project: null
         };
     },
 
@@ -236,6 +237,8 @@ Location
         //////get data/////
         updateEmployee(value) {
             const self = this;
+               self.getProject(value)
+            self.getSupportServices();
             axios
                 .get('get-customer-project/' + value)
                 .then(function (response) {
@@ -272,8 +275,7 @@ Location
             axios
                 .get('/get-supprt-services')
                 .then(function (response) {
-                    self.supportServices = response.data;
-                    console.log(response.data)
+                    self.supportServices = response.data.filter(val => val.location_data == self.project.location.province_municipality);
                 })
                 .catch(function (error) {
                     console.log(error);
