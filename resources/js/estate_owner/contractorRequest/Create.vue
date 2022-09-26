@@ -127,6 +127,7 @@ Location
             customers: [],
             projects: [],
             loading: false,
+            location_id: null
         };
     },
 
@@ -173,7 +174,8 @@ Location
             const self = this;
             let data = self.design;
             data['sent'] = sent;
-            
+            data['location_id'] = self.location_id
+
             if (this.$refs.form.validate()) {
                 self.loading = true;
                 axios

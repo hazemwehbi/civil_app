@@ -99,13 +99,18 @@
                     <v-btn color="green darken-1" flat @click="close">
                         {{ trans('data.cancel') }}
                     </v-btn>
+                       <v-btn color="white darken-1" class="primary" flat @click="$router.push({
+                                                    name: 'service_types_list',
+                                                })
+                                            ">
+                        {{ trans('data.all_service_types') }}
+                    </v-btn>
                             <v-btn color="white darken-1" class="bg-gray-600" flat @click="openLocation">
                         {{ trans('data.location_info') }}
                     </v-btn>
                     <v-btn
                         :disabled="!valid || !checkActive()"
                         color="success"
-                        class="mr-4"
                         @click="store(0)"
                     >
                         {{ trans('data.draft') }}
@@ -136,7 +141,8 @@ Location
             customers: [],
             projects: [],
             loading: false,
-            serviceTypes: []
+            serviceTypes: [],
+            location_id: null
         };
     },
 
@@ -195,7 +201,8 @@ Location
             const self = this;
             let data = self.design;
             data['sent'] = sent;
-            
+            data['location_id'] = self.location_id
+
             if (this.$refs.form.validate()) {
                 self.loading = true;
                 axios

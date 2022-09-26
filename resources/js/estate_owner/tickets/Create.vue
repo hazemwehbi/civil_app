@@ -192,6 +192,7 @@ Location
             dead_line_date: null,
             enginnering_type: '',
             note: '',
+            location_id: null
         };
     },
     computed: {
@@ -235,6 +236,7 @@ Location
     methods: {
          saveLocation(event){
            this.location_id = event
+           console.log(event)
         },
          openLocation(){
             this.$refs.locationInfo.openLocationDialog()
@@ -325,11 +327,11 @@ Location
                 customer_id: self.customer_id,
                 office_id: self.office_id,
                 dead_line_date: self.dead_line_date,
+                location_id: self.location_id,
                 note: self.note, //
                 enginnering_type: self.enginnering_type,
                 request_type: 'visit_request'
             };
-            console.log(data);
             if (this.$refs.form.validate()) {
                 self.loading = true;
                 axios

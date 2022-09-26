@@ -119,7 +119,7 @@
                         </div>
                     </td>
                             <td>
-                        <div align="center">
+                        <div align="center" v-if="props.item.service_type">
                             {{ props.item.service_type['name_'+getCurrentLang()] }}
                         </div>
                     </td>

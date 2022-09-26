@@ -90,7 +90,7 @@ class RequestTypeController extends Controller
             $visit_request = VisitRequest::create([
                 'customer_id'=>$customer_id,
                 'project_id'=>$request->project_id,
-                'location'=>$request->location_id,
+                'location_id'=>$request->location_id,
                 'request_type'=>'visit_request',//$request->request_type,
                 'description'=> 'test',//$request->description,
                 'status'=> $status,
@@ -170,7 +170,7 @@ class RequestTypeController extends Controller
         // if (!request()->user()->can('tickets.edit')) {
         //     abort(403, 'Unauthorized action.');
         // }
-        $request = VisitRequest::with('specialties','offices')->findOrFail($id);
+        $request = VisitRequest::with('specialties','offices','location')->findOrFail($id);
         $enginnering_types=$this->CommonUtil->getEnginneringTypes();
         $request_types=$this->CommonUtil->getRequestsTypes();
         $data = [

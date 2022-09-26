@@ -147,7 +147,39 @@
                                     </v-hover>
                                 </v-flex>
                             </v-flex>
-
+     <v-flex xs12 sm12 md4 v-if="$can('serviceType.view')">
+                                <v-flex xs12 sm12 md12>
+                                    <v-hover
+                                        v-slot:default="{ hover }"
+                                        open-delay="100"
+                                        close-delay="100"
+                                    >
+                                        <v-card
+                                            @click="
+                                                $router.push({
+                                                    name: 'service_types_list',
+                                                })
+                                            "
+                                            :elevation="hover ? 16 : 2"
+                                        >
+                                            <v-card-text>
+                                                <div class="text-md-center mt-2">
+                                                    <p
+                                                        x-large
+                                                        style="font-size: 18px; color: #06706d"
+                                                    >
+                                                        {{
+                                                            trans('data.service_types_list')
+                                                        }}&nbsp;&nbsp;
+                                                        <v-icon :color="'#06706d'">settings</v-icon>
+                                                    </p>
+                                                </div>
+                                            </v-card-text>
+                                        </v-card>
+                                        
+                                    </v-hover>
+                                </v-flex>
+                            </v-flex>
                             <v-flex xs12 sm12 md4>
                                 <v-flex xs12 sm12 md12>
                                     <v-hover

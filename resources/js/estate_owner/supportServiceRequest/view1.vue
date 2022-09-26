@@ -37,7 +37,7 @@
       </div>
           <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-white px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{trans('data.service_types_list')}}</dt>
-        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0">{{ design.service_type['name_'+getCurrentLang()] }}</dd>
+        <dd class="mt-1 text-md text-gray-900 sm:col-span-2 sm:mt-0"><span v-if="design.service_type">{{ design.service_type['name_'+getCurrentLang()] }}</span></dd>
       </div>
       <div :class="$vuetify.breakpoint.xsOnly?'flex justify-around':''" class="bg-gray-50 px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
         <dt class="text-md font-medium text-gray-500">{{ trans('data.note') }}</dt>
