@@ -12,7 +12,8 @@
               <v-autocomplete
                                 id="input_report_type"
                                 class="mx-2"
-                                item-text="stage"
+                                item-text="value"
+                                item-value="id"
                                 :items="stages"
                                 v-model="stage"
                                 :label="trans('data.stage')"
@@ -41,7 +42,7 @@
                             ></v-autocomplete>
                                      <v-autocomplete
                                 id="input_office"
-                                v-if="$hasRole('superadmin') && report_type"
+                                v-if="$hasRole('superadmin') && report_type && stage.id==1"
                                 class="mx-2"
                                 item-text="name"
                                 :items="offices"
@@ -59,7 +60,7 @@
                                 id="input_project"
                                 class="mx-2"
                                 item-text="name"
-                                v-if="($hasRole('superadmin') && office || report_type) && !$route.params.id"
+                                v-if="($hasRole('superadmin') && office || report_type) && !$route.params.id && stage.id==1"
                                 :items="projects"
                                 v-model="project"
                                 :label="trans('data.projects')"
@@ -78,7 +79,7 @@
                    
         </v-card>
         <div class="mx-auto" :class="$vuetify.breakpoint.xsOnly?'max-w-full':'report'">
-             <ReportPdf style="z-index:-15;position:fixed;" :visit_request_id="visit_request_id" :reportData="reportData" :language="language" ref="pdf" />
+             <ReportPdf style="z-index:-15;position:fixed;" :visit_request_id="visit_request_id" :reportData="reportData" :language="language" :stage="stage" ref="pdf" />
             </div>
         </v-form>
         <AddReportType :externalDialog="externalDialog" @close="externalDialog = event" @store="externalDialog = event" />
@@ -110,7 +111,7 @@ export default {
             create_time: '',
             loading:false,
             projects:[],
-            stages: [{id: 1, stage: 'Stage One'}],
+            stages: [],
             stage: null,
             language: null,
             visit_request_id: null
@@ -119,11 +120,17 @@ export default {
     created() {
         const self = this;
         self.getReportTypes();
+        self.getStages();
         self.getProject(self.$route.params.id)
         self.visit_request_id = self.$route.params.visit_request_id
         self.language = localStorage.getItem('currentLange')?localStorage.getItem('currentLange'):'ar'
     },
     methods: {
+        getStages(){
+           axios.get('stages').then((response)=>{
+            this.stages = response.data
+           })
+        },
         printPdf(event){
        this.reportData = event
          this.$refs.pdf.renderComponent();

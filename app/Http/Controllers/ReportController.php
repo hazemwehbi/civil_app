@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Report;
 use App\ReportType;
+use App\StageProject;
 use Auth;
 use Exception;
 use Illuminate\Http\File;
@@ -42,7 +43,10 @@ class ReportController extends Controller
         return $this->respond($project_note);
     }
 
-
+   public function stages(){
+    $stages = StageProject::orderby('order')->get();
+    return $this->respond($stages); 
+   }
 
     public function store(Request $request)
     {
@@ -59,13 +63,14 @@ class ReportController extends Controller
             else
             $office_id = $request->input('office_id');
             $report_type = $request->input('type');
-         //  dd($request->visit_request_id);
+          // dd($request->all());
             $report = Report::create([
                         'project_id' => $project_id,
                         'type_id'=>$report_type,
                         'created_by'=>Auth::id(),
                         'office_id'=> $office_id,
-                        'visit_request_id' => $request->visit_request_id
+                        'visit_request_id' => $request->visit_request_id,
+                        'stage_id' => $request->stage_id
                     ]);
                      
                $report->addMedia($request->pdfFile)->usingFileName('report'.time().'.pdf')->toMediaCollection('report');

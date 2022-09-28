@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md  id="printMe" ref="pdfHtml">
+  <v-container grid-list-md  id="printMe" ref="pdfHtml" style="min-width:1100px">
 <div class="mt-2" v-if="reportData" style="border-end: 1px solid gray;border-start: 1px solid gray;border-top: 1px solid gray">
  <div class="d-flex justify-space-between header">
     <div v-if="$hasRole('Engineer')" class="title">{{ reportData.office?reportData.office.parent_title:'' }}</div>
@@ -25,35 +25,35 @@
 
       
     </v-flex>
-     <v-flex xs12 sm4 md4 class="height-detect">
+     <v-flex xs4 sm4 md4 class="height-detect">
         <div class="label mx-2" v-if="reportData.project">{{trans('messages.project')}} : {{ reportData.project.name }}</div>
 
     </v-flex>
-      <v-flex xs12 sm4 md4 class="merge_rows justify-center height-detect" style="border-end: 1px solid gray;border-start: 1px solid gray;">
+      <v-flex xs4 sm4 md4 class="merge_rows justify-center height-detect" style="border-end: 1px solid gray;border-start: 1px solid gray;">
         <div class="label mx-2">{{trans('data.work_to_check')}} :</div>
     </v-flex>
-      <v-flex xs12 sm4 md4 class="merge_rows justify-center height-detect">
+      <v-flex xs4 sm4 md4 class="merge_rows justify-center height-detect">
         <div class="label mx-2">{{trans('data.delivery_request_num')}} :</div>
     </v-flex>
-       <v-flex xs12 sm4 md4 class="height-detect">
+       <v-flex xs4 sm4 md4 class="height-detect">
         <div class="label mx-2">{{trans('data.day')}} : {{reportData.day}}</div>
     
     </v-flex>
-     <v-flex xs12 sm4 md4 class="height-detect merge_rows justify-center" style="border-end: 1px solid gray;border-start: 1px solid gray;">
+     <v-flex xs4 sm4 md4 class="height-detect merge_rows justify-center" style="border-end: 1px solid gray;border-start: 1px solid gray;">
       {{ language == 'ar'?reportData.type.type_name_ar:reportData.type.type_name_en }}
     </v-flex>
-     <v-flex xs12 sm4 md4 class="merge_rows justify-center height-detect">
+     <v-flex xs4 sm4 md4 class="merge_rows justify-center height-detect">
           ({{ reportData.id }})
     </v-flex>
-    <v-flex xs12 sm4 md4 class="height-detect">
+    <v-flex xs4 sm4 md4 class="height-detect">
         <div class="label mx-2">{{trans('data.date')}} : {{reportData.create_time}}</div>
     </v-flex>
-    <v-flex xs12 sm4 md4 class="height-detect" style="border-end: 1px solid gray;border-start: 1px solid gray;"></v-flex>
-    <v-flex xs12 sm4 md4 ></v-flex>
-     <v-flex xs12 sm8 md8 class="height-detect" style="border-end: 1px solid gray; border-bottom:none">
+    <v-flex xs4 sm4 md4 class="height-detect" style="border-end: 1px solid gray;border-start: 1px solid gray;"></v-flex>
+    <v-flex xs4 sm4 md4 ></v-flex>
+     <v-flex xs8 sm8 md8 class="height-detect" style="border-end: 1px solid gray; border-bottom:none">
         <div class="label mx-2 d-flex">{{trans('data.contractor_actor')}} : {{reportData.contractor_actor}} </div>
     </v-flex>
-    <v-flex xs12 sm4 md4 class="height-detect" style="border-bottom:none">
+    <v-flex xs4 sm4 md4 class="height-detect" style="border-bottom:none">
         <div class="label d-flex">{{trans('data.signature')}} : {{reportData.signature}} </div>
     </v-flex>
   </v-layout>
@@ -111,7 +111,7 @@
           <v-icon v-if="reportData.rating==='withComments'">check</v-icon>
           )
         </div>
-            <div class="px-2 footer-item mt-2">
+            <div class="px-2 footer-item mt-2 mb-2">
           3 {{trans('data.unacceptable')}} (
              <v-icon v-if="reportData.rating==='unacceptable'">check</v-icon>
          )
@@ -141,7 +141,8 @@ jsPDF
   props:{
     reportData: null,
     language: null,
-    visit_request_id:null
+    visit_request_id:null,
+    stage: null
   },
   data(){
      return{
@@ -182,7 +183,7 @@ jsPDF
             formData.append('office_id', self.reportData.office?.id);
             formData.append('type', self.reportData.type.id);
             formData.append('visit_request_id',self.visit_request_id);
-            console.log(self.visit_request_id, formData)
+            formData.append('stage_id',self.stage.id);
             self.$validator.validateAll().then((result) => {
                 if (result == true) {
                     self.loading = true;

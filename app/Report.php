@@ -17,6 +17,10 @@ class Report extends Model implements HasMedia
     {
         return $this->belongsTo('App\Project');
     }
+    public function stage()
+    {
+        return $this->belongsTo(StageProject::class, 'stage_id' );
+    }
     public function type()
     {
         return $this->belongsTo('App\ReportType');

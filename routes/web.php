@@ -110,7 +110,7 @@ Route::middleware(['auth'])
 
       //  Route::post('visit-request', 'RequestTypeController@store');
         Route::resource('request', 'RequestTypeController');
-        
+        Route::get('stages', 'ReportController@stages');
 
       
         Route::get('get-requests', 'RequestTypeController@getRequests');
