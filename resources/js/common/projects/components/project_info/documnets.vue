@@ -58,7 +58,7 @@
                             <div class="flex">
                                  <div class="main_view" :class="$vuetify.breakpoint.xsOnly?'w-full':'w-3/4'" v-if="type === 'image'">
             <img v-if="currentSrc" :src="currentSrc" id="main" alt="IMAGE">
-            <img v-else src="img/image-1@2x.jpg" >
+            <img v-else src="img/image-1@2x.jpg" style="max-width:40rem">
         </div>
  
         <!-- All images with side view -->
@@ -74,7 +74,7 @@
 			:page="i"
 			style=""
 		></pdf>
-<img v-if="!numPages" src="img/image-1@2x.jpg" >
+<img v-if="!numPages" src="img/image-1@2x.jpg" style="max-width:40rem">
         </div>
  
         <!-- All images with side view -->

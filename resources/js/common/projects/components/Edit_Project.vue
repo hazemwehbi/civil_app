@@ -19,7 +19,7 @@
                         {{ trans('data.project_info') }}
                     </v-stepper-step>
                 </v-stepper-header>
-
+<v-form ref="form">
                 <v-stepper-items>
                     <v-stepper-content step="1">
                         <CustomerInfo
@@ -82,6 +82,7 @@
                         </v-layout>
                     </v-stepper-content>
                 </v-stepper-items>
+                </v-form>
             </v-stepper>
         </v-container>
     </div>

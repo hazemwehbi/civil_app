@@ -12,7 +12,7 @@
                     </v-card-title>
                     <v-divider></v-divider>
                     <v-card-text>
-                        <v-form ref="form">
+                        
                             <v-container grid-list-md>
                                 <v-layout row wrap>
                                     <v-flex xs12 md6>
@@ -370,7 +370,7 @@
                             <v-container grid-list-md>
                                 <v-layout row wrap> </v-layout>
                             </v-container>
-                        </v-form>
+                
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -419,22 +419,6 @@ export default {
                 lead_id: null,
                 status: null,
                 id: '',
-
-                //category_id: null,
-
-                // name:'',
-                // authorization_request_number:'',
-                // license_number:'',
-                // plot_number:'',
-                // cadastral_decision_number:'',
-                // start_date:'',
-                // end_date:'',
-                // status:'',
-                // description:'',
-                // billing_type:'',
-                // estimated_hours:'',
-                // estimated_cost:'',
-                // task_hours:'',
             },
             using_types: [],
             roles_number: [],
@@ -493,7 +477,7 @@ export default {
                 if (result == true) {
                     this.$emit('next', this.project);
                 } else {
-                    this.$refs.form.validate();
+                  //  this.$refs.form.validate();
                 }
             });
         },

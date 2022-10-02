@@ -9,6 +9,7 @@ return [
     'work_to_check'=>'Work to be checked',
     'delivery_request_num' => 'Receipt order number',
     'day' => 'Day',
+    'mobile'=>'Mobile',
     'date' => 'Date',
     'contractor_actor' => 'Contractor Representative',
     'signature'=>'Signature',

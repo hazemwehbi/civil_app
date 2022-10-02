@@ -126,9 +126,17 @@
                                         item-value="key"
                                         :items="province_municipalities"
                                         v-model="location_data"
+                                          :rules="[
+                                        (v) =>
+                                            !!v ||
+                                            trans('messages.required', {
+                                                name: trans('data.province_municipality'),
+                                            }),
+                                    ]"
                                         :label="trans('data.province_municipality')"
                                         :data-vv-as="trans('data.province_municipality')"
                                         :error-messages="errors.collect('province_municipality')"
+                                        required
                                     ></v-select>
                                 </v-flex>
                             <v-flex xs12 sm6 md4>

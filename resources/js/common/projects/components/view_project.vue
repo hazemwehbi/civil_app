@@ -135,17 +135,17 @@
   </v-navigation-drawer>
     <v-card :class="$vuetify.breakpoint.xsOnly?'mt-4':''" class="mx-3" style="min-width: 80%;" flat>
                     <v-card-text>
-                        <ProjectDataOverview ref="projectData" v-show="currentCard === 'projectInfo'" :projectData="resultData.data.data.project" />
-                        <LocationDataView ref="locationInfo" :location="resultData.data.data.project.location" v-show="currentCard === 'locationInfo'" />
+                        <ProjectDataOverview ref="projectData" v-show="currentCard === 'projectInfo'" :projectData="resultData?resultData.data.data.project:null" />
+                        <LocationDataView ref="locationInfo" :location="resultData?resultData.data.data.project.location:null" v-show="currentCard === 'locationInfo'" />
                          <UserDataOverview
                            v-show="currentCard === 'customerInfo'"
-                           :ownerData="resultData.data.data.project.customer"
+                           :ownerData="resultData?resultData.data.data.project.customer:null"
                             ref="customerInfo"
                         />
                         <ProjectActivity ref="projectActivity"
                         v-show="currentCard === 'projectActivity'"
                         > </ProjectActivity>
-                        <TaskLists v-show="currentCard === 'taskLists'"></TaskLists>
+                        <TaskLists v-show="currentCard === 'taskLists'" :backBtn="false"></TaskLists>
                         <visitRequests v-show="currentCard === 'visitRequests'" :backBtn="false" :id="projectId" ></visitRequests>
                          <visitInvoices :backBtn="false" :id="projectId" v-show="currentCard === 'visitInvoices'"></visitInvoices>
                          <Document ref="documentsInfo" v-show="currentCard === 'document'"> </Document>

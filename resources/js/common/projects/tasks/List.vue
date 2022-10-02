@@ -122,6 +122,7 @@
         <div align="center" v-if="projectId===null">
             <v-btn
                 style="background-color: #06706d; color: white"
+                v-if="backBtn"
                 @click="$router.go(-1)"
                 :loading="loading"
                 :disabled="loading"
@@ -139,6 +140,9 @@ import _ from 'lodash';
 export default {
     components: {
         TaskShow,
+    },
+    props:{
+backBtn: true
     },
     data() {
         const self = this;

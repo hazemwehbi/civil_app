@@ -16,11 +16,11 @@
                         <v-container grid-list-md>
                             <v-form ref="form">
                                 <v-layout row wrap v-for="(input, k) in inputs" :key="k">
+                                  
                                     <v-flex xs12 md4>
                                         <v-autocomplete
                                             item-text="name"
                                             item-value="id"
-                                            :disabled="isEdit"
                                             :items="customers"
                                             v-model="input.id"
                                             :label="trans('messages.name')"
@@ -30,6 +30,7 @@
                                             @change="(event) => updatevalues(event, k)"
                                             :error-messages="errors.collect('name')"
                                             required
+                                            
                                         ></v-autocomplete>
                                     </v-flex>
                                     <v-flex xs12 md4>
@@ -89,7 +90,7 @@
                             <div v-show="isAgency" v-for="(agency, k) in agency_inputs" :key="k">
                                 <v-divider></v-divider>
                                 <v-container>
-                                    <v-layout row wrap class="add-agency">
+                                    <v-layout row wrap class="add-agency" v-if="agency">
                                         <v-flex md3>
                                             <!-- <v-autocomplete
                                             item-text="trade_name"
@@ -112,11 +113,11 @@
                                                 readonly
                                             ></v-text-field>
                                         </v-flex>
-                                        <v-flex md3>
+                                        <v-flex md3 v-if="agency.email">
                                             <v-text-field
                                                 :label="trans('messages.email')"
                                                 v-model="agency.email"
-                                                v-validate="'email'"
+                                                 v-validate="'required|email'"
                                                 data-vv-name="email"
                                                 readonly
                                             ></v-text-field>
@@ -302,7 +303,6 @@ export default {
                 email: '',
                 mobile: '',
             });
-            console.log(this.inputs);
         },
 
         remove(index) {
@@ -340,6 +340,7 @@ export default {
         },
         resetAgentvalues() {
             const self = this;
+            if(self.agency){
             self.agency.id = null;
             self.agency.record_number = null;
             self.agency.agency_number = null;
@@ -348,6 +349,7 @@ export default {
             self.agency.agent_card_number = null;
             self.agency.email = null;
             self.agency.mobile = null;
+            }
         },
         getCustomers() {
             const self = this;
@@ -390,28 +392,22 @@ export default {
             const self = this;
             var data = {
                 customers: self.inputs,
-                agency_id: self.agency_inputs[0].id,
+                agency_id: self.agency_inputs[0]?.id,
             };
-
-            this.$emit('next', data);
-            // self.$validator.validateAll().then((result) => {
-
-            //     if (result == true) {
-            //         var data = {
-            //             customers: this.inputs,
-            //             agency_id: this.agency_inputs[0].id,
-            //         };
-            //         this.$emit('next', data);
-            //     } else {
+             self.$validator.validateAll().then((result) => {
+                 if (result == true) {
+                     this.$emit('next', data);
+                 } else {
             //         this.$refs.form.validate();
-            //     }
-            // });
+                 }
+             });
         },
 
         fillEditData(data, agency, isEdit) {
             const self = this;
             self.agencies.push(agency);
             self.inputs[0] = data;
+            console.log(self.inputs)
             self.agency = agency;
             if (agency != null) {
                 self.isAgency = true;

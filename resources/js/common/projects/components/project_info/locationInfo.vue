@@ -22,16 +22,20 @@
                         <v-container grid-list-md>
                             <v-layout row wrap>
                                 <v-flex md3>
-                                    <v-select
+                                     <v-autocomplete
                                         item-text="value"
                                         item-value="key"
                                         :items="province_municipalities"
                                         v-model="location.province_municipality"
                                         :label="trans('data.province_municipality')"
+                                        v-validate="'required'"
+                                         data-vv-name="province_municipality"
                                         :data-vv-as="trans('data.province_municipality')"
+                                        
                                         :error-messages="errors.collect('province_municipality')"
                                          :disabled="isEdit"
-                                    ></v-select>
+                                    required
+                                    ></v-autocomplete>
                                 </v-flex>
                                 <v-flex md3>
                                     <v-select
@@ -367,8 +371,15 @@ export default {
         },
         nextStep() {
             const self = this;
-            //  alert(JSON.stringify(self.location))
-            this.$emit('next', this.location);
+              this.$validator.validateAll().then((result) => {
+                //  alert(result)
+                if (result == true) {
+                    this.$emit('next', this.location);
+                } else {
+                  //  this.$refs.form.validate();
+                }
+            });
+            
         },
 
         createcordinate() {

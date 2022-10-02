@@ -1,6 +1,6 @@
 <template>
    <div :class="$vuetify.breakpoint.xsOnly?'w-full mt-2':'w-3/5 border-2 rounded-lg shadow-lg'" 
-   class="p-4 mx-auto bg-white sm:p-6 dark:bg-gray-800 dark:border-gray-700">
+   class="p-4 mx-auto bg-white sm:p-6 dark:bg-gray-800 dark:border-gray-700" v-if="projectData">
         <h5 class="mb-3 text-base font-semibold text-slate-600 md:text-xl dark:text-white">
             {{ trans('data.review_project_data') }} : {{ projectData.name }}
         </h5>

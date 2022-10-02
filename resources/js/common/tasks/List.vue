@@ -1,11 +1,14 @@
 <template>
-    <TasksList :id="project_id" :show-all-task="show_all_task"></TasksList>
+    <TasksList :id="project_id" :backBtn="backBtn" :show-all-task="show_all_task"></TasksList>
 </template>
 <script>
 import TasksList from '../projects/tasks/List';
 export default {
     components: {
         TasksList,
+    },
+      props:{
+backBtn: true
     },
     data() {
         return {
