@@ -92,6 +92,17 @@
                                     
                                 ></v-text-field>
                             </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                    <v-select
+                                        item-text="value"
+                                        item-value="key"
+                                        :items="province_municipalities"
+                                        v-model="location_data"
+                                        :label="trans('data.province_municipality')"
+                                        :data-vv-as="trans('data.province_municipality')"
+                                        :error-messages="errors.collect('province_municipality')"
+                                    ></v-select>
+                                </v-flex>
                             <!-- communication details -->
                             <v-flex xs12 sm12 md12>
                                 <v-icon small>contact_mail</v-icon>
@@ -348,6 +359,8 @@ export default {
             email: '',
             password: '',
             active: '',
+                 province_municipalities: [],
+            location_data:"",
             // enginnering_types: [],
             id_card_number: '',
             send_email: false,
@@ -363,14 +376,31 @@ export default {
     },
     created() {
         this.loadUser(() => {});
+         this.getLocationInfo()
     },
     methods: {
+              getLocationInfo() {
+            const self = this;
+            axios
+                .get('/get-location-info')
+                .then(function (response) {
+                    self.province_municipalities = response.data.provinceMunicipalities;
+                    self.municipalities = response.data.municipalities;
+                    self.categories_location = response.data.categoriesLocation;
+                    self.neighborhoods = response.data.neighborhoods;
+                    self.districts = response.data.districts;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         save() {
             const self = this;
             if (this.$refs.form.validate()) {
                 let payload = {
                     name: self.name,
                     mobile: self.form_fields.mobile,
+                    location_data: self.location_data,
                     alternate_num: self.form_fields.alternate_num,
                     home_address: self.form_fields.home_address,
                     current_address: self.form_fields.current_address,
@@ -443,6 +473,7 @@ export default {
                 self.form_fields = User;
                 self.gender_types = response.data.gender_types;
                 self.birth_date = User.birth_date;
+                self.location_data = User.location_data;
                 self.name = User.name;
                 self.email = User.email;
                 self.id_card_number = User.id_card_number;

@@ -97,7 +97,25 @@
                                     required
                                 ></v-text-field>
                             </v-flex>
-
+ <v-flex xs12 sm6 md4>
+                                    <v-select
+                                        item-text="value"
+                                        item-value="key"
+                                        :items="province_municipalities"
+                                        v-model="location_data"
+                                        :label="trans('data.province_municipality')"
+                                        :data-vv-as="trans('data.province_municipality')"
+                                        :error-messages="errors.collect('province_municipality')"
+                                                  :rules="[
+                                        (v) =>
+                                            !!v ||
+                                            trans('messages.required', {
+                                                name: trans('data.province_municipality'),
+                                            }),
+                                    ]"
+                                    required
+                                    ></v-select>
+                                </v-flex>
                             <!-- communication details -->
                             <v-flex xs12 sm12 md12>
                                 <v-icon small>contact_mail</v-icon>
@@ -326,6 +344,8 @@ export default {
             form_fields: [],
             birth_date: null,
             gender_types: [],
+            province_municipalities: [],
+            location_data:"",
             email: '',
             id_card_number: '',
             password: '',
@@ -342,7 +362,25 @@ export default {
             { label: 'Create', name: '' },
         ]);
     },
+    created(){
+       self.getLocationInfo()
+    },
     methods: {
+               getLocationInfo() {
+            const self = this;
+            axios
+                .get('/get-location-info')
+                .then(function (response) {
+                    self.province_municipalities = response.data.provinceMunicipalities;
+                    self.municipalities = response.data.municipalities;
+                    self.categories_location = response.data.categoriesLocation;
+                    self.neighborhoods = response.data.neighborhoods;
+                    self.districts = response.data.districts;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         save() {
             const self = this;
 
@@ -352,6 +390,7 @@ export default {
                     email: self.email,
                     mobile: self.form_fields.mobile,
                     alternate_num: self.form_fields.alternate_num,
+                    location_data: self.location_data,
                     home_address: self.form_fields.home_address,
                     current_address: self.form_fields.current_address,
                     skype: self.form_fields.skype,
