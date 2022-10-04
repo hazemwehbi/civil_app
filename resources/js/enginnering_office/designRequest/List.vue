@@ -61,7 +61,7 @@
                                     <!--{{trans('data.accept')}}-->
                                 </v-btn>
                                 </div>
-                            <div v-else>
+                            <div v-else class="flex justify-center">
                                 <v-btn
                                     color="primary"
                                     small
@@ -71,6 +71,17 @@
                                     @click="acceptProject(props.item)"
                                 >
                                     <v-icon color="white">check</v-icon>
+                                    <!--{{trans('data.accept')}}-->
+                                </v-btn>
+                                  <v-btn
+                                    color="secondary"
+                                    small
+                                    fab
+                                    v-if="props.item.offices.find(val => val.pivot.office_id == getCurrentUser().id).pivot.office_status =='recieved'"
+                                    :disabled="!checkActive()"
+                                    @click="rejectProject(props.item)"
+                                >
+                                    <v-icon color="white">close</v-icon>
                                     <!--{{trans('data.accept')}}-->
                                 </v-btn>
                                    <v-btn
@@ -348,14 +359,72 @@ export default {
                         project: item.project,
                         office_id: self.getCurrentUser(),
                     };
-                    self.$refs.acceptenginneringoffice.create(data);
+                         axios.post('/enginner_office/accept-design-request', data).then(function (response) {
+                    if (response.data.success) {
+                        self.loading = false;
+                        self.dialog = false;
+                        self.$store.commit('hideLoader');
+                        self.$store.commit('showSnackbar', {
+                                message: response.data.msg,
+                                color: response.data.success,
+                            });
+                        self.inputs = [];
+                       self.$eventBus.$emit('DESIGN_ADDED', response.data);
+
+                    } else {
+                        self.$store.commit('hideLoader');
+                        self.$store.commit('showSnackbar', {
+                                message: response.data.msg,
+                                color: response.data.success,
+                            });
+                    }
+                });
                 },
                 cancelCb: () => {
                     console.log('CANCEL');
                 },
             });
         },
+   rejectProject(item) {
+            const self = this;
+            self.$store.commit('showDialog', {
+                type: 'confirm',
+                icon: 'warning',
+                title: self.trans('messages.are_you_sure'),
+                message: self.trans('messages.are_you_sure'),
+                okCb: () => {
+                    let data = {
+                        status: item.status,
+                        id: item.id,
+                        project: item.project,
+                        office_id: self.getCurrentUser(),
+                    };
+                          axios.post('/enginner_office/reject-design-request', data).then(function (response) {
+                    if (response.data.success) {
+                        self.loading = false;
+                
+                        self.$emit('next');
+                        self.$store.commit('hideLoader');
+                        self.$store.commit('showSnackbar', {
+                                message: response.data.msg,
+                                color: response.data.success,
+                            });
+                                          self.$eventBus.$emit('DESIGN_ADDED', response.data);
 
+                    } else {
+                        self.$store.commit('hideLoader');
+                        self.$store.commit('showSnackbar', {
+                                message: response.data.msg,
+                                color: response.data.success,
+                            });
+                    }
+                });
+                },
+                cancelCb: () => {
+                    console.log('CANCEL');
+                },
+            });
+        },
         loadDesigns(cb) {
             const self = this;
             let params = {

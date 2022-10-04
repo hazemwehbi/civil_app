@@ -20,6 +20,7 @@ use App\Notifications\DesignRequestSendedToEmployees;
 
 use Notification;
 use App\Http\Controllers\Controller;
+use App\Notifications\DesignRequestEngineerRejected;
 use Lang;
 class DesignRequestController extends  Controller
 {
@@ -119,6 +120,7 @@ class DesignRequestController extends  Controller
                   
                 }
                 $design->status='pending';
+                
                 $design->update();
                 DB::commit();
                 $message = Lang::get('site.success_update');
@@ -130,6 +132,37 @@ class DesignRequestController extends  Controller
             }
 
         }
+         catch (Exception $e) {
+            $output = $this->respondWentWrong($e);
+        }
+    }
+    public function rejectDesignRequest(Request $request)
+    {
+
+        try {
+            $design = DesignRequest::find($request->id);
+
+            if($design!=  null){
+                DB::beginTransaction();
+                $design->status='rejected';
+                $design->update();
+                $office = $design->offices->find(Auth::id());
+                $office->pivot->office_status = 'rejected';
+                 $office->pivot->update();
+                 $data1=[
+                    'office_id'=>Auth::user()->id,
+                ];
+                $this->_saveDesignRequestSendedToOwnerNotifications($design->customer_id,$data1);
+                DB::commit();
+                $message = Lang::get('site.success_update');
+                return $this->respondSuccess($message);
+            }
+            else{
+                $message = Lang::get('site.object_not_found');
+                return $this->respondWentWrong($message);
+            }
+
+       }
          catch (Exception $e) {
             $output = $this->respondWentWrong($e);
         }
@@ -285,4 +318,10 @@ class DesignRequestController extends  Controller
             $notifiable_users = User::find($member);
             Notification::send($notifiable_users, new DesignRequestSendedToEmployees($data));
      }
+     protected function _saveDesignRequestSendedToOwnerNotifications($member, $data)
+     {
+         //foreach ($members as $member){
+             $notifiable_users = User::find($member);
+             Notification::send($notifiable_users, new DesignRequestEngineerRejected($data));
+      }
 }

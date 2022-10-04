@@ -82,7 +82,7 @@
           border-radius: 5rem;
           letter-spacing: .1rem;
           font-weight: bold;
-          padding: 1rem;
+         /* padding: 1rem; */
           transition: all 0.2s;
         }
 

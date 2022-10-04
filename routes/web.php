@@ -48,7 +48,7 @@ Route::prefix('admin')->
         // single page
         Route::get('/', 'SinglePageController@displaySPA')
             ->name('admin.spa');
-
+            
         // resource routes
         Route::get('user-statistics', 'UserController@getStatistics');
         Route::get('users-all', 'UserController@getAllEmployee');
@@ -106,7 +106,7 @@ Route::middleware(['auth'])
         Route::resource('media', 'MediaController');
 
         Route::post('removeFile', 'MediaController@removeFile');
-        
+        Route::get('/customers', 'Admin\UserController@getCustomers');
 
       //  Route::post('visit-request', 'RequestTypeController@store');
         Route::resource('request', 'RequestTypeController');
@@ -378,7 +378,7 @@ Route::prefix('estate_owner')
            
             Route::post('accept-design-request', 'DesignRequestController@acceptDesignRequest');
 
-
+            Route::post('reject-design-request', 'DesignRequestController@rejectDesignRequest');
 
             Route::post('send-design-request-offer', 'DesignRequestController@sendDesignRequestOffer');
 

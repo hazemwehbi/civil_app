@@ -125,8 +125,8 @@ class DesignRequestController extends  Controller
               //    $this->_saveDesignRequestSendedToEmployeesNotifications($design_enginner->enginner_id,$data1);
                }
                $office = $design->offices->find($request->created_by);
-                $office->pivot->office_status = 'rejected';
-                $office->pivot->update();
+               $office->pivot->office_status = 'rejected';
+               $office->pivot->update();
                $office->save();
                 DB::commit();
                 $message = Lang::get('site.success_update');

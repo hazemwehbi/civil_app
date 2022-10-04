@@ -354,10 +354,10 @@ export default {
         getCustomers() {
             const self = this;
 
-            if (self.getCurrentUser().user_type_log == 'ENGINEERING_OFFICE') {
+            if (self.getCurrentUser().user_type_log == 'SITE_MANAGENMENT') {
                 const self = this;
                 axios
-                    .get('/enginner_office/customers')
+                    .get('/customers')
                     .then(function (response) {
                         self.customers = response.data;
                     })

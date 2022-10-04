@@ -506,7 +506,18 @@ class UserController extends AdminController
        $users = User::getAllOfficeUsers();
         return $users;
     }
-
+    public function getCustomers(){
+        $customers = User::whereHas(
+            'roles', function($q){
+                $q->where('type', 'ESTATE_OWNER');
+            }
+        )->select('id', 'name','email','id_card_number','mobile')
+        ->orderBy('name')
+        ->get()
+        ->toArray();
+      
+        return $customers;
+   }
     public function getAllOffices()
     {
        $users = User::getAllOffices();

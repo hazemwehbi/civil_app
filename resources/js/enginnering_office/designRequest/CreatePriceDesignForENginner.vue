@@ -37,7 +37,7 @@
                                 <b-card-group deck class="w-full">
                                     <b-card
                                         :header="trans('data.enginner_name')"
-                                        header-tag="header1"
+                                        
                                         title=""
                                         class="w-full"
                                     >
@@ -49,7 +49,7 @@
                                 <b-card-group deck class="w-full">
                                     <b-card
                                         :header="trans('data.create_time')"
-                                        header-tag="header1"
+                                       
                                         class="w-full"
                                         title=""
                                     >
@@ -61,7 +61,7 @@
                                 <b-card-group deck class="w-full">
                                     <b-card
                                         :header="trans('data.stage')"
-                                        header-tag="header1"
+                                    
                                         title=""
                                         class="w-full"
                                     >
@@ -178,7 +178,7 @@ export default {
                 length: 11,
                 precision: 2,
             },
-
+             create_time: null,
             heading: 'Design Request',
             moreText: [''],
             loading: false,

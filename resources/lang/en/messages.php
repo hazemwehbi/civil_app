@@ -544,6 +544,7 @@ return [
 
 
     'design_request_send_to_employee_notification_text'=>'enginnering office send a request design for :stage',
+    'design_request_send_to_owner_notification_text'=>'Office Engineer :office Reject Request Design',
 'personal_data' =>'Personal Data',
 
     'ask_for_design_request_enginnering_office_notification_text'=>'recieve new request design ',

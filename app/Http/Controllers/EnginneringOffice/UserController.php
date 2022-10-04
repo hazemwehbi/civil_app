@@ -148,7 +148,7 @@ class UserController extends  Controller
         try {
             DB::beginTransaction();
 
-            $input = $request->only('signature','name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password','active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number','specialty_id');
+            $input = $request->only('signature','name','location_data', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password','active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number','specialty_id');
             $input['parent_id']=Auth::id(); 
             $input['isActive']=1; 
             $input['is_emp']=1; 
@@ -212,7 +212,7 @@ class UserController extends  Controller
         try {
             DB::beginTransaction();
 
-            $input = $request->only('name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number');
+            $input = $request->only('name', 'email','location_data', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number');
            // $input['parent_id']=Auth::id(); 
             $input['isActive']=1; 
             $input['user_type_log']='ESTATE_OWNER';
@@ -324,6 +324,7 @@ class UserController extends  Controller
                 'alternate_num',
                 'home_address',
                 'current_address',
+                'location_data',
                 'skype',
                 'linkedin',
                 'facebook',

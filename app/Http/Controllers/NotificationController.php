@@ -179,7 +179,9 @@ class NotificationController extends Controller
                             $notification['stage'] = StageProject::
                                 findOrFail($notification->data['stage_id']);
             }
-
+            if ('App\Notifications\DesignRequestEngineerRejected' == $notification->type) {
+                $notification['office'] = User::findOrFail($notification->data['office_id']);
+            }
             if ('App\Notifications\ShowDesignRequestOffer' == $notification->type) {
                 $notification['enginner'] = User::
                             findOrFail($notification->data['enginner_id']);

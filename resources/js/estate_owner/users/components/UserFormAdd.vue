@@ -98,7 +98,7 @@
                                 ></v-text-field>
                             </v-flex>
  <v-flex xs12 sm6 md4>
-                                    <v-select
+                                    <v-autocomplete
                                         item-text="value"
                                         item-value="key"
                                         :items="province_municipalities"
@@ -114,7 +114,7 @@
                                             }),
                                     ]"
                                     required
-                                    ></v-select>
+                                    ></v-autocomplete>
                                 </v-flex>
                             <!-- communication details -->
                             <v-flex xs12 sm12 md12>
@@ -352,6 +352,7 @@ export default {
             swordConfirm: '',
             active: true,
             send_email: false,
+            passwordConfirm: ''
         };
     },
     mounted() {
@@ -363,7 +364,7 @@ export default {
         ]);
     },
     created(){
-       self.getLocationInfo()
+       this.getLocationInfo()
     },
     methods: {
                getLocationInfo() {

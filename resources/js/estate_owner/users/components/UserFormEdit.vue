@@ -93,7 +93,7 @@
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
-                                    <v-select
+                                    <v-autocomplete
                                         item-text="value"
                                         item-value="key"
                                         :items="province_municipalities"
@@ -101,7 +101,7 @@
                                         :label="trans('data.province_municipality')"
                                         :data-vv-as="trans('data.province_municipality')"
                                         :error-messages="errors.collect('province_municipality')"
-                                    ></v-select>
+                                    ></v-autocomplete>
                                 </v-flex>
                             <!-- communication details -->
                             <v-flex xs12 sm12 md12>

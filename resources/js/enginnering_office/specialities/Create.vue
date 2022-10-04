@@ -44,6 +44,19 @@
                                     >
                                     </v-text-field>
                                 </v-flex>
+                                  <v-flex xs12 sm6 md4>
+                                    <v-autocomplete
+                                        item-text="value"
+                                        item-value="key"
+                                        :items="roles"
+                                        v-model="role_id"
+                                        :label="trans('data.role_name')"
+                                        :data-vv-as="trans('data.role_name')"
+                                        :error-messages="errors.collect('role_id')"
+                                  
+                                    required
+                                    ></v-autocomplete>
+                                </v-flex>
                             </v-layout>
                         </v-container>
                     </v-form>
@@ -77,6 +90,8 @@ export default {
             en_name: '',
             name: '',
             loading: false,
+            roles:[],
+            role_id: null
         };
     },
     mounted() {

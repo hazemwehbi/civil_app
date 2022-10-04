@@ -58,6 +58,7 @@ class RegisterController extends Controller
             'email' => 'required|email|unique:users,email',
             'id_card_number' => 'required|unique:users',
             'password' => 'required',
+             'location_data'=>'required',
         ]);
     }
     /**
@@ -75,7 +76,7 @@ class RegisterController extends Controller
         try {
             DB::beginTransaction();
 
-            $input = $request->only('name', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender',  'password', 'id_card_number');
+            $input = $request->only('name','location_data', 'email', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender',  'password', 'id_card_number');
              $input['active']=true;
              $input['isActive']=1; 
              $input['user_type_log']='ESTATE_OWNER';

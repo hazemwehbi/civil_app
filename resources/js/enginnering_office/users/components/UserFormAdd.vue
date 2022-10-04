@@ -99,7 +99,7 @@
                                 ></v-text-field>
                             </v-flex>
                              <v-flex xs12 sm6 md4>
-                                    <v-select
+                                    <v-autocomplete
                                         item-text="value"
                                         item-value="key"
                                         :items="province_municipalities"
@@ -115,7 +115,7 @@
                                             }),
                                     ]"
                                     required
-                                    ></v-select>
+                                    ></v-autocomplete>
                                 </v-flex>
                                <v-flex xs12 sm12 md12 >
 

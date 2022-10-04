@@ -986,7 +986,44 @@
                         </v-list-tile-content>
                     </v-list-tile>
 <!------------------------------------senf design to office----------------------------------------------------!-->
+ <v-list-tile
+                        v-if="
+                            notification.type &&
+                            notification.type =='App\\Notifications\\DesignRequestEngineerRejected'"
+                        @click="
+                            $router.push({
+                                name: 'design_request_estate_list',
+                            })
+                        "
+                        :style="notificationBackgroundColor(notification.read_at)"
+                        avatar
+                    >
+                        <v-list-tile-avatar>
+                            <avatar
+                                :members="convertObjectToArray(notification.office)"
+                                :tooltip="true"
+                            >
+                            </avatar>
+                        </v-list-tile-avatar>
 
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                <span class="text-uppercase font-weight-bold">
+                                    {{ notification.office.name }}
+                                </span>
+                                <span class="pl-5">
+                                    {{ notification.created_at | formatDateTime }}
+                                </span>
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{
+                                    trans('messages.design_request_send_to_owner_notification_text', {
+                                     office: notification.office.name
+                                    })
+                                }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
                     <v-list-tile
                         v-if="
                             notification.type &&

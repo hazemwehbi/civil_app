@@ -92,6 +92,7 @@ input[type=number] {
                                     </span>
                                 @endif
                             </div>
+                            
                             <div class="form-group col-md-6">
                                 <label for="confirm_password" style="padding-bottom: 5px;">
                                     {{__('messages.confirm_password')}}
@@ -113,7 +114,7 @@ input[type=number] {
                                 @endif
                             </div>
                         
-
+                       
                    
 
 
@@ -162,20 +163,37 @@ input[type=number] {
 
 
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="linkedin" style="padding-bottom: 5px;">
                                     {{__('messages.home_address')}}
                                 </label>
                                 <input type="text" id="home_address" name="home_address" class="form-control" placeholder="{{__('messages.home_address')}}"   >
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="current_address" style="padding-bottom: 5px;">
                                     {{__('messages.current_address')}}
                                 </label>
                                 <input type="text" id="current_address" name="current_address" class="form-control" placeholder="{{__('messages.current_address')}}"   >
                             </div>
 
-
+                            <div class="form-group col-md-4">
+                                <label for="location_data" style="padding-bottom: 5px;" class="required">
+                                    {{__('data.province_municipality')}}
+                                </label>
+                                <select class="form-control" id="location_data" name="location_data" >
+                                    <option value="" selected>{{__('data.province_municipality')}} </option>
+                                    <option value='province1'> {{__('data.province1')}} </option>
+                                    <option value='province2'> {{__('data.province2')}} </option>
+                                    <option value='province3'> {{__('data.province3')}} </option>
+                                    </select>
+                                    @if ($errors->has('location_data'))
+                                    <span class="help-block  text-danger">
+                                        <small class="help-text span-email" span-email>
+                                            {{ $errors->first('location_data') }}
+                                        </small>
+                                    </span>
+                                @endif
+                            </div>
 
 
                             <div class="form-group col-md-4">
@@ -184,6 +202,7 @@ input[type=number] {
                                 </label>
                                 <input type="date" id="date_of_birth" name="date_of_birth" class="form-control" placeholder="{{__('messages.date_of_birth')}}"   >
                             </div>
+                         
                             <div class="form-group col-md-4">
                                 <label for="guardian_name" style="padding-bottom: 5px;">
                                     {{__('messages.guardian_name')}}
@@ -214,7 +233,6 @@ input[type=number] {
                             <button class="btn btn-lg btn-block text-uppercase  mx-auto" style="background-color:#06706d;color:white;width:30%" id="submit" type="submit">
                             {{__('data.register')}}
                             </button>
-                            <
                         </div>
                         <a class="btn btn-link d-block text-center " style="color:#06706d;" href="{{ route('login') }}">
                          {{__('data.back_to_login')}}

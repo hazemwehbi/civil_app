@@ -46,12 +46,14 @@
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
-                                    <v-select
+                                    <v-autocomplete
                                         item-text="value"
                                         item-value="key"
                                         :items="province_municipalities"
                                         v-model="location_data"
                                         :label="trans('data.province_municipality')"
+                                        v-validate="'required'"
+                                      
                                         :data-vv-as="trans('data.province_municipality')"
                                         :error-messages="errors.collect('province_municipality')"
                                                   :rules="[
@@ -62,7 +64,7 @@
                                             }),
                                     ]"
                                     required
-                                    ></v-select>
+                                    ></v-autocomplete>
                                 </v-flex>
                             <v-flex xs12 sm12>
                                 <v-text-field
@@ -318,8 +320,12 @@
                                 class="text-xs-center text-sm-center text-md-center text-lg-center"
                             >
                                 <!-- Here the image preview -->
-                                <img :src="logo?logo:imageUrl" height="150" v-if="imageUrl || logo" />
+                                <div class="img-container" @click="pickFile">
+                                <img :src="logo?logo:imageUrl" height="150" v-if="imageUrl || logo"  class="image"/>
+                                <div class="overlay">Click For Select Image</div>
+                                </div>
                                 <v-text-field
+                                    v-if="!logo"
                                     label="Select Image"
                                     @click="pickFile"
                                     v-model="imageName"
@@ -375,7 +381,7 @@
                         <v-btn @click="save()" color="primary" :disabled="!valid || !checkActive()">
                             {{ trans('messages.update') }}
                         </v-btn>
-          <v-btn color="secondary" class="mr-4" @click="$refs.signature.dialog = true">
+                       <v-btn color="secondary" class="mr-4" @click="$refs.signature.dialog = true">
                             {{ trans('data.addSignature') }}
                         </v-btn>
                         <v-btn style="color: #06706d" @click="$router.go(-1)">
@@ -656,3 +662,34 @@ Popover
     },
 };
 </script>
+<style scoped>
+.img-container {
+  position: relative;
+  max-width: 300px;
+  cursor: pointer;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.overlay {
+  position: absolute; 
+  bottom: 0; 
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.5); /* Black see-through */
+  color: #f1f1f1; 
+  width: 100%;
+  transition: .5s ease;
+  opacity:0;
+  color: white;
+  font-size: 20px;
+  padding: 20px;
+  text-align: center;
+}
+.img-container:hover .overlay {
+  opacity: 1;
+}
+</style>

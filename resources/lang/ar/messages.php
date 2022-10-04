@@ -569,6 +569,7 @@ return [
 
 
     'design_request_send_to_employee_notification_text'=>'المكتب الهندسي ارسل الك طلب  تصميم للمرحلة :stage',
+    'design_request_send_to_owner_notification_text'=>'المكتب الهندسي رفض طلب  التصميم ',
 
      'ask_for_design_request_enginnering_office_notification_text'=>'استقبال طلب تصميم جديد',
      'ask_for_contracting_company_notification_text'=>'استقبال طلب مقاول جديد',
