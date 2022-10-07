@@ -138,7 +138,7 @@ class CommonController extends Controller
   
     
    public function checkRole($role_id) {
-    return Role::find($role_id)->is_primary;
+    return Role::find($role_id)?->is_primary;
    }
    public function checkCurrentUserType($type){
            // $user=Auth::user();
@@ -155,6 +155,9 @@ class CommonController extends Controller
    }
    public function getRole($role_id){
     return Role::find($role_id);
+ }
+ public function getRoles(){
+    return Role::all();
  }
    public function getProjects( Request $request)
    {

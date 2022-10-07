@@ -237,6 +237,7 @@ Route::middleware(['auth'])
         Route::post('ask-for-permission', 'CommonController@askPermissionForUser');
         Route::get('get-my-users', 'CommonController@getMyUsers');
         Route::get('get-role', 'CommonController@getRole');
+        Route::get('get-roles', 'CommonController@getRoles');
         Route::get('/check-role-primary/{id}', 'CommonController@checkRole');
         Route::get('get-project-customer','CommonController@getProjects');
         Route::get('check-current-user-type/{type}', 'CommonController@checkCurrentUserType');
@@ -246,7 +247,7 @@ Route::middleware(['auth'])
        // Route::get('get-download/{path}', 'CommonController@getDownload');
         Route::get('get-download/{path}','CommonController@getDownload');
         Route::get('get-location-info', 'ProjectController@getLocationInfo');
-
+        Route::get('get-municipalities-info/{province}', 'ProjectController@getMunicipalitiesInfo');
         
         Route::resource('requests-role', 'RequestRoleController');
         Route::get('accept-requests-role/{id}','RequestRoleController@acceptRequestRole');
@@ -260,6 +261,7 @@ Route::middleware(['auth'])
 
         Route::get('/get-enginnering-types', 'SpecialtyController@getspecialties');
 
+        Route::get('/get-enginnering-types-by-role/{role_id}', 'SpecialtyController@getspecialtiesByRole');
         Route::resource('project-document', 'ProjectDocumentsController');
         
         Route::post('show-design-request-details', 'DesignRequestController@showDesignRequestDetails');

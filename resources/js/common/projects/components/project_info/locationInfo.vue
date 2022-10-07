@@ -31,16 +31,16 @@
                                         v-validate="'required'"
                                          data-vv-name="province_municipality"
                                         :data-vv-as="trans('data.province_municipality')"
-                                        
+                                        @change="getMunicipalitiesInfo"
                                         :error-messages="errors.collect('province_municipality')"
                                          :disabled="isEdit"
                                     required
                                     ></v-autocomplete>
                                 </v-flex>
                                 <v-flex md3>
-                                    <v-select
-                                        item-text="value"
-                                        item-value="key"
+                                    <v-autocomplete
+                                        item-text="name"
+                                        item-value="id"
                                         :items="municipalities"
                                         v-model="location.municipality"
                                         :label="trans('data.municipality')"
@@ -48,7 +48,7 @@
                                         :data-vv-as="trans('data.municipality')"
                                         :error-messages="errors.collect('municipality')"
                                          :disabled="isEdit"
-                                    ></v-select>
+                                    ></v-autocomplete>
                                 </v-flex>
 
                                 <v-flex md3>
@@ -318,9 +318,9 @@ export default {
     },
     created() {
         const self = this;
-        // console.log(self.location1)
         self.getLocationStatus();
         self.getLocationInfo();
+
     },
     computed: {
         computedDateFormattedMomentjs() {
@@ -355,10 +355,21 @@ export default {
                 .get('/get-location-info')
                 .then(function (response) {
                     self.province_municipalities = response.data.provinceMunicipalities;
-                    self.municipalities = response.data.municipalities;
+                  //  self.municipalities = response.data.municipalities;
                     self.categories_location = response.data.categoriesLocation;
                     self.neighborhoods = response.data.neighborhoods;
                     self.districts = response.data.districts;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+            getMunicipalitiesInfo(event) {
+            const self = this;
+            axios
+                .get('/get-municipalities-info/'+event)
+                .then(function (response) {
+                    self.municipalities = response.data;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -372,7 +383,7 @@ export default {
         nextStep() {
             const self = this;
               this.$validator.validateAll().then((result) => {
-                //  alert(result)
+                
                 if (result == true) {
                     this.$emit('next', this.location);
                 } else {
@@ -390,8 +401,15 @@ export default {
         fillEditData(data, isEdit) {
             const self = this;
             self.isEdit = isEdit;
-
             self.location = data;
+              axios
+                .get('/get-municipalities-info/'+self.location.province_municipality)
+                .then(function (response) {
+                    self.municipalities = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
 
         },
     },

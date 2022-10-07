@@ -15,7 +15,7 @@
                     <v-form ref="form" v-model="valid" lazy-validation>
                         <v-container grid-list-md>
                             <v-layout row wrap>
-                                <v-flex xs12 md12>
+                                <v-flex xs6 md6>
                                     <v-text-field
                                         v-model="name"
                                         required
@@ -42,6 +42,19 @@
                                         :label="trans('data.en_name')"
                                     >
                                     </v-text-field>
+                                </v-flex>
+                                      <v-flex xs12 sm6 md4>
+                                    <v-autocomplete
+                                        item-text="name"
+                                        item-value="id"
+                                        :items="roles"
+                                        v-model="role_id"
+                                        :label="trans('data.role_name')"
+                                        :data-vv-as="trans('data.role_name')"
+                                        :error-messages="errors.collect('role_id')"
+                                  
+                                    required
+                                    ></v-autocomplete>
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -77,6 +90,8 @@ export default {
             ar_name: '',
             en_name: '',
             loading: false,
+                 roles:[],
+            role_id: null
         };
     },
     mounted() {
@@ -110,15 +125,29 @@ export default {
         },
         create(data) {
             const self = this;
+            self.getRoles();
             self.id = data.id;
             self.name = data.name;
-            (self.en_name = data.en_name), (self.ar_name = data.ar_name), (self.dialog = true);
+            self.role_id = data.role_id;
+         (self.en_name = data.en_name), (self.ar_name = data.ar_name), (self.dialog = true);
         },
         reset() {
             this.$refs.form.reset();
         },
         resetValidation() {
             this.$refs.form.resetValidation();
+        },
+             getRoles(){
+            const self = this;
+            axios
+                .get('/enginner_office/roles')
+                .then(function(response) {
+                    self.roles = response.data.data;
+                    console.log(response.data.data)
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
         },
         /*create(project_id) {
             const self = this;
@@ -161,6 +190,7 @@ export default {
                 name: self.name,
                 en_name: self.en_name,
                 ar_name: self.ar_name,
+                role_id: self.role_id
             };
             if (this.$refs.form.validate()) {
                 self.loading = true;

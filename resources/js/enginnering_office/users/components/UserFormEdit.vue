@@ -94,7 +94,7 @@
                                  
                                 ></v-text-field>
                             </v-flex>
-                             <v-flex xs12 sm6 md4>
+                             <v-flex xs12 sm6 md6>
                                     <v-autocomplete
                                         item-text="value"
                                         item-value="key"
@@ -106,6 +106,36 @@
                                         required
                                     ></v-autocomplete>
                                 </v-flex>
+                                 <v-flex xs12 sm6>
+                                <v-autocomplete
+                                    multiple
+                                        :clearable="true"
+                                    :deletable-chips="true"
+                                    :dense="true"
+                                    search-input=""
+                                    :solo-inverted="false"
+                                    :eager="true"
+                                    :loading="false"
+                                    :validate-on-blur="false"
+                                    :persistent-placeholder="false"
+                                    :chips="true"
+                                  
+                                    item-text="name"
+                                    item-value="id"
+                                    :items="roles"
+                                    v-model="form_fields.role_ids"
+                                    @change="getEnginneringTypes"
+                                    :rules="[
+                                        (v) =>
+                                            !!v ||
+                                            trans('messages.required', {
+                                                name: trans('messages.role'),
+                                            }),
+                                    ]"
+                                    :label="trans('messages.role')"
+                                    required
+                                ></v-autocomplete>
+                            </v-flex>
                             <v-flex xs12 sm12 md12>
                                 <v-autocomplete
                                     item-text="value"
@@ -321,35 +351,7 @@
                                 >
                                 </v-textarea>
                             </v-flex>
-                            <v-flex xs12 sm6>
-                                <v-autocomplete
-                                    multiple
-                                        :clearable="true"
-                                    :deletable-chips="true"
-                                    :dense="true"
-                                    search-input=""
-                                    :solo-inverted="false"
-                                    :eager="true"
-                                    :loading="false"
-                                    :validate-on-blur="false"
-                                    :persistent-placeholder="false"
-                                    :chips="true"
-                                  
-                                    item-text="name"
-                                    item-value="id"
-                                    :items="roles"
-                                    v-model="form_fields.role_ids"
-                                    :rules="[
-                                        (v) =>
-                                            !!v ||
-                                            trans('messages.required', {
-                                                name: trans('messages.role'),
-                                            }),
-                                    ]"
-                                    :label="trans('messages.role')"
-                                    required
-                                ></v-autocomplete>
-                            </v-flex>
+                           
                              <v-flex
                                 xs12
                                 sm3
@@ -435,12 +437,12 @@ export default {
     },
     mounted() {
         const self = this;
-        self.getEnginneringTypes();
        // self.checkCurrentUserType();
         // this.loadUser(() => {});
     },
     created() {
         this.loadUser(() => {});
+   
         this.getLocationInfo()
     },
     methods: {
@@ -459,10 +461,11 @@ export default {
                     console.log(error);
                 });
         },
-        getEnginneringTypes() {
+        getEnginneringTypes(event) {
             const self = this;
+            let url= '/get-enginnering-types-by-role/'+event
             axios
-                .get('/get-enginnering-types')
+                .get(url)
                 .then(function (response) {
                     self.enginnering_types = response.data;
                 })
@@ -562,6 +565,7 @@ export default {
                     self.checkRolePrimary(self.propUserId);
                     self.specialty_id = User.specialty_id;// JSON.parse(User.enginnering_type).toString();
                     self.signatureUrl = response.data.user.signature;
+                   self.getEnginneringTypes(self.form_fields.role_ids);
                 });
         },
         checkRolePrimary(id) {

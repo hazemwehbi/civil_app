@@ -89,6 +89,7 @@ class SpecialtyController extends Controller
                             'name' => $specialty_name,
                             'en_name' =>$request->input('en_name'),
                             'ar_name' => $request->input('ar_name'),
+                            'role_id'=> $request->input('role_id'),
                             'created_at'=>Carbon::now(),
                             'created_by'=>Auth::id()
                             //'type' => 'employee',hasRole
@@ -144,7 +145,7 @@ class SpecialtyController extends Controller
 
                 $specialty->en_name =$request->input('en_name');
                 $specialty->ar_name = $request->input('ar_name');
-
+                $specialty->role_id= $request->input('role_id');
            
                 $specialty->save();
            
@@ -187,6 +188,13 @@ class SpecialtyController extends Controller
     public function getspecialties(){
 
         $types=Specialty::select('id as key', 'name as value')
+        ->get()
+        ->toArray();
+            return $types;
+    }
+    public function getspecialtiesByRole($role_id){
+
+        $types=Specialty::where('role_id',$role_id)->select('id as key', 'name as value')
         ->get()
         ->toArray();
             return $types;

@@ -105,7 +105,7 @@
                                     :label="trans('messages.confirm_password')"
                                     type="password"
                                     autocomplete="off"
-                                    v-model="passwordConfirm?passwordConfirm:password"
+                                    v-model="passwordConfirm"
                                     :rules="[
                                         v =>
                                             !(v != password && password.length > 0) ||

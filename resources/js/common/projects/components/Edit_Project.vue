@@ -145,7 +145,6 @@ export default {
                         response.data.data.project.location,
                         false
                     );
-                    console.log(response.data.data.project.location);
                     self.$refs.projectInfo.fillEditData(response.data.data.project, false);
 
                     self.$refs.documentInfo.fillEditData(response.data.data.media, true);
@@ -162,6 +161,7 @@ export default {
         getCustomerData(data) {
             this.customers = data.customers;
             this.agency_id = data.agency_id;
+            
             this.e1 = 2;
         },
         getLocationData(data) {

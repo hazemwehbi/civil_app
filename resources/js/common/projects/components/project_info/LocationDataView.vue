@@ -12,8 +12,8 @@
             <li>
                 <a href="#" class="flex items-center p-3 text-base font-bold text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
   <div class="flex flex-wrap justify-between w-full">
-<span class="flex-1 ml-3 whitespace-nowrap">{{trans('data.province_municipality')}} :  {{location.province_municipality}}</span>
-                    <span class="flex-1 ml-3 whitespace-nowrap">{{trans('data.municipality')}}: {{location.municipality}}</span>
+<span class="flex-1 ml-3 whitespace-nowrap">{{trans('data.province_municipality')}} :  {{trans('data.'+location.province_municipality)}}</span>
+                    <span class="flex-1 ml-3 whitespace-nowrap">{{trans('data.municipality')}}: {{location.municipalitey.name}}</span>
   </div>
                 </a>
             </li>

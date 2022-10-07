@@ -56,7 +56,7 @@ class ProjectController extends Controller
         $user = $request->user();
 
 
-        $projects = Project::with('customer', 'categories', 'members','media', 'members.media','location','creator','report','report.media','report.reportCreator','report.type');
+        $projects = Project::with('customer', 'categories', 'members','media', 'members.media','location','location.municipalitey','creator','report','report.media','report.reportCreator','report.type');
         $customer_id=$user->id;
         $reports = []; 
         $childrens=$user->childrenIds($user->id);
@@ -281,7 +281,7 @@ class ProjectController extends Controller
     {
         $data = [
                 'provinceMunicipalities' =>$this->CommonUtil->getProvinceMunicipalities(),
-                'municipalities' => $this->CommonUtil->getMunicipalities(),
+              //  'municipalities' => $this->CommonUtil->getMunicipalities(),
                 'categoriesLocation' => $this->CommonUtil->getCategoriesLocation(),
                 'neighborhoods' => $this->CommonUtil->getNeighborhoods(),
                 'districts' => $this->CommonUtil->getDistricts(),
@@ -289,7 +289,9 @@ class ProjectController extends Controller
 
         return $data;
     }
-
+    public function getMunicipalitiesInfo($province){
+        return $this->CommonUtil->getMunicipalities($province);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -379,12 +381,13 @@ class ProjectController extends Controller
             return Response::respondError('هذا الفعل غير مسموح');
         }
 
-        $project = Project::with('customer', 'lead','media','location','agency', 'lead.media', 'tasks', 'categories', 'members', 'members.media')
+        $project = Project::with('customer', 'lead','media','location','location.municipalitey','agency', 'lead.media', 'tasks', 'categories', 'members', 'members.media')
                             ->withCount(['tasks',
                                 'tasks as completed_task' => function ($query) {
                                     $query->where('is_completed', 1);
                                 }, ])
                             ->find($id);
+                          //  dd($project);
                             $project->projectTypes = Project::getProjectTypes();
                             $project->statuss = Project::getStatusForProject();
                             $project->categories = Category::forDropdown('projects');

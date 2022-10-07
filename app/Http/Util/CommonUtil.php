@@ -5,6 +5,7 @@ namespace App\Http\Util;
 use App\Components\User\Models\User;
 use App\Customer;
 use App\InvoiceScheme;
+use App\Municipality;
 use App\Project;
 use App\ProjectMember;
 use App\ProjectTaskMember;
@@ -469,35 +470,76 @@ class CommonUtil
                             'value' => __('data.province2')
                         ],
                         [
-                            'key' => 'province2',
+                            'key' => 'province3',
                             'value' => __('data.province3')
                         ],
-                        
+                        [
+                            'key' => 'province4',
+                            'value' => __('data.province4')
+                        ],
+                        [
+                            'key' => 'province5',
+                            'value' => __('data.province5')
+                        ],
+                        [
+                            'key' => 'province6',
+                            'value' => __('data.province6')
+                        ],
+                        [
+                            'key' => 'province7',
+                            'value' => __('data.province7')
+                        ],
+                        [
+                            'key' => 'province8',
+                            'value' => __('data.province8')
+                        ],
+                        [
+                            'key' => 'province9',
+                            'value' => __('data.province9')
+                        ],
+                        [
+                            'key' => 'province10',
+                            'value' => __('data.province10')
+                        ],
+                        [
+                            'key' => 'province11',
+                            'value' => __('data.province11')
+                        ],
+                        [
+                            'key' => 'province12',
+                            'value' => __('data.province12')
+                        ],
+                        [
+                            'key' => 'province13',
+                            'value' => __('data.province13')
+                        ],
+                        [
+                            'key' => 'province14',
+                            'value' => __('data.province14')
+                        ],
+                        [
+                            'key' => 'province15',
+                            'value' => __('data.province15')
+                        ],
+                        [
+                            'key' => 'province16',
+                            'value' => __('data.province16')
+                        ],
+                        [
+                            'key' => 'province17',
+                            'value' => __('data.province17')
+                        ],
                     ];
 
         
         return $provinceMunicipalities;
     }
 
-    public function getMunicipalities($append_all = false)
+    public function getMunicipalities($province)
     {
-        $provinceMunicipalities = [
-                        [
-                            'key' => 'municipality1',
-                            'value' => __('data.municipality1')
-                        ],
-                        [
-                            'key' => 'municipality2',
-                            'value' => __('data.municipality2')
-                        ],
-                        [
-                            'key' => 'municipality3',
-                            'value' => __('data.municipality3')
-                        ],
-                        
-                    ];
+        $provinceMunicipalities = Municipality::where('province',$province)
+        ->get();
 
-        
         return $provinceMunicipalities;
     }
 

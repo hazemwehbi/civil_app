@@ -98,7 +98,7 @@
                                     required
                                 ></v-text-field>
                             </v-flex>
-                             <v-flex xs12 sm6 md4>
+                             <v-flex xs12 sm6 md6>
                                     <v-autocomplete
                                         item-text="value"
                                         item-value="key"
@@ -117,6 +117,35 @@
                                     required
                                     ></v-autocomplete>
                                 </v-flex>
+                                   <v-flex xs12 sm6>
+                                <v-autocomplete
+                                   class="content-sign"
+                                    multiple
+                                    :clearable="true"
+                                    :deletable-chips="true"
+                                    :dense="true"
+                                    search-input=""
+                                    :solo-inverted="false"
+                                    :eager="true"
+                                    :loading="false"
+                                    :validate-on-blur="false"
+                                    :persistent-placeholder="false"
+                                    item-text="name"
+                                    item-value="id"
+                                    :items="roles"
+                                    v-model="form_fields.role_id"
+                                    @change="getEnginneringTypes"
+                                    :label="trans('messages.role')"
+                                    :rules="[
+                                        (v) =>
+                                            (v && v.length > 0) ||
+                                            trans('messages.required', {
+                                                name: trans('messages.role'),
+                                            }),
+                                    ]"
+                                    required
+                                ></v-autocomplete>
+                            </v-flex>
                                <v-flex xs12 sm12 md12 >
 
                                 <v-autocomplete
@@ -131,7 +160,7 @@
                                     :loading="false"
                                     :validate-on-blur="false"
                                     :persistent-placeholder="false"
-                                    chips="true"
+                                    :chips="true"
                                     item-value="key"
                                     :items="enginnering_types"
                                     v-model="specialty_id"
@@ -331,34 +360,7 @@
                                 >
                                 </v-textarea>
                             </v-flex>
-                            <v-flex xs12 sm3>
-                                <v-autocomplete
-                                   class="content-sign"
-                                    multiple
-                                    :clearable="true"
-                                    :deletable-chips="true"
-                                    :dense="true"
-                                    search-input=""
-                                    :solo-inverted="false"
-                                    :eager="true"
-                                    :loading="false"
-                                    :validate-on-blur="false"
-                                    :persistent-placeholder="false"
-                                    item-text="name"
-                                    item-value="id"
-                                    :items="roles"
-                                    v-model="form_fields.role_id"
-                                    :label="trans('messages.role')"
-                                    :rules="[
-                                        (v) =>
-                                            (v && v.length > 0) ||
-                                            trans('messages.required', {
-                                                name: trans('messages.role'),
-                                            }),
-                                    ]"
-                                    required
-                                ></v-autocomplete>
-                            </v-flex>
+                         
                             <!-- <v-flex xs12 sm3 v-if="$hasRole('superadmin')">
                                 <v-switch
                                     :label="trans('messages.pre_Active_acount')"
@@ -418,6 +420,7 @@ export default {
             valid: true,
             name: '',
             form_fields: [],
+            passwordConfirm: null,
             birth_date: null,
             gender_types: [],
             province_municipalities: [],
@@ -431,7 +434,8 @@ export default {
             roles: [],
             send_email: false,
             enginnering_type: '',
-            signatureData: null
+            signatureData: null,
+            loading: false
         };
     },
     mounted() {
@@ -460,10 +464,11 @@ export default {
                     console.log(error);
                 });
         },
-        getEnginneringTypes() {
+        getEnginneringTypes(event) {
             const self = this;
+            let url= '/get-enginnering-types-by-role/'+event
             axios
-                .get('/get-enginnering-types')
+                .get(url)
                 .then(function (response) {
                     self.enginnering_types = response.data;
                 })
