@@ -1,11 +1,11 @@
 <template>
-
-        <v-card  :class="$vuetify.breakpoint.xsOnly?'pt-4':''">
-            <v-form ref="form" v-model="valid" lazy-validation>
+        <v-card>
+            <SignaturePad ref="signature" @save="signatureData = $event"/>
+            <v-form ref="form" v-model="valid" lazy-validation enctype="multipart/form-data">
                 <v-card-title>
                     <v-icon medium>person</v-icon>
                     <span class="headline">
-                        {{ trans('data.add_customer') }}
+                        {{ trans('data.add_employee') }}
                     </span>
                 </v-card-title>
                 <v-divider></v-divider>
@@ -56,6 +56,7 @@
                                     ]"
                                     type="number"
                                     :label="trans('data.id_card_number')"
+                                    autocomplete="new-password"
                                     required
                                 ></v-text-field>
                             </v-flex>
@@ -96,25 +97,6 @@
                                     required
                                 ></v-text-field>
                             </v-flex>
-                              <v-flex xs12 sm6 md6>
-                                    <v-autocomplete
-                                        item-text="value"
-                                        item-value="key"
-                                        :items="province_municipalities"
-                                        v-model="location_data"
-                                        :label="trans('data.province_municipality')"
-                                        :data-vv-as="trans('data.province_municipality')"
-                                        :error-messages="errors.collect('province_municipality')"
-                                                  :rules="[
-                                        (v) =>
-                                            !!v ||
-                                            trans('messages.required', {
-                                                name: trans('data.province_municipality'),
-                                            }),
-                                    ]"
-                                    required
-                                    ></v-autocomplete>
-                                </v-flex>
 
                             <!-- communication details -->
                             <v-flex xs12 sm12 md12>
@@ -138,6 +120,25 @@
                                     :label="trans('messages.alternate_num')"
                                 ></v-text-field>
                             </v-flex>
+                               <v-flex xs12 sm6 md4>
+                                    <v-autocomplete
+                                        item-text="value"
+                                        item-value="key"
+                                        :items="province_municipalities"
+                                        v-model="location_data"
+                                          :rules="[
+                                        (v) =>
+                                            !!v ||
+                                            trans('messages.required', {
+                                                name: trans('data.province_municipality'),
+                                            }),
+                                    ]"
+                                        :label="trans('data.province_municipality')"
+                                        :data-vv-as="trans('data.province_municipality')"
+                                        :error-messages="errors.collect('province_municipality')"
+                                        required
+                                    ></v-autocomplete>
+                                </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-text-field
                                     v-model="form_fields.skype"
@@ -166,13 +167,10 @@
                                 >
                                 </v-text-field>
                             </v-flex>
-                            
-                            <v-flex xs12 sm12 md12>
-                                  <v-textarea
+                           
+                            <v-flex xs12 sm12 md12
+                                <v-textarea
                                     v-model="form_fields.current_address"
-                                    no-resize
-                                    clearable
-                                    @keypress="textAreaWrite"
                                     :label="trans('messages.current_address')"
                                     rows="3"
                                 ></v-textarea>
@@ -193,28 +191,29 @@
                                                 <label
                                                     aria-hidden="true"
                                                     class="
-                                                        v-label
+                                                        v-label v-label--active
                                                         theme--light
-                                                        w-full
-                                                        text-start
                                                         flat_picker_label
                                                     "
-                               
-                                                    :class="label_active"
-                                                    style="left:auto"
                                                 >
                                                     {{ trans('messages.date_of_birth') }}
                                                 </label>
                                                 <flat-pickr
                                                     v-model="birth_date"
                                                     name="date_of_birth"
-                                                      @input="label_active = 'v-label--active'"
                                                     :config="flatPickerDate()"
                                                 ></flat-pickr>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </v-flex>
+                            <v-flex xs12 sm6 md4>
+                                <v-text-field
+                                    v-model="form_fields.guardian_name"
+                                    :label="trans('messages.guardian_name')"
+                                >
+                                </v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-select
@@ -286,13 +285,60 @@
                                     rows="3"
                                     v-model="form_fields.note"
                                     :label="trans('messages.note')"
-                                    no-resize
-                                    clearable
-                                    @keypress="textAreaWrite"
                                 >
                                 </v-textarea>
                             </v-flex>
-                    
+                            <v-flex xs12 sm3>
+                                <v-autocomplete
+                                    multiple
+                                    item-text="name"
+                                    item-value="id"
+                                    :items="roles"
+                                    v-model="form_fields.role_id"
+                                    :label="trans('messages.role')"
+                                    :rules="[
+                                        (v) =>
+                                            (v && v.length > 0) ||
+                                            trans('messages.required', {
+                                                name: trans('messages.role'),
+                                            }),
+                                    ]"
+                                    required
+                                ></v-autocomplete>
+                            </v-flex>
+
+                              <v-flex xs12 sm3 v-if="form_fields.role_id && form_fields.role_id.find(val => val == 2)">
+                                <v-text-field
+                                    v-model="form_fields.title"
+                                    :label="trans('messages.title')"
+                                    :rules="[
+                                        (v) =>
+                                            (v && v.length > 0) ||
+                                            trans('messages.required', {
+                                                name: trans('messages.role'),
+                                            }),
+                                    ]"
+                                    required
+                                ></v-text-field>
+                            </v-flex>
+<v-flex xs12 sm3 class="text-xs-center text-sm-center text-md-center text-lg-center" v-if="form_fields.role_id && form_fields.role_id.find(val => val == 2)">
+            <!-- Here the image preview -->
+            <img :src="imageUrl" height="150" v-if="imageUrl"/>
+            <v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon="mdi-file-image"></v-text-field>
+            <input
+              type="file"
+              style="display: none"
+              ref="image"
+              accept="image/jpeg, image/jpg, image/png"
+              @change="onFilePicked"
+            >
+</v-flex>
+                            <v-flex xs12 sm3 v-if="$hasRole('superadmin')">
+                                <v-switch
+                                    :label="trans('messages.pre_Active_acount')"
+                                    v-model="active"
+                                ></v-switch>
+                            </v-flex>
                             <v-flex xs12 sm3>
                                 <v-checkbox
                                     :label="trans('messages.send_email')"
@@ -305,12 +351,15 @@
                     </v-container>
                 </v-card-text>
                 <v-layout justify-center>
-                    <v-card-actions>
+                    <v-card-actions class="flex-wrap">
                         <v-spacer></v-spacer>
                         <v-btn color="error" class="mr-4" @click="reset">
                             {{ trans('data.reset') }}
                         </v-btn>
-                        <v-btn @click="save()"  color="success" class="mr-4" :disabled="!valid || !checkActive()">
+                        <v-btn color="secondary" class="mr-4" @click="$refs.signature.dialog = true">
+                            {{ trans('data.addSignature') }}
+                        </v-btn>
+                        <v-btn @click="save()" :disabled="!valid" color="success" class="mr-4">
                             {{ trans('messages.save') }}
                         </v-btn>
                         <v-btn style="color: #06706d" @click="$router.go(-1)">
@@ -319,55 +368,86 @@
                     </v-card-actions>
                 </v-layout>
             </v-form>
+            
         </v-card>
-
+        
 </template>
 
 <script>
-import Popover from '../../../admin/popover/Popover';
+import Popover from '../admin/popover/Popover';
+import SignaturePad from './SignaturePad'
 export default {
     components: {
         Popover,
+        SignaturePad
     },
     data() {
         const self = this;
 
         return {
-            enginnering_types: [],
             valid: true,
             name: '',
             form_fields: [],
             birth_date: null,
-            province_municipalities: [],
-            label_active:"",
-            passwordConfirm: null,
-            location_data:"",
             gender_types: [],
+            province_municipalities: [],
+            location_data:"",
             email: '',
+            passwordConfirm: null,
             id_card_number: '',
             password: '',
             swordConfirm: '',
             active: true,
+            roles: [],
             send_email: false,
-            
+                imageUrl: '',
+    imageFile: null,
+    imageName: '',
+    user_id: null,
+    signatureData: null
         };
     },
     mounted() {
         const self = this;
         self.loadRolesAndGenders();
-         this.getLocationInfo();
+        self.getLocationInfo()
         self.$store.commit('setBreadcrumbs', [
             { label: 'Users', name: 'users.list' },
             { label: 'Create', name: '' },
         ]);
     },
     methods: {
+         pickFile() {
+      this.$refs.image.click()
+    },
+    onFilePicked(e) {
+      const files = e.target.files
+      if(files[0] !== undefined) {
+        this.imageName = files[0].name
+        if (this.imageName.lastIndexOf('.') <= 0) {
+          return
+        }
+        const fr = new FileReader()
+        fr.readAsDataURL(files[0])
+        fr.addEventListener('load', () => {
+          this.imageUrl = fr.result
+          this.imageFile = files[0]
+        })
+      } else {
+        this.imageName = ''
+        this.imageFile = ''
+        this.imageUrl = ''
+      }
+    },
         save() {
             const self = this;
-
+              let data = new FormData();
+              data.append('file', self.imageFile);
             if (this.$refs.form.validate()) {
                 let payload = {
+                    signature: self.signatureData,
                     name: self.name,
+                    location_data: self.location_data,
                     email: self.email,
                     mobile: self.form_fields.mobile,
                     alternate_num: self.form_fields.alternate_num,
@@ -376,14 +456,14 @@ export default {
                     skype: self.form_fields.skype,
                     linkedin: self.form_fields.linkedin,
                     facebook: self.form_fields.facebook,
-                    location_data: self.location_data,
                     twitter: self.form_fields.twitter,
                     birth_date: self.birth_date,
-                  //  guardian_name: self.form_fields.guardian_name,
+                    guardian_name: self.form_fields.guardian_name,
                     gender: self.form_fields.gender,
                     note: self.form_fields.note,
                     password: self.password,
                     active: self.active ? moment().format('YYYY-MM-DD') : null,
+                    role: self.form_fields.role_id,
                     send_email: self.send_email,
                     account_holder_name: self.form_fields.account_holder_name,
                     account_no: self.form_fields.account_no,
@@ -392,41 +472,42 @@ export default {
                     branch_location: self.form_fields.branch_location,
                     tax_payer_id: self.form_fields.tax_payer_id,
                     id_card_number: self.id_card_number,
+                    title: self.form_fields.title,
                 };
-
+Object.keys(payload).forEach(function(key) {
+    if(payload[key])
+  data.append(key, payload[key]);
+})
                 self.$store.commit('showLoader');
                 axios
-                    .post('enginner_office/add-customer', payload)
+                    .post('/admin/users', data)
                     .then(function (response) {
+                         self.user_id= response.data.id
                         self.$store.commit('showSnackbar', {
-                            message: response.data.msg,
+                            message: response.data.msg.original.msg,
                             color: response.data.success,
                         });
-
-                        self.$store.commit('hideLoader');
-                        self.reset();
+    
+                     self.$store.commit('hideLoader');
+                     
+                        if (response.data.msg.original.success == true) {
+                            console.log(response.data.msg.original.success)
+                               self.reset();
                         self.resetValidation();
-                        if (response.data.success === true) {
-                            // reset
                             self.$validator.reset();
                             self.goBack();
                         }
                     })
                     .catch(function (error) {
                         self.$store.commit('hideLoader');
-
-                        if (error.response) {
-                            self.$store.commit('showSnackbar', {
-                                message: error.response.data.message,
-                                color: 'error',
-                                duration: 3000,
-                            });
-                        } else if (error.request) {
-                            console.log(error.request);
-                        } else {
-                            console.log('Error', error.message);
-                        }
                     });
+                
+            } else {
+                self.$store.commit('showSnackbar', {
+                    message: 'املئ الحقول الضرورية',
+                    color: 'error',
+                    duration: 3000,
+                });
             }
         },
 
@@ -440,17 +521,15 @@ export default {
         loadRolesAndGenders() {
             const self = this;
             axios
-                .get('/enginner_office/users/create')
+                .get('/admin/users/create')
                 .then(function (response) {
                     self.gender_types = response.data.gender_types;
-                   // self.roles = response.data.roles;
+                    self.roles = response.data.roles;
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
         },
-
-        
     },
 };
 </script>

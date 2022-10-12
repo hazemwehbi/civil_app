@@ -58,7 +58,7 @@ class UserController extends  Controller
         // $roles = Role::where('type', 'employee')
         //             ->select('name', 'created_at', 'id');
    
-            $users = User::with('roles','specialty')->where('is_emp',1)->where(function ($query) {
+            $users = User::with('roles','specialty','parent')->where('is_emp',1)->where(function ($query) {
                 $query->where('parent_id',Auth::id());
                 //$query->where('parent_id',Auth::id());
 
@@ -213,7 +213,7 @@ class UserController extends  Controller
             DB::beginTransaction();
 
             $input = $request->only('name', 'email','location_data', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number');
-           // $input['parent_id']=Auth::id(); 
+            $input['parent_id']=Auth::id(); 
             $input['isActive']=1; 
             $input['user_type_log']='ESTATE_OWNER';
             /** @var User $user */
@@ -396,7 +396,21 @@ class UserController extends  Controller
         }
         return $output;
     }
-
+  public function addNewEmployee(Request $request){
+    $customer = User::find($request->id);
+   // dd($request->all(),$customer);
+    if($customer->parent_id === null){
+        $customer->parent_id = Auth::id();
+        $customer->is_emp = 1;
+        $customer->roles()->attach(Role::find(7));
+        $customer->save();
+        $output = $this->respondSuccess(__('messages.updated_successfully'));
+    }
+    else{
+        $output = $this->respondSuccess(__('messages.employee_busy'));
+    }
+return $output;
+  }
     /**
      * Remove the specified resource from storage.
      *

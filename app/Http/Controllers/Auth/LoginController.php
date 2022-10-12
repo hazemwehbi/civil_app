@@ -55,7 +55,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        // echo $request->input('type_name');
+       // dd($this->checkEmail($request->input('email_id_card')));
        // $x= $this->userRepository->getTypeOfUser($request->input('email_id_card'), $request->input('user_type'));
             if($this->checkEmail($request->input('email_id_card'))){
                 $user = User::where('email', $request->input('email_id_card'))->first();
@@ -63,6 +63,7 @@ class LoginController extends Controller
             else{
                 $user = User::where('id_card_number', $request->input('email_id_card'))->first();
             }
+           
             if(isset($user)){
                 if (Hash::check($request->password, $user->password)) {
                     $user->last_login=\Carbon\Carbon::now();
@@ -123,7 +124,7 @@ class LoginController extends Controller
         else{
             $user = User::where('id_card_number', $request->input('email_id_card'))->first();
         }
-    
+       
         if(isset($user)){
             if (Hash::check($request->password, $user->password)) {
                 $user->last_login=\Carbon\Carbon::now();
@@ -147,7 +148,7 @@ class LoginController extends Controller
 
     function checkEmail($email) {
         $find1 = strpos($email, '@');
-        $find2 = strpos($email, '.');
+        $find2 = strripos($email, '.');
         $x= ($find1 !== false && $find2 !== false && $find2 > $find1);
         return $x;
      }

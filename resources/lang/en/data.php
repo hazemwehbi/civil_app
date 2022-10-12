@@ -20,7 +20,7 @@ return [
 'create_service_type'=>'Create New Service Type',
 'edit_service_type'=>'Edit Service Type',
 'service_types_list'=>'Service Types List',
-
+'commercial_register'=>'Commercial Register',
 'province1'=>'Qassim Municipality',
 'province2'=>'Northern Frontier Region Secretariat',
 'province3'=>'Al-Baha Municipality',
@@ -445,10 +445,11 @@ return [
        'can_not_static_role'=>'Can Not Assign Primary Role ',
        'not_permiision_to_assign_primary_role'=>'You can not assign primary role to user, you have to ask permission',
 
-
+'undo' => 'Undo',
        //enignnering office
        'speciality'=>'speciality',
-       'new_employee_off'=>'New Employee',
+       'new_employee_off'=>'Create Employee',
+       'add_employee_off'=>'Add Employee',
        'all_employees'=>'All Employees',
        'add_employee_off'=>'Add Employee',
        'edit_employee_off'=>'Edit Employee' ,

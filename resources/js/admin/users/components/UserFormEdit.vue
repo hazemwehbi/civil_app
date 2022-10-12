@@ -66,7 +66,7 @@
                                     required
                                 ></v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm6>
+                           <!-- <v-flex xs12 sm6>
                                 <v-text-field
                                     :label="trans('messages.password')"
                                     :messages="trans('messages.password_edit_help')"
@@ -83,7 +83,20 @@
                                         ,
                                     ]"
                                 ></v-text-field>
-                            </v-flex>
+                            </v-flex>-->
+                              <v-flex xs12 sm6>
+                                <v-text-field
+            v-model="password"
+            :append-icon="show1 ? 'visibility' : 'visibility_off'"
+            :type="show1 ? 'text' : 'password'"
+            name="input-10-1"
+            autocomplete="new-password"
+           :label="trans('messages.password')"
+            hint="At least 6 characters"
+            counter
+            @click:append="show1 = !show1"
+          ></v-text-field>
+        </v-flex>
                             <v-flex xs12 sm6>
                                 <v-text-field
                                     :label="trans('messages.confirm_password')"
@@ -168,21 +181,15 @@
                                 >
                                 </v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm6 md6>
-                                <v-textarea
-                                    v-model="form_fields.home_address"
-                                    :label="trans('messages.home_address')"
-                                    rows="3"
-                                >
-                                </v-textarea>
-                            </v-flex>
-                            <v-flex xs12 sm6 md6>
-                                <v-textarea
+                            <v-flex xs12 sm12 md12>
+                                 <v-textarea
                                     v-model="form_fields.current_address"
+                                    no-resize
+                                    clearable
+                                    @keypress="textAreaWrite"
                                     :label="trans('messages.current_address')"
                                     rows="3"
-                                >
-                                </v-textarea>
+                                ></v-textarea>
                             </v-flex>
                             <!-- personal information -->
                             <v-flex xs12 sm12 md12>
@@ -197,19 +204,25 @@
                                     <div class="v-input__control">
                                         <div class="v-input__slot">
                                             <div class="v-text-field__slot">
-                                                <label
+                                                   <label
                                                     aria-hidden="true"
                                                     class="
-                                                        v-label v-label--active
+                                                        v-label
                                                         theme--light
+                                                        w-full
+                                                        text-start
                                                         flat_picker_label
                                                     "
+                               
+                                                    :class="label_active"
+                                                    style="left:auto"
                                                 >
                                                     {{ trans('messages.date_of_birth') }}
                                                 </label>
                                                 <flat-pickr
                                                     v-model="birth_date"
                                                     name="date_of_birth"
+                                                      @input="label_active = 'v-label--active'"
                                                     :config="flatPickerDate()"
                                                 ></flat-pickr>
                                             </div>
@@ -217,13 +230,13 @@
                                     </div>
                                 </div>
                             </v-flex>
-                            <v-flex xs12 sm6 md4>
+                            <!--<v-flex xs12 sm6 md4>
                                 <v-text-field
                                     v-model="form_fields.guardian_name"
                                     :label="trans('messages.guardian_name')"
                                 >
                                 </v-text-field>
-                            </v-flex>
+                            </v-flex>-->
                             <v-flex xs12 sm6 md4>
                                 <v-select
                                     :items="gender_types"
@@ -319,6 +332,24 @@
                                     required
                                 ></v-autocomplete>
                             </v-flex>
+                             <v-flex xs12 sm3 v-if="form_fields.role_ids && form_fields.role_ids.find(val => val == 7)">
+                                    <v-autocomplete
+                                        item-text="name"
+                                        item-value="id"
+                                        :chips="true"
+                                        :items="engennering_offices"
+                                        v-model="office_id"
+                                        :label="trans('data.enginnering_office_name')"
+                                        :rules="[
+                                            (v) =>
+                                                !!v ||
+                                                trans('messages.required', {
+                                                    name: trans('data.enginnering_office_name'),
+                                                }),
+                                        ]"
+                                        required
+                                    ></v-autocomplete>
+                                </v-flex>
                             <v-flex
                                 xs12
                                 sm3
@@ -346,8 +377,13 @@
                                 "
                             >
                                 <!-- Here the image preview -->
-                                <img :src="logo?logo:imageUrl" height="150" v-if="imageUrl || logo" />
+                                     <div class="img-container" @click="pickFile" v-if="imageUrl || logo">
+                                <img :src="logo?logo:imageUrl" height="150"  class="image"/>
+                                <div class="overlay text-sm text-gray-500">Click For Select Image</div>
+                                </div>
+                                <!--<img :src="logo?logo:imageUrl" height="150" v-if="imageUrl || logo" />-->
                                 <v-text-field
+                                   v-else
                                     label="Select Image"
                                     @click="pickFile"
                                     v-model="imageName"
@@ -408,7 +444,8 @@
 
 <script>
 import Popover from '../../popover/Popover';
-import SignaturePad from './SignaturePad'
+import SignaturePad from '../../../common/SignaturePad'
+
 export default {
     components: {
         Popover,
@@ -423,15 +460,19 @@ export default {
         const self = this;
 
         return {
+               show1: false,
             valid: false,
             name: '',
             form_fields: [],
             birth_date: null,
             gender_types: [],
             passwordConfirm: null,
+               engennering_offices: [],
+             office_id:null,
             email: '',
             password: '',
             active: '',
+            label_active: '',
             roles: [],
             title: null,
             id_card_number: '',
@@ -452,24 +493,10 @@ export default {
     },
     created() {
         this.loadUser(() => {});
+        this.getOffices()
          this.getLocationInfo()
     },
     methods: {
-        getLocationInfo() {
-            const self = this;
-            axios
-                .get('/get-location-info')
-                .then(function (response) {
-                    self.province_municipalities = response.data.provinceMunicipalities;
-                    self.municipalities = response.data.municipalities;
-                    self.categories_location = response.data.categoriesLocation;
-                    self.neighborhoods = response.data.neighborhoods;
-                    self.districts = response.data.districts;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
           changeRole(){
           this.$forceUpdate()
         },
@@ -512,11 +539,12 @@ export default {
                     facebook: self.form_fields.facebook,
                     twitter: self.form_fields.twitter,
                     birth_date: self.birth_date,
-                    guardian_name: self.form_fields.guardian_name,
+                  //  guardian_name: self.form_fields.guardian_name,
+                  office_id:self.office_id,
                     gender: self.form_fields.gender,
                     note: self.form_fields.note,
                     email: self.email,
-                    password: self.password ? self.password : null,
+                    password: self.password,
                     active: self.active ? moment().format('YYYY-MM-DD') : null,
                     role: self.form_fields.role_ids,
                     send_email: self.send_email,
@@ -568,6 +596,17 @@ export default {
                 });
             }
         },
+               getOffices() {
+            const self = this;
+            axios
+                .get('/get-offices')
+                .then(function (response) {
+                    self.engennering_offices = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         loadUser(cb) {
             const self = this;
             axios.get('/admin/users/' + self.propUserId + '/edit').then(function(response) {
@@ -579,6 +618,7 @@ export default {
                 self.email = User.email;
                 self.location_data = User.location_data,
                 self.id_card_number = User.id_card_number;
+                self.office_id = User.parent_id;
                 self.active = User.active !== null;
                 self.roles = response.data.roles;
                 self.form_fields.role_ids = response.data.role_ids;
@@ -597,3 +637,32 @@ export default {
     },
 };
 </script>
+<style scoped>
+.img-container {
+  position: relative;
+  max-width: 300px;
+  cursor: pointer;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    background: rgb(0, 0, 0);
+    background: rgb(237 245 239 / 50%);
+    width: 100%;
+    transition: .5s ease;
+    opacity: 0;
+    padding: 20px;
+    text-align: center;
+    height: 100%;
+}
+.img-container:hover .overlay {
+  opacity: 1;
+}
+</style>

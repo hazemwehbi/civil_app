@@ -88,6 +88,16 @@
                     {{ trans('data.new_employee_off') }}
                     <v-icon right dark>add</v-icon>
                 </v-btn>
+                  <v-btn
+                    v-if="$can('employee.create')"
+                    :disabled="!checkActive()"
+                    @click="addEmployee"
+                    style="background-color: #06706d; color: white"
+                    class="lighten-1"
+                >
+                    {{ trans('data.add_employee_off') }}
+                    <v-icon right dark>add</v-icon>
+                </v-btn>
             </v-card-title>
             <v-divider></v-divider>
             <!-- data table -->
@@ -178,6 +188,9 @@
                             </span>
                         </div>
                     </td>
+                      <td>
+                        <div align="center">{{ props.item.parent?props.item.parent.name:null }}</div>
+                    </td>
                     <td>
                         <div align="center">
                             <span>
@@ -216,12 +229,17 @@
             </v-btn>
         </div>
         <br />
+        <AddEmployeeById ref="addEmployeeById"/>
     </div>
 </template>
 
 <script>
+import AddEmployeeById from './AddEmployeeById.vue'
 import _ from 'lodash';
 export default {
+    components:{
+     AddEmployeeById
+    },
     data() {
         const self = this;
         return {
@@ -254,6 +272,12 @@ export default {
                 {
                     text: self.trans('messages.roles'),
                     value: 'roles',
+                    align: 'center',
+                    sortable: false,
+                },
+                      {
+                    text: self.trans('data.enginnering_office_name'),
+                    value: 'parent',
                     align: 'center',
                     sortable: false,
                 },
@@ -305,14 +329,20 @@ export default {
         'pagination.rowsPerPage': function () {
             this.loadUsers(() => {});
         },
-        'filters.name': _.debounce(() => {
+        'filters.name':  {
+            handler(){
+           const self = this;
+           self.loadUsers(() => {});
+            }
+        },
+        'filters.email':{
+            handler(){
+          //   _.debounce(() => {
             const self = this;
             self.loadUsers(() => {});
-        }, 700),
-        'filters.email': _.debounce(() => {
-            const self = this;
-            self.loadUsers(() => {});
-        }, 700),
+       // }, 700)
+            }
+    },
     },
     methods: {
         trash(user) {
@@ -354,6 +384,9 @@ export default {
                     console.log('CANCEL');
                 },
             });
+        },
+        addEmployee(){
+this.$refs.addEmployeeById.create()
         },
         getEnginneringTypes() {
             const self = this;

@@ -22,9 +22,9 @@
            {{data.name?data.name[0]:''}}
            </div>
             <h2 class="text-2xl font-bold text-gray-900 text-center mt-3">{{ data.name }}</h2>
-            <h3 id="information-heading" class="font-bold text-gray-900 text-center">{{ trans('messages.guardian_name') }}</h3>
+            <!--<h3 id="information-heading" class="font-bold text-gray-900 text-center">{{ trans('messages.guardian_name') }}</h3>-->
            
-  <div class="dark:bg-slate-800 w-full text-sm flex-col">
+  <div class="dark:bg-slate-800 w-full text-sm flex-col mt-3">
     <div class="flex justify-between flex-wrap">
       <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400 w-1/2">{{ trans('data.id_card_number') }}:</div>
       <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400 w-1/2">{{ data.id_card_number}}</div>
@@ -133,10 +133,7 @@
       <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ trans('messages.mobile') }}:</td>
       <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ data.mobile }}</td>
     </tr>
-     <tr>
-      <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ trans('messages.home_address') }}:</td>
-      <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ data.home_address }}</td>
-    </tr>
+    
       <tr>
       <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ trans('data.speciality') }}:</td>
       <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ data.specialty != null ?  data.specialty.name : ''  }}</td>

@@ -167,16 +167,12 @@
                                 >
                                 </v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm6 md6>
-                                <v-textarea
-                                    v-model="form_fields.home_address"
-                                    :label="trans('messages.home_address')"
-                                    rows="3"
-                                ></v-textarea>
-                            </v-flex>
-                            <v-flex xs12 sm6 md6>
+                            <v-flex xs12 sm12 md12>
                                 <v-textarea
                                     v-model="form_fields.current_address"
+                                    no-resize
+                                    clearable
+                                    @keypress="textAreaWrite"
                                     :label="trans('messages.current_address')"
                                     rows="3"
                                 ></v-textarea>
@@ -194,18 +190,24 @@
                                     <div class="v-input__control">
                                         <div class="v-input__slot">
                                             <div class="v-text-field__slot">
-                                                <label
+                                               <label
                                                     aria-hidden="true"
                                                     class="
-                                                        v-label v-label--active
+                                                        v-label
                                                         theme--light
+                                                        w-full
+                                                        text-start
                                                         flat_picker_label
                                                     "
+                               
+                                                    :class="label_active"
+                                                    style="left:auto"
                                                 >
                                                     {{ trans('messages.date_of_birth') }}
                                                 </label>
                                                 <flat-pickr
                                                     v-model="birth_date"
+                                                    @input="label_active = 'v-label--active'"
                                                     name="date_of_birth"
                                                     :config="flatPickerDate()"
                                                 ></flat-pickr>
@@ -213,13 +215,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </v-flex>
-                            <v-flex xs12 sm6 md4>
-                                <v-text-field
-                                    v-model="form_fields.guardian_name"
-                                    :label="trans('messages.guardian_name')"
-                                >
-                                </v-text-field>
                             </v-flex>
                             <v-flex xs12 sm6 md4>
                                 <v-select
@@ -291,6 +286,9 @@
                                     rows="3"
                                     v-model="form_fields.note"
                                     :label="trans('messages.note')"
+                                       no-resize
+                                    clearable
+                                    @keypress="textAreaWrite"
                                 >
                                 </v-textarea>
                             </v-flex>
@@ -312,7 +310,23 @@
                                     required
                                 ></v-autocomplete>
                             </v-flex>
-
+ <v-flex xs12 sm3 v-if="form_fields.role_id && form_fields.role_id.find(val => val == 7)">
+                                    <v-autocomplete
+                                        item-text="name"
+                                        item-value="id"
+                                        :items="engennering_offices"
+                                        v-model="office_id"
+                                        :label="trans('data.enginnering_office_name')"
+                                        :rules="[
+                                            (v) =>
+                                                !!v ||
+                                                trans('messages.required', {
+                                                    name: trans('data.enginnering_office_name'),
+                                                }),
+                                        ]"
+                                        required
+                                    ></v-autocomplete>
+                                </v-flex>
                               <v-flex xs12 sm3 v-if="form_fields.role_id && form_fields.role_id.find(val => val == 2)">
                                 <v-text-field
                                     v-model="form_fields.title"
@@ -381,7 +395,7 @@
 
 <script>
 import Popover from '../../popover/Popover';
-import SignaturePad from './SignaturePad'
+import SignaturePad from '../../../common/SignaturePad'
 export default {
     components: {
         Popover,
@@ -397,8 +411,11 @@ export default {
             birth_date: null,
             gender_types: [],
             province_municipalities: [],
+             engennering_offices: [],
+             office_id:null,
             location_data:"",
             email: '',
+            label_active:'',
             passwordConfirm: null,
             id_card_number: '',
             password: '',
@@ -413,34 +430,38 @@ export default {
     signatureData: null
         };
     },
+     computed: {
+    lineCount: function() {
+      // Return number of lines using regex if not empty
+      return this.form_fields?.current_address?.length ? this.form_fields?.current_address?.split(/\r\n|\r|\n/).length : 0;
+    }
+  },
     mounted() {
         const self = this;
         self.loadRolesAndGenders();
         self.getLocationInfo()
+        self.getOffices()
         self.$store.commit('setBreadcrumbs', [
             { label: 'Users', name: 'users.list' },
             { label: 'Create', name: '' },
         ]);
     },
     methods: {
-        getLocationInfo() {
+ 
+         pickFile() {
+      this.$refs.image.click()
+    },
+       getOffices() {
             const self = this;
             axios
-                .get('/get-location-info')
+                .get('/get-offices')
                 .then(function (response) {
-                    self.province_municipalities = response.data.provinceMunicipalities;
-                    self.municipalities = response.data.municipalities;
-                    self.categories_location = response.data.categoriesLocation;
-                    self.neighborhoods = response.data.neighborhoods;
-                    self.districts = response.data.districts;
+                    self.engennering_offices = response.data;
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
         },
-         pickFile() {
-      this.$refs.image.click()
-    },
     onFilePicked(e) {
       const files = e.target.files
       if(files[0] !== undefined) {
@@ -479,7 +500,8 @@ export default {
                     facebook: self.form_fields.facebook,
                     twitter: self.form_fields.twitter,
                     birth_date: self.birth_date,
-                    guardian_name: self.form_fields.guardian_name,
+                    office_id:self.office_id,
+                    //guardian_name: self.form_fields.guardian_name,
                     gender: self.form_fields.gender,
                     note: self.form_fields.note,
                     password: self.password,

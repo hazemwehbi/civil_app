@@ -217,7 +217,7 @@ return [
     'supervision_requests'=>'طلبات الاشراف',
     'archive'=>'الارشيف',
     'accounting'=>'المحاسبة',
-    'add_customer'=>'إضافة زبون',
+    'add_customer'=>'إضافة عميل',
     'reports'=>'التقارير',
     'institutional'=>'مؤسسي',
     'business'=>'اعمال',
@@ -235,6 +235,7 @@ return [
     'required' => 'الحقل مطلوب',
     'enginnering_office_name'=>'اسم المكتب الهندسي',
      'yes' => 'نعم',
+     'undo'=>'تراجع',
      'no' => 'لا',
       //report 
       'project_name_and_address'=> 'اسم وعنوان المشروع',
@@ -338,11 +339,11 @@ return [
       'architectural_enginnering'=>'Architectural Enginnering',
 
       'enginnering_type'=>'نوع المهندس',
-      
+      'commercial_register'=>'السجل التجاري',
 
-      'ask_for_permission'=>'طلب صلاحية',
+      'ask_for_permission'=>'طلب تسجيل جهة عمل',
 
-      'choose_permission'=>'اختر صلاحية',
+      'choose_permission'=>'اختر جهة العمل',
       'select_document'=>'اختر وثيقة',
 
       'enginner'=>'المهندس',
@@ -410,7 +411,8 @@ return [
 
        //enginnering office
         'speciality'=>'الاختصاص',
-        'new_employee_off'=>'موظف جديد',
+        'new_employee_off'=>'إنشاء موظف',
+        'add_employee_off'=>'إضافة موظف',
         'all_employees'=>'جميع الموظفين',
         'add_employee_off'=>'اضافة موظف',
         'edit_employee_off'=>'تعديل موظف',

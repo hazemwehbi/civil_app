@@ -82,11 +82,11 @@
                                 ></v-text-field>
                             </v-flex>
 
-                            <v-flex xs12 sm6>
+                           <!-- <v-flex xs12 sm6>
                                 <v-text-field
                                     :label="trans('messages.password')"
                                     :messages="trans('messages.password_edit_help')"
-                                    type="password"
+                                   
                                     v-model="password"
                                     :rules="[
                                         (v) => (v) =>
@@ -99,12 +99,25 @@
                                     ]"
                                     required
                                 ></v-text-field>
-                            </v-flex>
+                            </v-flex>-->
+                                <v-flex xs12 sm6>
+          <v-text-field
+            v-model="password"
+            :append-icon="show1 ? 'visibility' : 'visibility_off'"
+            :type="show1 ? 'text' : 'password'"
+            name="input-10-1"
+            autocomplete="new-password"
+           :label="trans('messages.password')"
+            hint="At least 6 characters"
+            counter
+            @click:append="show1 = !show1"
+          ></v-text-field>
+        </v-flex>
                             <v-flex xs12 sm6>
                                        <v-text-field
                                     :label="trans('messages.confirm_password')"
-                                    type="password"
-                                    autocomplete="off"
+                                 
+                                    autocomplete="new-password"
                                     v-model="passwordConfirm"
                                     :rules="[
                                         v =>
@@ -165,15 +178,8 @@
                                 >
                                 </v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm6 md6>
-                                <v-textarea
-                                    v-model="form_fields.home_address"
-                                    :label="trans('messages.home_address')"
-                                    rows="3"
-                                >
-                                </v-textarea>
-                            </v-flex>
-                            <v-flex xs12 sm6 md6>
+                        
+                            <v-flex xs12 sm12 md12>
                                 <v-textarea
                                     v-model="form_fields.current_address"
                                     :label="trans('messages.current_address')"
@@ -320,12 +326,12 @@
                                 class="text-xs-center text-sm-center text-md-center text-lg-center"
                             >
                                 <!-- Here the image preview -->
-                                <div class="img-container" @click="pickFile">
-                                <img :src="logo?logo:imageUrl" height="150" v-if="imageUrl || logo"  class="image"/>
-                                <div class="overlay">Click For Select Image</div>
+                                <div class="img-container" @click="pickFile" v-if="imageUrl || logo">
+                                <img :src="logo?logo:imageUrl" height="150"   class="image"/>
+                                <div class="overlay text-sm text-gray-500">Click For Select Image</div>
                                 </div>
                                 <v-text-field
-                                    v-if="!logo"
+                                    v-else
                                     label="Select Image"
                                     @click="pickFile"
                                     v-model="imageName"
@@ -394,7 +400,7 @@
 </template>
 
 <script>
-import SignaturePad from '../../admin/users/components/SignaturePad'
+import SignaturePad from '../../common/SignaturePad'
 import Popover from '../../admin/popover/Popover';
 export default {
     components:{
@@ -411,7 +417,17 @@ Popover
             birth_date: null,
             gender_types: [],
             email: '',
-            password: '',
+            password: null,
+            show1: false,
+             rules: {
+          required: value => !!value || 'Required.',
+       //   min: v => v.length >= 8 || 'Min 8 characters',
+          min: v => (v && v.length >= 6) || this.trans('messages.string_length', {
+                                                name: this.trans('messages.password'),
+                                                length: '6',
+                                            }),
+
+        },
             active: '',
             id_card_number: '',
             send_email: false,
@@ -435,21 +451,6 @@ Popover
         self.edit(self.userId);
     },
     methods: {
-            getLocationInfo() {
-            const self = this;
-            axios
-                .get('/get-location-info')
-                .then(function (response) {
-                    self.province_municipalities = response.data.provinceMunicipalities;
-                    self.municipalities = response.data.municipalities;
-                    self.categories_location = response.data.categoriesLocation;
-                    self.neighborhoods = response.data.neighborhoods;
-                    self.districts = response.data.districts;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        },
           pickFile() {
             this.$refs.image.click();
         },
@@ -488,7 +489,7 @@ Popover
                     self.id_card_number = User.id_card_number;
                     self.active = User.active !== null;
                     self.signatureUrl = response.data.user.signature;
-                       self.imageUrl = response.data.user.logo
+                    self.imageUrl = response.data.user.logo;
                     // self.roles = response.data.roles;
                     // self.form_fields.role_ids = response.data.role_ids;
                     self.checkRolePrimary(self.propUserId);
@@ -558,7 +559,7 @@ Popover
                     gender: self.form_fields.gender,
                     note: self.form_fields.note,
                     email: self.email,
-                    password: self.password ? self.password : null,
+                    password: self.password,
                     active: self.active ? moment().format('YYYY-MM-DD') : null,
                     role: self.form_fields.role_ids,
                     send_email: self.send_email,
@@ -676,18 +677,16 @@ Popover
 }
 
 .overlay {
-  position: absolute; 
-  bottom: 0; 
-  background: rgb(0, 0, 0);
-  background: rgba(0, 0, 0, 0.5); /* Black see-through */
-  color: #f1f1f1; 
-  width: 100%;
-  transition: .5s ease;
-  opacity:0;
-  color: white;
-  font-size: 20px;
-  padding: 20px;
-  text-align: center;
+    position: absolute;
+    bottom: 0;
+    background: rgb(0, 0, 0);
+    background: rgb(237 245 239 / 50%);
+    width: 100%;
+    transition: .5s ease;
+    opacity: 0;
+    padding: 20px;
+    text-align: center;
+    height: 100%;
 }
 .img-container:hover .overlay {
   opacity: 1;

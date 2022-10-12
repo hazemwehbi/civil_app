@@ -61,12 +61,8 @@ class UserController extends AdminController
         //             ->select('name', 'created_at', 'id');
         $user=Auth::user();
        
-             $users = User::with('roles');
+             $users = User::with('roles','parent');
       
-
-
-        
-
         if (!empty($request->get('name'))) {
             $term = $request->get('name');
             $users->where('name', 'like', "%$term%");
@@ -156,7 +152,7 @@ class UserController extends AdminController
             DB::beginTransaction();
 
             $input = $request->only('name', 'email','location_data', 'mobile', 'alternate_num', 'home_address', 'current_address', 'skype', 'linkedin', 'facebook', 'twitter', 'birth_date', 'guardian_name', 'gender', 'note', 'password', 'active', 'account_holder_name', 'account_no', 'bank_name', 'bank_identifier_code', 'branch_location', 'tax_payer_id','id_card_number','title');
-            $input['parent_id']=Auth::id(); 
+            $input['parent_id']=$request->office_id; 
 
             $input['isActive']=1; 
             
@@ -437,7 +433,8 @@ class UserController extends AdminController
     public function getEmployee($id)
     {
         $user = User::findOrFail($id);
-
+        $user->signature = $user->getFirstMedia('signature')?$user->getFirstMedia('signature')->original_url:'';
+        $user->logo = $user->getFirstMedia('logo')?$user->getFirstMedia('logo')->original_url:'';
         return $this->respond($user);
     }
 
@@ -515,7 +512,7 @@ class UserController extends AdminController
         ->orderBy('name')
         ->get()
         ->toArray();
-      
+     // dd($customers);
         return $customers;
    }
     public function getAllOffices()

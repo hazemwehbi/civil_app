@@ -352,14 +352,11 @@ class User extends Authenticatable implements HasMedia
 
     public static function getRolesForPermission()
     {
-      
-        
-     
-        //where('type','!=', $userrole->type)
        
         $roles = Role:: where(function ($query) {
             $roles_ids = Auth::user()->roles->pluck('id');
             $query->where('is_primary',1);
+            $query->where('id','!=',6);
             $query->whereNotIn('id', $roles_ids);
         })->select('id', 'name')
                       ->get()

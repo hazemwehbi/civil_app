@@ -551,7 +551,7 @@ return [
     'ask_for_contracting_company_notification_text'=>'recieve new request contracing company',
     'ask_for_support_service_office_notification_text'=>'recieve new request support service office',
 
-
+    "employee_busy" => "E,ployee Is Work In Another Office",
 
     'email_valid'=>'Email must be valid',
 

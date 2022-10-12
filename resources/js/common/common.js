@@ -105,6 +105,8 @@ flatpickr.setDefaults({
 
 import MoonLoader from "vue-spinner/src/MoonLoader.vue"
 import Notification from "../common/notification/Notification.vue"
+import FormAdd from "../common/UserFormAdd.vue"
+import SignaturePad from "../common/SignaturePad.vue"
 import MobileHeader from "../common/MobileHeader.vue"
 import Calendar from "../common/calendar/Calendar.vue"
 import Avatar from "../common/projects/components/Avatar.vue"
@@ -113,6 +115,8 @@ import Create from "../admin/quick_add/Create.vue"
 
 Vue.component('moon-loader', MoonLoader);
 Vue.component('notification', Notification);
+Vue.component('userformadd', FormAdd);
+Vue.component('signaturepad', SignaturePad);
 Vue.component('mobileheader', MobileHeader);
 Vue.component('calendar', Calendar);
 Vue.component('avatar', Avatar);

@@ -38,7 +38,12 @@
                                             @change="onFilePicked"
                                         />
                                     </v-flex>
-
+ <v-flex xs12 sm12 md12>
+                                        <v-text-field
+                                            :label="trans('data.commercial_register')"
+                                            v-model="commercial_register"
+                                        ></v-text-field>
+ </v-flex>
                                     <v-flex xs12 sm12 md12>
                                         <v-text-field
                                             v-model="note"
@@ -89,6 +94,7 @@ export default {
                 ,// (v) => (v && v.length <= 10) || 'Name must be less than 10 characters',
             ],
             permission: '',
+            commercial_register:null,
             note: '',
             fileName: '',
             url: '',
@@ -130,12 +136,14 @@ export default {
             let data = {
                 permission: self.permission,
                 note: self.note,
+                commercial_register:self.commercial_register
             };
 
             // self.$validator.validateAll().then((result) => {
             //     if (result == true) 
             self.formData.append('permission',self.permission);
             self.formData.append('note',self.note);
+            self.formData.append('commercial_register',self.commercial_register);
             if (this.$refs.form.validate()) {
                 self.loading = true;
 

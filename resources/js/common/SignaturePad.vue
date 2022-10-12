@@ -19,9 +19,9 @@
         <v-divider></v-divider>
  <v-card-actions>
           <v-spacer></v-spacer>
-      <v-btn class="primary" @click="save">{{trans('data.save')}}</v-btn>
-      <v-btn class="secondary" @click="undo">Undo</v-btn>
-      <v-btn class="secondary" @click="dialog = false">{{trans('data.close')}}</v-btn>
+      <v-btn class="btn primary" style="color: #fff;background:#4CAF50 " @click="save">{{trans('data.save')}}</v-btn>
+      <v-btn class="btn secondary" style="color: #fff;background:#2196F3 " @click="undo">{{trans('data.undo')}}</v-btn>
+      <v-btn class="btn secondary" style="color: #fff;background:#424242 " @click="dialog = false">{{trans('data.close')}}</v-btn>
     </v-card-actions>
      </v-card>
   </v-dialog>
@@ -42,9 +42,20 @@ export default {
    }
  }
  },
+ props:{
+   extraDialogValue: false
+ },
+ watch:{
+   extraDialogValue(){
+    this.dialog = this.extraDialogValue
+   }
+ },
   methods: {
     undo() {
       this.$refs.signaturePad.undoSignature();
+    },
+    create(){
+        this.dialog = true
     },
     save() {
       const { isEmpty, data } = this.$refs.signaturePad.saveSignature();

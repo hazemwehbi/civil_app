@@ -137,7 +137,7 @@ const router = new Router({
     routes: [
         {
             path: '/',
-            redirect: APP.USER_TYPE_LOG == 'ESTATE_OWNER' ? '/es' :
+            redirect:  APP.USER_TYPE_LOG == 'ESTATE_OWNER' ? '/es' :
              APP.USER_TYPE_LOG == 'ENGINEERING_OFFICE_MANAGER' ? '/en' : 
              APP.USER_TYPE_LOG == 'CONTRACTING_COMPANY' ? '/en' : 
              APP.USER_TYPE_LOG == 'SUPPORT_SERVICES_OFFICE' ? '/en' : 
@@ -925,7 +925,7 @@ router.beforeEach((to, from, next) => {
     store.commit('showLoader');
     if (to.path == '/to-do') {
         //  alert(to.path)
-        if (APP.USER_TYPE_LOG == 'ESTATE_OWNER') {
+        if ( APP.USER_TYPE_LOG == 'ESTATE_OWNER') {
             if (from.path != '/es/to-do-list')
                 next('/es/to-do-list')
             else
@@ -938,13 +938,13 @@ router.beforeEach((to, from, next) => {
             else
                 next('/')
         }
-        else if (APP.USER_TYPE_LOG == 'CONTRACTING_COMPANY') {
+        else if ( APP.USER_TYPE_LOG == 'CONTRACTING_COMPANY') {
             if (from.path != '/en/to-do-list_contractor')
                 next('/en/to-do-list_contractor')
             else
                 next('/')
         }
-        else if (APP.USER_TYPE_LOG == 'SUPPORT_SERVICES_OFFICE') {
+        else if ( APP.USER_TYPE_LOG == 'SUPPORT_SERVICES_OFFICE') {
             if (from.path != '/en/to-do-list-support-service')
                 next('/en/to-do-list-support-service')
             else

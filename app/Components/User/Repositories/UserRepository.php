@@ -53,7 +53,8 @@ class UserRepository extends BaseRepository
 
     function checkEmail($email) {
         $find1 = strpos($email, '@');
-        $find2 = strpos($email, '.');
+        $find2 = strripos($email, '.');
+      //  dd($find2);
         $x= ($find1 !== false && $find2 !== false && $find2 > $find1);
         return $x;
      }

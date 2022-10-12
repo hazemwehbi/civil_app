@@ -104,7 +104,7 @@ Route::middleware(['auth'])
 
             Route::resource('dashboards', 'DashboardController')->only(['index']);
         Route::resource('media', 'MediaController');
-
+        
         Route::post('removeFile', 'MediaController@removeFile');
         Route::get('/customers', 'Admin\UserController@getCustomers');
 
@@ -342,7 +342,7 @@ Route::prefix('estate_owner')
             Route::get('/', 'SinglePageController@displaySPA')
             ->name('estate_owner.spa');
             Route::resource('dashboards', 'DashboardController')->only(['index']);
-
+            Route::post('addNewEmployee','UserController@addNewEmployee');
             Route::get('user-statistics', 'UserController@getStatistics');
             Route::get('users-all', 'UserController@getAllEmployee');
             Route::get('users/{id}/name', 'UserController@getEmployee');

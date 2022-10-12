@@ -62,9 +62,9 @@
            {{employee.name?employee.name[0]:''}}
            </div>
             <h2 class="text-2xl font-bold text-gray-900 text-center mt-3">{{ employee.name }}</h2>
-            <h3 id="information-heading" class="font-bold text-gray-900 text-center">{{ trans('messages.guardian_name') }}</h3>
+            <!--<h3 id="information-heading" class="font-bold text-gray-900 text-center">{{ trans('messages.guardian_name') }}</h3>-->
            
-  <div class="dark:bg-slate-800 w-full text-sm flex-col">
+  <div class="dark:bg-slate-800 w-full text-sm flex-col mt-3">
     <div class="flex justify-between flex-wrap">
       <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400 w-1/2">{{ trans('data.id_card_number') }}:</div>
       <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400 w-1/2">{{ employee.id_card_number}}</div>
@@ -100,10 +100,7 @@
       <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ trans('messages.mobile') }}:</td>
       <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ employee.mobile }}</td>
     </tr>
-     <tr>
-      <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ trans('messages.home_address') }}:</td>
-      <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ employee.home_address }}</td>
-    </tr>
+  
       <tr>
       <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ trans('data.speciality') }}:</td>
       <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ employee.specialty != null ?  employee.specialty.name : ''  }}</td>
@@ -138,11 +135,11 @@
               <section aria-labelledby="options-heading" class="mt-2 mx-auto">
               
                   <div class="flex">
-                  <button  v-if="true"
+                  <!--<button  v-if="true"
                    @click="$router.push({ name: 'profile.edit', params: { id: employee.id } })"
                    class="mt-6 w-full bg-indigo-600 border border-transparent rounded-md py-2 px-8 mx-2 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                    >
-                     {{ trans('messages.edit') }}</button>
+                     {{ trans('messages.edit') }}</button>-->
                       <button  
                    @click="$router.go(-1)"
                    class="mt-6 w-full bg-gray-600 border border-transparent rounded-md py-2 px-8 mx-2 flex items-center justify-center text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

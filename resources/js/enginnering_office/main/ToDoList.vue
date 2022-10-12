@@ -318,7 +318,7 @@
                                 </v-flex>
                             </v-flex>
 
-                            <v-flex xs12 sm12 md4 v-if="$can('employee.view')">
+                            <v-flex xs12 sm12 md4 v-if="$can('employee.view') && !$hasRole('Engineer')">
                                 <v-flex xs12 sm12 md12>
                                     <v-hover
                                         v-slot:default="{ hover }"

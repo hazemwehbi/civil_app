@@ -11,6 +11,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\AskPermissionNotification;
 use App\Components\User\Models\User;
+use App\Document;
 use Carbon\Carbon;
 use App\Project;
 use App\StageProject;
@@ -27,11 +28,12 @@ class CommonController extends Controller
             DB::beginTransaction();
 
             $path_document='';
+          //  dd($request->all());
             if ($request->hasFile('file')) {
                  $file=$request->file;
-                 $extension = $file->getClientOriginalExtension();
+               /*  $extension = $file->getClientOriginalExtension();
                  $sha1 = sha1($file->getClientOriginalName());
-                 $filename = date('Y-m-d-h-i-s') . "_" . $sha1 . "." . $extension;
+                /* $filename = date('Y-m-d-h-i-s') . "_" . $sha1 . "." . $extension;
                  $path = public_path().'/documents';
                    // path does not exist
                  if (!file_exists($path)) {
@@ -39,13 +41,15 @@ class CommonController extends Controller
                 }
                 $file->move($path, $filename);
                 $database_path='documents/'. $filename;
-                $path_document=$database_path;
-                DB::table('documents')->insert([
-                    'path' => $database_path,
+                $path_document=$database_path;*/
+            
+                $document =Document::create([
                     'user_id'=>Auth::id(),
                     'type'=>'request_role',
+                    'commercial_register'=>$request->commercial_register,
                     'created_at'=>Carbon::now()
                 ]);
+                $document->addMedia($request->file)->toMediaCollection('document');
             }
 
             $role_id = $request->input('permission');

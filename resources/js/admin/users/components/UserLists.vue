@@ -173,6 +173,9 @@
                         </span>
                         </div>
                     </td>
+                       <td>
+                        <div align="center">{{ props.item.parent?props.item.parent.name:null }}</div>
+                    </td>
                   <td><div align="center"> {{ props.item.last_login | formatDateTime }} </div></td>
                     <td>
                         <div align="center">
@@ -235,6 +238,12 @@ export default {
                     align: 'center',
                     sortable: false,
                 },
+                          {
+                    text: self.trans('data.enginnering_office_name'),
+                    value: 'parent',
+                    align: 'center',
+                    sortable: false,
+                },
                 {
                     text: self.trans('messages.last_login'),
                     value: 'last_login',
@@ -276,14 +285,20 @@ export default {
         'pagination.rowsPerPage': function() {
             this.loadUsers(() => {});
         },
-        'filters.name': _.debounce(() => {
+        'filters.name': {
+        //_.debounce(() => {
+            handler(){
             const self = this;
             self.loadUsers(() => {});
-        }, 700),
-        'filters.email': _.debounce(() => {
+            }
+       // }, 700),
+        },
+        'filters.email': {
+            handler(){
             const self = this;
             self.loadUsers(() => {});
-        }, 700),
+            }
+        }
     },
     methods: {
         trash(user) {

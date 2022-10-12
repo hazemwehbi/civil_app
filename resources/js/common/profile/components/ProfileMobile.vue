@@ -43,10 +43,7 @@
         <div>  {{trans('messages.gender')}}</div>
        <div>{{data.gender}}</div>
         </div>
-            <div class="my-2 flex justify-between whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
-        <div>  {{trans('messages.home_address')}}</div>
-       <div>{{data.home_address}}</div>
-        </div>
+           
              <div class="my-2 flex justify-between whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
          <div> {{trans('messages.speciality')}}</div>
        <div>{{ data.specialty != null ?  data.specialty.name : ''  }}</div>

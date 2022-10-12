@@ -70,7 +70,7 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
       
-
+ // dd($request->all());
         
         $this->validator($request->all())->validate();
         try {
@@ -87,7 +87,9 @@ class RegisterController extends Controller
 
             $user->assignRole('Estate Owner');
 
-           
+            if($request->signature){
+                $user->addMediaFromBase64($request->signature)->usingFileName('signature'.time().'.png')->toMediaCollection('signature');
+            }
 
             // //send email to employee is send_email is enabled
             // if (!empty($request->input('send_email'))) {

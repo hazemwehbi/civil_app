@@ -1,45 +1,4 @@
 <template>
-    <!--<div  :class="$vuetify.breakpoint.xsOnly?'pt-4':''">
-        <v-toolbar color="cyan" dark tabs height="28">
-            <v-toolbar-title>{{ employee.name }}</v-toolbar-title>
-            <template slot="extension">
-                <v-tabs
-                    centered
-                    color="cyan"
-                    slider-color="yellow"
-                    v-model="tabs"
-                    dark
-                    icons-and-text
-                    height="47"
-                >
-                  
-                    <v-tab href="#tab-1">
-                        {{ trans('messages.overview') }}
-                        <v-icon>dvr</v-icon>
-                    </v-tab>
-
-                    <v-tab href="#tab-2">
-                        {{ trans('messages.documents_notes') }}
-                        <v-icon>perm_media</v-icon>
-                    </v-tab>
-             
-                </v-tabs>
-            </template>
-        </v-toolbar>
-     
-        <v-tabs-items v-model="tabs">
-            <v-tab-item :key="1" :value="'tab-1'">
-                <v-card flat>
-                    <v-card-text> <EmployeeOverview></EmployeeOverview> </v-card-text>
-                </v-card>
-            </v-tab-item>
-            <v-tab-item :key="2" :value="'tab-2'">
-                <v-card flat>
-                    <v-card-text> <NoteAndDocumentList></NoteAndDocumentList> </v-card-text>
-                </v-card>
-            </v-tab-item>
-        </v-tabs-items>
-    </div>-->
      <ProfileMobile v-if="$vuetify.breakpoint.xsOnly" :data="employee"/>
  <div v-else class="z-10 inset-0 mx-auto w-3/4">
     <div  class="flex items-stretch md:items-center justify-center min-h-full text-center md:px-2 lg:px-4">
@@ -61,16 +20,16 @@
            {{employee.name?employee.name[0]:''}}
            </div>
             <h2 class="text-2xl font-bold text-gray-900 text-center mt-3">{{ employee.name }}</h2>
-            <h3 id="information-heading" class="font-bold text-gray-900 text-center">{{ trans('messages.guardian_name') }}</h3>
+            <!--<h3 id="information-heading" class="font-bold text-gray-900 text-center">{{ trans('messages.guardian_name') }}</h3>-->
            
-  <div class="dark:bg-slate-800 w-full text-sm flex-col">
+  <div class="dark:bg-slate-800 w-full text-sm flex-col mt-3">
     <div class="flex justify-between flex-wrap">
-      <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400 w-1/2">{{ trans('data.id_card_number') }}:</div>
-      <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400 w-1/2">{{ employee.id_card_number}}</div>
+      <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400 w-1/3">{{ trans('data.id_card_number') }}:</div>
+      <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400 w-2/3">{{ employee.id_card_number}}</div>
     </div>
     <div class="flex justify-between flex-wrap">
-      <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400 w-1/2">{{ trans('messages.email') }}:</div>
-      <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400 w-1/2">{{ employee.email }}</div>
+      <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400 w-1/3">{{ trans('messages.email') }}:</div>
+      <div class="whitespace-nowrap border-b border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400 w-2/3 min-w-fit">{{ employee.email }}</div>
       </div>
   </div>
             </div>
@@ -98,10 +57,6 @@
       <tr>
       <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ trans('messages.mobile') }}:</td>
       <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ employee.mobile }}</td>
-    </tr>
-     <tr>
-      <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ trans('messages.home_address') }}:</td>
-      <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ employee.home_address }}</td>
     </tr>
       <tr>
       <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ trans('data.speciality') }}:</td>
@@ -137,11 +92,11 @@
               <section aria-labelledby="options-heading" class="mt-2 mx-auto">
               
                   <div class="flex">
-                  <button  v-if="true"
+                  <!--<button  v-if="true"
                    @click="$router.push({ name: 'profile.edit', params: { id: employee.id } })"
                    class="mt-6 w-full bg-indigo-600 border border-transparent rounded-md py-2 px-8 mx-2 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                    >
-                     {{ trans('messages.edit') }}</button>
+                     {{ trans('messages.edit') }}</button>-->
                       <button  
                    @click="$router.go(-1)"
                    class="mt-6 w-full bg-gray-600 border border-transparent rounded-md py-2 px-8 mx-2 flex items-center justify-center text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

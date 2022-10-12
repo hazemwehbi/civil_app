@@ -42,6 +42,21 @@ export default {
                 return 'orange';
             }
         },
+                    getLocationInfo() {
+            const self = this;
+            axios
+                .get('/get-location-info')
+                .then(function (response) {
+                    self.province_municipalities = response.data.provinceMunicipalities;
+                    self.municipalities = response.data.municipalities;
+                    self.categories_location = response.data.categoriesLocation;
+                    self.neighborhoods = response.data.neighborhoods;
+                    self.districts = response.data.districts;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         $checklang() {
             return APP.RTL;
         },
@@ -55,6 +70,11 @@ export default {
         getCurrentLang(){
             return APP.CURRENT_LANGUAGE
         },
+                 textAreaWrite(event){
+   if(event.which === 13)
+    this.lineCount>=3?event.preventDefault():''
+
+  },
         getLanguages(){
            return APP.LANGUAGES
         },
