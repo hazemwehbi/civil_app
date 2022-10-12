@@ -10,7 +10,9 @@
 input[type=number]::-webkit-outer-spin-button { 
   -webkit-appearance: none; 
 }
-
+input{
+    width:100%!important;
+}
 input[type=number] {
   -moz-appearance: textfield;
 }
@@ -35,9 +37,11 @@ input[type=number] {
 
     </style>
 @section('content')
+
 <div class="container">
-    <div class="row">
-        <form class="form-signin" method="POST" action="{{ route('register') }}">
+  <div class="row">
+   
+    <form class="form-signin" method="POST" action="{{ route('register') }}">
             {{ csrf_field() }}
          
 
@@ -180,11 +184,25 @@ input[type=number] {
                                 <label for="location_data" style="padding-bottom: 5px;" class="required">
                                     {{__('data.province_municipality')}}
                                 </label>
-                                <select class="form-control" id="location_data" name="location_data" >
+                                <select class="form-control" id="location_data" name="location_data" required>
                                     <option value="" selected>{{__('data.province_municipality')}} </option>
                                     <option value='province1'> {{__('data.province1')}} </option>
                                     <option value='province2'> {{__('data.province2')}} </option>
                                     <option value='province3'> {{__('data.province3')}} </option>
+                                    <option value='province4'> {{__('data.province4')}} </option>
+                                    <option value='province5'> {{__('data.province5')}} </option>
+                                    <option value='province6'> {{__('data.province6')}} </option>
+                                    <option value='province7'> {{__('data.province7')}} </option>
+                                    <option value='province8'> {{__('data.province8')}} </option>
+                                    <option value='province9'> {{__('data.province9')}} </option>
+                                    <option value='province10'> {{__('data.province10')}} </option>
+                                    <option value='province11'> {{__('data.province11')}} </option>
+                                    <option value='province12'> {{__('data.province12')}} </option>
+                                    <option value='province13'> {{__('data.province13')}} </option>
+                                    <option value='province14'> {{__('data.province14')}} </option>
+                                    <option value='province15'> {{__('data.province15')}} </option>
+                                    <option value='province16'> {{__('data.province16')}} </option>
+                                    <option value='province17'> {{__('data.province17')}} </option>
                                     </select>
                                     @if ($errors->has('location_data'))
                                     <span class="help-block  text-danger">
@@ -203,12 +221,12 @@ input[type=number] {
                                 <input type="date" id="date_of_birth" name="date_of_birth" class="form-control" placeholder="{{__('messages.date_of_birth')}}"   >
                             </div>
                          
-                            <div class="form-group col-md-4">
+                           <!-- <div class="form-group col-md-4">
                                 <label for="guardian_name" style="padding-bottom: 5px;">
                                     {{__('messages.guardian_name')}}
                                 </label>
                                 <input type="text" id="guardian_name" name="guardian_name" class="form-control" placeholder="{{__('messages.guardian_name')}}"   >
-                            </div>
+                            </div>-->
 
                             <div class="form-group col-md-4">
                                 <label for="gender" style="padding-bottom: 5px;">
@@ -216,36 +234,46 @@ input[type=number] {
                                 </label>
                                 <select class="form-control" id="gender" name="gender" >
                                     <option selected>{{__('data.select_gender')}} </option>
-                                    <option value='male'> {{__('data.male')}} </option>
-                                    <option value='female'> {{__('data.female')}} </option>
+                                    <option value='male'> {{__('messages.male')}} </option>
+                                    <option value='female'> {{__('messages.female')}} </option>
                                     </select>
                             </div>
                     </div>
 
                 </div>
             </div>
-        
+        <input type="hidden" name="signature" id="signature" ref="signature" />
 
             <div class="col-md-12">
                 <div class="card card-signin my-5">
-                    <div class="card-body container">
-                            <div class="d-flex justify-content-center">
-                            <button class="btn btn-lg btn-block text-uppercase  mx-auto" style="background-color:#06706d;color:white;width:30%" id="submit" type="submit">
+                    <v-layout justify-center>
+                        <v-card-actions class="flex-wrap">
+                            <v-btn class="btn btn-lg btn-block text-uppercase  mx-auto" style="background-color:#06706d;color:white;max-width:30%" id="submit" type="submit">
                             {{__('data.register')}}
-                            </button>
-                        </div>
-                        <a class="btn btn-link d-block text-center " style="color:#06706d;" href="{{ route('login') }}">
-                         {{__('data.back_to_login')}}
-                        </a>
+                            </v-btn>
+                      
+                            <v-btn class="btn btn-lg btn-block text-uppercase  mx-auto" @click="$refs.signaturePad.create()" style="background-color:#888888;color:white;max-width:30%">
+                            {{__('data.addSignature')}}
+                            </v-btn>
+                    
+        
+                        </v-card-actions>
+                    </v-layout>
+                    <a class="btn btn-link d-block text-center " style="color:#06706d;" href="{{ route('login') }}">
+                        {{__('data.back_to_login')}}
+                       </a>
                     </div>
                 </div>
 
             </div>
-
+         
         </form>
+        <signaturepad ref="signaturePad" @save="$refs.signature.value=$event"/>
     </div>
-
+    
+   
 </div>
+
 
 @endsection
 

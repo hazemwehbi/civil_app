@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" style="direction:{{ app()->getLocale() == 'ar'?'rtl':'ltr' }}">
 <head>
       <script>
+        var APP = {};
                 @auth
                     window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
                 @else
@@ -14,7 +15,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
     <title>Civil Application</title>
 
     @if(!empty($favicon))
@@ -99,20 +100,68 @@ background-size: cover;
             
          
         }
-        /*.help-text {
-            margin-left: 36px;
-        }*/
+        .modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.error{
+    color: red;
+  }
+    .style_rtl{
+        text-align: right;
+    }
+    .style_lrt{
+        text-align: left;
+    }
   </style>
 </head>
 <body data-gr-c-s-loaded="true" cz-shortcut-listen="true" id="app">
     <div class="limiter">
-        <div>
+        <div id="admin">
             @yield('content')
+            
         </div>
     </div>
+   
+    <script src="{{ env('APP_URL') . '/js/lang.js' }}"></script>
+    <script src="{{ asset('js/manifest.js') }}"></script>
+    <script src="{{ asset('js/vendor.js') }}"></script>
+    <script src="{{ asset('js/admin.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="{{ asset('front/js/jquery-3.2.1.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('front/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>

@@ -2,53 +2,6 @@
 
 @section('content')
 
- 
-<style>
-    /* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-/* Modal Content */
-.modal-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
-
-/* The Close Button */
-.close {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-    .style_rtl{
-        text-align: right;
-    }
-    .style_lrt{
-        text-align: left;
-    }
-       
-    </style>
 <div class="container" >
 
     <div class="row">
@@ -71,7 +24,7 @@
 
                         <div id="email_pass" >
                         <div class="form-outline mb-1">
-                                <input type="text" id="inputEmail" name="email_id_card" class="form-control form-control-lg" placeholder="{{ trans('data.email_or_id_card') }}"  onchange="getEmail(this)"  required  >
+                                <input type="text" id="inputEmail" name="email_id_card" class="form-control form-control-lg" onchange="getEmail(this)"  required placeholder="{{ trans('data.email_or_id_card') }}">
                                     <span class="help-block  text-danger ">
                                         <small class="help-text email_description " >
                                           
@@ -222,30 +175,6 @@
   </div>
 
 </div>
-@section('javascript')
-<style>
-
-
-  .error{
-    color: red;
-  }
-  /* label,
-  input,
-  button {
-    border: 0;
-    margin-bottom: 3px;
-    display: block;
-    width: 100%;
-  }
- .common_box_body {
-    padding: 15px;
-    border: 12px solid #28BAA2;
-    border-color: #28BAA2;
-    border-radius: 15px;
-    margin-top: 10px;
-    background: #d4edda;
-} */
-</style>
 @section('javascript')
 <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>

@@ -64,6 +64,7 @@
 <div id="admin">
     <template>
         <v-app id="inspire-font">
+           
         <!--    </v-navigation-drawer>-->
             <div>
             <v-toolbar v-if='!$vuetify.breakpoint.xsOnly' style="background-color:#06706d;z-index: 100" app dark flat fixed dense height="100"
